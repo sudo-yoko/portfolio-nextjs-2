@@ -1,0 +1,28 @@
+{
+  "editor.minimap.enabled": false,
+  // "editor.fontFamily": "'Cascadia Code', 'monospace', monospace",
+  // "editor.fontFamily": "'Fira Mono', 'monospace', monospace",
+  // "editor.fontFamily": "'Ubuntu Mono', 'monospace', monospace",
+  "editor.fontFamily": "'Geist Mono Light', 'monospace', monospace",
+  "editor.fontSize": 13,
+  //"terminal.integrated.fontFamily": "'Cascadia Code', 'monospace', monospace",
+  //"terminal.integrated.fontFamily": "'Ubuntu Mono', 'monospace', monospace",
+  "terminal.integrated.fontFamily": "'Geist Mono Light', 'monospace', monospace",
+  "terminal.integrated.fontSize": 13,
+  "workbench.colorTheme": "Userscape (rainglow)",
+  /*
+  "workbench.colorTheme": "Absent (rainglow)",
+  "editor.tokenColorCustomizations": {
+    "comments": {
+      "foreground": "#616E76"
+    }
+  },*/
+  "explorer.compactFolders": false,
+  "workbench.tree.indent": 20,
+  "workbench.colorCustomizations": {
+    "editor.selectionBackground": "#4f93ff88",  // 通常の選択色（単語を選択したときの背景）
+    "editor.selectionHighlightBackground": "#4f93ff44",  // 通常された単語と同じ単語の選択色（少し透明度をつけた一致色）
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "window.zoomLevel": 1
+}
