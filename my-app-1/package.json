@@ -2,11 +2,18 @@
   "name": "my-app-1",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "mock1": "tsx watch __mocks__/customers.ts",
+    "mock2": "tsx watch __mocks__/openai-mock.ts",
+    "mock3": "tsx watch __mocks__/proxy-server.ts",
+    "mock4": "tsx watch __mocks__/users.ts",
+    "mock5": "tsx watch __mocks__/web-to-case.ts",
+    "dev:mock": "npm-run-all --parallel dev mock1 mock2 mock3 mock4 mock5"
   },
   "dependencies": {
     "next": "16.0.3",
@@ -15,12 +22,20 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.5",
+    "@types/http-proxy": "^1.17.17",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cors": "^2.8.5",
     "eslint": "^9",
     "eslint-config-next": "16.0.3",
+    "express": "^5.1.0",
+    "http-proxy": "^1.18.1",
+    "npm-run-all": "^4.1.5",
     "tailwindcss": "^4",
+    "tsx": "^4.20.6",
     "typescript": "^5"
   }
 }
