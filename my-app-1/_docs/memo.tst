@@ -11,5 +11,5 @@ tsconfig の paths
     }
 
 Jest の moduleNameMapper
-    テスト実行時に「そのパスは実際はこっち」と教える
+    テスト実行時に「そのパスは実際はこっち」と教える.Jest.unstable_mockModuleでのパス指定
     主に “テスト実行時（ランタイム）の世界”
