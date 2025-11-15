@@ -9,9 +9,9 @@
     "start": "next start",
     "lint": "eslint",
     "mock1": "tsx watch __mocks__/customers.ts",
-    "mock2": "tsx watch __mocks__/openai-mock.ts",
-    "mock3": "tsx watch __mocks__/proxy-server.ts",
-    "mock4": "tsx watch __mocks__/users.ts",
+    "mock2": "node --no-warnings --loader ts-node/esm __mocks__/users.mts",
+    "mock3": "tsx watch __mocks__/openai-mock.ts",
+    "mock4": "tsx watch __mocks__/proxy-server.ts",
     "mock5": "tsx watch __mocks__/web-to-case.ts",
     "dev:mock": "npm-run-all --parallel dev mock1 mock2 mock3 mock4 mock5"
   },
@@ -42,6 +42,7 @@
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.7.1",
     "tailwindcss": "^4",
+    "ts-node": "^10.9.2",
     "tsx": "^4.20.6",
     "typescript": "^5"
   }
