@@ -1,4 +1,4 @@
-import { printf } from '@/__tests__/next-jest/test-logger';
+import { printf } from '@/__tests__/test-logger';
 import { jest } from '@jest/globals';
 
 const print = printf({ logPrefix: '>>> [logging.core.winston.test.ts]', stdout: true });
