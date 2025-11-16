@@ -21,30 +21,22 @@ interface FormData {
 const app = express();
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
-app.post(
-  path,
-  async (req: Request<undefined, undefined, FormData>, res: Response<void>) => {
-    const body = req.body;
-    console.log(
-      logPrefix + `Request(Inbound) -> formData=${JSON.stringify(body)}`,
-    );
+app.post(path, async (req: Request<undefined, undefined, FormData>, res: Response<void>) => {
+  const body = req.body;
+  console.log(logPrefix + `Request(Inbound) -> formData=${JSON.stringify(body)}`);
 
-    // 1秒待機
-    await new Promise<void>((resolve) => {
-      setTimeout(() => {
-        resolve();
-      }, 1000);
-    });
+  // 1秒待機
+  await new Promise<void>((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, 1000);
+  });
 
-    const status = 200;
-    console.log(logPrefix + `Response(Outbound) -> status=${status}`);
-    res.sendStatus(status);
-  },
-);
+  const status = 200;
+  console.log(logPrefix + `Response(Outbound) -> status=${status}`);
+  res.sendStatus(status);
+});
 
 app.listen(port, () => {
-  console.log(
-    consolePrefix +
-      `Mock service running on http://localhost:${port} (web-to-case-mock)`,
-  );
+  console.log(consolePrefix + `Mock service running on http://localhost:${port} (web-to-case-mock)`);
 });

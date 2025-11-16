@@ -5,8 +5,8 @@ import test from 'node:test';
 //
 // 静的インポートのパス解決をテストする
 //
-import { required } from '@/presentation/(system)/validation/validators.presence'; // パス解決ができること
 import { printf } from '@/__tests__/test-logger'; // パス解決ができること
+import { required } from '@/presentation/(system)/validation/validators.presence'; // パス解決ができること
 const print = printf({ logPrefix: '>>> [test-logger.test.ts]', stdout: false });
 await test('test1-1', async () => {
   const result = required('', 'ユーザーID');

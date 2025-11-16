@@ -4,8 +4,8 @@
 // 静的インポートのパス解決をテストする
 // npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/path-alias-resolution.test.ts -t 'test1-1'
 //
-import logger from '@/presentation/(system)/logging/logger.s'; // パス解決ができること
 import { printf } from '@/__tests__/test-logger'; // パス解決ができること
+import logger from '@/presentation/(system)/logging/logger.s'; // パス解決ができること
 const print = printf({ logPrefix: '>>> [test-logger.test.ts]', stdout: true });
 test('test1-1', () => {
   logger.info('##### logger OK! #####');
