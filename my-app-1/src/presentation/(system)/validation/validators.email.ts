@@ -27,6 +27,6 @@ export const requiredEmail: Validator = (value, label) => {
  * メールアドレスの形式チェック
  */
 export const validateEmail: Validator = (value, label) => {
-  const result = z.string().email(`${label}の形式が不正です。`).safeParse(value);
-  return result.success ? [] : result.error.errors.map((issue) => issue.message);
+  const result = z.email(`${label}の形式が不正です。`).safeParse(value);
+  return result.success ? [] : result.error.issues.map((issue) => issue.message);
 };
