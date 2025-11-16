@@ -16,11 +16,13 @@
     "dev:mock": "npm-run-all --parallel dev mock1 mock2 mock3 mock4 mock5"
   },
   "dependencies": {
+    "axios": "^1.13.2",
     "next": "16.0.3",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "winston": "^3.18.3",
-    "winston-daily-rotate-file": "^5.0.0"
+    "winston-daily-rotate-file": "^5.0.0",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
