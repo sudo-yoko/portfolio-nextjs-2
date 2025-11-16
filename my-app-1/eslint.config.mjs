@@ -1,6 +1,7 @@
 import nextVitals from 'eslint-config-next/core-web-vitals';
 import nextTs from 'eslint-config-next/typescript';
 import eslintConfigPrettier from 'eslint-config-prettier';
+import tsdocPlugin from 'eslint-plugin-tsdoc';
 import { defineConfig, globalIgnores } from 'eslint/config';
 
 const eslintConfig = defineConfig([
@@ -15,12 +16,21 @@ const eslintConfig = defineConfig([
   ...nextTs,
 
   /**
-   * lint 対象外フォルダ
+   * lint 対象外フォルダ/ファイル
    */
-  globalIgnores(['.next/**', 'out/**', 'build/**', 'next-env.d.ts', 'coverage/**']),
+  globalIgnores([
+    '.next/**',
+    'out/**',
+    'build/**',
+    'next-env.d.ts',
+    'coverage/**',
+    'eslint.config.mjs',
+    '.prettierrc.cjs',
+    'postcss.config.mjs',
+  ]),
 
   /**
-   * 未使用の変数についてのルール
+   * 未使用の変数のチェック
    */
   {
     rules: {
@@ -37,6 +47,51 @@ const eslintConfig = defineConfig([
       ],
     },
   },
+
+  /**
+   * TODO: コメントに警告に表示する
+   */
+  {
+    rules: {
+      'no-warning-comments': [
+        'warn',
+        {
+          terms: ['todo', 'fixme', 'hack'],
+          location: 'start', // TODO: の位置は行頭
+        },
+      ],
+    },
+  },
+
+  /**
+   * TSDoc の書き方チェック
+   */
+  {
+    // files: ['**/*.{ts,tsx}'],
+    plugins: {
+      tsdoc: tsdocPlugin,
+    },
+    rules: {
+      'tsdoc/syntax': 'warn',
+    },
+  },
+
+  /**
+   * await の要/不要のチェック
+   */
+  {
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+      },
+    },
+    rules: {
+      '@typescript-eslint/no-floating-promises': 'warn', // 非同期関数にawaitつけ忘れ検知
+      '@typescript-eslint/await-thenable': 'error', // awaitできないものにawaitがついているものを検知
+    },
+  },
+
   // Prettierと競合するESLintの整形系ルールを無効化する。
   eslintConfigPrettier,
 ]);

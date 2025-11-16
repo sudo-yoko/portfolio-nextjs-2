@@ -8,7 +8,7 @@ import test from 'node:test';
 
 const consolePrefix = '### test: offset-pager.test.ts >>> ';
 
-test('test: offset-pager.test.ts', async () => {
+void test('test: offset-pager.test.ts', async () => {
   const fetcher: FetchPage<User[], UsersQuery> = async (offset, limit, query) => {
     console.log(consolePrefix + `parameter -> offset=${offset}`);
     console.log(consolePrefix + `parameter -> limit=${limit}`);

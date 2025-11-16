@@ -7,12 +7,12 @@ import test from 'node:test';
 
 const consolePrefix = '### test: validator.test.ts >>> ';
 
-test('test1', async () => {
+void test('test1', () => {
   const result = required('', 'userId');
   console.log(consolePrefix + `result -> ${result}`);
 });
 
-test('test2', async () => {
+void test('test2', () => {
   const result = requiredEmail('aaa', 'email');
   console.log(consolePrefix + `result -> ${result}`);
 });
