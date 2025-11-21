@@ -67,12 +67,19 @@ const eslintConfig = defineConfig([
    * TSDoc の書き方チェック
    */
   {
-    // files: ['**/*.{ts,tsx}'],
+    files: ['**/*.{ts,tsx}'],
     plugins: {
       tsdoc: tsdocPlugin,
     },
     rules: {
       'tsdoc/syntax': 'warn',
+    },
+  },
+  {
+    // js では TsDoc 無効
+    files: ['**/*.{js,mjs}'],
+    rules: {
+      'tsdoc/syntax': 'off',
     },
   },
 
