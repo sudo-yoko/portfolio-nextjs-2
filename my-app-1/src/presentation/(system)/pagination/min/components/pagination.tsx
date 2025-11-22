@@ -27,7 +27,7 @@ export function Pagination<TItems, TQuery>({
   const [error, setError] = useState(false);
   const [page, setPage] = useState(initialPage);
   const pager = useRef<Pager<TItems>>(null);
-  // useCallbackの第一引数の関数は、インライン関数で書く必要がある。
+  // [Next.js 16 Compatibility Fix] useCallbackの第一引数の関数は、インライン関数で書く必要がある。
   // const fetchCallback = useCallback(fetchPage, [fetchPage]);
   const fetchCallback = useCallback(
     (offset: number, perPage: number, query: TQuery) => fetchPage(offset, perPage, query),

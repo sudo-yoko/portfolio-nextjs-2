@@ -1,0 +1,17 @@
+'use server';
+
+import { withAuthAsync } from '@/presentation/(system)/auth/auth-handler';
+import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error-handler.action';
+import { FetchPageResult } from '@/presentation/(system)/pagination/min/modules/types';
+import { send } from '@/presentation/users/min/modules/users-client';
+import { User, UsersQuery } from '@/presentation/users/min/modules/users-types';
+
+export async function action(offset: number, limit: number, query: UsersQuery) {
+  return await withErrorHandlingAsync(() => withAuthAsync(() => func()));
+
+  async function func() {
+    const { total, users } = await send(offset, limit, query);
+    const result: FetchPageResult<User[]> = { total, items: users };
+    return result;
+  }
+}
