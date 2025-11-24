@@ -11,13 +11,17 @@ import { Violations } from '@/presentation/(system)/validation/validation.types'
  * - RouteError       - Route Handlers でエラーが発生したことを示すカスタムエラー
  * - ValidationError  - BFF
  */
-export type ErrType =
-  | 'ActionError'
-  | 'AuthError'
-  | 'RouteError'
-  | 'ValidationError'
-  | 'BoundaryError'
-  | 'BackendError';
+// 定数オブジェクト
+export const ErrType = {
+  ActionError: 'ActionError',
+  AuthError: 'AuthError',
+  RouteError: 'RouteError',
+  ValidationError: 'ValidationError',
+  BoundaryError: 'BoundaryError',
+  BackendError: 'BackendError',
+} as const;
+// 型
+export type ErrType = (typeof ErrType)[keyof typeof ErrType];
 
 /**
  * Errorインスタンスに追加するプロパティ
@@ -39,7 +43,6 @@ function customError<T extends ErrType>(type: T, message?: string): CustomError<
   err[ERR_TYPE] = type;
   return err;
 }
-
 /**
  * 種類別カスタムエラー生成ファクトリ
  */
@@ -51,13 +54,13 @@ const errorOfType =
 /**
  * AuthError を生成する
  */
-export const authError = errorOfType('AuthError', '認証エラー');
+export const authError = errorOfType(ErrType.AuthError, '認証エラー');
 
 /**
  * ActionError を生成する
  */
 // export const actionError = errorOfType('ActionError', 'An exception occurred in a Server Action.');
-export function actionError<T>(result: ActionResult<T>): CustomError<'ActionError'> {
+export function actionError<T>(result: ActionResult<T>): CustomError<ErrType> {
   const cause: string[] = [];
   cause.push(`abort=${result.abort}`);
   if (result.abort) {
@@ -66,7 +69,7 @@ export function actionError<T>(result: ActionResult<T>): CustomError<'ActionErro
   if (!result.abort) {
     cause.push(`data=${JSON.stringify(result.data)}`);
   }
-  return customError('ActionError', cause.join(', '));
+  return customError(ErrType.ActionError, cause.join(', '));
 }
 
 /**
@@ -76,7 +79,7 @@ export function actionError<T>(result: ActionResult<T>): CustomError<'ActionErro
 export async function routeError(
   status: number,
   meta?: { body?: string; method?: string; route?: string },
-): Promise<CustomError<'RouteError'>> {
+): Promise<CustomError<ErrType>> {
   //const status = res.status;
   //const body = await res.text(); // bodyがjsonとは限らないのでtextで取得する。エラーの場合はhtmlが返ってくることもある
   const cause: string[] = [];
@@ -90,22 +93,22 @@ export async function routeError(
   if (meta?.body) {
     cause.push(`body=${meta.body}`);
   }
-  return customError('RouteError', cause.join(', '));
+  return customError(ErrType.RouteError, cause.join(', '));
 }
 
-export function validationError<T extends string>(violations: Violations<T>): CustomError<'ValidationError'> {
+export function validationError<T extends string>(violations: Violations<T>): CustomError<ErrType> {
   const cause = Object.entries(violations)
     .flatMap(([key, value]) => (Array.isArray(value) ? value.map((m: string) => `${m}[${key}]`) : []))
     .join(', ');
-  return customError('ValidationError', cause);
+  return customError(ErrType.ValidationError, cause);
 }
 
-export function boundaryError(cause?: string): CustomError<'BoundaryError'> {
-  return customError('BoundaryError', cause);
+export function boundaryError(cause?: string): CustomError<ErrType> {
+  return customError(ErrType.BoundaryError, cause);
 }
 
-export function backEndError(cause?: string): CustomError<'BackendError'> {
-  return customError('BackendError', cause);
+export function backEndError(cause?: string): CustomError<ErrType> {
+  return customError(ErrType.BackendError, cause);
 }
 
 /**
@@ -127,16 +130,16 @@ function isErrorOf<T extends ErrType>(type: T) {
 /**
  * ActionError かどうかを判定する
  */
-export const isActionError = isErrorOf('ActionError');
+export const isActionError = isErrorOf(ErrType.ActionError);
 
 /**
  * AuthError かどうかを判定する
  */
-export const isAuthError = isErrorOf('AuthError');
+export const isAuthError = isErrorOf(ErrType.AuthError);
 
 /**
  * RouteError かどうかを判定する
  */
-export const isRouteError = isErrorOf('RouteError');
+export const isRouteError = isErrorOf(ErrType.RouteError);
 
-export const isBoundaryError = isErrorOf('BoundaryError');
+export const isBoundaryError = isErrorOf(ErrType.BoundaryError);
