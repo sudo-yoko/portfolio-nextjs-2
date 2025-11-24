@@ -13,6 +13,7 @@ test('test1-1', async () => {
 
   const res: Result = {
     status: 200,
+    rawBody: '',
   };
 
   const client: Client = {
@@ -48,6 +49,7 @@ test('test1-2', async () => {
 
   const res: Result = {
     status: 200,
+    rawBody: '',
   };
 
   const client: Client = {
