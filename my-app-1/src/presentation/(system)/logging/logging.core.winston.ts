@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { envByStaticKey as env } from '@/presentation/(system)/env/env-testable.s';
+import { envByStaticKey as env } from '@/presentation/(system)/env/env.s';
 import fs from 'fs';
 import path from 'path';
 import winston, { createLogger, format, transports } from 'winston';

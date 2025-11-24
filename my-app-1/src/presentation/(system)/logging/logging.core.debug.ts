@@ -4,7 +4,7 @@
 // production の場合は空実装を適用し、ログ出力を無効化する。
 // 開発中はデバッグログを出力し、本番環境ではログ出力を防ぎます。
 //
-import { envByStaticKey as env } from '@/presentation/(system)/env/env-testable';
+import { envByStaticKey as env } from '@/presentation/(system)/env/env';
 
 /**
  * ロガーの型定義

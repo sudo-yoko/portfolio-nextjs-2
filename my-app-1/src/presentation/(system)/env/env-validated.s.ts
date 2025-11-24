@@ -2,7 +2,7 @@
 // 環境変数取得ユーティリティ
 // バリデーション付きで安全に環境変数を取得する。サーバーサイド専用
 //
-import { envByDynamicKey } from '@/presentation/(system)/env/env-testable.s';
+import { envByDynamicKey } from '@/presentation/(system)/env/env.s';
 import logger from '@/presentation/(system)/logging/logger.s';
 import 'server-only';
 

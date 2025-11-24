@@ -1,7 +1,7 @@
 import { printf } from '@/__tests__/test-logger';
 import { jest } from '@jest/globals';
 
-const print = printf({ logPrefix: '>>> [env-testable.test.ts]', stdout: true });
+const print = printf({ logPrefix: '>>> [env.test.ts]', stdout: true });
 
 // npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/env/env-testable.test.ts -t 'test1-1'
 test('test1-1', async () => {
