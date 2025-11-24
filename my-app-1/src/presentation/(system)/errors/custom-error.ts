@@ -11,7 +11,13 @@ import { Violations } from '@/presentation/(system)/validation/validation.types'
  * - RouteError       - Route Handlers でエラーが発生したことを示すカスタムエラー
  * - ValidationError  - BFF
  */
-export type ErrType = 'ActionError' | 'AuthError' | 'RouteError' | 'ValidationError' | 'BoundaryError';
+export type ErrType =
+  | 'ActionError'
+  | 'AuthError'
+  | 'RouteError'
+  | 'ValidationError'
+  | 'BoundaryError'
+  | 'BackendError';
 
 /**
  * Errorインスタンスに追加するプロパティ
@@ -96,6 +102,10 @@ export function validationError<T extends string>(violations: Violations<T>): Cu
 
 export function boundaryError(cause?: string): CustomError<'BoundaryError'> {
   return customError('BoundaryError', cause);
+}
+
+export function backEndError(cause?: string): CustomError<'BackendError'> {
+  return customError('BackendError', cause);
 }
 
 /**

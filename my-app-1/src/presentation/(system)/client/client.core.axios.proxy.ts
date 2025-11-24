@@ -1,10 +1,11 @@
 //
 // プロキシ設定付きRESTクライアント（Axiosインスタンス）
 //
+import 'server-only';
+
 import { env, envNumber, envProtocol } from '@/presentation/(system)/env/env-validated.s';
 import type { AxiosInstance } from 'axios';
 import axios from 'axios';
-import 'server-only';
 
 function create(): AxiosInstance {
   const protocol = envProtocol('PROXY_PROTOCOL');
@@ -13,8 +14,8 @@ function create(): AxiosInstance {
 
   return axios.create({
     proxy: { protocol, host, port },
+    timeout: 10000,
   });
 }
-const client: AxiosInstance = create();
 
-export default client;
+export const client: AxiosInstance = create();

@@ -1,6 +1,3 @@
-// method
-export const POST = 'POST';
-export const GET = 'GET';
 
 // headers
 const CONTENT_TYPE = 'Content-Type';
