@@ -99,7 +99,7 @@ test('test2-4', () => {
 // npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/errors/custom-error.test.ts -t '^test3-1$'
 test('test3-1', async () => {
   const status = 500;
-  const e = await routeError(status);
+  const e = routeError(status);
 
   const errType = e[ERR_TYPE];
   print(`errType=${errType}`);
@@ -113,7 +113,7 @@ test('test3-2', async () => {
   const status = 500;
   const meta = { body: 'error!', method: 'GET', route: 'http://xxxxx' };
 
-  const e = await routeError(status, meta);
+  const e = routeError(status, meta);
 
   const errType = e[ERR_TYPE];
   print(`errType=${errType}`);
@@ -171,7 +171,7 @@ test('test5-3', async () => {
   const status = 500;
   const meta = { body: 'error!', method: 'GET', route: 'http://xxxxx' };
 
-  const e = await routeError(status, meta);
+  const e = routeError(status, meta);
   expect(e instanceof Error).toBe(true);
   expect(isActionError(e)).toBe(false);
   expect(isAuthError(e)).toBe(false);

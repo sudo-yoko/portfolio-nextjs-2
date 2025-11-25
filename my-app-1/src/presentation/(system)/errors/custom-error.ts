@@ -73,13 +73,13 @@ export function actionError<T>(result: ActionResult<T>): CustomError<ErrType> {
 }
 
 /**
- * RouteError を生成する　※awaitを付けて呼ぶこと
+ * RouteError を生成する
  */
 // export const routeError = errorOfType('RouteError', 'An exception occurred in a Route Handler.');
-export async function routeError(
+export function routeError(
   status: number,
   meta?: { body?: string; method?: string; route?: string },
-): Promise<CustomError<ErrType>> {
+): CustomError<ErrType> {
   //const status = res.status;
   //const body = await res.text(); // bodyがjsonとは限らないのでtextで取得する。エラーの場合はhtmlが返ってくることもある
   const cause: string[] = [];

@@ -40,7 +40,7 @@ const fetchRoute: FetchPage<User[], UsersQuery> = async (offset, limit, query) =
     const body: FetchPageResult<User[]> = JSON.parse(result.rawBody);
     return body;
   }
-  throw await routeError(result.status, { body: result.rawBody, method: 'POST', route: url });
+  throw routeError(result.status, { body: result.rawBody, method: 'POST', route: url });
 
   /*
   const res = await window.fetch(url, {
