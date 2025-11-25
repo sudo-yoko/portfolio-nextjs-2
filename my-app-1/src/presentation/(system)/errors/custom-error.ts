@@ -18,7 +18,7 @@ export const ErrType = {
   RouteError: 'RouteError',
   ValidationError: 'ValidationError',
   BoundaryError: 'BoundaryError',
-  BackendError: 'BackendError',
+  BackendApiError: 'BackendApiError',
 } as const;
 // 型
 export type ErrType = (typeof ErrType)[keyof typeof ErrType];
@@ -107,8 +107,8 @@ export function boundaryError(cause?: string): CustomError<ErrType> {
   return customError(ErrType.BoundaryError, cause);
 }
 
-export function backEndError(cause?: string): CustomError<ErrType> {
-  return customError(ErrType.BackendError, cause);
+export function backendApiError(cause?: string): CustomError<ErrType> {
+  return customError(ErrType.BackendApiError, cause);
 }
 
 /**

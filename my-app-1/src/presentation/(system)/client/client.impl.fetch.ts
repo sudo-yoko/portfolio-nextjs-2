@@ -4,7 +4,7 @@
 import 'client-only';
 
 import { Client, Req, Result } from '@/presentation/(system)/client/client.types';
-import { backEndError } from '@/presentation/(system)/errors/custom-error';
+import { backendApiError } from '@/presentation/(system)/errors/custom-error';
 import logger from '@/presentation/(system)/logging/logger.c';
 
 const logPrefix = 'client.impl.fetch.ts: ';
@@ -22,8 +22,7 @@ export const clientImpl: Client = {
 
     // ステータスコードの検証
     if (!validateStatus(res.status)) {
-      const err = backEndError(`Request -> ${JSON.stringify(req)}, Response -> status=${res.status}`);
-      // TODO: 「backEndError」が出力されない
+      const err = backendApiError(`Request -> ${JSON.stringify(req)}, Response -> status=${res.status}`);
       logger.error(logPrefix + err.message);
       throw err;
     }
