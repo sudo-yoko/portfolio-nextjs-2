@@ -2,10 +2,10 @@ import 'server-only';
 
 import { stringify } from '@/presentation/(system)/errors/stringify-error';
 import logger from '@/presentation/(system)/logging/logger.s';
-import type { BoundaryResult } from '@/presentation/(system)/bff/boundary-result';
-import { abort } from '@/presentation/(system)/bff/boundary-result';
+import type { BffResult } from '@/presentation/(system)/bff/bff-result';
+import { abort } from '@/presentation/(system)/bff/bff-result';
 
-const logPrefix = 'boundary-error-handler.ts: ';
+const logPrefix = 'bff-error-handler.ts: ';
 
 /**
  * クライアント／サーバー境界 エラーハンドリング.
@@ -13,8 +13,8 @@ const logPrefix = 'boundary-error-handler.ts: ';
  * @remarks 引数に渡されたサンクにエラーハンドリングを追加して実行する。
  */
 export async function withErrorHandlingAsync<RESULT, REASON>(
-  thunk: () => Promise<BoundaryResult<RESULT, REASON>>,
-): Promise<BoundaryResult<RESULT, REASON>> {
+  thunk: () => Promise<BffResult<RESULT, REASON>>,
+): Promise<BffResult<RESULT, REASON>> {
   const fname = 'withErrorHandlingAsync: ';
   try {
     return await thunk();

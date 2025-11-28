@@ -3,10 +3,10 @@
 //
 import 'server-only';
 
-import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error-handler.boundary';
+import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error-handler.bff';
 import logger from '@/presentation/(system)/logging/logger.s';
-import type { BoundaryResult } from '@/presentation/(system)/bff/boundary-result';
-import { ok, reject, REJECTION_LABELS } from '@/presentation/(system)/bff/boundary-result';
+import type { BffResult } from '@/presentation/(system)/bff/bff-result';
+import { ok, reject, REJECTION_LABELS } from '@/presentation/(system)/bff/bff-result';
 import { hasError } from '@/presentation/(system)/validation/validation.helper';
 import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
@@ -20,7 +20,7 @@ const logPrefix = 'usecase.ts: ';
  */
 export async function execute(
   formData: FormData<FormKeys>,
-): Promise<BoundaryResult<void, Violations<FormKeys>>> {
+): Promise<BffResult<void, Violations<FormKeys>>> {
   return await withErrorHandlingAsync(() => func());
 
   async function func() {

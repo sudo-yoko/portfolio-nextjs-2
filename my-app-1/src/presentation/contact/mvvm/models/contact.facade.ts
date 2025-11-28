@@ -7,15 +7,15 @@
 import 'client-only';
 
 import { CONTENT_TYPE_APPLICATION_JSON_UTF8 } from '@/presentation/(system)/client/client.constants';
-import { boundaryError } from '@/presentation/(system)/errors/custom-error';
+import { bffError } from '@/presentation/(system)/errors/custom-error';
 import logger from '@/presentation/(system)/logging/logger.c';
 import {
   Completed,
   isOk,
   isReject,
-  parseBoundaryResult,
+  parseBffResult,
   REJECTION_LABELS,
-} from '@/presentation/(system)/bff/boundary-result';
+} from '@/presentation/(system)/bff/bff-result';
 import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
 import { action } from '@/presentation/contact/mvvm/bff/contact.action';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
@@ -41,7 +41,7 @@ const _viaAction: SendRequest = async (formData) => {
   if (isReject(result) && result.label === REJECTION_LABELS.VIOLATION) {
     return result;
   }
-  throw boundaryError(JSON.stringify(result));
+  throw bffError(JSON.stringify(result));
 };
 
 /**
@@ -62,7 +62,7 @@ const viaRoute: SendRequest = async (formData) => {
     validateStatus: (status) => status === 200,
   });
 
-  const parsed = parseBoundaryResult<void, Violations<FormKeys>>(res.rawBody);
+  const parsed = parseBffResult<void, Violations<FormKeys>>(res.rawBody);
   if (parsed !== null) {
     if (isOk(parsed)) {
       return parsed;
@@ -71,7 +71,7 @@ const viaRoute: SendRequest = async (formData) => {
       return parsed;
     }
   }
-  throw boundaryError(res.rawBody);
+  throw bffError(`BFFから想定外の値が返されました。res.rawBody=${res.rawBody}`);
 };
 
 /**

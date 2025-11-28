@@ -17,7 +17,7 @@ export const ErrType = {
   AuthError: 'AuthError',
   RouteError: 'RouteError',
   ValidationError: 'ValidationError',
-  BoundaryError: 'BoundaryError',
+  BffError: 'BffError',
   BackendApiError: 'BackendApiError',
 } as const;
 // 型
@@ -103,8 +103,8 @@ export function validationError<T extends string>(violations: Violations<T>): Cu
   return customError(ErrType.ValidationError, cause);
 }
 
-export function boundaryError(cause?: string): CustomError<ErrType> {
-  return customError(ErrType.BoundaryError, cause);
+export function bffError(cause?: string): CustomError<ErrType> {
+  return customError(ErrType.BffError, cause);
 }
 
 export function backendApiError(cause?: string): CustomError<ErrType> {
@@ -142,4 +142,4 @@ export const isAuthError = isErrorOf(ErrType.AuthError);
  */
 export const isRouteError = isErrorOf(ErrType.RouteError);
 
-export const isBoundaryError = isErrorOf(ErrType.BoundaryError);
+export const isBffError = isErrorOf(ErrType.BffError);

@@ -1,9 +1,9 @@
 'use server';
 
 import { withAuthAsync } from '@/presentation/(system)/auth/auth-handler';
-import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error-handler.boundary';
+import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error-handler.bff';
 import logger from '@/presentation/(system)/logging/logger.s';
-import { BoundaryResult } from '@/presentation/(system)/bff/boundary-result';
+import { BffResult } from '@/presentation/(system)/bff/bff-result';
 import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 import { execute } from '@/presentation/contact/mvvm/bff/contact.interactor';
@@ -15,7 +15,7 @@ const logPrefix = '/contact/action.ts: ';
  */
 export async function action(
   formData: FormData<FormKeys>,
-): Promise<BoundaryResult<void, Violations<FormKeys>>> {
+): Promise<BffResult<void, Violations<FormKeys>>> {
   return await withErrorHandlingAsync(() => withAuthAsync(() => func()));
 
   async function func() {

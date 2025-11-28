@@ -46,7 +46,7 @@ export type Aborted = { tag: 'abort'; cause?: string };
  *
  * 正常終了｜差し戻し｜失敗
  */
-export type BoundaryResult<RESULT = void, REASON = never> = Ok<RESULT> | Rejected<REASON> | Aborted;
+export type BffResult<RESULT = void, REASON = never> = Ok<RESULT> | Rejected<REASON> | Aborted;
 
 /**
  * 境界返却値のユニオン型
@@ -100,16 +100,16 @@ export function abort(cause?: string): Aborted {
 // 型解析、型ガード関数
 //////////////////////////
 
-export function parseBoundaryResult<RESULT, REASON>(text: string): BoundaryResult<RESULT, REASON> | null {
+export function parseBffResult<RESULT, REASON>(text: string): BffResult<RESULT, REASON> | null {
   try {
     const parsed = JSON.parse(text);
-    return isBoundaryResult<RESULT, REASON>(parsed) ? parsed : null;
+    return isBffResult<RESULT, REASON>(parsed) ? parsed : null;
   } catch (_e) {
     return null;
   }
 }
 
-function isBoundaryResult<RESULT, REASON>(text: unknown): text is BoundaryResult<RESULT, REASON> {
+function isBffResult<RESULT, REASON>(text: unknown): text is BffResult<RESULT, REASON> {
   if (text === null) {
     return false;
   }
@@ -118,7 +118,7 @@ function isBoundaryResult<RESULT, REASON>(text: unknown): text is BoundaryResult
     return false;
   }
 
-  const tag = (text as BoundaryResult<RESULT, REASON>).tag;
+  const tag = (text as BffResult<RESULT, REASON>).tag;
   if (tag === 'ok') {
     return true;
   }
@@ -132,25 +132,25 @@ function isBoundaryResult<RESULT, REASON>(text: unknown): text is BoundaryResult
 }
 
 export function isOk<RESULT = void, REASON = never>(
-  result: BoundaryResult<RESULT, REASON>,
+  result: BffResult<RESULT, REASON>,
 ): result is Ok<RESULT> {
   return result.tag === 'ok';
 }
 
 export function isReject<RESULT = void, REASON = never>(
-  result: BoundaryResult<RESULT, REASON>,
+  result: BffResult<RESULT, REASON>,
 ): result is Rejected<REASON> {
   return result.tag === 'reject';
 }
 
 export function isAbort<RESULT = void, REASON = never>(
-  result: BoundaryResult<RESULT, REASON>,
+  result: BffResult<RESULT, REASON>,
 ): result is Aborted {
   return result.tag === 'abort';
 }
 
 export function isComplete<RESULT = void, REASON = never>(
-  result: BoundaryResult<RESULT, REASON>,
+  result: BffResult<RESULT, REASON>,
 ): result is Completed<RESULT, REASON> {
   return result.tag === 'ok' || result.tag === 'reject';
 }
