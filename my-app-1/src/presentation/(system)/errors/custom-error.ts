@@ -1,7 +1,7 @@
 //
 // カスタムエラー定義
 //
-import { ActionResult } from '@/presentation/(system)/types/action-result';
+import { ActionResult } from '@/presentation/(system)/bff/action-result';
 import { Violations } from '@/presentation/(system)/validation/validation.types';
 
 /**

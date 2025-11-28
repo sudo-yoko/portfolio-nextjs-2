@@ -5,7 +5,7 @@ import 'server-only';
 
 import { stringify } from '@/presentation/(system)/errors/stringify-error';
 import logger from '@/presentation/(system)/logging/logger.s';
-import { ActionResult } from '@/presentation/(system)/types/action-result';
+import { ActionResult } from '@/presentation/(system)/bff/action-result';
 
 const logPrefix = 'action-error-handler.ts: ';
 

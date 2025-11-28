@@ -1,4 +1,4 @@
-import { ActionResult } from '@/presentation/(system)/types/action-result';
+import { ActionResult } from '@/presentation/(system)/bff/action-result';
 import { User } from '@/presentation/users/min/modules/users-types';
 
 // 型の制約によるコンパイルエラーを確認するコード

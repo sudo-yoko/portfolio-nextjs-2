@@ -11,7 +11,7 @@ import {
   validationError,
 } from '@/presentation/(system)/errors/custom-error';
 import { stringify } from '@/presentation/(system)/errors/stringify-error';
-import { ActionResult } from '@/presentation/(system)/types/action-result';
+import { ActionResult } from '@/presentation/(system)/bff/action-result';
 import { Violations } from '@/presentation/(system)/validation/validation.types';
 
 const print = printf({ logPrefix: '>>> [custom-error.test.test.ts]', stdout: true });

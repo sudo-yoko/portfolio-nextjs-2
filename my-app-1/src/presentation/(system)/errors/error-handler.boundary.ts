@@ -2,8 +2,8 @@ import 'server-only';
 
 import { stringify } from '@/presentation/(system)/errors/stringify-error';
 import logger from '@/presentation/(system)/logging/logger.s';
-import type { BoundaryResult } from '@/presentation/(system)/types/boundary-result';
-import { abort } from '@/presentation/(system)/types/boundary-result';
+import type { BoundaryResult } from '@/presentation/(system)/bff/boundary-result';
+import { abort } from '@/presentation/(system)/bff/boundary-result';
 
 const logPrefix = 'boundary-error-handler.ts: ';
 

@@ -27,7 +27,7 @@ export const clientImpl: Client = {
       throw err;
     }
 
-    const rawBody = await res.text();
+    const rawBody = await res.text();  // bodyがjsonとは限らないのでtextで取得する。エラーの場合はhtmlが返ってくることもある
     const result: Result = {
       status: res.status,
       rawBody,

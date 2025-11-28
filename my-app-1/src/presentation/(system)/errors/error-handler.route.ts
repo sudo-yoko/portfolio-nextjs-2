@@ -6,7 +6,7 @@ import 'server-only';
 import { isAuthError } from '@/presentation/(system)/errors/custom-error';
 import { stringify } from '@/presentation/(system)/errors/stringify-error';
 import logger from '@/presentation/(system)/logging/logger.s';
-import { Aborted, RouteResult } from '@/presentation/(system)/types/route-response';
+import { Aborted, RouteResult } from '@/presentation/(system)/bff/route-response';
 
 const logPrefix = 'route-error-handler.ts: ';
 
