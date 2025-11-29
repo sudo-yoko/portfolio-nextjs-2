@@ -4,18 +4,18 @@
 import 'server-only';
 
 //import client from '@/modules/(system)/clients/proxy-client';
+import { BffResult, ok } from '@/presentation/(system)/bff/bff-result';
 import { CONTENT_TYPE_APPLICATION_FORM } from '@/presentation/(system)/client/client.constants';
 import client from '@/presentation/(system)/client/client.s';
 import { Method } from '@/presentation/(system)/client/client.types';
 import { env } from '@/presentation/(system)/env/env-validated.s';
-import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error-handler.server';
+import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error-handler.bff';
 import logger from '@/presentation/(system)/logging/logger.s';
 import { ContactBody } from '@/presentation/contact/mvvm/models/contact.types';
 
-const logPrefix = 'contact2-client.ts: ';
+const logPrefix = 'contact.webToCase-client.ts: ';
 
-export async function send(model: ContactBody): Promise<void> {
-  // エラーハンドリングを追加して処理を実行する。
+export async function send(model: ContactBody): Promise<BffResult<void, void>> {
   return await withErrorHandlingAsync(() => func());
 
   async function func() {
@@ -28,13 +28,9 @@ export async function send(model: ContactBody): Promise<void> {
       url,
       body,
       headers: { ...CONTENT_TYPE_APPLICATION_FORM },
+      validateStatus: (status) => status === 200, // ステータスコード200以外はエラーをスローする
     });
-
-    // const res = await client.send(url, body, {
-    // headers: {
-    // 'Content-Type': 'application/x-www-form-urlencoded',
-    // },
-    // });/
     logger.info(logPrefix + `Response(Inbound) -> status=${result.status}`);
+    return ok();
   }
 }

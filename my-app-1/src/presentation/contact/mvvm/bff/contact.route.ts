@@ -6,7 +6,7 @@ import logger from '@/presentation/(system)/logging/logger.s';
 import { ContactBody } from '@/presentation/contact/mvvm/models/contact.types';
 import { execute } from '@/presentation/contact/mvvm/bff/contact.interactor';
 
-const logPrefix = '/contact/route.impl.ts: ';
+const logPrefix = 'contact.route.ts: ';
 
 export async function POST(req: Request): Promise<Response> {
   return withErrorHandlingAsync(() => withAuthAsync(() => func()));

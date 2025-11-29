@@ -3,24 +3,22 @@
 //
 import 'server-only';
 
-import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error-handler.bff';
-import logger from '@/presentation/(system)/logging/logger.s';
 import type { BffResult } from '@/presentation/(system)/bff/bff-result';
 import { ok, reject, REJECTION_LABELS } from '@/presentation/(system)/bff/bff-result';
+import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error-handler.bff';
+import logger from '@/presentation/(system)/logging/logger.s';
 import { hasError } from '@/presentation/(system)/validation/validation.helper';
 import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
+import { send } from '@/presentation/contact/mvvm/bff/contact.webToCase-client';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 import { validate } from '@/presentation/contact/mvvm/models/contact.validator';
-import { send } from '@/presentation/contact/mvvm/bff/contact.webToCase-client';
 
-const logPrefix = 'usecase.ts: ';
+const logPrefix = 'contact.interactor.ts: ';
 
 /**
  * ユースケースの実行
  */
-export async function execute(
-  formData: FormData<FormKeys>,
-): Promise<BffResult<void, Violations<FormKeys>>> {
+export async function execute(formData: FormData<FormKeys>): Promise<BffResult<void, Violations<FormKeys>>> {
   return await withErrorHandlingAsync(() => func());
 
   async function func() {
