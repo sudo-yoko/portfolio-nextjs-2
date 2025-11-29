@@ -1,8 +1,12 @@
+//
+// BFF結果オブジェクト ヘルパー関数
+//
+import { Aborted, BffResult, Completed, Ok, Rejected } from '@/presentation/(system)/bff/bff.result.types';
+
+
 //////////////////////////
 // 型解析、型ガード関数
 //////////////////////////
-import { Aborted, BffResult, Completed, Ok, Rejected } from '@/presentation/(system)/bff/bff.result.types';
-
 export function parseBffResult<RESULT, REASON>(text: string): BffResult<RESULT, REASON> | null {
   try {
     const parsed = JSON.parse(text);
