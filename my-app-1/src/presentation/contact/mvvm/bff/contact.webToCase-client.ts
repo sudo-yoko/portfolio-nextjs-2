@@ -4,7 +4,8 @@
 import 'server-only';
 
 //import client from '@/modules/(system)/clients/proxy-client';
-import { BffResult, ok } from '@/presentation/(system)/bff/bff-result';
+import { ok } from '@/presentation/(system)/bff/bff.result.factories';
+import { BffResult } from '@/presentation/(system)/bff/bff.result.types';
 import { CONTENT_TYPE_APPLICATION_FORM } from '@/presentation/(system)/client/client.constants';
 import client from '@/presentation/(system)/client/client.s';
 import { Method } from '@/presentation/(system)/client/client.types';

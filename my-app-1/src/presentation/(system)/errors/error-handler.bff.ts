@@ -2,8 +2,8 @@ import 'server-only';
 
 import { stringify } from '@/presentation/(system)/errors/stringify-error';
 import logger from '@/presentation/(system)/logging/logger.s';
-import type { BffResult } from '@/presentation/(system)/bff/bff-result';
-import { abort } from '@/presentation/(system)/bff/bff-result';
+import type { BffResult } from '@/presentation/(system)/bff/bff.result.types';
+import { abort } from '@/presentation/(system)/bff/bff.result.factories';
 
 const logPrefix = 'bff-error-handler.ts: ';
 

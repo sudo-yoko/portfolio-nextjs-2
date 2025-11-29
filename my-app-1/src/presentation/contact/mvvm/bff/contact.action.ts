@@ -3,7 +3,7 @@
 import { withAuthAsync } from '@/presentation/(system)/auth/auth-handler';
 import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error-handler.bff';
 import logger from '@/presentation/(system)/logging/logger.s';
-import { BffResult } from '@/presentation/(system)/bff/bff-result';
+import { BffResult } from '@/presentation/(system)/bff/bff.result.types';
 import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 import { execute } from '@/presentation/contact/mvvm/bff/contact.interactor';

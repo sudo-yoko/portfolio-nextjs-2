@@ -3,8 +3,9 @@
 //
 import 'server-only';
 
-import type { BffResult } from '@/presentation/(system)/bff/bff-result';
-import { ok, reject, REJECTION_LABELS } from '@/presentation/(system)/bff/bff-result';
+import { REJECTION_LABELS } from '@/presentation/(system)/bff/bff.result.constants';
+import { ok, reject } from '@/presentation/(system)/bff/bff.result.factories';
+import type { BffResult } from '@/presentation/(system)/bff/bff.result.types';
 import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error-handler.bff';
 import logger from '@/presentation/(system)/logging/logger.s';
 import { hasError } from '@/presentation/(system)/validation/validation.helper';

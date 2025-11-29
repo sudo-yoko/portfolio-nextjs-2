@@ -6,21 +6,17 @@
 //
 import 'client-only';
 
+import { REJECTION_LABELS } from '@/presentation/(system)/bff/bff.result.constants';
+import { isOk, isReject, parseBffResult } from '@/presentation/(system)/bff/bff.result.helpers';
+import { Completed } from '@/presentation/(system)/bff/bff.result.types';
+import client from '@/presentation/(system)/client/client.c';
 import { CONTENT_TYPE_APPLICATION_JSON_UTF8 } from '@/presentation/(system)/client/client.constants';
+import { Method } from '@/presentation/(system)/client/client.types';
 import { bffError } from '@/presentation/(system)/errors/custom-error';
 import logger from '@/presentation/(system)/logging/logger.c';
-import {
-  Completed,
-  isOk,
-  isReject,
-  parseBffResult,
-  REJECTION_LABELS,
-} from '@/presentation/(system)/bff/bff-result';
 import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
 import { action } from '@/presentation/contact/mvvm/bff/contact.action';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
-import client from '@/presentation/(system)/client/client.c';
-import { Method } from '@/presentation/(system)/client/client.types';
 
 /**
  *

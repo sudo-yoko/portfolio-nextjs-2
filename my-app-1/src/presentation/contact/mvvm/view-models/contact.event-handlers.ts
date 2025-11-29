@@ -1,6 +1,7 @@
 'use client';
 
-import { isOk, isReject, REJECTION_LABELS } from '@/presentation/(system)/bff/bff-result';
+import { REJECTION_LABELS } from '@/presentation/(system)/bff/bff.result.constants';
+import { isOk, isReject } from '@/presentation/(system)/bff/bff.result.helpers';
 import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error-handler.client';
 import { hasError } from '@/presentation/(system)/validation/validation.helper';
 import { Violations } from '@/presentation/(system)/validation/validation.types';
