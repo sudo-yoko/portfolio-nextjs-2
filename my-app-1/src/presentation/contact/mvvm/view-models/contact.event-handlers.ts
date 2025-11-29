@@ -1,10 +1,10 @@
 'use client';
 
-import { withErrorHandlingAsync } from '@/presentation/(system)/error-handlers/client-error-handler';
-import { isOk, isReject, REJECTION_LABELS } from '@/presentation/(system)/types/boundary-result';
+import { isOk, isReject, REJECTION_LABELS } from '@/presentation/(system)/bff/bff-result';
+import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error-handler.client';
 import { hasError } from '@/presentation/(system)/validation/validation.helper';
 import { Violations } from '@/presentation/(system)/validation/validation.types';
-import { sendRequest } from '@/presentation/contact/mvvm/boundary/contact.facade';
+import { sendRequest } from '@/presentation/contact/mvvm/models/contact.facade';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 import { validate } from '@/presentation/contact/mvvm/models/contact.validator';
 import {
