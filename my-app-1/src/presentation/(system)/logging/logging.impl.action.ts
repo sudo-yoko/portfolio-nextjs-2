@@ -13,10 +13,12 @@ import type { Logger } from '@/presentation/(system)/logging/logging.types';
  * ServerActions によるロガー実装
  */
 export const loggerImpl: Logger = {
-  log: () => {},
-  info: (message, _extras) => void logInfo(message),
-  warn: () => {},
-  error: (message, _extras) => void logError(message),
+  info: async (message, _extras) => {
+    await logInfo(message);
+  },
+  error: async (message, _extras) => {
+    await logError(message);
+  },
   debug: (message, _extras) => {
     // デバッグログをコンソールに出力
     debug(message);
@@ -25,15 +27,17 @@ export const loggerImpl: Logger = {
       void logDebug(message);
     }
   },
-  logAsync: async () => {},
   infoAsync: async (message, _extras) => {
     void logInfo(message);
   },
-  warnAsync: async () => {},
   errorAsync: async (message, _extras) => {
     void logError(message);
   },
   debugAsync: async (message, _extras) => {
     debug(message);
   },
+  log: () => {}, // Not implemented
+  warn: () => {}, // Not implemented
+  logAsync: async () => {}, // Not implemented
+  warnAsync: async () => {}, // Not implemented
 };
