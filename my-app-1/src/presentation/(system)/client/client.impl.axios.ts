@@ -1,11 +1,12 @@
 //
 // API クライアントの実装 ( Axios )
+// BFF -> バックエンドAPIのリクエストで使用する
 //
 import 'server-only';
 
 import { client } from '@/presentation/(system)/client/client.core.axios';
 import { Client, Req, Result } from '@/presentation/(system)/client/client.types';
-import { backendApiError } from '@/presentation/(system)/errors/custom-error';
+import { backendApiError } from '@/presentation/(system)/errors/error.factories';
 import logger from '@/presentation/(system)/logging/logger.s';
 
 const logPrefix = 'client.impl.axios.ts: ';

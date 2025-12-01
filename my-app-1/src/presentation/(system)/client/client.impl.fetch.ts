@@ -1,18 +1,21 @@
 //
 // API クライアントの実装 ( Fetch API )
+// クライアントサイド -> BFF(APIルート)のリクエストで使用する
 //
 import 'client-only';
 
 import { Client, Req, Result } from '@/presentation/(system)/client/client.types';
-import { backendApiError } from '@/presentation/(system)/errors/custom-error';
+import { backendApiError } from '@/presentation/(system)/errors/error.factories';
 import logger from '@/presentation/(system)/logging/logger.c';
 
 const logPrefix = 'client.impl.fetch.ts: ';
 
 export const clientImpl: Client = {
   send: async <BODY = never, PARAMS = never>(req: Req<BODY, PARAMS>) => {
-    // デフォルトは、500 以上のステータスコードの場合はエラーをスローする
-    const validateStatus = req.validateStatus ?? ((status: number) => status < 500);
+    // クライアントサイド -> BFF(APIルート)間リクエストでは、ステータスコード200のみとする。
+    // エラーの場合はレスポンスボディにエラー情報を設定する
+    // 200以外が返ってきたら例外をスローする
+    const validateStatus = req.validateStatus ?? ((status: number) => status === 200);
 
     const res = await fetch(req.url, {
       method: req.method,
@@ -27,7 +30,7 @@ export const clientImpl: Client = {
       throw err;
     }
 
-    const rawBody = await res.text();  // bodyがjsonとは限らないのでtextで取得する。エラーの場合はhtmlが返ってくることもある
+    const rawBody = await res.text(); // bodyがjsonとは限らないのでtextで取得する。エラーの場合はhtmlが返ってくることもある
     const result: Result = {
       status: res.status,
       rawBody,

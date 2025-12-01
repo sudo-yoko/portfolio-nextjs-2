@@ -78,6 +78,6 @@ export function complete<RESULT = void, REASON = never>(
  * @param cause - 失敗の原因
  * @returns
  */
-export function abort(cause?: string): Aborted {
-  return { tag: 'abort', cause };
+export function abort({ type, cause }: { type?: string; cause?: string }): Aborted {
+  return { tag: 'abort', type, cause };
 }

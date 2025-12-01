@@ -1,4 +1,4 @@
-import { authError } from '@/presentation/(system)/errors/custom-error';
+import { authError } from '@/presentation/(system)/errors/error.factories';
 import { stringify } from '@/presentation/(system)/errors/stringify-error';
 import logger from '@/presentation/(system)/logging/logger.s';
 import 'server-only';

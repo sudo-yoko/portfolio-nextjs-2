@@ -1,46 +1,18 @@
 //
-// カスタムエラー定義
+// カスタムエラーファクトリー
 //
+import { BffResult } from '@/presentation/(system)/bff/bff.result.types';
+import { BffError, CustomError, ErrType } from '@/presentation/(system)/errors/error.types';
 import { ActionResult } from '@/presentation/(system)/types/action-result';
 import { Violations } from '@/presentation/(system)/validation/validation.types';
 
 /**
- * カスタムエラーの種類
- * - ActionError      - Server Actions でエラーが発生したことを示すカスタムエラー
- * - AuthError        - 認証エラーが発生したことを示すカスタムエラー
- * - RouteError       - Route Handlers でエラーが発生したことを示すカスタムエラー
- * - ValidationError  - BFF
- */
-// 定数オブジェクト
-export const ErrType = {
-  ActionError: 'ActionError',
-  AuthError: 'AuthError',
-  RouteError: 'RouteError',
-  ValidationError: 'ValidationError',
-  BffError: 'BffError',
-  BackendApiError: 'BackendApiError',
-} as const;
-// 型
-export type ErrType = (typeof ErrType)[keyof typeof ErrType];
-
-/**
- * Errorインスタンスに追加するプロパティ
- */
-export const ERR_TYPE = Symbol.for('err.type'); // シリアライズで消えるので注意
-
-/**
- * カスタムエラーの型。
- * ErrorインスタンスにERR_TYPEプロパティを追加したもの
- */
-export type CustomError<T extends ErrType> = Error & { [ERR_TYPE]: T };
-
-/**
  * カスタムエラーを生成する
  */
-function customError<T extends ErrType>(type: T, message?: string): CustomError<T> {
+export function customError<T extends ErrType>(type: T, message?: string): CustomError<T> {
   const err = new Error(message) as CustomError<T>;
   err.name = type;
-  err[ERR_TYPE] = type;
+  err.errType = type;
   return err;
 }
 /**
@@ -103,43 +75,13 @@ export function validationError<T extends string>(violations: Violations<T>): Cu
   return customError(ErrType.ValidationError, cause);
 }
 
-export function bffError(cause?: string): CustomError<ErrType> {
-  return customError(ErrType.BffError, cause);
-}
-
 export function backendApiError(cause?: string): CustomError<ErrType> {
   return customError(ErrType.BackendApiError, cause);
 }
 
-/**
- * 種類別カスタムエラー判定ファクトリ
- */
-function isErrorOf<T extends ErrType>(type: T) {
-  return (e: unknown) => {
-    if (e instanceof Error) {
-      if (ERR_TYPE in e) {
-        if ((e as CustomError<T>)[ERR_TYPE] === type) {
-          return true;
-        }
-      }
-    }
-    return false;
-  };
+export function bffError(bffResult: BffResult, message?: string): BffError {
+  const err = new Error(message) as BffError;
+  err.name = ErrType.BffError;
+  err.bffResult = bffResult;
+  return err;
 }
-
-/**
- * ActionError かどうかを判定する
- */
-export const isActionError = isErrorOf(ErrType.ActionError);
-
-/**
- * AuthError かどうかを判定する
- */
-export const isAuthError = isErrorOf(ErrType.AuthError);
-
-/**
- * RouteError かどうかを判定する
- */
-export const isRouteError = isErrorOf(ErrType.RouteError);
-
-export const isBffError = isErrorOf(ErrType.BffError);

@@ -12,8 +12,7 @@ import { Completed } from '@/presentation/(system)/bff/bff.result.types';
 import client from '@/presentation/(system)/client/client.c';
 import { CONTENT_TYPE_APPLICATION_JSON_UTF8 } from '@/presentation/(system)/client/client.constants';
 import { Method } from '@/presentation/(system)/client/client.types';
-import { bffError } from '@/presentation/(system)/errors/custom-error';
-import logger from '@/presentation/(system)/logging/logger.c';
+import { bffError } from '@/presentation/(system)/errors/error.factories';
 import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
 import { action } from '@/presentation/contact/mvvm/bff/contact.action';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
@@ -37,7 +36,7 @@ const _viaAction: SendRequest = async (formData) => {
   if (isReject(result) && result.label === REJECTION_LABELS.VIOLATION) {
     return result;
   }
-  throw bffError(JSON.stringify(result));
+  throw bffError(result);
 };
 
 /**
@@ -55,19 +54,16 @@ const viaRoute: SendRequest = async (formData) => {
       ...CONTENT_TYPE_APPLICATION_JSON_UTF8,
     },
     body: JSON.stringify({ name, email, body }),
-    validateStatus: (status) => status === 200,
   });
 
   const parsed = parseBffResult<void, Violations<FormKeys>>(res.rawBody);
-  if (parsed !== null) {
-    if (isOk(parsed)) {
-      return parsed;
-    }
-    if (isReject(parsed) && parsed.label === REJECTION_LABELS.VIOLATION) {
-      return parsed;
-    }
+  if (isOk(parsed)) {
+    return parsed;
   }
-  throw bffError(`BFFから想定外の値が返されました。res.rawBody=${res.rawBody}`);
+  if (isReject(parsed) && parsed.label === REJECTION_LABELS.VIOLATION) {
+    return parsed;
+  }
+  throw bffError(parsed);
 };
 
 /**

@@ -3,7 +3,7 @@ import 'client-only';
 import client from '@/presentation/(system)/client/client.c';
 import { CONTENT_TYPE_APPLICATION_JSON_UTF8 } from '@/presentation/(system)/client/client.constants';
 import { Method } from '@/presentation/(system)/client/client.types';
-import { actionError, routeError } from '@/presentation/(system)/errors/custom-error';
+import { actionError, routeError } from '@/presentation/(system)/errors/error.factories';
 import logger from '@/presentation/(system)/logging/logger.c';
 import { FetchPage, FetchPageResult } from '@/presentation/(system)/pagination/min/modules/types';
 import { action } from '@/presentation/users/min/modules/users-action';
