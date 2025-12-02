@@ -10,7 +10,7 @@ import {
   routeError,
   validationError,
 } from '@/presentation/(system)/errors/error.helpers';
-import { stringify } from '@/presentation/(system)/errors/stringify-error';
+import { stringify } from '@/presentation/(system)/errors/error.stringify';
 import { ActionResult } from '@/presentation/(system)/types/action-result';
 import { Violations } from '@/presentation/(system)/validation/validation.types';
 

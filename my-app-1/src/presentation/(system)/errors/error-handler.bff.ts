@@ -2,7 +2,7 @@ import 'server-only';
 
 import { abort } from '@/presentation/(system)/bff/bff.result.factories';
 import type { BffResult } from '@/presentation/(system)/bff/bff.result.types';
-import { stringify } from '@/presentation/(system)/errors/stringify-error';
+import { stringify } from '@/presentation/(system)/errors/error.stringify';
 import logger from '@/presentation/(system)/logging/logger.s';
 
 const logPrefix = 'bff-error-handler.ts: ';

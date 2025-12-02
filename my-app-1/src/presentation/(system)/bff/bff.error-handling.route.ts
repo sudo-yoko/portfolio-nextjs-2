@@ -4,7 +4,7 @@ import { abort } from '@/presentation/(system)/bff/bff.result.factories';
 import { bffRouteResponse } from '@/presentation/(system)/bff/bff.result.factories.s';
 import { isAuthError } from '@/presentation/(system)/errors/error.helpers';
 import { ErrType } from '@/presentation/(system)/errors/error.types';
-import { stringify } from '@/presentation/(system)/errors/stringify-error';
+import { stringify } from '@/presentation/(system)/errors/error.stringify';
 import logger from '@/presentation/(system)/logging/logger.s';
 
 const logPrefix = 'bff.error-handling.route.ts: ';

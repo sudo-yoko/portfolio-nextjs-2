@@ -3,7 +3,7 @@
 //
 import { Aborted, BffResult, Completed, Ok, Rejected } from '@/presentation/(system)/bff/bff.result.types';
 import { bffResultParseError } from '@/presentation/(system)/errors/error.helpers';
-import { stringify } from '@/presentation/(system)/errors/stringify-error';
+import { stringify } from '@/presentation/(system)/errors/error.stringify';
 
 //////////////////////////
 // 型解析、型ガード関数

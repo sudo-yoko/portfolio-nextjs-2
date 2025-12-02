@@ -1,5 +1,5 @@
 import { authError } from '@/presentation/(system)/errors/error.factories';
-import { stringify } from '@/presentation/(system)/errors/stringify-error';
+import { stringify } from '@/presentation/(system)/errors/error.stringify';
 import logger from '@/presentation/(system)/logging/logger.s';
 import 'server-only';
 

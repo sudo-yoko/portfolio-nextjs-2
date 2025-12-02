@@ -4,7 +4,7 @@
 import 'server-only';
 
 import { isAuthError } from '@/presentation/(system)/errors/error.helpers';
-import { stringify } from '@/presentation/(system)/errors/stringify-error';
+import { stringify } from '@/presentation/(system)/errors/error.stringify';
 import logger from '@/presentation/(system)/logging/logger.s';
 import { Aborted, RouteResult } from '@/presentation/(system)/types/route-response';
 
