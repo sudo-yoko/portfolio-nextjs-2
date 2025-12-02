@@ -2,9 +2,8 @@
 // カスタムエラー ヘルパー関数
 //
 import { CustomError, ErrType } from '@/presentation/(system)/errors/error.types';
-import { customError } from './error.factories';
-import { BffResult } from '../bff/bff.result.types';
 import { isAbort } from '../bff/bff.result.helpers';
+import { BffResult } from '../bff/bff.result.types';
 
 /**
  * 種類別カスタムエラー判定ファクトリ
@@ -47,17 +46,4 @@ export function isBffAuthError(bffResult: BffResult): boolean {
     }
   }
   return false;
-}
-
-
-/**
- * 
- */
-export function bffResultParseError(text: string, message?: string): CustomError<ErrType> {
-  const cause: string[] = [];
-  if (message) {
-    cause.push(message);
-  }
-  cause.push(text);
-  return customError(ErrType.BffResultParseError, cause.join(', '));
 }

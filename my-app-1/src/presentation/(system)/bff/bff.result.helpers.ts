@@ -2,7 +2,7 @@
 // BFF結果オブジェクト ヘルパー関数
 //
 import { Aborted, BffResult, Completed, Ok, Rejected } from '@/presentation/(system)/bff/bff.result.types';
-import { bffResultParseError } from '@/presentation/(system)/errors/error.helpers';
+import { bffResultParseError } from '@/presentation/(system)/errors/error.factories';
 import { stringify } from '@/presentation/(system)/errors/error.stringify';
 
 //////////////////////////

@@ -9,7 +9,7 @@ import { Violations } from '@/presentation/(system)/validation/validation.types'
 /**
  * カスタムエラーを生成する
  */
-export function customError<T extends ErrType>(type: T, message?: string): CustomError<T> {
+function customError<T extends ErrType>(type: T, message?: string): CustomError<T> {
   const err = new Error(message) as CustomError<T>;
   err.name = type;
   err.errType = type;
@@ -19,9 +19,9 @@ export function customError<T extends ErrType>(type: T, message?: string): Custo
  * 種類別カスタムエラー生成ファクトリ
  */
 const errorOfType =
-  <T extends ErrType>(type: T, cause?: string) =>
+  <T extends ErrType>(type: T, message?: string) =>
   () =>
-    customError(type, cause);
+    customError(type, message);
 
 /**
  * AuthError を生成する
@@ -84,4 +84,16 @@ export function bffError(bffResult: BffResult, message?: string): BffError {
   err.name = ErrType.BffError;
   err.bffResult = bffResult;
   return err;
+}
+
+/**
+ *
+ */
+export function bffResultParseError(text: string, message?: string): CustomError<ErrType> {
+  const cause: string[] = [];
+  if (message) {
+    cause.push(message);
+  }
+  cause.push(text);
+  return customError(ErrType.BffResultParseError, cause.join(', '));
 }

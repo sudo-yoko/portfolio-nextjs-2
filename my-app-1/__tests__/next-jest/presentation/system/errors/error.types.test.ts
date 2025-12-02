@@ -38,3 +38,17 @@ test('test1-2', () => {
   print(`error.stack=${error.stack}`);
   print(`error.bffResult=${JSON.stringify(error.bffResult)}`);
 });
+
+// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/errors/error.types.test.ts -t '^test1-3$'
+test('test1-3', () => {
+  const error: Error = {
+    name: 'name',
+    message: 'message',
+    cause: 'cause',
+    stack: 'stack',
+  };
+  print(`error.name=${error.name}`);
+  print(`error.message=${error.message}`);
+  print(`error.cause=${error.cause}`);
+  print(`error.stack=${error.stack}`);
+});

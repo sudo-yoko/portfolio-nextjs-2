@@ -3,13 +3,10 @@ import { printf } from '@/__tests__/test-logger';
 import {
   actionError,
   authError,
-  ERR_TYPE,
-  isActionError,
-  isAuthError,
-  isRouteError,
   routeError,
   validationError,
-} from '@/presentation/(system)/errors/error.helpers';
+} from '@/presentation/(system)/errors/error.factories';
+import { isActionError, isAuthError, isRouteError } from '@/presentation/(system)/errors/error.helpers';
 import { stringify } from '@/presentation/(system)/errors/error.stringify';
 import { ActionResult } from '@/presentation/(system)/types/action-result';
 import { Violations } from '@/presentation/(system)/validation/validation.types';
@@ -23,8 +20,11 @@ const print = printf({ logPrefix: '>>> [custom-error.test.test.ts]', stdout: tru
 test('test1-1', () => {
   const e = authError();
 
-  const errType = e[ERR_TYPE];
-  print(`errType=${errType}`);
+  print(`error.errType=${e.errType}`);
+  print(`error.name=${e.name}`);
+  print(`error.message=${e.message}`);
+  print(`error.cause=${e.cause}`);
+  print(`error.stack=${e.stack}`);
 
   const { message, all } = stringify(e);
   print(`message=${message}, all=${all}`);
@@ -38,7 +38,7 @@ test('test2-1', () => {
   const result = ActionResult.abort();
   const e = actionError(result);
 
-  const errType = e[ERR_TYPE];
+  const errType = e.errType;
   print(`errType=${errType}`);
 
   const { message, all } = stringify(e);
@@ -52,7 +52,7 @@ test('test2-2', () => {
   const result = ActionResult.abort(cause);
   const e = actionError(result);
 
-  const errType = e[ERR_TYPE];
+  const errType = e.errType;
   print(`errType=${errType}`);
 
   const { message, all } = stringify(e);
@@ -66,7 +66,7 @@ test('test2-3', () => {
 
   const e = actionError(result);
 
-  const errType = e[ERR_TYPE];
+  const errType = e.errType;
   print(`errType=${errType}`);
 
   const { message, all } = stringify(e);
@@ -86,7 +86,7 @@ test('test2-4', () => {
 
   const e = actionError(result);
 
-  const errType = e[ERR_TYPE];
+  const errType = e.errType;
   print(`errType=${errType}`);
 
   const { message, all } = stringify(e);
@@ -101,7 +101,7 @@ test('test3-1', async () => {
   const status = 500;
   const e = routeError(status);
 
-  const errType = e[ERR_TYPE];
+  const errType = e.errType;
   print(`errType=${errType}`);
 
   const { message, all } = stringify(e);
@@ -115,7 +115,7 @@ test('test3-2', async () => {
 
   const e = routeError(status, meta);
 
-  const errType = e[ERR_TYPE];
+  const errType = e.errType;
   print(`errType=${errType}`);
 
   const { message, all } = stringify(e);
@@ -135,7 +135,7 @@ test('test4-1', () => {
 
   const e = validationError(violations);
 
-  const errType = e[ERR_TYPE];
+  const errType = e.errType;
   print(`errType=${errType}`);
 
   const { message, all } = stringify(e);
