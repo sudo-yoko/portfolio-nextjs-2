@@ -1,11 +1,10 @@
+//
+// カスタムエラー型定義
+//
 import { BffResult } from '@/presentation/(system)/bff/bff.result.types';
 
 /**
  * カスタムエラーの種類
- * - ActionError      - Server Actions でエラーが発生したことを示すカスタムエラー
- * - AuthError        - 認証エラーが発生したことを示すカスタムエラー
- * - RouteError       - Route Handlers でエラーが発生したことを示すカスタムエラー
- * - ValidationError  - BFF
  */
 // 定数オブジェクト
 export const ErrType = {
@@ -21,10 +20,13 @@ export const ErrType = {
 export type ErrType = (typeof ErrType)[keyof typeof ErrType];
 
 /**
- * カスタムエラーの型。
- * ErrorインスタンスにERR_TYPEプロパティを追加したもの
+ * 基本のカスタムエラー型
+ * Error型に errType プロパティを追加したもの
  */
-export type CustomError<T extends ErrType> = Error & { errType: T };
+export type CustomError<T extends ErrType> = Error & { errType: T }; // 型の合成
 
-// カスタムエラー
+/**
+ * BFFエラー
+ * CustomErrorに bffResult プロパティを追加したもの
+ */
 export type BffError = CustomError<typeof ErrType.BffError> & { bffResult: BffResult };
