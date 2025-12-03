@@ -6,7 +6,6 @@ import { BffResult } from '@/presentation/(system)/bff/bff.result.types';
 /**
  * カスタムエラーの種類
  */
-// 定数オブジェクト
 export const ErrType = {
   ActionError: 'ActionError',
   AuthError: 'AuthError',
@@ -15,18 +14,21 @@ export const ErrType = {
   BffError: 'BffError',
   BackendApiError: 'BackendApiError',
   BffResultParseError: 'BffResultParseError',
-} as const;
-// 型
-export type ErrType = (typeof ErrType)[keyof typeof ErrType];
+} as const; // 定数オブジェクト
+export type ErrType = (typeof ErrType)[keyof typeof ErrType]; // 型
+
+// カスタムエラー固有のプロパティ名をシンボルで定義
+export const CUSTOM_ERROR_TAG = Symbol.for('MyApp.CustomErrorTag');
+export const BFF_RESULT = Symbol.for('MyApp.BffResult');
 
 /**
  * 基本のカスタムエラー型
- * Error型に errType プロパティを追加したもの
+ * Errorオブジェクトを拡張して [CUSTOM_ERROR_TAG] プロパティを追加する
  */
-export type CustomError<T extends ErrType> = Error & { errType: T }; // 型の合成
+export type CustomError<T extends ErrType> = Error & { [CUSTOM_ERROR_TAG]: T }; // 型の合成
 
 /**
  * BFFエラー
- * CustomErrorに bffResult プロパティを追加したもの
+ * CustomErrorに [BFF_RESULT] プロパティを追加したもの
  */
-export type BffError = CustomError<typeof ErrType.BffError> & { bffResult: BffResult };
+export type BffError = CustomError<typeof ErrType.BffError> & { [BFF_RESULT]: BffResult }; // 型の合成

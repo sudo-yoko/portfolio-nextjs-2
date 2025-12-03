@@ -1,4 +1,4 @@
-// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/errors/custom-error.test.ts
+// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/errors/error.factories.test.ts
 import { printf } from '@/__tests__/test-logger';
 import {
   actionError,
@@ -6,74 +6,75 @@ import {
   routeError,
   validationError,
 } from '@/presentation/(system)/errors/error.factories';
-import { isActionError, isAuthError, isRouteError } from '@/presentation/(system)/errors/error.helpers';
 import { stringify } from '@/presentation/(system)/errors/error.stringify';
+import { CUSTOM_ERROR_TAG } from '@/presentation/(system)/errors/error.types';
 import { ActionResult } from '@/presentation/(system)/types/action-result';
 import { Violations } from '@/presentation/(system)/validation/validation.types';
 
-const print = printf({ logPrefix: '>>> [custom-error.test.test.ts]', stdout: true });
+const print = printf({ logPrefix: '>>> [error.factories.test.ts]', stdout: true });
 
 // ======================
 // authError() Test
 // ======================
-// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/errors/custom-error.test.ts -t '^test1-1$'
+// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/errors/error.factories.test.ts -t '^test1-1$'
 test('test1-1', () => {
   const e = authError();
 
-  print(`error.errType=${e.errType}`);
+  print(`error[CUSTOM_ERROR_TAG]=${e[CUSTOM_ERROR_TAG]}`);
+  print(`error.name=${e.name}`);
+  print(`error.message=${e.message}`);
+  print(`error.cause=${e.cause}`);
+  print(`error.stack=${e.stack}`);
+});
+
+// ======================
+// actionError() Test
+// ======================
+// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/errors/error.factories.test.ts -t '^test2-1$'
+test('test2-1', () => {
+  const result = ActionResult.abort();
+  const e = actionError(result);
+
+  print(`error[CUSTOM_ERROR_TAG]=${e[CUSTOM_ERROR_TAG]}`);
   print(`error.name=${e.name}`);
   print(`error.message=${e.message}`);
   print(`error.cause=${e.cause}`);
   print(`error.stack=${e.stack}`);
 
   const { message, all } = stringify(e);
-  print(`message=${message}, all=${all}`);
+  print(`message=${message}`);
+  print(`all=${all}`);
 });
 
-// ======================
-// actionError() Test
-// ======================
-// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/errors/custom-error.test.ts -t '^test2-1$'
-test('test2-1', () => {
-  const result = ActionResult.abort();
-  const e = actionError(result);
-
-  const errType = e.errType;
-  print(`errType=${errType}`);
-
-  const { message, all } = stringify(e);
-  print(`message=${message}, all=${all}`);
-});
-
-// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/errors/custom-error.test.ts -t '^test2-2$'
+// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/errors/error.factories.test.ts -t '^test2-2$'
 test('test2-2', () => {
   const cause = '原因エラー';
 
   const result = ActionResult.abort(cause);
   const e = actionError(result);
 
-  const errType = e.errType;
-  print(`errType=${errType}`);
-
-  const { message, all } = stringify(e);
-  print(`message=${message}, all=${all}`);
+  print(`error[CUSTOM_ERROR_TAG]=${e[CUSTOM_ERROR_TAG]}`);
+  print(`error.name=${e.name}`);
+  print(`error.message=${e.message}`);
+  print(`error.cause=${e.cause}`);
+  print(`error.stack=${e.stack}`);
 });
 
-// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/errors/custom-error.test.ts -t '^test2-3$'
+// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/errors/error.factories.test.ts -t '^test2-3$'
 test('test2-3', () => {
   const result = ActionResult.complete({});
   print(`result=${JSON.stringify(result)}`);
 
   const e = actionError(result);
 
-  const errType = e.errType;
-  print(`errType=${errType}`);
-
-  const { message, all } = stringify(e);
-  print(`message=${message}, all=${all}`);
+  print(`error[CUSTOM_ERROR_TAG]=${e[CUSTOM_ERROR_TAG]}`);
+  print(`error.name=${e.name}`);
+  print(`error.message=${e.message}`);
+  print(`error.cause=${e.cause}`);
+  print(`error.stack=${e.stack}`);
 });
 
-// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/errors/custom-error.test.ts -t '^test2-4$'
+// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/errors/error.factories.test.ts -t '^test2-4$'
 test('test2-4', () => {
   type User = {
     userId: string;
@@ -86,46 +87,46 @@ test('test2-4', () => {
 
   const e = actionError(result);
 
-  const errType = e.errType;
-  print(`errType=${errType}`);
-
-  const { message, all } = stringify(e);
-  print(`message=${message}, all=${all}`);
+  print(`error[CUSTOM_ERROR_TAG]=${e[CUSTOM_ERROR_TAG]}`);
+  print(`error.name=${e.name}`);
+  print(`error.message=${e.message}`);
+  print(`error.cause=${e.cause}`);
+  print(`error.stack=${e.stack}`);
 });
 
 // ======================
 // routeError() Test
 // ======================
-// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/errors/custom-error.test.ts -t '^test3-1$'
+// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/errors/error.factories.test.ts -t '^test3-1$'
 test('test3-1', async () => {
   const status = 500;
   const e = routeError(status);
 
-  const errType = e.errType;
-  print(`errType=${errType}`);
-
-  const { message, all } = stringify(e);
-  print(`message=${message}, all=${all}`);
+  print(`error[CUSTOM_ERROR_TAG]=${e[CUSTOM_ERROR_TAG]}`);
+  print(`error.name=${e.name}`);
+  print(`error.message=${e.message}`);
+  print(`error.cause=${e.cause}`);
+  print(`error.stack=${e.stack}`);
 });
 
-// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/errors/custom-error.test.ts -t '^test3-2$'
+// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/errors/error.factories.test.ts -t '^test3-2$'
 test('test3-2', async () => {
   const status = 500;
   const meta = { body: 'error!', method: 'GET', route: 'http://xxxxx' };
 
   const e = routeError(status, meta);
 
-  const errType = e.errType;
-  print(`errType=${errType}`);
-
-  const { message, all } = stringify(e);
-  print(`message=${message}, all=${all}`);
+  print(`error[CUSTOM_ERROR_TAG]=${e[CUSTOM_ERROR_TAG]}`);
+  print(`error.name=${e.name}`);
+  print(`error.message=${e.message}`);
+  print(`error.cause=${e.cause}`);
+  print(`error.stack=${e.stack}`);
 });
 
 // ======================
 // validationError() Test
 // ======================
-// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/errors/custom-error.test.ts -t '^test4-1$'
+// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/errors/error.factories.test.ts -t '^test4-1$'
 test('test4-1', () => {
   type FormKeys = 'name' | 'email' | 'body';
   const violations: Violations<FormKeys> = {
@@ -135,72 +136,9 @@ test('test4-1', () => {
 
   const e = validationError(violations);
 
-  const errType = e.errType;
-  print(`errType=${errType}`);
-
-  const { message, all } = stringify(e);
-  print(`message=${message}, all=${all}`);
-});
-
-// ======================
-// isErrorOf Test
-// ======================
-// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/errors/custom-error.test.ts -t 'test5-'
-
-// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/errors/custom-error.test.ts -t '^test5-1$'
-test('test5-1', () => {
-  const result = ActionResult.abort();
-  const e = actionError(result);
-  expect(e instanceof Error).toBe(true);
-  expect(isActionError(e)).toBe(true);
-  expect(isAuthError(e)).toBe(false);
-  expect(isRouteError(e)).toBe(false);
-});
-
-// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/errors/custom-error.test.ts -t '^test5-2$'
-test('test5-2', () => {
-  const e = authError();
-  expect(e instanceof Error).toBe(true);
-  expect(isActionError(e)).toBe(false);
-  expect(isAuthError(e)).toBe(true);
-  expect(isRouteError(e)).toBe(false);
-});
-
-// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/errors/custom-error.test.ts -t '^test5-3$'
-test('test5-3', async () => {
-  const status = 500;
-  const meta = { body: 'error!', method: 'GET', route: 'http://xxxxx' };
-
-  const e = routeError(status, meta);
-  expect(e instanceof Error).toBe(true);
-  expect(isActionError(e)).toBe(false);
-  expect(isAuthError(e)).toBe(false);
-  expect(isRouteError(e)).toBe(true);
-});
-
-// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/errors/custom-error.test.ts -t '^test5-4$'
-test('test5-4', () => {
-  const e = new Error();
-  expect(e instanceof Error).toBe(true);
-  expect(isActionError(e)).toBe(false);
-  expect(isAuthError(e)).toBe(false);
-  expect(isRouteError(e)).toBe(false);
-});
-
-// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/errors/custom-error.test.ts -t '^test5-5$'
-test('test5-5', () => {
-  try {
-    const result = ActionResult.abort();
-    throw actionError(result);
-  } catch (e) {
-    // e is unknown
-    expect(isActionError(e)).toBe(true);
-  }
-});
-
-// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/errors/custom-error.test.ts -t '^test5-6$'
-test('test5-6', () => {
-  const e = new String('test');
-  // e is string
-  expect(isActionError(e)).toBe(false);
+  print(`error[CUSTOM_ERROR_TAG]=${e[CUSTOM_ERROR_TAG]}`);
+  print(`error.name=${e.name}`);
+  print(`error.message=${e.message}`);
+  print(`error.cause=${e.cause}`);
+  print(`error.stack=${e.stack}`);
 });
