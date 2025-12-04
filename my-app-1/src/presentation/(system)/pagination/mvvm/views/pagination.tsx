@@ -4,7 +4,7 @@
 'use client';
 
 import { ErrorRedirect } from '@/presentation/(system)/errors/views/component.error-redirect';
-import { FetchPage } from '@/presentation/(system)/pagination/mvvm/models/types';
+import { FetchPage } from '@/presentation/(system)/pagination/mvvm/models/pagination.requester';
 import { handlePagination } from '@/presentation/(system)/pagination/mvvm/view-models/event-handlers';
 import { usePagination } from '@/presentation/(system)/pagination/mvvm/view-models/use-pagination';
 import React from 'react';

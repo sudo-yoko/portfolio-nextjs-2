@@ -6,7 +6,8 @@ import {
   withErrorHandlingAsync,
 } from '@/presentation/(system)/errors/error-handler.client';
 import { createPager } from '@/presentation/(system)/pagination/mvvm/models/pager';
-import { FetchPage, Pager } from '@/presentation/(system)/pagination/mvvm/models/types';
+import { FetchPage } from '@/presentation/(system)/pagination/mvvm/models/pagination.requester';
+import { Pager } from '@/presentation/(system)/pagination/mvvm/models/types';
 import { reducer, toResults } from '@/presentation/(system)/pagination/mvvm/view-models/reducer';
 import { useEffect, useReducer, useRef, useState } from 'react';
 

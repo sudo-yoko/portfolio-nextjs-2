@@ -1,7 +1,8 @@
 import 'client-only';
 
 import { isOk } from '@/presentation/(system)/bff/bff.result.helpers';
-import { FetchPage, Pager, PagerResult } from '@/presentation/(system)/pagination/mvvm/models/types';
+import { FetchPage } from '@/presentation/(system)/pagination/mvvm/models/pagination.requester';
+import { Pager, PagerResult } from '@/presentation/(system)/pagination/mvvm/models/types';
 import {
   calcPagination,
   offsetOfLastPage,
