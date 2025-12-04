@@ -13,7 +13,8 @@
     "mock3": "tsx watch __mocks__/openai-mock.ts",
     "mock4": "tsx watch __mocks__/proxy-server.ts",
     "mock5": "tsx watch __mocks__/web-to-case.ts",
-    "dev:mock": "npm-run-all --parallel dev mock1 mock2 mock3 mock4 mock5"
+    "dev:mock": "npm-run-all --parallel dev mock1 mock2 mock3 mock4 mock5",
+    "start:mock": "npm-run-all --parallel start mock1 mock2 mock3 mock4 mock5"
   },
   "dependencies": {
     "axios": "^1.13.2",
