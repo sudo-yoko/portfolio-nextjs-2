@@ -36,7 +36,7 @@ const _viaAction: Request = async (formData) => {
  */
 const viaRoute: Request = async (formData) => {
   const url = '/api/contact/mvvm';
-  const { name, email, body } = formData;
+  // const { name, email, body } = formData;
 
   const res = await client.send({
     url,
@@ -44,7 +44,8 @@ const viaRoute: Request = async (formData) => {
     headers: {
       ...CONTENT_TYPE_APPLICATION_JSON_UTF8,
     },
-    body: { name, email, body }, // オブジェクトのまま（JSON.stringify不要）で渡す
+    //body: { name, email, body }, // オブジェクトのまま（JSON.stringify不要）で渡す
+    body: formData,
   });
   return parseBffResult<void, Violations<FormKeys>>(res.rawBody);
 };

@@ -1,8 +1,9 @@
+import 'server-only';
+
 import { authError } from '@/presentation/(system)/errors/error.factories';
+import { isAuthError } from '@/presentation/(system)/errors/error.helpers';
 import { stringify } from '@/presentation/(system)/errors/error.stringify';
 import logger from '@/presentation/(system)/logging/logger.s';
-import 'server-only';
-import { isAuthError } from '../errors/error.helpers';
 
 const logPrefix = 'auth-handler.ts: ';
 
