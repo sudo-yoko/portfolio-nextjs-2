@@ -1,6 +1,16 @@
 // REST API クライントのライブラリ非依存のインターフェース型
 
 /**
+ * REST API クライアントのインターフェース型
+ */
+export type Client = {
+  /**
+   * リクエストを送信する
+   */
+  send<BODY = never, PARAMS = never>(req: Req<BODY, PARAMS>): Promise<Result>;
+};
+
+/**
  * HTTP メソッド定義
  */
 export const Method = {
@@ -31,14 +41,4 @@ export type Req<BODY = never, PARAMS = never> = {
 export type Result = {
   status: number;
   rawBody: string;
-};
-
-/**
- * REST API クライアントのインターフェース型
- */
-export type Client = {
-  /**
-   * リクエストを送信する
-   */
-  send<BODY = never, PARAMS = never>(req: Req<BODY, PARAMS>): Promise<Result>;
 };
