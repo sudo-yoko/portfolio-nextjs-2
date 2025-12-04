@@ -20,7 +20,7 @@ export const clientImpl: Client = {
     const res = await fetch(req.url, {
       method: req.method,
       headers: req.headers,
-      body: JSON.stringify(req.body),
+      body: JSON.stringify(req.body), // オブジェクトをJSON.stringifyして渡す
     });
 
     // ステータスコードの検証

@@ -9,7 +9,7 @@ import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error-han
 import { bffError } from '@/presentation/(system)/errors/error.factories';
 import { hasError } from '@/presentation/(system)/validation/validation.helper';
 import { Violations } from '@/presentation/(system)/validation/validation.types';
-import { sendRequest } from '@/presentation/contact/mvvm/models/contact.facade';
+import { request } from '@/presentation/contact/mvvm/models/contact.requester';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 import { validate } from '@/presentation/contact/mvvm/models/contact.validator';
 import {
@@ -59,7 +59,7 @@ export async function send(
   await withErrorHandlingAsync(() => func(), setError);
 
   async function func() {
-    const result = await sendRequest(state.formData);
+    const result = await request(state.formData);
     // 正常
     if (isOk(result)) {
       toComplete(dispatch);

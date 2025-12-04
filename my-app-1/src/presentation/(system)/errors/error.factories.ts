@@ -65,7 +65,7 @@ export function routeError(
 }
 
 /**
- * 
+ *
  * ValidationError を生成する
  */
 export function validationError<T extends string>(violations: Violations<T>): CustomError<ErrType> {
@@ -95,7 +95,14 @@ export function bffResultParseError(text: string, message?: string): CustomError
  * BffError を生成する
  */
 export function bffError(bffResult: BffResult, msg?: string): BffError {
-  const base = new Error(`${ErrType.BffError}: ${msg ?? ''}`);
+  const message: string[] = [];
+  message.push('バックエンドエラー');
+  if (msg) {
+    message.push(msg);
+  }
+  message.push(`bffResult=${JSON.stringify(bffResult)}`);
+
+  const base = new Error(`${ErrType.BffError}: ${message.join(', ')}`);
   const error = Object.assign(base, {
     [CUSTOM_ERROR_TAG]: ErrType.BffError,
     [BFF_RESULT]: bffResult,

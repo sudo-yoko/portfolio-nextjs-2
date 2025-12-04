@@ -13,7 +13,7 @@ const logPrefix = 'contact.action.ts: ';
 /**
  * お問い合わせの送信 サーバーアクション
  */
-export async function action(
+export async function post(
   formData: FormData<FormKeys>,
 ): Promise<BffResult<void, Violations<FormKeys>>> {
   return await withErrorHandlingAsync(() => withAuthAsync(() => func()));
