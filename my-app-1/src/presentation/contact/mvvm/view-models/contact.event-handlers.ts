@@ -3,6 +3,7 @@
 import { REJECTION_LABELS } from '@/presentation/(system)/bff/bff.result.constants';
 import { isOk, isReject } from '@/presentation/(system)/bff/bff.result.helpers';
 import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error-handler.client';
+import { bffError } from '@/presentation/(system)/errors/error.factories';
 import { hasError } from '@/presentation/(system)/validation/validation.helper';
 import { Violations } from '@/presentation/(system)/validation/validation.types';
 import { sendRequest } from '@/presentation/contact/mvvm/models/contact.facade';
@@ -70,7 +71,7 @@ export async function send(
         return;
       }
     }
-    // 上記以外
-    throw Error('予期しない例外');
+    // Aborted やその他想定外の返却値の場合
+    throw bffError(result);
   }
 }

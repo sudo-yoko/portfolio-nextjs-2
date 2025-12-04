@@ -6,7 +6,6 @@ import 'server-only';
 import { REJECTION_LABELS } from '@/presentation/(system)/bff/bff.result.constants';
 import { ok, reject } from '@/presentation/(system)/bff/bff.result.factories';
 import type { BffResult } from '@/presentation/(system)/bff/bff.result.types';
-import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error-handler.bff';
 import logger from '@/presentation/(system)/logging/logger.s';
 import { hasError } from '@/presentation/(system)/validation/validation.helper';
 import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
@@ -20,22 +19,18 @@ const logPrefix = 'contact.interactor.ts: ';
  * ユースケースの実行
  */
 export async function execute(formData: FormData<FormKeys>): Promise<BffResult<void, Violations<FormKeys>>> {
-  return await withErrorHandlingAsync(() => func());
-
-  async function func() {
-    logger.info(logPrefix + `formData=${JSON.stringify(formData)}`);
-    //
-    // バリデーション
-    //
-    const violations = validate(formData);
-    if (hasError(violations)) {
-      logger.info(logPrefix + `validation error. ${JSON.stringify(violations)}`);
-      return reject(REJECTION_LABELS.VIOLATION, violations);
-    }
-    //
-    // 送信
-    //
-    await send({ ...formData });
-    return ok();
+  logger.info(logPrefix + `formData=${JSON.stringify(formData)}`);
+  //
+  // バリデーション
+  //
+  const violations = validate(formData);
+  if (hasError(violations)) {
+    logger.info(logPrefix + `validation error. ${JSON.stringify(violations)}`);
+    return reject(REJECTION_LABELS.VIOLATION, violations);
   }
+  //
+  // 送信
+  //
+  await send({ ...formData });
+  return ok();
 }

@@ -6,47 +6,35 @@
 //
 import 'client-only';
 
-import { REJECTION_LABELS } from '@/presentation/(system)/bff/bff.result.constants';
-import { isOk, isReject, parseBffResult } from '@/presentation/(system)/bff/bff.result.helpers';
-import { Completed } from '@/presentation/(system)/bff/bff.result.types';
+import { parseBffResult } from '@/presentation/(system)/bff/bff.result.helpers';
+import { BffResult } from '@/presentation/(system)/bff/bff.result.types';
 import client from '@/presentation/(system)/client/client.c';
 import { CONTENT_TYPE_APPLICATION_JSON_UTF8 } from '@/presentation/(system)/client/client.constants';
 import { Method } from '@/presentation/(system)/client/client.types';
-import { bffError } from '@/presentation/(system)/errors/error.factories';
 import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
 import { action } from '@/presentation/contact/mvvm/bff/contact.action';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 
 /**
- *
+ * バックエンド呼び出しのインターフェース型
  */
 type SendRequest = {
-  (formData: FormData<FormKeys>): Promise<Completed<void, Violations<FormKeys>>>;
+  (formData: FormData<FormKeys>): Promise<BffResult<void, Violations<FormKeys>>>;
 };
 
 /**
- * Server Actions による実装
+ * ServerActions経由バックエンド呼び出し
  */
 const _viaAction: SendRequest = async (formData) => {
-  // Server Action を呼び出す
-  const result = await action(formData);
-  if (isOk(result)) {
-    return result;
-  }
-  if (isReject(result) && result.label === REJECTION_LABELS.VIOLATION) {
-    return result;
-  }
-  throw bffError(result);
+  return await action(formData);
 };
 
 /**
- * Route Handlers による実装
+ * RouteHandlers経由バックエンド呼び出し
  */
 const viaRoute: SendRequest = async (formData) => {
-  // Route Handler を呼び出す
   const url = '/api/contact/mvvm';
   const { name, email, body } = formData;
-
   const res = await client.send({
     url,
     method: Method.POST,
@@ -55,15 +43,7 @@ const viaRoute: SendRequest = async (formData) => {
     },
     body: JSON.stringify({ name, email, body }),
   });
-
-  const parsed = parseBffResult<void, Violations<FormKeys>>(res.rawBody);
-  if (isOk(parsed)) {
-    return parsed;
-  }
-  if (isReject(parsed) && parsed.label === REJECTION_LABELS.VIOLATION) {
-    return parsed;
-  }
-  throw bffError(parsed);
+  return parseBffResult<void, Violations<FormKeys>>(res.rawBody);
 };
 
 /**
