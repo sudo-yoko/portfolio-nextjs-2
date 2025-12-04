@@ -1,3 +1,6 @@
+//
+// お問い合わせフォーム リクエストハンドラー
+//
 import 'server-only';
 
 import logger from '@/presentation/(system)/logging/logger.s';

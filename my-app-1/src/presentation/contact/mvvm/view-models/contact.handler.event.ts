@@ -1,3 +1,6 @@
+//
+// お問い合わせフォーム イベントハンドラー
+//
 'use client';
 
 import { REJECTION_LABELS } from '@/presentation/(system)/bff/bff.result.constants';

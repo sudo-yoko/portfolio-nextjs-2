@@ -1,6 +1,6 @@
 'use client';
 
-import { ErrorRedirect } from '@/presentation/(system)/errors/views/components/error-redirect';
+import { ErrorRedirect } from '@/presentation/(system)/errors/views/component.error-redirect';
 import { initialState, reducer } from '@/presentation/contact/mvvm/view-models/contact.reducer';
 import Complete from '@/presentation/contact/mvvm/views/contact.component.complete';
 import Confirm from '@/presentation/contact/mvvm/views/contact.component.confirm';

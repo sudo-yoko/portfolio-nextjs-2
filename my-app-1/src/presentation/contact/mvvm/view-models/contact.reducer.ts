@@ -1,4 +1,6 @@
-// お問い合わせフォームのモデル定義
+//
+// お問い合わせフォーム 状態管理
+//
 'use client';
 
 import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';

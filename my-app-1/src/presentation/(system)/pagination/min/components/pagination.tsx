@@ -4,7 +4,7 @@
 'use client';
 
 import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error-handler.client';
-import { ErrorRedirect } from '@/presentation/(system)/errors/views/components/error-redirect';
+import { ErrorRedirect } from '@/presentation/(system)/errors/views/component.error-redirect';
 import { createPager } from '@/presentation/(system)/pagination/min/modules/pager';
 import { FetchPage, Pager } from '@/presentation/(system)/pagination/min/modules/types';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
