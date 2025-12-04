@@ -1,8 +1,6 @@
 //
 // カスタムエラー ヘルパー関数
 //
-import { isAbort } from '@/presentation/(system)/bff/bff.result.helpers';
-import { BffResult } from '@/presentation/(system)/bff/bff.result.types';
 import { CUSTOM_ERROR_TAG, CustomError, ErrType } from '@/presentation/(system)/errors/error.types';
 
 /**
@@ -51,11 +49,11 @@ export const isRouteError = isErrorOf(ErrType.RouteError);
 /**
  * client-only
  */
-export function isBffAuthError(bffResult: BffResult): boolean {
-  if (isAbort(bffResult)) {
-    if (ErrType.AuthError === bffResult.type) {
-      return true;
-    }
-  }
-  return false;
-}
+// export function isBffAuthError(bffResult: BffResult): boolean {
+  // if (isAbort(bffResult)) {
+    // if (ErrType.AuthError === bffResult.type) {
+      // return true;
+    // }
+  // }
+  // return false;
+// }

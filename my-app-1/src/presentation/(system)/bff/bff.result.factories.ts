@@ -2,6 +2,7 @@
 // BFF結果オブジェクト ファクトリー関数
 //
 import { Aborted, Completed, Ok, Rejected } from '@/presentation/(system)/bff/bff.result.types';
+import { ErrType } from '@/presentation/(system)/errors/error.types';
 
 // Overload Signature
 /**
@@ -78,6 +79,6 @@ export function complete<RESULT = void, REASON = never>(
  * @param cause - 失敗の原因
  * @returns
  */
-export function abort({ type, cause }: { type?: string; cause?: string }): Aborted {
-  return { tag: 'abort', type, cause };
+export function abort({ errType, message }: { errType?: ErrType; message?: string }): Aborted {
+  return { tag: 'abort', errType, message };
 }

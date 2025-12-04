@@ -2,7 +2,9 @@ import 'server-only';
 
 import { abort } from '@/presentation/(system)/bff/bff.result.factories';
 import type { BffResult } from '@/presentation/(system)/bff/bff.result.types';
+import { isCustomError } from '@/presentation/(system)/errors/error.helpers';
 import { stringify } from '@/presentation/(system)/errors/error.stringify';
+import { CUSTOM_ERROR_TAG } from '@/presentation/(system)/errors/error.types';
 import logger from '@/presentation/(system)/logging/logger.s';
 
 const logPrefix = 'bff-error-handler.ts: ';
@@ -21,6 +23,11 @@ export async function withErrorHandlingAsync<RESULT, REASON>(
   } catch (e) {
     const { message, all } = stringify(e);
     logger.error(logPrefix + fname + all);
-    return abort({ cause: message });
+
+    let args = {};
+    if (isCustomError(e)) {
+      args = { errType: e[CUSTOM_ERROR_TAG] };
+    }
+    return abort({ message, ...args });
   }
 }

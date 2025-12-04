@@ -1,6 +1,7 @@
 //
 // BFF結果オブジェクト 型定義
 //
+import { ErrType } from '@/presentation/(system)/errors/error.types';
 
 /**
  * 正常終了を表す型
@@ -21,7 +22,7 @@ export type Rejected<REASON = never> = [REASON] extends [never]
 /**
  * 処理の失敗（続行不可能なエラー）を表す型
  */
-export type Aborted = { tag: 'abort'; type?: string; cause?: string };
+export type Aborted = { tag: 'abort'; errType?: ErrType; message?: string };
 
 /**
  * すべての型（正常終了｜差し戻し｜失敗）を包括して総称するユニオン型
