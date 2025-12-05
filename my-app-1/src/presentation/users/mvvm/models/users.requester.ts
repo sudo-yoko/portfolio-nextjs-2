@@ -8,20 +8,21 @@ import {
   FetchPage,
   FetchPageResult,
 } from '@/presentation/(system)/pagination/mvvm/models/pagination.requester';
+import { Violations } from '@/presentation/(system)/validation/validation.types';
 import { action } from '@/presentation/users/mvvm/bff/users.action';
-import { User, UsersQuery } from '@/presentation/users/mvvm/models/users.types';
+import { FormKeys, User, UsersQuery } from '@/presentation/users/mvvm/models/users.types';
 
 /**
  * ServerActions経由バックエンド実行
  */
-const _viaAction: FetchPage<User[], UsersQuery> = async (offset, limit, query) => {
+const _viaAction: FetchPage<UsersQuery, User[], Violations<FormKeys>> = async (offset, limit, query) => {
   return await action(offset, limit, query);
 };
 
 /**
  * Route Handlers経由バックエンド実行
  */
-const viaRoute: FetchPage<User[], UsersQuery> = async (offset, limit, query) => {
+const viaRoute: FetchPage<UsersQuery, User[], Violations<FormKeys>> = async (offset, limit, query) => {
   const url = '/api/users/mvvm';
   const result = await client.send({
     url,
@@ -29,7 +30,7 @@ const viaRoute: FetchPage<User[], UsersQuery> = async (offset, limit, query) => 
     headers: { ...CONTENT_TYPE_APPLICATION_JSON_UTF8 },
     body: { offset, limit, query },
   });
-  return parseBffResult<FetchPageResult<User[]>, FetchPageResult<User[]>>(result.rawBody);
+  return parseBffResult<FetchPageResult<User[]>, Violations<FormKeys>>(result.rawBody);
 
   // const res = await window.fetch(url, {
   // method: POST,
@@ -50,4 +51,4 @@ const viaRoute: FetchPage<User[], UsersQuery> = async (offset, limit, query) => 
   // throw boundaryError(text);
 };
 
-export const fetchPage: FetchPage<User[], UsersQuery> = viaRoute;
+export const fetchPage: FetchPage<UsersQuery, User[], Violations<FormKeys>> = viaRoute;

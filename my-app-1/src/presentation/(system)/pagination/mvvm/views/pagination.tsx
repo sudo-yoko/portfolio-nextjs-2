@@ -9,7 +9,7 @@ import { handlePagination } from '@/presentation/(system)/pagination/mvvm/view-m
 import { usePagination } from '@/presentation/(system)/pagination/mvvm/view-models/use-pagination';
 import React from 'react';
 
-export function Pagination<TItems, TQuery>({
+export function Pagination<QUERY, RESULT, REASON>({
   children,
   search,
   fetchCallback,
@@ -20,11 +20,11 @@ export function Pagination<TItems, TQuery>({
 }: {
   children?: React.ReactNode;
   search: boolean;
-  fetchCallback: FetchPage<TItems, TQuery>;
+  fetchCallback: FetchPage<QUERY, RESULT, REASON>;
   initialPage: number;
   perPage: number;
-  query: TQuery;
-  setItems: React.Dispatch<React.SetStateAction<TItems>>;
+  query: QUERY;
+  setItems: React.Dispatch<React.SetStateAction<RESULT>>;
 }) {
   const { error, state, pager, dispatch, setError } = usePagination({
     search,

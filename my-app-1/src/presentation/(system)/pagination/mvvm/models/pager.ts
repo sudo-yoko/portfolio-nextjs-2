@@ -20,10 +20,10 @@ import {
  * @param params - パラメーター
  * @returns ページャ関数
  */
-export function createPager<T, Q>(
-  fetchPage: FetchPage<T, Q>,
-  params: { initialPage?: number; perPage: number; query: Q },
-): Pager<T> {
+export function createPager<QUERY, RESULT, REASON>(
+  fetchPage: FetchPage<QUERY, RESULT, REASON>,
+  params: { initialPage?: number; perPage: number; query: QUERY },
+): Pager<RESULT> {
   const { perPage, query } = params;
   const initPage = params.initialPage ?? 1;
   const limit = perPage;
@@ -32,7 +32,7 @@ export function createPager<T, Q>(
   /**
    * データ取得関数を使ってページデータを取得する関数
    */
-  const fetchData = async (): Promise<PagerResult<T>> => {
+  const fetchData = async (): Promise<PagerResult<RESULT>> => {
     //
     // 実効オフセットに補正（下限値）
     //
@@ -78,7 +78,7 @@ export function createPager<T, Q>(
    * ページャ関数
    * 検索条件や表示件数などは関数の中にエンクロージングされる
    */
-  const pager: Pager<T> = {
+  const pager: Pager<RESULT> = {
     current() {
       return fetchData();
     },

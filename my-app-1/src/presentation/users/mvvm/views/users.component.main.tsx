@@ -13,7 +13,11 @@ export function Main() {
   const { userName } = formData;
   const [users, setUsers] = useState<User[]>([]);
   const [query, setQuery] = useState<UsersQuery>({ userId: '', userName });
-  const fetchCallback = useCallback(fetchPage, [fetchPage]);
+  // const fetchCallback = useCallback(fetchPage, [fetchPage]);
+  const fetchCallback = useCallback(
+    (offset: number, perPage: number, query: UsersQuery) => fetchPage(offset, perPage, query),
+    [],
+  );
 
   const initialPage = 1;
   const perPage = 4;
