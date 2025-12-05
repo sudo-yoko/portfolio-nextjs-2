@@ -11,6 +11,10 @@ export const REJECTION_LABELS = {
    */
   VIOLATION: 'violation',
   /**
+   * 該当データなし
+   */
+  NO_DATA: 'no_data',
+  /**
    * タイムアウト
    */
   TIMEOUT: 'timeout',
