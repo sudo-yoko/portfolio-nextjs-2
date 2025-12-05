@@ -12,7 +12,7 @@ import { reducer, toResults } from '@/presentation/(system)/pagination/mvvm/view
 import { useEffect, useReducer, useRef, useState } from 'react';
 
 //
-export function usePagination<TItems, TQuery>({
+export function usePagination<QUERY, RESULT, REASON>({
   search,
   fetchCallback,
   initialPage,
@@ -21,15 +21,15 @@ export function usePagination<TItems, TQuery>({
   setItems,
 }: {
   search: boolean;
-  fetchCallback: FetchPage<TItems, TQuery>;
+  fetchCallback: FetchPage<QUERY, RESULT, REASON>;
   initialPage: number;
   perPage: number;
-  query: TQuery;
-  setItems: React.Dispatch<React.SetStateAction<TItems>>;
+  query: QUERY;
+  setItems: React.Dispatch<React.SetStateAction<RESULT>>;
 }) {
-  const [state, dispatch] = useReducer(reducer<TItems>, { step: 'initial' });
+  const [state, dispatch] = useReducer(reducer<RESULT>, { step: 'initial' });
   const [error, setError] = useState(false);
-  const pager = useRef<Pager<TItems>>(null);
+  const pager = useRef<Pager<RESULT>>(null);
 
   console.log('presentation');
 
