@@ -1,7 +1,7 @@
 // 型推論の検証
 
-import { isAborted, isInvalid } from '@/presentation/(system)/bff/bff.result.helpers';
 import { okData } from '@/presentation/(system)/result/result.core.factories';
+import { isAborted, isInvalid } from '@/presentation/(system)/result/result.core.helpers';
 import { Aborted, Invalid, OkData, OkEmpty } from '@/presentation/(system)/result/result.core.types';
 
 type Ok<DATA = void> = [DATA] extends [void] ? OkEmpty : OkData<DATA>;
