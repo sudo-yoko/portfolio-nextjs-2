@@ -1,4 +1,4 @@
-import { FormData, Validator, Violations } from '@/presentation/(system)/validation/validation.types';
+import { FormValidator, Validator, Violations } from '@/presentation/(system)/validation/validation.types';
 import { requiredEmail } from '@/presentation/(system)/validation/validators.email';
 import { required } from '@/presentation/(system)/validation/validators.presence';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
@@ -7,13 +7,13 @@ import { z } from 'zod';
 /**
  * フォームのバリデーション
  */
-export function validate(formData: FormData<FormKeys>): Violations<FormKeys> {
+export const validate: FormValidator<FormKeys> = (formData) => {
   const errors: Violations<FormKeys> = {};
   errors['name'] = required(formData.name, 'お名前');
   errors['email'] = requiredEmail(formData.email, 'メールアドレス');
   errors['body'] = requiredMax50(formData.body, 'お問い合わせ内容');
   return errors;
-}
+};
 
 /**
  * バリデーション：必須で最大５０桁まで

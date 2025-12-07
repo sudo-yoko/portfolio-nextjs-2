@@ -3,12 +3,12 @@
 //
 import 'server-only';
 
-import { abort } from '@/presentation/(system)/bff/bff.result.factories';
 import { bffRouteResponse } from '@/presentation/(system)/bff/bff.result.factories.s';
 import { isCustomError } from '@/presentation/(system)/errors/error.helpers';
 import { stringify } from '@/presentation/(system)/errors/error.stringify';
 import { CUSTOM_ERROR_TAG } from '@/presentation/(system)/errors/error.types';
 import logger from '@/presentation/(system)/logging/logger.s';
+import { abort } from '@/presentation/(system)/result/result.core.factories';
 
 const logPrefix = 'route-error-handler.ts: ';
 
