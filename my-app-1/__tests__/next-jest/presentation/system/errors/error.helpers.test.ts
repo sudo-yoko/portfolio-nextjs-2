@@ -1,5 +1,5 @@
 import { printf } from '@/__tests__/test-logger';
-import { BffResult } from '@/presentation/(system)/bff/bff.result.types';
+import { BffResult } from '@/presentation/(system)/result/result.bff.types';
 import { actionError, authError, bffError, routeError } from '@/presentation/(system)/errors/error.factories';
 import {
   isActionError,

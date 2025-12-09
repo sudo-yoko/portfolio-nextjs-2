@@ -9,10 +9,12 @@ import { createPager } from '@/presentation/(system)/pagination/mvvm/models/page
 import { FetchPage } from '@/presentation/(system)/pagination/mvvm/models/pagination.requester';
 import { Pager } from '@/presentation/(system)/pagination/mvvm/models/types';
 import { reducer, toResults } from '@/presentation/(system)/pagination/mvvm/view-models/reducer';
+import { isOkData } from '@/presentation/(system)/result/result.core.helpers';
+import { FormData } from '@/presentation/(system)/validation/validation.types';
 import { useEffect, useReducer, useRef, useState } from 'react';
 
 //
-export function usePagination<QUERY, RESULT, REASON>({
+export function usePagination<DATA, FIELD extends string>({
   search,
   fetchCallback,
   initialPage,
@@ -21,15 +23,15 @@ export function usePagination<QUERY, RESULT, REASON>({
   setItems,
 }: {
   search: boolean;
-  fetchCallback: FetchPage<QUERY, RESULT, REASON>;
+  fetchCallback: FetchPage<DATA, FIELD>;
   initialPage: number;
   perPage: number;
-  query: QUERY;
-  setItems: React.Dispatch<React.SetStateAction<RESULT>>;
+  query: FormData<FIELD>;
+  setItems: React.Dispatch<React.SetStateAction<DATA>>;
 }) {
-  const [state, dispatch] = useReducer(reducer<RESULT>, { step: 'initial' });
+  const [state, dispatch] = useReducer(reducer<DATA>, { step: 'initial' });
   const [error, setError] = useState(false);
-  const pager = useRef<Pager<RESULT>>(null);
+  const pager = useRef<Pager<DATA, FIELD>>(null);
 
   console.log('presentation');
 
@@ -47,7 +49,10 @@ export function usePagination<QUERY, RESULT, REASON>({
       }
       pager.current = createPager(fetchCallback, { initialPage, perPage, query });
       const page = await pager.current.current();
-      toResults(dispatch, page.items, page.currentPage);
+      if (isOkData(page)) {
+        // if (page.tag === 'ok') {
+        toResults(dispatch, page.data.items, page.data.currentPage);
+      }
     }
   }, [fetchCallback, initialPage, perPage, query, search]);
 

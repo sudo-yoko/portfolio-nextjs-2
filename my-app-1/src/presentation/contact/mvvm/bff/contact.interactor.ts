@@ -3,12 +3,11 @@
 //
 import 'server-only';
 
-import { REJECTION_LABELS } from '@/presentation/(system)/bff/bff.result.constants';
-import { ok, reject } from '@/presentation/(system)/bff/bff.result.factories';
-import type { BffResult } from '@/presentation/(system)/bff/bff.result.types';
+import type { BffResult } from '@/presentation/(system)/result/result.bff.types';
 import logger from '@/presentation/(system)/logging/logger.s';
+import { invalid, okEmpty } from '@/presentation/(system)/result/result.core.factories';
 import { hasError } from '@/presentation/(system)/validation/validation.helper';
-import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
+import { FormData } from '@/presentation/(system)/validation/validation.types';
 import { send } from '@/presentation/contact/mvvm/bff/contact.webToCase-client';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 import { validate } from '@/presentation/contact/mvvm/models/contact.validator';
@@ -18,7 +17,7 @@ const logPrefix = 'contact.interactor.ts: ';
 /**
  * ユースケースの実行
  */
-export async function execute(formData: FormData<FormKeys>): Promise<BffResult<void, Violations<FormKeys>>> {
+export async function execute(formData: FormData<FormKeys>): Promise<BffResult<void, FormKeys>> {
   logger.info(logPrefix + `formData=${JSON.stringify(formData)}`);
   //
   // バリデーション
@@ -26,11 +25,12 @@ export async function execute(formData: FormData<FormKeys>): Promise<BffResult<v
   const violations = validate(formData);
   if (hasError(violations)) {
     logger.info(logPrefix + `validation error. ${JSON.stringify(violations)}`);
-    return reject(REJECTION_LABELS.VIOLATION, violations);
+    //return reject(REJECTION_LABELS.VIOLATION, violations);
+    return invalid(violations);
   }
   //
   // 送信
   //
   await send({ ...formData });
-  return ok();
+  return okEmpty();
 }

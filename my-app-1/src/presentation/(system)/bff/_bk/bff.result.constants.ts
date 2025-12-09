@@ -5,17 +5,17 @@
 /**
  * 差し戻しの理由。よく使うラベルを固定値で定義しておく
  */
-export const REJECTION_LABELS = {
+// export const REJECTION_LABELS = {
   /**
    * バリデーションエラー
    */
-  VIOLATION: 'violation',
+  // VIOLATION: 'violation',
   /**
    * 該当データなし
    */
-  NO_DATA: 'no_data',
+  // NO_DATA: 'no_data',
   /**
    * タイムアウト
    */
-  TIMEOUT: 'timeout',
-} as const;
+  // TIMEOUT: 'timeout',
+// } as const;

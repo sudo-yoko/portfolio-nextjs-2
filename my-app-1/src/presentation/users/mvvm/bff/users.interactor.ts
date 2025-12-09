@@ -1,26 +1,39 @@
 import 'server-only';
 
-import { REJECTION_LABELS } from '@/presentation/(system)/bff/bff.result.constants';
-import { ok, reject } from '@/presentation/(system)/bff/bff.result.factories';
-import { BffResult } from '@/presentation/(system)/bff/bff.result.types';
+import { BffResult } from '@/presentation/(system)/result/result.bff.types';
 import { FetchPageResult } from '@/presentation/(system)/pagination/mvvm/models/pagination.requester';
-import { Violations } from '@/presentation/(system)/validation/validation.types';
+import { invalid, okData } from '@/presentation/(system)/result/result.core.factories';
+import { hasError } from '@/presentation/(system)/validation/validation.helper';
+import { FormData } from '@/presentation/(system)/validation/validation.types';
 import { send } from '@/presentation/users/mvvm/bff/users.client';
-import { FormKeys, User, UsersQuery } from '@/presentation/users/mvvm/models/users.types';
+import { FormKeys, User } from '@/presentation/users/mvvm/models/users.types';
+import { validate } from '@/presentation/users/mvvm/models/users.validator';
 
 export async function execute(
   offset: number,
   limit: number,
-  query: UsersQuery,
-): Promise<BffResult<FetchPageResult<User[]>, Violations<FormKeys>>> {  // TODO: REASON型を指定しないのにコンパイルエラーにならない
-  const { total, users } = await send(offset, limit, query);
-
-  const data: FetchPageResult<User[]> = { total, items: users };
-  if (total === 0) {
-    const violations: Violations<FormKeys> = {
-      userName: ['該当データがありません。'],
-    };
-    return reject(REJECTION_LABELS.NO_DATA, violations);
+  query: FormData<FormKeys>,
+  // TODO: REASON型を指定しないのにコンパイルエラーにならない
+): Promise<BffResult<FetchPageResult<User[]>, FormKeys>> {
+  //
+  // バリデーション
+  //
+  const violations = validate(query);
+  if (hasError(violations)) {
+    // return reject(REJECTION_LABELS.VIOLATION, violations);
+    return invalid(violations);
   }
-  return ok(data);
+
+  // const query: UsersQuery = {
+  // userName: formData.userName,
+  // };
+  //
+  // データ取得
+  //
+  const { total, users } = await send(offset, limit, query);
+  // if (total === 0) {
+  // return reject(REJECTION_LABELS.NO_DATA);
+  // }
+  const data: FetchPageResult<User[]> = { total, items: users };
+  return okData(data);
 }

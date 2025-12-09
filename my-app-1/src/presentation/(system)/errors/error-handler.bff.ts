@@ -1,11 +1,11 @@
 import 'server-only';
 
-import { abort } from '@/presentation/(system)/bff/bff.result.factories';
-import type { BffResult } from '@/presentation/(system)/bff/bff.result.types';
+import type { BffResult } from '@/presentation/(system)/result/result.bff.types';
 import { isCustomError } from '@/presentation/(system)/errors/error.helpers';
 import { stringify } from '@/presentation/(system)/errors/error.stringify';
 import { CUSTOM_ERROR_TAG } from '@/presentation/(system)/errors/error.types';
 import logger from '@/presentation/(system)/logging/logger.s';
+import { abort } from '@/presentation/(system)/result/result.core.factories';
 
 const logPrefix = 'bff-error-handler.ts: ';
 
@@ -14,9 +14,9 @@ const logPrefix = 'bff-error-handler.ts: ';
  *
  * @remarks 引数に渡されたサンクにエラーハンドリングを追加して実行する。
  */
-export async function withErrorHandlingAsync<RESULT, REASON>(
-  thunk: () => Promise<BffResult<RESULT, REASON>>,
-): Promise<BffResult<RESULT, REASON>> {
+export async function withErrorHandlingAsync<DATA, FIELD extends string>(
+  thunk: () => Promise<BffResult<DATA, FIELD>>,
+): Promise<BffResult<DATA, FIELD>> {
   const fname = 'withErrorHandlingAsync: ';
   try {
     return await thunk();

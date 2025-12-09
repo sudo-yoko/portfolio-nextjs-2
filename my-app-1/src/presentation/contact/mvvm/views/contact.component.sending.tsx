@@ -1,6 +1,6 @@
 'use client';
 
-import { send } from '@/presentation/contact/mvvm/view-models/contact.handler.event';
+import { submit } from '@/presentation/contact/mvvm/view-models/contact.handler.event';
 import { Action, State } from '@/presentation/contact/mvvm/view-models/contact.reducer';
 import React, { useEffect } from 'react';
 
@@ -19,7 +19,7 @@ export default function Sending({
   useEffect(() => {
     // 書き方その１
     void (async () => {
-      await send(state, dispatch, setError);
+      await submit(state, dispatch, setError);
     })();
 
     // 書き方その２

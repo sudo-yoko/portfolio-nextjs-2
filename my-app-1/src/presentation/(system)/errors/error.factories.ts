@@ -1,7 +1,7 @@
 //
 // カスタムエラーファクトリー
 //
-import { BffResult } from '@/presentation/(system)/bff/bff.result.types';
+import { BffResult } from '@/presentation/(system)/result/result.bff.types';
 import {
   BFF_RESULT,
   BffError,
@@ -80,15 +80,27 @@ export function backendApiError(message: string): CustomError<ErrType> {
 }
 
 /**
- * BffResultParseError を生成する
+ * ResultParseError を生成する
  */
-export function bffResultParseError(text: string, message?: string): CustomError<ErrType> {
+export function parseResultError(text: string, message?: string): CustomError<ErrType> {
   const cause: string[] = [];
   if (message) {
     cause.push(message);
   }
   cause.push(text);
-  return customError(ErrType.BffResultParseError, cause.join(', '));
+  return customError(ErrType.ParseResultError, cause.join(', '));
+}
+
+/**
+ * BffResultParseError を生成する
+ */
+export function parseBffResultError(text: string, message?: string): CustomError<ErrType> {
+  const cause: string[] = [];
+  if (message) {
+    cause.push(message);
+  }
+  cause.push(text);
+  return customError(ErrType.ParseBffResultError, cause.join(', '));
 }
 
 /**

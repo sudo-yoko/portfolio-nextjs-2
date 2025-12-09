@@ -1,14 +1,18 @@
 import 'client-only';
 
-import { isOk } from '@/presentation/(system)/bff/bff.result.helpers';
+import { BffResult } from '@/presentation/(system)/result/result.bff.types';
+import { bffError } from '@/presentation/(system)/errors/error.factories';
 import { FetchPage } from '@/presentation/(system)/pagination/mvvm/models/pagination.requester';
-import { Pager, PagerResult } from '@/presentation/(system)/pagination/mvvm/models/types';
+import { PageData, Pager } from '@/presentation/(system)/pagination/mvvm/models/types';
 import {
   calcPagination,
   offsetOfLastPage,
   pageToOffset,
   toEffectiveOffsetMin,
 } from '@/presentation/(system)/pagination/mvvm/models/utils';
+import { invalid, okData } from '@/presentation/(system)/result/result.core.factories';
+import { isAborted, isInvalid } from '@/presentation/(system)/result/result.core.helpers';
+import { FormData } from '@/presentation/(system)/validation/validation.types';
 
 /**
  * ページャ関数を返す
@@ -20,10 +24,10 @@ import {
  * @param params - パラメーター
  * @returns ページャ関数
  */
-export function createPager<QUERY, RESULT, REASON>(
-  fetchPage: FetchPage<QUERY, RESULT, REASON>,
-  params: { initialPage?: number; perPage: number; query: QUERY },
-): Pager<RESULT> {
+export function createPager<ITEMS, FIELD extends string>(
+  fetchPage: FetchPage<ITEMS, FIELD>,
+  params: { initialPage?: number; perPage: number; query: FormData<FIELD> },
+): Pager<ITEMS, FIELD> {
   const { perPage, query } = params;
   const initPage = params.initialPage ?? 1;
   const limit = perPage;
@@ -32,7 +36,7 @@ export function createPager<QUERY, RESULT, REASON>(
   /**
    * データ取得関数を使ってページデータを取得する関数
    */
-  const fetchData = async (): Promise<PagerResult<RESULT>> => {
+  const fetchData = async (): Promise<BffResult<PageData<ITEMS>, FIELD>> => {
     //
     // 実効オフセットに補正（下限値）
     //
@@ -41,8 +45,12 @@ export function createPager<QUERY, RESULT, REASON>(
     // データ取得
     //
     let result = await fetchPage(offset, limit, query);
-    if (!isOk(result)) {
-      throw Error();
+    // BffResult -> PagerResultに変換して返す
+    if (isAborted(result)) {
+      throw bffError(result);
+    }
+    if (isInvalid(result)) {
+      return invalid(result.violations);
     }
     let { total, items } = result.data;
     //
@@ -51,7 +59,20 @@ export function createPager<QUERY, RESULT, REASON>(
     if (total === 0) {
       const { effectiveOffset, currentPage, totalPages } = calcPagination(offset, limit, total);
       offset = effectiveOffset;
-      return { total, offset, items, hasNext: false, hasPrev: false, currentPage, totalPages };
+
+      // return { total, offset, items, hasNext: false, hasPrev: false, currentPage, totalPages };
+      const data: PageData<ITEMS> = {
+        total,
+        offset,
+        items,
+        hasNext: false,
+        hasPrev: false,
+        currentPage,
+        totalPages,
+      };
+      return okData(data);
+      // const result: PagerResult<ITEMS, FIELD> = { tag: 'ok', data };
+      // return result;
     }
     //
     // 実効オフセットに補正（上限値）して再取得
@@ -59,8 +80,11 @@ export function createPager<QUERY, RESULT, REASON>(
     if (offset > total) {
       offset = offsetOfLastPage(total, limit); // 最終ページの先頭の1件目
       result = await fetchPage(offset, limit, query);
-      if (!isOk(result)) {
-        throw Error();
+      if (isAborted(result)) {
+        throw bffError(result);
+      }
+      if (isInvalid(result)) {
+        return invalid(result.violations);
       }
       ({ total, items } = result.data);
     }
@@ -71,14 +95,18 @@ export function createPager<QUERY, RESULT, REASON>(
     const hasPrev = offset > 0;
     const { effectiveOffset, currentPage, totalPages } = calcPagination(offset, limit, total);
     offset = effectiveOffset;
-    return { total, offset, items, hasNext, hasPrev, currentPage, totalPages };
+    // return { tag: 'ok', total, offset, items, hasNext, hasPrev, currentPage, totalPages };
+    const data: PageData<ITEMS> = { total, offset, items, hasNext, hasPrev, currentPage, totalPages };
+    return okData(data);
+    // const result2: PagerResult<ITEMS, FIELD> = { tag: 'ok', data };
+    // return result2;
   };
 
   /**
    * ページャ関数
    * 検索条件や表示件数などは関数の中にエンクロージングされる
    */
-  const pager: Pager<RESULT> = {
+  const pager: Pager<ITEMS, FIELD> = {
     current() {
       return fetchData();
     },

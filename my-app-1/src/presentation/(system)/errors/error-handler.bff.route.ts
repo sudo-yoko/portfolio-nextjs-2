@@ -3,7 +3,7 @@
 //
 import 'server-only';
 
-import { bffRouteResponse } from '@/presentation/(system)/bff/bff.result.factories.s';
+import { bffRouteResponse } from '@/presentation/(system)/result/result.bff.factories.s';
 import { isCustomError } from '@/presentation/(system)/errors/error.helpers';
 import { stringify } from '@/presentation/(system)/errors/error.stringify';
 import { CUSTOM_ERROR_TAG } from '@/presentation/(system)/errors/error.types';

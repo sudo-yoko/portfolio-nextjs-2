@@ -1,5 +1,5 @@
 import { printf } from '@/__tests__/test-logger';
-import { Aborted } from '@/presentation/(system)/bff/bff.result.types';
+import { Aborted } from '@/presentation/(system)/result/result.bff.types';
 import { bffError, isBffAuthError } from '@/presentation/(system)/errors/bff-error';
 import { ErrType } from '@/presentation/(system)/errors/error.types';
 

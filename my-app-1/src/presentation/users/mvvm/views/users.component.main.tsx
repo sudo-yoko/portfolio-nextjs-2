@@ -3,10 +3,9 @@
 import { ErrorRedirect } from '@/presentation/(system)/errors/views/component.error-redirect';
 import { handlePagination } from '@/presentation/(system)/pagination/mvvm/view-models/event-handlers';
 import { usePagination } from '@/presentation/(system)/pagination/mvvm/view-models/use-pagination';
-import { Pagination } from '@/presentation/(system)/pagination/mvvm/views/pagination';
-import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
+import { FormData } from '@/presentation/(system)/validation/validation.types';
 import { fetchPage } from '@/presentation/users/mvvm/models/users.requester';
-import { FormKeys, User, UsersQuery } from '@/presentation/users/mvvm/models/users.types';
+import { FormKeys, User } from '@/presentation/users/mvvm/models/users.types';
 import UserList from '@/presentation/users/mvvm/views/users.component.list';
 import { useCallback, useState } from 'react';
 
@@ -15,23 +14,22 @@ export function Main() {
   const [formData, setFormData] = useState<FormData<FormKeys>>({ userName: '' });
   const { userName } = formData;
   const [users, setUsers] = useState<User[]>([]);
-  const [query, setQuery] = useState<UsersQuery>({ userId: '', userName });
+  //const [query, setQuery] = useState<UsersQuery>({ userId: '', userName });
+  const [query, setQuery] = useState<FormData<FormKeys>>({ userName });
   // const fetchCallback = useCallback(fetchPage, [fetchPage]);
   const fetchCallback = useCallback(
-    (offset: number, perPage: number, query: UsersQuery) => fetchPage(offset, perPage, query),
+    (offset: number, perPage: number, query: FormData<FormKeys>) => fetchPage(offset, perPage, query),
     [],
   );
 
-  const { error, state, pager, dispatch, setError } = usePagination<UsersQuery, User[], Violations<FormKeys>>(
-    {
-      search,
-      fetchCallback,
-      initialPage: 1,
-      perPage: 4,
-      query,
-      setItems: setUsers,
-    },
-  );
+  const { error, state, pager, dispatch, setError } = usePagination<User[], FormKeys>({
+    search,
+    fetchCallback,
+    initialPage: 1,
+    perPage: 4,
+    query,
+    setItems: setUsers,
+  });
 
   function handleSearch() {
     setQuery({ ...query, userName: formData.userName });

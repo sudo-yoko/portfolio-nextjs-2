@@ -1,10 +1,11 @@
 'use server';
 
 import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error-handler.bff';
+import { FormData } from '@/presentation/(system)/validation/validation.types';
 import { execute } from '@/presentation/users/mvvm/bff/users.interactor';
-import { UsersQuery } from '@/presentation/users/mvvm/models/users.types';
+import { FormKeys } from '@/presentation/users/mvvm/models/users.types';
 
-export async function action(offset: number, limit: number, query: UsersQuery) {
+export async function action(offset: number, limit: number, query: FormData<FormKeys>) {
   return await withErrorHandlingAsync(() => func());
 
   async function func() {

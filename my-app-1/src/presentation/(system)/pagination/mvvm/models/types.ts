@@ -3,29 +3,37 @@
 //
 import 'client-only';
 
+import { BffResult } from '@/presentation/(system)/result/result.bff.types';
+
 /**
- * ページャ関数の関数シグネチャ
+ * ページャ関数のインターフェース型
  */
-export interface Pager<T> {
+export type Pager<ITEMS, FIELD extends string> = {
   /**
    * 現在のページを取得する
    */
-  current(): Promise<PagerResult<T>>;
+  current(): Promise<BffResult<PageData<ITEMS>, FIELD>>;
   /**
    * 次ページを取得する
    */
-  next(): Promise<PagerResult<T>>;
+  next(): Promise<BffResult<PageData<ITEMS>, FIELD>>;
   /**
    * 前ページを取得する
    */
-  prev(): Promise<PagerResult<T>>;
-}
+  prev(): Promise<BffResult<PageData<ITEMS>, FIELD>>;
+};
 
 /**
  * ページャ関数の戻り値の型
  */
-export interface PagerResult<T> {
-  items: T;
+// export type PagerResult<ITEMS, FIELD extends string> = OkData<PageData<ITEMS>> | Invalid<FIELD>;
+
+/**
+ * ページのデータ型
+ */
+// export interface Pager<T> {
+export type PageData<ITEMS> = {
+  items: ITEMS;
   /**
    * 現在選択されているページ
    */
@@ -50,4 +58,4 @@ export interface PagerResult<T> {
    * 前ページがあるか
    */
   hasPrev: boolean;
-}
+};

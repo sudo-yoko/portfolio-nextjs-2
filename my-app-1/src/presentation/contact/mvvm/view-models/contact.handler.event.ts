@@ -3,13 +3,12 @@
 //
 'use client';
 
-import { REJECTION_LABELS } from '@/presentation/(system)/bff/bff.result.constants';
-import { isOk, isReject } from '@/presentation/(system)/bff/bff.result.helpers';
 import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error-handler.client';
 import { bffError } from '@/presentation/(system)/errors/error.factories';
+import { isInvalid, isOkEmpty } from '@/presentation/(system)/result/result.core.helpers';
 import { hasError } from '@/presentation/(system)/validation/validation.helper';
 import { Violations } from '@/presentation/(system)/validation/validation.types';
-import { request } from '@/presentation/contact/mvvm/models/contact.requester';
+import { send } from '@/presentation/contact/mvvm/models/contact.requester';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 import { validate } from '@/presentation/contact/mvvm/models/contact.validator';
 import {
@@ -50,7 +49,7 @@ export function handleNext(state: State, dispatch: React.ActionDispatch<[action:
 /**
  * 送信中が表示中の処理
  */
-export async function send(
+export async function submit(
   state: State,
   dispatch: React.ActionDispatch<[action: Action]>,
   setError: React.Dispatch<React.SetStateAction<boolean>>,
@@ -59,15 +58,16 @@ export async function send(
   await withErrorHandlingAsync(() => func(), setError);
 
   async function func() {
-    const result = await request(state.formData);
+    const result = await send(state.formData);
     // 正常
-    if (isOk(result)) {
+    if (isOkEmpty(result)) {
       toComplete(dispatch);
       return;
     }
     // バリデーションエラーあり
-    if (isReject(result) && result.label === REJECTION_LABELS.VIOLATION) {
-      const violations = result.data;
+    if(isInvalid(result)){
+    // if (isReject(result) && result.label === REJECTION_LABELS.VIOLATION) {
+      const violations = result.violations;
       if (hasError(violations)) {
         setViolations(dispatch, violations);
         toInput(dispatch);

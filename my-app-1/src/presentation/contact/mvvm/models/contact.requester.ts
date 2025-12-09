@@ -1,40 +1,38 @@
 //
-// お問い合わせの送信 バックエンド・ゲートウェイ
-//
-// バックエンド（サーバーサイド）実行窓口
+// お問い合わせフォーム バックエンド呼び出し
 //
 import 'client-only';
 
-import { parseBffResult } from '@/presentation/(system)/bff/bff.result.helpers';
-import { BffResult } from '@/presentation/(system)/bff/bff.result.types';
+import { parseBffResult } from '@/presentation/(system)/result/result.bff.helpers';
+import { BffResult } from '@/presentation/(system)/result/result.bff.types';
 import client from '@/presentation/(system)/client/client.c';
 import { CONTENT_TYPE_APPLICATION_JSON_UTF8 } from '@/presentation/(system)/client/client.constants';
 import { Method } from '@/presentation/(system)/client/client.types';
-import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
+import { FormData } from '@/presentation/(system)/validation/validation.types';
 import { post } from '@/presentation/contact/mvvm/bff/contact.action';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 
 /**
- * バックエンド実行のインターフェース型
+ * バックエンド呼び出しのインターフェース型
  *
  * @param formData - 問い合わせフォームの入力値
  * @returns 正常終了の場合はvoid、差し戻しの場合はバリデーションエラーをBffResultにラップして返す
  */
-type Request = {
-  (formData: FormData<FormKeys>): Promise<BffResult<void, Violations<FormKeys>>>;
+type Send = {
+  (formData: FormData<FormKeys>): Promise<BffResult<void, FormKeys>>;
 };
 
 /**
- * ServerActions経由バックエンド実行
+ * バックエンド呼び出しの実装：ServerActions経由バックエンド呼び出し
  */
-const _viaAction: Request = async (formData) => {
+const _viaAction: Send = async (formData) => {
   return await post(formData);
 };
 
 /**
- * RouteHandlers経由バックエンド実行
+ * バックエンド呼び出しの実装：RouteHandlers経由バックエンド呼び出し
  */
-const viaRoute: Request = async (formData) => {
+const viaRoute: Send = async (formData) => {
   const url = '/api/contact/mvvm';
   // const { name, email, body } = formData;
 
@@ -47,10 +45,10 @@ const viaRoute: Request = async (formData) => {
     //body: { name, email, body }, // オブジェクトのまま（JSON.stringify不要）で渡す
     body: formData,
   });
-  return parseBffResult<void, Violations<FormKeys>>(res.rawBody);
+  return parseBffResult<void, FormKeys>(res.rawBody);
 };
 
 /**
  * お問い合わせを送信する
  */
-export const request: Request = viaRoute;
+export const send: Send = viaRoute;

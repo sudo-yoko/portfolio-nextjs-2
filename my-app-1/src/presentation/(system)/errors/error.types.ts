@@ -1,7 +1,7 @@
 //
 // カスタムエラー型定義
 //
-import { BffResult } from '@/presentation/(system)/bff/bff.result.types';
+import { BffResult } from '@/presentation/(system)/result/result.bff.types';
 
 /**
  * カスタムエラーの種類
@@ -13,7 +13,8 @@ export const ErrType = {
   ValidationError: 'ValidationError',
   BffError: 'BffError',
   BackendApiError: 'BackendApiError',
-  BffResultParseError: 'BffResultParseError',
+  ParseResultError: 'ParseResultError',
+  ParseBffResultError: 'ParseBffResultError',
 } as const; // 定数オブジェクト
 export type ErrType = (typeof ErrType)[keyof typeof ErrType]; // 型
 
