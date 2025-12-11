@@ -1,10 +1,14 @@
 'use client';
 
-import { Pagination } from '@/presentation/(system)/pagination/min/components/pagination';
+import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error-handler.client';
+import { ErrorRedirect } from '@/presentation/(system)/errors/views/component.error-redirect';
+import { createPager } from '@/presentation/(system)/pagination/min/modules/pagination.pager';
+import { Pager } from '@/presentation/(system)/pagination/min/modules/pagination.types';
+import { isOkData } from '@/presentation/(system)/result/result.core.helpers';
 import { FormData } from '@/presentation/(system)/validation/validation.types';
-import { fetch } from '@/presentation/users/min/modules/users-fetcher';
-import { FormKeys, User, UsersQuery } from '@/presentation/users/min/modules/users-types';
-import { useState } from 'react';
+import { fetchPage } from '@/presentation/users/min/modules/users.requester';
+import { FormKeys, User } from '@/presentation/users/min/modules/users.types';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 const initialPage = 1;
 const perPage = 4;
@@ -14,12 +18,66 @@ export default function UserList() {
   const [formData, setFormData] = useState<FormData<FormKeys>>({ userName: '' });
   const [users, setUsers] = useState<User[]>([]);
   const { userName } = formData; // 各レンダーで作り直される“その回のスナップショット”
-  const [query, setQuery] = useState<UsersQuery>({ userId: '', userName });
+  const [query, setQuery] = useState<FormData<FormKeys>>({ userName });
   //const queryMemo: UsersQuery = useMemo(() => ({ userId: '', userName:'' }), []);
+
+  const [error, setError] = useState(false);
+  const [page, setPage] = useState(initialPage);
+  const pager = useRef<Pager<User[], FormKeys>>(null);
+  // [Next.js 16 Compatibility Fix] useCallbackの第一引数の関数は、インライン関数で書く必要がある。
+  // const fetchCallback = useCallback(fetchPage, [fetchPage]);
+  const fetchCallback = useCallback(
+    (offset: number, perPage: number, query: FormData<FormKeys>) => fetchPage(offset, perPage, query),
+    [],
+  );
+
+  useEffect(() => {
+    void (async () => {
+      await withErrorHandlingAsync(() => func(), setError);
+    })();
+
+    async function func() {
+      if (!search) {
+        return;
+      }
+      pager.current = createPager(fetchCallback, { initialPage, perPage, query });
+      const page = await pager.current.current();
+      if (isOkData(page)) {
+        setUsers(page.data.items);
+        setPage(page.data.currentPage);
+      }
+    }
+  }, [fetchCallback, query, search, setUsers]);
 
   function handleSearch() {
     setQuery({ ...query, userName: formData.userName });
     setSearch(true);
+  }
+
+  function handleNext() {
+    // Promiseチェーンで書く場合は、withErrorHandlingのエラーハンドリングは効果が無いので
+    // 以下のようにエラーハンドリングを記述する
+    pager.current
+      ?.next()
+      .then((page) => {
+        if (isOkData(page)) {
+          setUsers(page.data.items);
+          setPage(page.data.currentPage);
+        }
+      })
+      .catch((_e) => setError(true));
+  }
+
+  function handlePrev() {
+    pager.current
+      ?.prev()
+      .then((page) => {
+        if (isOkData(page)) {
+          setUsers(page.data.items);
+          setPage(page.data.currentPage);
+        }
+      })
+      .catch((_e) => setError(true));
   }
 
   return (
@@ -41,15 +99,41 @@ export default function UserList() {
             </div>
           </div>
         </div>
-        {/** ページネーションコンポーネント */}
+        {/** ページネーションコンポーネント 
         <Pagination
           search={search}
-          fetchPage={fetch}
+          fetchPage={fetchPage}
           initialPage={initialPage}
           perPage={perPage}
           query={query}
           setItems={setUsers}
         />
+*/}
+        <div>
+          {error && <ErrorRedirect />}
+          {search && (
+            <div>
+              <div>検索条件：{JSON.stringify(query)}</div>
+              <div>
+                <button
+                  type="button"
+                  onClick={() => handlePrev()}
+                  className="rounded-lg bg-indigo-300 px-4 py-2"
+                >
+                  前へ
+                </button>
+                {page}
+                <button
+                  type="button"
+                  onClick={() => handleNext()}
+                  className="rounded-lg bg-indigo-300 px-4 py-2"
+                >
+                  次へ
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
         {/** 一覧 */}
         {users.length > 0 && <List users={users} />}
       </div>

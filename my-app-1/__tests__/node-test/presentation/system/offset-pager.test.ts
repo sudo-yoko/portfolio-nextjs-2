@@ -3,7 +3,7 @@
 
 import { createPager } from '@/presentation/(system)/pagination/min/modules/pager';
 import { FetchPage, FetchPageResult, Pager } from '@/presentation/(system)/pagination/min/modules/types';
-import type { User, UsersQuery } from '@/presentation/users/min/modules/users-types';
+import type { User, UsersQuery } from '@/presentation/users/min/modules/users.types';
 import test from 'node:test';
 
 const consolePrefix = '### test: offset-pager.test.ts >>> ';
