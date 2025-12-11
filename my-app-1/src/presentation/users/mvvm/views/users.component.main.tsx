@@ -2,8 +2,9 @@
 
 import { ErrorRedirect } from '@/presentation/(system)/errors/views/component.error-redirect';
 import { handlePagination } from '@/presentation/(system)/pagination/mvvm/view-models/event-handlers';
+import { Step } from '@/presentation/(system)/pagination/mvvm/view-models/reducer';
 import { usePagination } from '@/presentation/(system)/pagination/mvvm/view-models/use-pagination';
-import { FormData } from '@/presentation/(system)/validation/validation.types';
+import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
 import { fetchPage } from '@/presentation/users/mvvm/models/users.requester';
 import { FormKeys, User } from '@/presentation/users/mvvm/models/users.types';
 import UserList from '@/presentation/users/mvvm/views/users.component.list';
@@ -14,6 +15,7 @@ export function Main() {
   const [formData, setFormData] = useState<FormData<FormKeys>>({ userName: '' });
   const { userName } = formData;
   const [users, setUsers] = useState<User[]>([]);
+  const [violations, setViolations] = useState<Violations<FormKeys>>({ userName: [''] });
   //const [query, setQuery] = useState<UsersQuery>({ userId: '', userName });
   const [query, setQuery] = useState<FormData<FormKeys>>({ userName });
   // const fetchCallback = useCallback(fetchPage, [fetchPage]);
@@ -29,6 +31,7 @@ export function Main() {
     perPage: 4,
     query,
     setItems: setUsers,
+    setViolations,
   });
 
   function handleSearch() {
@@ -51,6 +54,12 @@ export function Main() {
             検索
           </button>
         </div>
+        {state.step === Step.Invalid &&
+          violations.userName?.map((err, index) => (
+            <div key={index} className="text-red-500">
+              {err}
+            </div>
+          ))}
         {/*
         <div>
           <Pagination
@@ -67,7 +76,7 @@ export function Main() {
         */}
         <div>
           {error && <ErrorRedirect />}
-          {search && state.step === 'results' && (
+          {search && state.step === Step.Ok && (
             <div>
               <div>検索条件：{JSON.stringify(query)}</div>
               <Controller

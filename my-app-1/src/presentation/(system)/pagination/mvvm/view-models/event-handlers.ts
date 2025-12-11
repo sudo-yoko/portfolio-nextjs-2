@@ -5,9 +5,9 @@ import 'client-only';
 
 import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error-handler.client';
 import { Pager } from '@/presentation/(system)/pagination/mvvm/models/types';
-import { Action, toResults } from '@/presentation/(system)/pagination/mvvm/view-models/reducer';
+import { Action, toInvalid, toOk } from '@/presentation/(system)/pagination/mvvm/view-models/reducer';
+import { isInvalid, isOkData } from '@/presentation/(system)/result/result.core.helpers';
 import React from 'react';
-import { isOkData } from '@/presentation/(system)/result/result.core.helpers';
 
 /**
  * 次へ／前へボタンを押したとき
@@ -27,9 +27,12 @@ export async function handlePagination<ITEMS, FIELD extends string>(
       return;
     }
     const page = destination === 'next' ? await pager.current.next() : await pager.current.prev();
+    // if (page.tag === 'ok') {
     if (isOkData(page)) {
-      // if (page.tag === 'ok') {
-      toResults(dispatch, page.data.items, page.data.currentPage);
+      toOk(dispatch, page.data.items, page.data.currentPage);
+    }
+    if (isInvalid(page)) {
+      toInvalid(dispatch, page.violations);
     }
   }
 }

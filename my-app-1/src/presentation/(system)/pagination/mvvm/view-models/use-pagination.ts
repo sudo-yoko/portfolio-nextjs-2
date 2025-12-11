@@ -8,10 +8,10 @@ import {
 import { createPager } from '@/presentation/(system)/pagination/mvvm/models/pager';
 import { FetchPage } from '@/presentation/(system)/pagination/mvvm/models/pagination.requester';
 import { Pager } from '@/presentation/(system)/pagination/mvvm/models/types';
-import { reducer, toResults } from '@/presentation/(system)/pagination/mvvm/view-models/reducer';
-import { isOkData } from '@/presentation/(system)/result/result.core.helpers';
-import { FormData } from '@/presentation/(system)/validation/validation.types';
-import { useEffect, useReducer, useRef, useState } from 'react';
+import { reducer, Step, toInvalid, toOk } from '@/presentation/(system)/pagination/mvvm/view-models/reducer';
+import { isInvalid, isOkData } from '@/presentation/(system)/result/result.core.helpers';
+import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
+import React, { useEffect, useReducer, useRef, useState } from 'react';
 
 //
 export function usePagination<DATA, FIELD extends string>({
@@ -21,6 +21,7 @@ export function usePagination<DATA, FIELD extends string>({
   perPage,
   query,
   setItems,
+  setViolations,
 }: {
   search: boolean;
   fetchCallback: FetchPage<DATA, FIELD>;
@@ -28,12 +29,11 @@ export function usePagination<DATA, FIELD extends string>({
   perPage: number;
   query: FormData<FIELD>;
   setItems: React.Dispatch<React.SetStateAction<DATA>>;
+  setViolations: React.Dispatch<React.SetStateAction<Violations<FIELD>>>;
 }) {
-  const [state, dispatch] = useReducer(reducer<DATA>, { step: 'initial' });
+  const [state, dispatch] = useReducer(reducer<DATA>, { step: Step.Initial });
   const [error, setError] = useState(false);
   const pager = useRef<Pager<DATA, FIELD>>(null);
-
-  console.log('presentation');
 
   /**
    * 検索時
@@ -49,9 +49,12 @@ export function usePagination<DATA, FIELD extends string>({
       }
       pager.current = createPager(fetchCallback, { initialPage, perPage, query });
       const page = await pager.current.current();
+      // if (page.tag === 'ok') {
       if (isOkData(page)) {
-        // if (page.tag === 'ok') {
-        toResults(dispatch, page.data.items, page.data.currentPage);
+        toOk(dispatch, page.data.items, page.data.currentPage);
+      }
+      if(isInvalid(page)){
+        toInvalid(dispatch, page.violations)
       }
     }
   }, [fetchCallback, initialPage, perPage, query, search]);
@@ -66,11 +69,14 @@ export function usePagination<DATA, FIELD extends string>({
     withErrorHandling(() => func(), setError);
 
     function func() {
-      if (state.step === 'results') {
+      if (state.step === Step.Ok) {
         setItems(state.items);
       }
+      if(state.step === Step.Invalid){
+        setViolations(state.violations);
+      }
     }
-  }, [setItems, state]);
+  }, [setItems, setViolations, state]);
 
   return { error, state, pager, dispatch, setError };
 }

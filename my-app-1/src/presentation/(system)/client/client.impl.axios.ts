@@ -15,7 +15,13 @@ export const clientImpl: Client = {
     // デフォルトは、500 以上のステータスコードの場合はエラーをスローする
     const validateStatus = req.validateStatus ?? ((status: number) => status < 500);
 
-    const res = await client.get(req.url, { params: req.params, validateStatus });
+    logger.info(logPrefix + req.url);
+    const res = await client.request({
+      method: req.method,
+      url: req.url,
+      params: req.params,
+      validateStatus,
+    });
 
     // ステータスコードの検証
     // if (!validateStatus(res.status)) {
