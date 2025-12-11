@@ -1,9 +1,9 @@
 'use client';
 
 import { ErrorRedirect } from '@/presentation/(system)/errors/views/component.error-redirect';
-import { handlePagination } from '@/presentation/(system)/pagination/mvvm/view-models/event-handlers';
-import { Step } from '@/presentation/(system)/pagination/mvvm/view-models/reducer';
-import { usePagination } from '@/presentation/(system)/pagination/mvvm/view-models/use-pagination';
+import { handlePagination } from '@/presentation/(system)/pagination/mvvm/view-models/pagination.event-handlers';
+import { Step } from '@/presentation/(system)/pagination/mvvm/view-models/pagination.reducer';
+import { usePagination } from '@/presentation/(system)/pagination/mvvm/view-models/pagination.use-pagination';
 import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
 import { fetchPage } from '@/presentation/users/mvvm/models/users.requester';
 import { FormKeys, User } from '@/presentation/users/mvvm/models/users.types';

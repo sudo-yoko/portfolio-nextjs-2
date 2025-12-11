@@ -4,8 +4,8 @@
 import 'client-only';
 
 import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error-handler.client';
-import { Pager } from '@/presentation/(system)/pagination/mvvm/models/types';
-import { Action, toInvalid, toOk } from '@/presentation/(system)/pagination/mvvm/view-models/reducer';
+import { Pager } from '@/presentation/(system)/pagination/mvvm/models/pegination.types';
+import { Action, toInvalid, toOk } from '@/presentation/(system)/pagination/mvvm/view-models/pagination.reducer';
 import { isInvalid, isOkData } from '@/presentation/(system)/result/result.core.helpers';
 import React from 'react';
 

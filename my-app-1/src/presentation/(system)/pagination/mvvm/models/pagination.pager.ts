@@ -1,15 +1,15 @@
 import 'client-only';
 
-import { BffResult } from '@/presentation/(system)/result/result.bff.types';
 import { bffError } from '@/presentation/(system)/errors/error.factories';
-import { FetchPage } from '@/presentation/(system)/pagination/mvvm/models/pagination.requester';
-import { PageData, Pager } from '@/presentation/(system)/pagination/mvvm/models/types';
 import {
   calcPagination,
   offsetOfLastPage,
   pageToOffset,
   toEffectiveOffsetMin,
-} from '@/presentation/(system)/pagination/mvvm/models/utils';
+} from '@/presentation/(system)/pagination/mvvm/models/pagination.helper';
+import { FetchPage } from '@/presentation/(system)/pagination/mvvm/models/pagination.requester';
+import { PageData, Pager } from '@/presentation/(system)/pagination/mvvm/models/pegination.types';
+import { BffResult } from '@/presentation/(system)/result/result.bff.types';
 import { invalid, okData } from '@/presentation/(system)/result/result.core.factories';
 import { isAborted, isInvalid } from '@/presentation/(system)/result/result.core.helpers';
 import { FormData } from '@/presentation/(system)/validation/validation.types';

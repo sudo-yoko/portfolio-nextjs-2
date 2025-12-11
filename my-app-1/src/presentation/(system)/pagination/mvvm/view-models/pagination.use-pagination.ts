@@ -5,10 +5,10 @@ import {
   withErrorHandling,
   withErrorHandlingAsync,
 } from '@/presentation/(system)/errors/error-handler.client';
-import { createPager } from '@/presentation/(system)/pagination/mvvm/models/pager';
+import { createPager } from '@/presentation/(system)/pagination/mvvm/models/pagination.pager';
 import { FetchPage } from '@/presentation/(system)/pagination/mvvm/models/pagination.requester';
-import { Pager } from '@/presentation/(system)/pagination/mvvm/models/types';
-import { reducer, Step, toInvalid, toOk } from '@/presentation/(system)/pagination/mvvm/view-models/reducer';
+import { Pager } from '@/presentation/(system)/pagination/mvvm/models/pegination.types';
+import { reducer, Step, toInvalid, toOk } from '@/presentation/(system)/pagination/mvvm/view-models/pagination.reducer';
 import { isInvalid, isOkData } from '@/presentation/(system)/result/result.core.helpers';
 import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
 import React, { useEffect, useReducer, useRef, useState } from 'react';
@@ -53,8 +53,8 @@ export function usePagination<DATA, FIELD extends string>({
       if (isOkData(page)) {
         toOk(dispatch, page.data.items, page.data.currentPage);
       }
-      if(isInvalid(page)){
-        toInvalid(dispatch, page.violations)
+      if (isInvalid(page)) {
+        toInvalid(dispatch, page.violations);
       }
     }
   }, [fetchCallback, initialPage, perPage, query, search]);
@@ -72,7 +72,7 @@ export function usePagination<DATA, FIELD extends string>({
       if (state.step === Step.Ok) {
         setItems(state.items);
       }
-      if(state.step === Step.Invalid){
+      if (state.step === Step.Invalid) {
         setViolations(state.violations);
       }
     }
