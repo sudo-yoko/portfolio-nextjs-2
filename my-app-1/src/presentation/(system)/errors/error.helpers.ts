@@ -32,19 +32,9 @@ function isErrorOf<T extends ErrType>(type: T) {
 }
 
 /**
- * ActionError かどうかを判定する
- */
-export const isActionError = isErrorOf(ErrType.ActionError);
-
-/**
  * AuthError かどうかを判定する
  */
 export const isAuthError = isErrorOf(ErrType.AuthError);
-
-/**
- * RouteError かどうかを判定する
- */
-export const isRouteError = isErrorOf(ErrType.RouteError);
 
 /**
  * client-only

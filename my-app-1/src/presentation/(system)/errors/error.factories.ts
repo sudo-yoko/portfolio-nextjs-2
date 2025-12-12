@@ -1,7 +1,6 @@
 //
 // カスタムエラーファクトリー
 //
-import { BffResult } from '@/presentation/(system)/result/result.bff.types';
 import {
   BFF_RESULT,
   BffError,
@@ -9,7 +8,7 @@ import {
   CustomError,
   ErrType,
 } from '@/presentation/(system)/errors/error.types';
-import { ActionResult } from '@/presentation/(system)/types/action-result';
+import { BffResult } from '@/presentation/(system)/result/result.bff.types';
 import { Violations } from '@/presentation/(system)/validation/validation.types';
 
 /**
@@ -37,32 +36,6 @@ const errorOfType =
  * AuthErrorを生成する
  */
 export const authError = errorOfType(ErrType.AuthError, '認証エラー');
-
-/**
- * ActionError を生成する
- */
-export function actionError<T>(result: ActionResult<T>): CustomError<ErrType> {
-  const message: string[] = [];
-  message.push('An exception occurred in a Server Action.');
-  message.push(`actionResult=${JSON.stringify(result)}`);
-  return customError(ErrType.ActionError, message.join(', '));
-}
-
-/**
- * RouteError を生成する
- */
-export function routeError(
-  status: number,
-  meta?: { body?: string; method?: string; route?: string },
-): CustomError<ErrType> {
-  const message: string[] = [];
-  message.push('An exception occurred in a Route Handler.');
-  message.push(`status=${status}`);
-  if (meta) {
-    message.push(`${JSON.stringify(meta)}`);
-  }
-  return customError(ErrType.RouteError, message.join(', '));
-}
 
 /**
  *

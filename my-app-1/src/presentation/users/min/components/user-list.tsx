@@ -4,8 +4,8 @@ import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error-han
 import { ErrorRedirect } from '@/presentation/(system)/errors/views/component.error-redirect';
 import { createPager } from '@/presentation/(system)/pagination/min/modules/pagination.pager';
 import { Pager } from '@/presentation/(system)/pagination/min/modules/pagination.types';
-import { isOkData } from '@/presentation/(system)/result/result.core.helpers';
-import { FormData } from '@/presentation/(system)/validation/validation.types';
+import { isInvalid, isOkData } from '@/presentation/(system)/result/result.core.helpers';
+import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
 import { fetchPage } from '@/presentation/users/min/modules/users.requester';
 import { FormKeys, User } from '@/presentation/users/min/modules/users.types';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -20,6 +20,7 @@ export default function UserList() {
   const { userName } = formData; // 各レンダーで作り直される“その回のスナップショット”
   const [query, setQuery] = useState<FormData<FormKeys>>({ userName });
   //const queryMemo: UsersQuery = useMemo(() => ({ userId: '', userName:'' }), []);
+  const [violations, setViolations] = useState<Violations<FormKeys>>({});
 
   const [error, setError] = useState(false);
   const [page, setPage] = useState(initialPage);
@@ -45,6 +46,11 @@ export default function UserList() {
       if (isOkData(page)) {
         setUsers(page.data.items);
         setPage(page.data.currentPage);
+        setViolations({});
+      }
+      if (isInvalid(page)) {
+        setUsers([]);
+        setViolations(page.violations);
       }
     }
   }, [fetchCallback, query, search, setUsers]);
@@ -97,21 +103,16 @@ export default function UserList() {
                 検索
               </button>
             </div>
+            {violations.userName?.map((err, index) => (
+              <div key={index} className="text-red-500">
+                {err}
+              </div>
+            ))}
           </div>
         </div>
-        {/** ページネーションコンポーネント 
-        <Pagination
-          search={search}
-          fetchPage={fetchPage}
-          initialPage={initialPage}
-          perPage={perPage}
-          query={query}
-          setItems={setUsers}
-        />
-*/}
         <div>
           {error && <ErrorRedirect />}
-          {search && (
+          {search && users.length > 0 && (
             <div>
               <div>検索条件：{JSON.stringify(query)}</div>
               <div>

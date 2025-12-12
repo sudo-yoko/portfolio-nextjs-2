@@ -7,9 +7,7 @@ import { BffResult } from '@/presentation/(system)/result/result.bff.types';
  * カスタムエラーの種類
  */
 export const ErrType = {
-  ActionError: 'ActionError',
   AuthError: 'AuthError',
-  RouteError: 'RouteError',
   ValidationError: 'ValidationError',
   BffError: 'BffError',
   BackendApiError: 'BackendApiError',
