@@ -4,7 +4,7 @@
 import {
   withInterception,
   withInterceptionAsync,
-} from '@/presentation/(system)/interceptor/interceptor.client';
+} from '@/presentation/(system)/middleware/interceptor.client';
 import { createPager } from '@/presentation/(system)/pagination/mvvm/models/pagination.pager';
 import { FetchPage } from '@/presentation/(system)/pagination/mvvm/models/pagination.requester';
 import { Pager } from '@/presentation/(system)/pagination/mvvm/models/pegination.types';

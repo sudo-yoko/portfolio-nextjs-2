@@ -3,7 +3,7 @@
 //
 import 'client-only';
 
-import { withInterceptionAsync } from '@/presentation/(system)/interceptor/interceptor.client';
+import { withInterceptionAsync } from '@/presentation/(system)/middleware/interceptor.client';
 import { Pager } from '@/presentation/(system)/pagination/mvvm/models/pegination.types';
 import {
   Action,
