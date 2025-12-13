@@ -1,7 +1,7 @@
 'use client';
 
-import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error.handler.client';
-import { ErrorRedirect } from '@/presentation/(system)/errors/views/component.error-redirect';
+import { withErrorHandlingAsync } from '@/presentation/(system)/error/error.handler.client';
+import { ErrorRedirect } from '@/presentation/(system)/error/views/component.error-redirect';
 import { createPager } from '@/presentation/(system)/pagination/min/modules/pagination.pager';
 import { Pager } from '@/presentation/(system)/pagination/min/modules/pagination.types';
 import { isInvalid, isOkData } from '@/presentation/(system)/result/result.core.helpers';

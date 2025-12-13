@@ -5,7 +5,7 @@
 import 'client-only';
 
 import { Client, Req, Result } from '@/presentation/(system)/client/client.types';
-import { backendApiError } from '@/presentation/(system)/errors/error.factories';
+import { backendApiError } from '@/presentation/(system)/error/error.factories';
 import logger from '@/presentation/(system)/logging/logger.c';
 
 const logPrefix = 'client.impl.fetch.ts: ';

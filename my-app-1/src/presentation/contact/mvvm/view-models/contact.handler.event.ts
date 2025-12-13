@@ -3,7 +3,7 @@
 //
 'use client';
 
-import { bffError } from '@/presentation/(system)/errors/error.factories';
+import { bffError } from '@/presentation/(system)/error/error.factories';
 import { withInterceptionAsync } from '@/presentation/(system)/middleware/interceptor.client';
 import { isInvalid, isOkEmpty } from '@/presentation/(system)/result/result.core.helpers';
 import { hasError } from '@/presentation/(system)/validation/validation.helper';

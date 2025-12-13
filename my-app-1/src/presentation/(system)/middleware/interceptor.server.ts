@@ -8,7 +8,7 @@ import { withAuth, withAuthAsync } from '@/presentation/(system)/auth/auth-handl
 import {
   withErrorHandling,
   withErrorHandlingAsync,
-} from '@/presentation/(system)/errors/error.handler.server';
+} from '@/presentation/(system)/error/error.handler.server';
 
 /**
  * 引数に渡されたサンクにサーバーサイド共通処理を挟んで実行する

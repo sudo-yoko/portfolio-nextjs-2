@@ -1,7 +1,7 @@
 //
 // カスタムエラー ヘルパー関数
 //
-import { CUSTOM_ERROR_TAG, CustomError, ErrType } from '@/presentation/(system)/errors/error.types';
+import { CUSTOM_ERROR_TAG, CustomError, ErrType } from '@/presentation/(system)/error/error.types';
 
 /**
  * カスタムエラー判定

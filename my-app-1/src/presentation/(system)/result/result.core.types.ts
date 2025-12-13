@@ -1,7 +1,7 @@
 //
 // RESULT型
 //
-import { ErrType } from '@/presentation/(system)/errors/error.types';
+import { ErrType } from '@/presentation/(system)/error/error.types';
 import { Violations } from '@/presentation/(system)/validation/validation.types';
 
 /**

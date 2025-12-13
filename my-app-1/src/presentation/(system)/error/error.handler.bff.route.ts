@@ -4,9 +4,9 @@
 import 'server-only';
 
 import { bffRouteResponse } from '@/presentation/(system)/result/result.bff.factories.s';
-import { isCustomError } from '@/presentation/(system)/errors/error.helpers';
-import { stringify } from '@/presentation/(system)/errors/error.helper.stringify';
-import { CUSTOM_ERROR_TAG } from '@/presentation/(system)/errors/error.types';
+import { isCustomError } from '@/presentation/(system)/error/error.helpers';
+import { stringify } from '@/presentation/(system)/error/error.helper.stringify';
+import { CUSTOM_ERROR_TAG } from '@/presentation/(system)/error/error.types';
 import logger from '@/presentation/(system)/logging/logger.s';
 import { abort } from '@/presentation/(system)/result/result.core.factories';
 

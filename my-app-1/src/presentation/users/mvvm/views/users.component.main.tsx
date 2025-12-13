@@ -1,6 +1,6 @@
 'use client';
 
-import { ErrorRedirect } from '@/presentation/(system)/errors/views/component.error-redirect';
+import { ErrorRedirect } from '@/presentation/(system)/error/views/component.error-redirect';
 import { handlePagination } from '@/presentation/(system)/pagination/mvvm/view-models/pagination.event-handlers';
 import { Step } from '@/presentation/(system)/pagination/mvvm/view-models/pagination.reducer';
 import { usePagination } from '@/presentation/(system)/pagination/mvvm/view-models/pagination.use-pagination';

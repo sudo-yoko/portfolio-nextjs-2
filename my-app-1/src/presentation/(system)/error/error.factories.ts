@@ -7,7 +7,7 @@ import {
   CUSTOM_ERROR_TAG,
   CustomError,
   ErrType,
-} from '@/presentation/(system)/errors/error.types';
+} from '@/presentation/(system)/error/error.types';
 import { BffResult } from '@/presentation/(system)/result/result.bff.types';
 import { Violations } from '@/presentation/(system)/validation/validation.types';
 

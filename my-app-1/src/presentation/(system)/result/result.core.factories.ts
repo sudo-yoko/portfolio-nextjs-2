@@ -1,7 +1,7 @@
 //
 // RESULT型 生成ファクトリ―
 //
-import { ErrType } from '@/presentation/(system)/errors/error.types';
+import { ErrType } from '@/presentation/(system)/error/error.types';
 import { Aborted, Invalid, OkData, OkEmpty, Tag } from '@/presentation/(system)/result/result.core.types';
 import { Violations } from '@/presentation/(system)/validation/validation.types';
 

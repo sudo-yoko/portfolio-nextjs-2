@@ -1,13 +1,13 @@
 import { printf } from '@/__tests__/test-logger';
 import { BffResult } from '@/presentation/(system)/result/result.bff.types';
-import { actionError, authError, bffError, routeError } from '@/presentation/(system)/errors/error.factories';
+import { actionError, authError, bffError, routeError } from '@/presentation/(system)/error/error.factories';
 import {
   isActionError,
   isAuthError,
   isCustomError,
   isRouteError,
-} from '@/presentation/(system)/errors/error.helpers';
-import { CUSTOM_ERROR_TAG, CustomError, ErrType } from '@/presentation/(system)/errors/error.types';
+} from '@/presentation/(system)/error/error.helpers';
+import { CUSTOM_ERROR_TAG, CustomError, ErrType } from '@/presentation/(system)/error/error.types';
 import { ActionResult } from '@/presentation/(system)/types/action-result';
 
 const print = printf({ logPrefix: '>>> [error.factories.test.ts]', stdout: true });

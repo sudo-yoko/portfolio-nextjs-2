@@ -3,7 +3,7 @@ import 'client-only';
 import {
   withErrorHandling,
   withErrorHandlingAsync,
-} from '@/presentation/(system)/errors/error.handler.client';
+} from '@/presentation/(system)/error/error.handler.client';
 
 export function withInterception<T>(
   thunk: () => T,

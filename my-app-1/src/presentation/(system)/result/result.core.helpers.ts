@@ -1,8 +1,8 @@
 //
 // RESULT型 ヘルパー関数
 //
-import { parseResultError } from '@/presentation/(system)/errors/error.factories';
-import { stringify } from '@/presentation/(system)/errors/error.helper.stringify';
+import { parseResultError } from '@/presentation/(system)/error/error.factories';
+import { stringify } from '@/presentation/(system)/error/error.helper.stringify';
 import {
   Aborted,
   Invalid,

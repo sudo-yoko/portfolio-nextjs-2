@@ -4,7 +4,7 @@ import { withAuth, withAuthAsync } from '@/presentation/(system)/auth/auth-handl
 import {
   withErrorHandling,
   withErrorHandlingAsync,
-} from '@/presentation/(system)/errors/error.handler.bff.route';
+} from '@/presentation/(system)/error/error.handler.bff.route';
 
 export function withInterception(thunk: () => Response): Response {
   return withErrorHandling(() => withAuth(thunk));

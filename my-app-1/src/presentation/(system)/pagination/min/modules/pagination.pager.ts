@@ -1,6 +1,6 @@
 import 'client-only';
 
-import { bffError } from '@/presentation/(system)/errors/error.factories';
+import { bffError } from '@/presentation/(system)/error/error.factories';
 import {
   calcPagination,
   offsetOfLastPage,

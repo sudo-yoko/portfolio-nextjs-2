@@ -1,7 +1,7 @@
 import 'server-only';
 
 import { withAuth, withAuthAsync } from '@/presentation/(system)/auth/auth-handler';
-import { withErrorHandling, withErrorHandlingAsync } from '@/presentation/(system)/errors/error.handler.bff';
+import { withErrorHandling, withErrorHandlingAsync } from '@/presentation/(system)/error/error.handler.bff';
 import { BffResult } from '@/presentation/(system)/result/result.bff.types';
 
 export function withInterception<DATA, FIELD extends string>(
