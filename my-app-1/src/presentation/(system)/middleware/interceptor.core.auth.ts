@@ -1,8 +1,12 @@
+//
+// 認証インターセプター
+//
 import 'server-only';
 
+import { authenticate } from '@/presentation/(system)/auth/authentication';
 import { authError } from '@/presentation/(system)/error/error.factories';
-import { isAuthError } from '@/presentation/(system)/error/error.helpers';
 import { stringify } from '@/presentation/(system)/error/error.helper.stringify';
+import { isAuthError } from '@/presentation/(system)/error/error.helpers';
 import logger from '@/presentation/(system)/logging/logger.s';
 
 const logPrefix = 'auth-handler.ts: ';
@@ -13,9 +17,7 @@ const logPrefix = 'auth-handler.ts: ';
 export async function withAuthAsync<T>(thunk: () => Promise<T>): Promise<T> {
   const fname = 'withAuthAsync: ';
   try {
-    if (process.env['AUTH_ERROR']) {
-      throw authError();
-    }
+    authenticate();
     return await thunk();
   } catch (e) {
     if (isAuthError(e)) {

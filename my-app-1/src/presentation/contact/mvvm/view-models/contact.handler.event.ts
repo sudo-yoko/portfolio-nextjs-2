@@ -4,7 +4,7 @@
 'use client';
 
 import { bffError } from '@/presentation/(system)/error/error.factories';
-import { withInterceptionAsync } from '@/presentation/(system)/middleware/interceptor.client';
+import { withInterceptionAsync } from '@/presentation/(system)/middleware/interceptor.feature.client';
 import { isInvalid, isOkEmpty } from '@/presentation/(system)/result/result.core.helpers';
 import { hasError } from '@/presentation/(system)/validation/validation.helper';
 import { Violations } from '@/presentation/(system)/validation/validation.types';

@@ -4,7 +4,7 @@
 'use server';
 
 import logger from '@/presentation/(system)/logging/logger.s';
-import { withInterceptionAsync } from '@/presentation/(system)/middleware/interceptor.bff';
+import { withInterceptionAsync } from '@/presentation/(system)/middleware/interceptor.feature.bff';
 import { BffResult } from '@/presentation/(system)/result/result.bff.types';
 import { FormData } from '@/presentation/(system)/validation/validation.types';
 import { execute } from '@/presentation/contact/mvvm/bff/contact.interactor';

@@ -1,7 +1,6 @@
 import 'server-only';
 
-import { withAuthAsync } from '@/presentation/(system)/auth/auth-handler';
-import { withErrorHandlingAsync } from '@/presentation/(system)/error/error.handler.bff.route';
+import { withInterceptionAsync } from '@/presentation/(system)/middleware/interceptor.feature.bff.route';
 import { FetchPageResult } from '@/presentation/(system)/pagination/min/modules/pagination.requester';
 import { bffRouteResponse } from '@/presentation/(system)/result/result.bff.factories.s';
 import { okData } from '@/presentation/(system)/result/result.core.factories';
@@ -15,7 +14,8 @@ interface ReqBody {
 }
 
 export async function POST(req: Request): Promise<Response> {
-  return await withErrorHandlingAsync(() => withAuthAsync(() => func()));
+  // return await withErrorHandlingAsync(() => withAuthAsync(() => func()));
+  return await withInterceptionAsync(() => func());
 
   async function func() {
     const reqBody: ReqBody = await req.json();

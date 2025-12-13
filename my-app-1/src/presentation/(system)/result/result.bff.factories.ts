@@ -1,10 +1,9 @@
 //
 // BFF結果オブジェクト ファクトリー関数
 //
-import { BffResult, Ok } from '@/presentation/(system)/result/result.bff.types';
-import { abort, invalid, okData, okEmpty } from '@/presentation/(system)/result/result.core.factories';
-import { Aborted, Invalid, OkData, OkEmpty, Tag } from '@/presentation/(system)/result/result.core.types';
-import { Violations } from '../validation/validation.types';
+import { Ok } from '@/presentation/(system)/result/result.bff.types';
+import { okData, okEmpty } from '@/presentation/(system)/result/result.core.factories';
+import { OkData, OkEmpty } from '@/presentation/(system)/result/result.core.types';
 
 export function ok(): OkEmpty;
 export function ok<DATA>(data: DATA): OkData<DATA>;

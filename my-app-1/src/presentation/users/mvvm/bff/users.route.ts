@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { withInterceptionAsync } from '@/presentation/(system)/middleware/interceptor.bff.route';
+import { withInterceptionAsync } from '@/presentation/(system)/middleware/interceptor.feature.bff.route';
 import { bffRouteResponse } from '@/presentation/(system)/result/result.bff.factories.s';
 import { FormData } from '@/presentation/(system)/validation/validation.types';
 import { execute } from '@/presentation/users/mvvm/bff/users.interactor';
