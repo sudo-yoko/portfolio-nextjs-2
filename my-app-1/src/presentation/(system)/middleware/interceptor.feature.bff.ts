@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { withErrorHandling, withErrorHandlingAsync } from '@/presentation/(system)/error/error.handler.bff';
+import { withErrorHandling, withErrorHandlingAsync } from '@/presentation/(system)/middleware/interceptor.core.exception.bff';
 import { withAuth, withAuthAsync } from '@/presentation/(system)/middleware/interceptor.core.auth';
 import { withLogging, withLoggingAsync } from '@/presentation/(system)/middleware/interceptor.core.logging.s';
 import { BffResult } from '@/presentation/(system)/result/result.bff.types';

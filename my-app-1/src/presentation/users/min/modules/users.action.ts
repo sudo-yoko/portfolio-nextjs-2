@@ -1,6 +1,6 @@
 'use server';
 
-import { withErrorHandlingAsync } from '@/presentation/(system)/error/error.handler.bff';
+import { withErrorHandlingAsync } from '@/presentation/(system)/middleware/interceptor.core.exception.bff';
 import { FormData } from '@/presentation/(system)/validation/validation.types';
 import { execute } from '@/presentation/users/min/modules/users.interactor';
 import { FormKeys } from '@/presentation/users/min/modules/users.types';

@@ -3,7 +3,7 @@ import 'client-only';
 import {
   withErrorHandling,
   withErrorHandlingAsync,
-} from '@/presentation/(system)/error/error.handler.client';
+} from '@/presentation/(system)/middleware/interceptor.core.exception.client';
 import { withLogging, withLoggingAsync } from '@/presentation/(system)/middleware/interceptor.core.logging.c';
 
 const logPrefix = 'interceptor.feature.client.ts';

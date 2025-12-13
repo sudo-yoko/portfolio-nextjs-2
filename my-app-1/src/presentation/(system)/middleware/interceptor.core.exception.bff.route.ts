@@ -1,22 +1,21 @@
+//
+// エラーハンドリング インターセプター
+//
 import 'server-only';
 
-import type { BffResult } from '@/presentation/(system)/result/result.bff.types';
+import { bffRouteResponse } from '@/presentation/(system)/result/result.bff.factories.s';
 import { isCustomError } from '@/presentation/(system)/error/error.helpers';
 import { stringify } from '@/presentation/(system)/error/error.helper.stringify';
 import { CUSTOM_ERROR_TAG } from '@/presentation/(system)/error/error.types';
 import logger from '@/presentation/(system)/logging/logger.s';
 import { abort } from '@/presentation/(system)/result/result.core.factories';
 
-const logPrefix = 'error-handler.bff.ts: ';
+const logPrefix = 'route-error-handler.ts: ';
 
 /**
- * クライアント／サーバー境界 エラーハンドリング.
- *
- * @remarks 引数に渡されたサンクにエラーハンドリングを追加して実行する。
+ * 引数に渡されたサンクにエラーハンドリングを追加して実行する。
  */
-export async function withErrorHandlingAsync<DATA, FIELD extends string>(
-  thunk: () => Promise<BffResult<DATA, FIELD>>,
-): Promise<BffResult<DATA, FIELD>> {
+export async function withErrorHandlingAsync(thunk: () => Promise<Response>): Promise<Response> {
   const fname = 'withErrorHandlingAsync: ';
   try {
     return await thunk();
@@ -26,15 +25,14 @@ export async function withErrorHandlingAsync<DATA, FIELD extends string>(
 
     let args = {};
     if (isCustomError(e)) {
-      args = { errType: e[CUSTOM_ERROR_TAG] };
+      args = { ...{ errType: e[CUSTOM_ERROR_TAG] } };
     }
-    return abort({ message, ...args });
+    const result = abort({ message, ...args });
+    return bffRouteResponse(result);
   }
 }
 
-export function withErrorHandling<DATA, FIELD extends string>(
-  thunk: () => BffResult<DATA, FIELD>,
-): BffResult<DATA, FIELD> {
+export function withErrorHandling(thunk: () => Response): Response {
   const fname = 'withErrorHandling: ';
   try {
     return thunk();
@@ -44,8 +42,9 @@ export function withErrorHandling<DATA, FIELD extends string>(
 
     let args = {};
     if (isCustomError(e)) {
-      args = { errType: e[CUSTOM_ERROR_TAG] };
+      args = { ...{ errType: e[CUSTOM_ERROR_TAG] } };
     }
-    return abort({ message, ...args });
+    const result = abort({ message, ...args });
+    return bffRouteResponse(result);
   }
 }

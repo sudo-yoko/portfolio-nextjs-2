@@ -7,7 +7,7 @@ import 'server-only';
 import {
   withErrorHandling,
   withErrorHandlingAsync,
-} from '@/presentation/(system)/middleware/interceptor.core.error-handling.server';
+} from '@/presentation/(system)/middleware/interceptor.core.exception.server';
 import { withAuth, withAuthAsync } from '@/presentation/(system)/middleware/interceptor.core.auth';
 import { withLogging, withLoggingAsync } from '@/presentation/(system)/middleware/interceptor.core.logging.s';
 
