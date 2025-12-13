@@ -1,3 +1,7 @@
+//
+// クライアントサイドインターセプター
+// クラインとサイド処理の前後に共通処理を挟む
+//
 import 'client-only';
 
 import {
@@ -8,18 +12,18 @@ import { withLogging, withLoggingAsync } from '@/presentation/(system)/middlewar
 
 const logPrefix = 'interceptor.feature.client.ts';
 
-export function withInterception<T>(
+export function execute<T>(
   thunk: () => T,
   setHasError: React.Dispatch<React.SetStateAction<boolean>>,
 ): T | void {
-  const process = 'sync client process';
-  return withLogging({ logPrefix, process }, () => withErrorHandling(thunk, setHasError));
+  const text = { logPrefix, process: 'sync client process' };
+  return withLogging(text, () => withErrorHandling(thunk, setHasError));
 }
 
-export async function withInterceptionAsync<T>(
+export async function executeAsync<T>(
   thunk: () => Promise<T>,
   setHasError: React.Dispatch<React.SetStateAction<boolean>>,
 ): Promise<T | void> {
-  const process = 'async client process';
-  return withLoggingAsync({ logPrefix, process }, () => withErrorHandlingAsync(thunk, setHasError));
+  const text = { logPrefix, process: 'async client process' };
+  return withLoggingAsync(text, () => withErrorHandlingAsync(thunk, setHasError));
 }

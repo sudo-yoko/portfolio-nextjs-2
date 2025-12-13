@@ -1,3 +1,7 @@
+//
+// BFFインターセプター
+// BFF処理の前後に共通処理を挟む
+//
 import 'server-only';
 
 import { withErrorHandling, withErrorHandlingAsync } from '@/presentation/(system)/middleware/interceptor.core.exception.bff';
@@ -7,14 +11,14 @@ import { BffResult } from '@/presentation/(system)/result/result.bff.types';
 
 const logPrefix = 'interceptor.feature.bff.ts';
 
-export function withInterception<DATA, FIELD extends string>(
+export function execute<DATA, FIELD extends string>(
   thunk: () => BffResult<DATA, FIELD>,
 ): BffResult<DATA, FIELD> {
   const process = 'sync bff process';
   return withLogging({ logPrefix, process }, () => withErrorHandling(() => withAuth(thunk)));
 }
 
-export async function withInterceptionAsync<DATA, FIELD extends string>(
+export async function executeAsync<DATA, FIELD extends string>(
   thunk: () => Promise<BffResult<DATA, FIELD>>,
 ): Promise<BffResult<DATA, FIELD>> {
   const process = 'async bff process';

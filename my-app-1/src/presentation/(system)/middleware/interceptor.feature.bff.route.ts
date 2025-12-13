@@ -6,7 +6,7 @@ import { withLoggingAsync } from '@/presentation/(system)/middleware/interceptor
 
 const logPrefix = 'interceptor.bff.route.ts: ';
 
-export async function withInterceptionAsync(thunk: () => Promise<Response>): Promise<Response> {
+export async function executeAsync(thunk: () => Promise<Response>): Promise<Response> {
   const process = 'bff route process';
   return withLoggingAsync({ logPrefix, process }, () => withErrorHandlingAsync(() => withAuthAsync(thunk)));
 }

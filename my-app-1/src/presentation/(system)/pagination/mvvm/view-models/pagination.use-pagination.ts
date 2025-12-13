@@ -2,8 +2,8 @@
 // カスタムフック
 //
 import {
-  withInterception,
-  withInterceptionAsync,
+  execute,
+  executeAsync,
 } from '@/presentation/(system)/middleware/interceptor.feature.client';
 import { createPager } from '@/presentation/(system)/pagination/mvvm/models/pagination.pager';
 import { FetchPage } from '@/presentation/(system)/pagination/mvvm/models/pagination.requester';
@@ -45,7 +45,7 @@ export function usePagination<DATA, FIELD extends string>({
    */
   useEffect(() => {
     void (async () => {
-      await withInterceptionAsync(() => func(), setError);
+      await executeAsync(() => func(), setError);
     })();
 
     async function func() {
@@ -71,7 +71,7 @@ export function usePagination<DATA, FIELD extends string>({
     // dispatchした結果のstateを同じeffect内で安全に見られない。
     // dispatchした結果のstateを他コンポーネントに連携する関係で結果のstateを取得する必要がある。
     // そのため別の依存配列の別effectにしている。
-    withInterception(() => func(), setError);
+    execute(() => func(), setError);
 
     function func() {
       if (state.step === Step.Ok) {

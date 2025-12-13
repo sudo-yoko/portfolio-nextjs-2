@@ -3,7 +3,7 @@
 //
 import 'client-only';
 
-import { withInterceptionAsync } from '@/presentation/(system)/middleware/interceptor.feature.client';
+import { executeAsync } from '@/presentation/(system)/middleware/interceptor.feature.client';
 import { Pager } from '@/presentation/(system)/pagination/mvvm/models/pegination.types';
 import {
   Action,
@@ -24,7 +24,7 @@ export async function handlePagination<ITEMS, FIELD extends string>(
   dispatch: React.ActionDispatch<[action: Action<ITEMS>]>,
   setError: React.Dispatch<React.SetStateAction<boolean>>,
 ): Promise<void> {
-  await withInterceptionAsync(() => func(), setError);
+  await executeAsync(() => func(), setError);
 
   async function func() {
     if (pager?.current == null) {

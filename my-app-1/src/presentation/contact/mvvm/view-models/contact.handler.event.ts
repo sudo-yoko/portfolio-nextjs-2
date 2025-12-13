@@ -4,7 +4,7 @@
 'use client';
 
 import { bffError } from '@/presentation/(system)/error/error.factories';
-import { withInterceptionAsync } from '@/presentation/(system)/middleware/interceptor.feature.client';
+import { executeAsync } from '@/presentation/(system)/middleware/interceptor.feature.client';
 import { isInvalid, isOkEmpty } from '@/presentation/(system)/result/result.core.helpers';
 import { hasError } from '@/presentation/(system)/validation/validation.helper';
 import { Violations } from '@/presentation/(system)/validation/validation.types';
@@ -55,7 +55,7 @@ export async function submit(
   setError: React.Dispatch<React.SetStateAction<boolean>>,
 ) {
   // エラーハンドリングを追加して処理を実行する。
-  await withInterceptionAsync(() => func(), setError);
+  await executeAsync(() => func(), setError);
 
   async function func() {
     const result = await send(state.formData);
