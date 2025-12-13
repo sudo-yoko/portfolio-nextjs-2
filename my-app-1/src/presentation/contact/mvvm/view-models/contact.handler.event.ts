@@ -3,8 +3,8 @@
 //
 'use client';
 
-import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error.handler.client';
 import { bffError } from '@/presentation/(system)/errors/error.factories';
+import { withInterceptionAsync } from '@/presentation/(system)/interceptor/interceptor.client';
 import { isInvalid, isOkEmpty } from '@/presentation/(system)/result/result.core.helpers';
 import { hasError } from '@/presentation/(system)/validation/validation.helper';
 import { Violations } from '@/presentation/(system)/validation/validation.types';
@@ -55,7 +55,7 @@ export async function submit(
   setError: React.Dispatch<React.SetStateAction<boolean>>,
 ) {
   // エラーハンドリングを追加して処理を実行する。
-  await withErrorHandlingAsync(() => func(), setError);
+  await withInterceptionAsync(() => func(), setError);
 
   async function func() {
     const result = await send(state.formData);
@@ -65,8 +65,8 @@ export async function submit(
       return;
     }
     // バリデーションエラーあり
-    if(isInvalid(result)){
-    // if (isReject(result) && result.label === REJECTION_LABELS.VIOLATION) {
+    if (isInvalid(result)) {
+      // if (isReject(result) && result.label === REJECTION_LABELS.VIOLATION) {
       const violations = result.violations;
       if (hasError(violations)) {
         setViolations(dispatch, violations);

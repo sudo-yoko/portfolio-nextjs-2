@@ -2,13 +2,18 @@
 // カスタムフック
 //
 import {
-  withErrorHandling,
-  withErrorHandlingAsync,
-} from '@/presentation/(system)/errors/error.handler.client';
+  withInterception,
+  withInterceptionAsync,
+} from '@/presentation/(system)/interceptor/interceptor.client';
 import { createPager } from '@/presentation/(system)/pagination/mvvm/models/pagination.pager';
 import { FetchPage } from '@/presentation/(system)/pagination/mvvm/models/pagination.requester';
 import { Pager } from '@/presentation/(system)/pagination/mvvm/models/pegination.types';
-import { reducer, Step, toInvalid, toOk } from '@/presentation/(system)/pagination/mvvm/view-models/pagination.reducer';
+import {
+  reducer,
+  Step,
+  toInvalid,
+  toOk,
+} from '@/presentation/(system)/pagination/mvvm/view-models/pagination.reducer';
 import { isInvalid, isOkData } from '@/presentation/(system)/result/result.core.helpers';
 import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
 import React, { useEffect, useReducer, useRef, useState } from 'react';
@@ -40,7 +45,7 @@ export function usePagination<DATA, FIELD extends string>({
    */
   useEffect(() => {
     void (async () => {
-      await withErrorHandlingAsync(() => func(), setError);
+      await withInterceptionAsync(() => func(), setError);
     })();
 
     async function func() {
@@ -66,7 +71,7 @@ export function usePagination<DATA, FIELD extends string>({
     // dispatchした結果のstateを同じeffect内で安全に見られない。
     // dispatchした結果のstateを他コンポーネントに連携する関係で結果のstateを取得する必要がある。
     // そのため別の依存配列の別effectにしている。
-    withErrorHandling(() => func(), setError);
+    withInterception(() => func(), setError);
 
     function func() {
       if (state.step === Step.Ok) {
