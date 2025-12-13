@@ -3,14 +3,13 @@
 //
 import 'server-only';
 
-import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error-handler.server';
+import { withInterceptionAsync } from '@/presentation/(system)/interceptor/interceptor.server';
 import { SearchParams } from '@/presentation/(system)/types/search-params';
 import { handleRequest } from '@/presentation/contact/mvvm/view-models/contact.handler.request';
 import Steps from '@/presentation/contact/mvvm/views/contact.component.steps';
 
 export default async function Page(props: { searchParams?: SearchParams }) {
-  // エラーハンドリングを追加して処理を実行する。
-  return await withErrorHandlingAsync(() => func());
+  return await withInterceptionAsync(() => func());
 
   async function func() {
     const _result = handleRequest(props);

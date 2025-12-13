@@ -2,12 +2,12 @@ import 'server-only';
 
 import type { BffResult } from '@/presentation/(system)/result/result.bff.types';
 import { isCustomError } from '@/presentation/(system)/errors/error.helpers';
-import { stringify } from '@/presentation/(system)/errors/error.stringify';
+import { stringify } from '@/presentation/(system)/errors/error.helper.stringify';
 import { CUSTOM_ERROR_TAG } from '@/presentation/(system)/errors/error.types';
 import logger from '@/presentation/(system)/logging/logger.s';
 import { abort } from '@/presentation/(system)/result/result.core.factories';
 
-const logPrefix = 'bff-error-handler.ts: ';
+const logPrefix = 'error-handler.bff.ts: ';
 
 /**
  * クライアント／サーバー境界 エラーハンドリング.
@@ -20,6 +20,24 @@ export async function withErrorHandlingAsync<DATA, FIELD extends string>(
   const fname = 'withErrorHandlingAsync: ';
   try {
     return await thunk();
+  } catch (e) {
+    const { message, all } = stringify(e);
+    logger.error(logPrefix + fname + all);
+
+    let args = {};
+    if (isCustomError(e)) {
+      args = { errType: e[CUSTOM_ERROR_TAG] };
+    }
+    return abort({ message, ...args });
+  }
+}
+
+export function withErrorHandling<DATA, FIELD extends string>(
+  thunk: () => BffResult<DATA, FIELD>,
+): BffResult<DATA, FIELD> {
+  const fname = 'withErrorHandling: ';
+  try {
+    return thunk();
   } catch (e) {
     const { message, all } = stringify(e);
     logger.error(logPrefix + fname + all);

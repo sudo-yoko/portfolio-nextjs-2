@@ -3,7 +3,7 @@
 //
 'use client';
 
-import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error-handler.client';
+import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error.handler.client';
 import { bffError } from '@/presentation/(system)/errors/error.factories';
 import { isInvalid, isOkEmpty } from '@/presentation/(system)/result/result.core.helpers';
 import { hasError } from '@/presentation/(system)/validation/validation.helper';

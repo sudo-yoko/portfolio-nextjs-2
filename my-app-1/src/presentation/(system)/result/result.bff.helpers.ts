@@ -2,7 +2,7 @@
 // BFFのRESULT型 ヘルパー関数
 //
 import { parseBffResultError } from '@/presentation/(system)/errors/error.factories';
-import { stringify } from '@/presentation/(system)/errors/error.stringify';
+import { stringify } from '@/presentation/(system)/errors/error.helper.stringify';
 import { BffResult } from '@/presentation/(system)/result/result.bff.types';
 import { parseResult } from './result.core.helpers';
 

@@ -1,7 +1,7 @@
 import 'server-only';
 
 import { withAuthAsync } from '@/presentation/(system)/auth/auth-handler';
-import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error-handler.bff.route';
+import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error.handler.bff.route';
 import { FetchPageResult } from '@/presentation/(system)/pagination/min/modules/pagination.requester';
 import { bffRouteResponse } from '@/presentation/(system)/result/result.bff.factories.s';
 import { okData } from '@/presentation/(system)/result/result.core.factories';

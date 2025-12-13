@@ -2,7 +2,7 @@ import 'server-only';
 
 import { authError } from '@/presentation/(system)/errors/error.factories';
 import { isAuthError } from '@/presentation/(system)/errors/error.helpers';
-import { stringify } from '@/presentation/(system)/errors/error.stringify';
+import { stringify } from '@/presentation/(system)/errors/error.helper.stringify';
 import logger from '@/presentation/(system)/logging/logger.s';
 
 const logPrefix = 'auth-handler.ts: ';
@@ -24,6 +24,21 @@ export async function withAuthAsync<T>(thunk: () => Promise<T>): Promise<T> {
       logger.error(logPrefix + fname + stringify(e).message);
     }
     // 認証エラー以外は外側のwithErrorHandlingで処理させる
+    throw e;
+  }
+}
+
+export function withAuth<T>(thunk: () => T): T {
+  const fname = 'withAuth: ';
+  try {
+    if (process.env['AUTH_ERROR']) {
+      throw authError();
+    }
+    return thunk();
+  } catch (e) {
+    if (isAuthError(e)) {
+      logger.error(logPrefix + fname + stringify(e).message);
+    }
     throw e;
   }
 }

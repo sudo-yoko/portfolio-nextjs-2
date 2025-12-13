@@ -5,7 +5,7 @@ import 'server-only';
 
 import { bffRouteResponse } from '@/presentation/(system)/result/result.bff.factories.s';
 import { isCustomError } from '@/presentation/(system)/errors/error.helpers';
-import { stringify } from '@/presentation/(system)/errors/error.stringify';
+import { stringify } from '@/presentation/(system)/errors/error.helper.stringify';
 import { CUSTOM_ERROR_TAG } from '@/presentation/(system)/errors/error.types';
 import logger from '@/presentation/(system)/logging/logger.s';
 import { abort } from '@/presentation/(system)/result/result.core.factories';
@@ -19,6 +19,23 @@ export async function withErrorHandlingAsync(thunk: () => Promise<Response>): Pr
   const fname = 'withErrorHandlingAsync: ';
   try {
     return await thunk();
+  } catch (e) {
+    const { message, all } = stringify(e);
+    logger.error(logPrefix + fname + all);
+
+    let args = {};
+    if (isCustomError(e)) {
+      args = { ...{ errType: e[CUSTOM_ERROR_TAG] } };
+    }
+    const result = abort({ message, ...args });
+    return bffRouteResponse(result);
+  }
+}
+
+export function withErrorHandling(thunk: () => Response): Response {
+  const fname = 'withErrorHandling: ';
+  try {
+    return thunk();
   } catch (e) {
     const { message, all } = stringify(e);
     logger.error(logPrefix + fname + all);

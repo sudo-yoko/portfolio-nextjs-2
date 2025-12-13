@@ -1,6 +1,6 @@
 'use client';
 
-import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error-handler.client';
+import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error.handler.client';
 import { ErrorRedirect } from '@/presentation/(system)/errors/views/component.error-redirect';
 import { createPager } from '@/presentation/(system)/pagination/min/modules/pagination.pager';
 import { Pager } from '@/presentation/(system)/pagination/min/modules/pagination.types';

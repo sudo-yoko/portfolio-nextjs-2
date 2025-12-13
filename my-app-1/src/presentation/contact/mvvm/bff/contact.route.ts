@@ -2,7 +2,7 @@ import 'server-only';
 
 import { withAuthAsync } from '@/presentation/(system)/auth/auth-handler';
 import { bffRouteResponse } from '@/presentation/(system)/result/result.bff.factories.s';
-import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error-handler.bff.route';
+import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error.handler.bff.route';
 import logger from '@/presentation/(system)/logging/logger.s';
 import { execute } from '@/presentation/contact/mvvm/bff/contact.interactor';
 import { ContactBody, FormKeys } from '@/presentation/contact/mvvm/models/contact.types';

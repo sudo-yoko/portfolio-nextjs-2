@@ -2,7 +2,7 @@
 
 import { withAuthAsync } from '@/presentation/(system)/auth/auth-handler';
 import { BffResult } from '@/presentation/(system)/result/result.bff.types';
-import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error-handler.bff';
+import { withErrorHandlingAsync } from '@/presentation/(system)/errors/error.handler.bff';
 import logger from '@/presentation/(system)/logging/logger.s';
 import { FormData } from '@/presentation/(system)/validation/validation.types';
 import { execute } from '@/presentation/contact/mvvm/bff/contact.interactor';

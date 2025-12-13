@@ -2,7 +2,7 @@
 // RESULT型 ヘルパー関数
 //
 import { parseResultError } from '@/presentation/(system)/errors/error.factories';
-import { stringify } from '@/presentation/(system)/errors/error.stringify';
+import { stringify } from '@/presentation/(system)/errors/error.helper.stringify';
 import {
   Aborted,
   Invalid,

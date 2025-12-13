@@ -3,7 +3,7 @@
 //
 import 'server-only';
 
-import { stringify } from '@/presentation/(system)/errors/error.stringify';
+import { stringify } from '@/presentation/(system)/errors/error.helper.stringify';
 import logger from '@/presentation/(system)/logging/logger.s';
 import axios from 'axios';
 
