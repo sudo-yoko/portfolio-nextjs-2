@@ -3,7 +3,7 @@
 //
 import 'server-only';
 
-import { executeAsync } from '@/presentation/(system)/middleware/interceptor.feature.server';
+import { executeAsync } from '@/presentation/(system)/aop/aop.feature.server';
 import { SearchParams } from '@/presentation/(system)/types/search-params';
 import { handleRequest } from '@/presentation/contact/mvvm/view-models/contact.handler.request';
 import Steps from '@/presentation/contact/mvvm/views/contact.component.steps';

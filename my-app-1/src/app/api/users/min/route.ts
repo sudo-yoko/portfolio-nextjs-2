@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { executeAsync } from '@/presentation/(system)/middleware/interceptor.feature.bff.route';
+import { executeAsync } from '@/presentation/(system)/aop/aop.feature.bff.route';
 import { FetchPageResult } from '@/presentation/(system)/pagination/min/modules/pagination.requester';
 import { bffRouteResponse } from '@/presentation/(system)/result/result.bff.factories.s';
 import { okData } from '@/presentation/(system)/result/result.core.factories';

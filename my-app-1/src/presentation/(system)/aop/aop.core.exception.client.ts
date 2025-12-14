@@ -1,5 +1,5 @@
 //
-// エラーハンドリング インターセプター
+// エラーハンドリング・インターセプター
 //
 import 'client-only';
 
@@ -17,7 +17,6 @@ export function withErrorHandling<T>(
   setHasError: React.Dispatch<React.SetStateAction<boolean>>,
 ): T | void {
   const fname = 'withErrorHandling: ';
-
   try {
     // 引数に渡されたサンクを実行
     return thunk();
@@ -36,7 +35,6 @@ export async function withErrorHandlingAsync<T>(
   setHasError: React.Dispatch<React.SetStateAction<boolean>>,
 ): Promise<T | void> {
   const fname = 'withErrorHandlingAsync: ';
-
   try {
     // 引数に渡されたサンクを実行
     return await thunk();

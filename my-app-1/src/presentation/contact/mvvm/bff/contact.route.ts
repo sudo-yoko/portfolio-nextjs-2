@@ -1,7 +1,7 @@
 import 'server-only';
 
+import { executeAsync } from '@/presentation/(system)/aop/aop.feature.bff.route';
 import logger from '@/presentation/(system)/logging/logger.s';
-import { executeAsync } from '@/presentation/(system)/middleware/interceptor.feature.bff.route';
 import { bffRouteResponse } from '@/presentation/(system)/result/result.bff.factories.s';
 import { FormData } from '@/presentation/(system)/validation/validation.types';
 import { execute } from '@/presentation/contact/mvvm/bff/contact.interactor';

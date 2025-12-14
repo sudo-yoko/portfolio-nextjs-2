@@ -1,16 +1,13 @@
-//
-// エラーハンドリング インターセプター
-//
 import 'server-only';
 
-import { bffRouteResponse } from '@/presentation/(system)/result/result.bff.factories.s';
-import { isCustomError } from '@/presentation/(system)/error/error.helpers';
 import { stringify } from '@/presentation/(system)/error/error.helper.stringify';
+import { isCustomError } from '@/presentation/(system)/error/error.helpers';
 import { CUSTOM_ERROR_TAG } from '@/presentation/(system)/error/error.types';
 import logger from '@/presentation/(system)/logging/logger.s';
+import { bffRouteResponse } from '@/presentation/(system)/result/result.bff.factories.s';
 import { abort } from '@/presentation/(system)/result/result.core.factories';
 
-const logPrefix = 'route-error-handler.ts: ';
+const logPrefix = 'interceptor.core.exception.bff.route.ts: ';
 
 /**
  * 引数に渡されたサンクにエラーハンドリングを追加して実行する。
@@ -32,6 +29,9 @@ export async function withErrorHandlingAsync(thunk: () => Promise<Response>): Pr
   }
 }
 
+/**
+ * 引数に渡されたサンクにエラーハンドリングを追加して実行する。
+ */
 export function withErrorHandling(thunk: () => Response): Response {
   const fname = 'withErrorHandling: ';
   try {

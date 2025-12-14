@@ -1,22 +1,14 @@
-//
-// エラーハンドリング インターセプター
-//
 import 'server-only';
 
-import type { BffResult } from '@/presentation/(system)/result/result.bff.types';
-import { isCustomError } from '@/presentation/(system)/error/error.helpers';
 import { stringify } from '@/presentation/(system)/error/error.helper.stringify';
+import { isCustomError } from '@/presentation/(system)/error/error.helpers';
 import { CUSTOM_ERROR_TAG } from '@/presentation/(system)/error/error.types';
 import logger from '@/presentation/(system)/logging/logger.s';
+import type { BffResult } from '@/presentation/(system)/result/result.bff.types';
 import { abort } from '@/presentation/(system)/result/result.core.factories';
 
 const logPrefix = 'error-handler.bff.ts: ';
 
-/**
- * クライアント／サーバー境界 エラーハンドリング.
- *
- * @remarks 引数に渡されたサンクにエラーハンドリングを追加して実行する。
- */
 export async function withErrorHandlingAsync<DATA, FIELD extends string>(
   thunk: () => Promise<BffResult<DATA, FIELD>>,
 ): Promise<BffResult<DATA, FIELD>> {

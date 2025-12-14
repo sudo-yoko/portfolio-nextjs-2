@@ -1,6 +1,6 @@
 'use client';
 
-import { withErrorHandlingAsync } from '@/presentation/(system)/middleware/interceptor.core.exception.client';
+import { withErrorHandlingAsync } from '@/presentation/(system)/aop/aop.core.exception.client';
 import { ErrorRedirect } from '@/presentation/(system)/error/views/component.error-redirect';
 import { createPager } from '@/presentation/(system)/pagination/min/modules/pagination.pager';
 import { Pager } from '@/presentation/(system)/pagination/min/modules/pagination.types';
