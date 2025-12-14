@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 /**
  * Errorオブジェクトの文字列表現を作成する
  */
@@ -17,6 +19,14 @@ export function stringify(
   if (typeof error === 'string') {
     const message = error;
     return { message, all: join({ description, message }) };
+  } else if (axios.isAxiosError(error)) {
+    const { message } = error;
+    const stacks = getStackTrace(error);
+    let details;
+    if (error.response) {
+      details = `Axios Error: Response(Inbound) -> status=${error.response.status}, data=${error.response.data}`;
+    }
+    return { message, all: join({ description, message, details, stacks }) };
   } else if (error instanceof Error) {
     const { message } = error;
     const stacks = getStackTrace(error);
