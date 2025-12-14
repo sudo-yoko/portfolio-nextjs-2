@@ -1,20 +1,17 @@
-//
-// エラーハンドリング・インターセプター
-//
+// エラーハンドリングAOP部品
 import 'server-only';
 
 import { stringify } from '@/presentation/(system)/error/error.helper.stringify';
 import logger from '@/presentation/(system)/logging/logger.s';
 import axios from 'axios';
 
-const logPrefix = 'server-error-handler.ts: ';
+const logPrefix = 'aop.core.exception.server.ts: ';
 
 /**
- * 引数に渡されたサンクにエラーハンドリングを追加して実行する。（同期処理用）
+ * 引数に渡されたサンクにエラーハンドリングを追加して実行する。
  */
 export function withErrorHandling<T>(thunk: () => T): T {
   const fname = 'withErrorHandling: ';
-
   try {
     // 引数に渡されたサンクを実行
     return thunk();
@@ -26,13 +23,11 @@ export function withErrorHandling<T>(thunk: () => T): T {
 }
 
 /**
- * 引数に渡されたサンクにエラーハンドリングを追加して実行する。（非同期処理用）
+ * 引数に渡されたサンクにエラーハンドリングを追加して実行する。
  */
 export async function withErrorHandlingAsync<T>(thunk: () => Promise<T>): Promise<T> {
   const fname = 'withErrorHandlingAsync: ';
-
   try {
-    // 引数に渡されたサンクを実行
     return await thunk();
   } catch (error) {
     handleError(error, fname);

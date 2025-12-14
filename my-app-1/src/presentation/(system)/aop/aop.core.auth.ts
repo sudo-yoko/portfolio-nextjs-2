@@ -1,3 +1,4 @@
+// 認証AOP部品
 import 'server-only';
 
 import { authenticate } from '@/presentation/(system)/auth/authentication';
@@ -5,7 +6,7 @@ import { stringify } from '@/presentation/(system)/error/error.helper.stringify'
 import { isAuthError } from '@/presentation/(system)/error/error.helpers';
 import logger from '@/presentation/(system)/logging/logger.s';
 
-const logPrefix = 'interceptor.core.auth.ts: ';
+const logPrefix = 'aop.core.auth.ts: ';
 
 /**
  * 引数に渡されたサンクに認証処理を追加して実行する。

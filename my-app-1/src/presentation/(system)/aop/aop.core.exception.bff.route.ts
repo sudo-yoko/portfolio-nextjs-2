@@ -1,3 +1,4 @@
+// エラーハンドリングAOP部品
 import 'server-only';
 
 import { stringify } from '@/presentation/(system)/error/error.helper.stringify';
@@ -7,7 +8,7 @@ import logger from '@/presentation/(system)/logging/logger.s';
 import { bffRouteResponse } from '@/presentation/(system)/result/result.bff.factories.s';
 import { abort } from '@/presentation/(system)/result/result.core.factories';
 
-const logPrefix = 'interceptor.core.exception.bff.route.ts: ';
+const logPrefix = 'aop.core.exception.bff.route.ts: ';
 
 /**
  * 引数に渡されたサンクにエラーハンドリングを追加して実行する。

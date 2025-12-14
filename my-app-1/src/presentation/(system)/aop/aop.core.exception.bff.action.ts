@@ -1,3 +1,4 @@
+// エラーハンドリングAOP部品
 import 'server-only';
 
 import { stringify } from '@/presentation/(system)/error/error.helper.stringify';
@@ -7,8 +8,11 @@ import logger from '@/presentation/(system)/logging/logger.s';
 import type { BffResult } from '@/presentation/(system)/result/result.bff.types';
 import { abort } from '@/presentation/(system)/result/result.core.factories';
 
-const logPrefix = 'error-handler.bff.ts: ';
+const logPrefix = 'aop.core.exception.bff.ts: ';
 
+/**
+ * 引数に渡されたサンクにエラーハンドリングを追加して実行する。
+ */
 export async function withErrorHandlingAsync<DATA, FIELD extends string>(
   thunk: () => Promise<BffResult<DATA, FIELD>>,
 ): Promise<BffResult<DATA, FIELD>> {
@@ -27,6 +31,9 @@ export async function withErrorHandlingAsync<DATA, FIELD extends string>(
   }
 }
 
+/**
+ * 引数に渡されたサンクにエラーハンドリングを追加して実行する。
+ */
 export function withErrorHandling<DATA, FIELD extends string>(
   thunk: () => BffResult<DATA, FIELD>,
 ): BffResult<DATA, FIELD> {
