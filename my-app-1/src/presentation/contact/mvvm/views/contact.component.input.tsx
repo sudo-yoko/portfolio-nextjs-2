@@ -1,6 +1,6 @@
 'use client';
 
-import { resizeTextarea } from '@/presentation/(system)/utils/dom-utils';
+import { TextAreaEx } from '@/presentation/(system)/components/textareaEx';
 import { applyViolations, handleNext } from '@/presentation/contact/mvvm/view-models/contact.handler.event';
 import { Action, setValue, State } from '@/presentation/contact/mvvm/view-models/contact.reducer';
 import { useEffect } from 'react';
@@ -60,12 +60,7 @@ export default function Input({
         <div>
           <div>お問い合わせ内容：</div>
           <div>
-            <textarea
-              value={state.formData.body}
-              onChange={(e) => setValue(dispatch, 'body', e.target.value)}
-              onInput={(e) => resizeTextarea(e.currentTarget)}
-              className="w-80 border-2 border-black"
-            />
+            <TextAreaEx value={state.formData.body} onChange={(value) => setValue(dispatch, 'body', value)} />
           </div>
           {state.violations.body?.map((err, index) => (
             <div key={index}>

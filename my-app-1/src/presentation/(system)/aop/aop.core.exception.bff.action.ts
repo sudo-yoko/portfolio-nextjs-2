@@ -8,7 +8,7 @@ import logger from '@/presentation/(system)/logging/logger.s';
 import type { BffResult } from '@/presentation/(system)/result/result.bff.types';
 import { abort } from '@/presentation/(system)/result/result.core.factories';
 
-const logPrefix = 'aop.core.exception.bff.ts: ';
+const logPrefix = 'aop.core.exception.bff.action.ts: ';
 
 /**
  * 引数に渡されたサンクにエラーハンドリングを追加して実行する。
