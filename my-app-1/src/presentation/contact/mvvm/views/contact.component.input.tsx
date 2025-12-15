@@ -1,6 +1,6 @@
 'use client';
 
-import { TextAreaEx } from '@/presentation/(system)/components/textareaEx';
+import { AutoResizeTextAreaSimple } from '@/presentation/(system)/components/autoResizeTextArea.decorator.simple';
 import { applyViolations, handleNext } from '@/presentation/contact/mvvm/view-models/contact.handler.event';
 import { Action, setValue, State } from '@/presentation/contact/mvvm/view-models/contact.reducer';
 import { useEffect } from 'react';
@@ -60,7 +60,11 @@ export default function Input({
         <div>
           <div>お問い合わせ内容：</div>
           <div>
-            <TextAreaEx value={state.formData.body} onChange={(value) => setValue(dispatch, 'body', value)} />
+            <AutoResizeTextAreaSimple
+              value={state.formData.body}
+              onChange={(value) => setValue(dispatch, 'body', value)}
+              violation={state.violations.body}
+            />
           </div>
           {state.violations.body?.map((err, index) => (
             <div key={index}>
