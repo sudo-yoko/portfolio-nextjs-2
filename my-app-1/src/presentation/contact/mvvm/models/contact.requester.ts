@@ -3,11 +3,11 @@
 //
 import 'client-only';
 
-import { parseBffResult } from '@/presentation/(system)/result/result.bff.helpers';
-import { BffResult } from '@/presentation/(system)/result/result.bff.types';
 import client from '@/presentation/(system)/client/client.c';
 import { CONTENT_TYPE_APPLICATION_JSON_UTF8 } from '@/presentation/(system)/client/client.constants';
 import { Method } from '@/presentation/(system)/client/client.types';
+import { bffResult } from '@/presentation/(system)/result/result.bff.factories';
+import { BffResult } from '@/presentation/(system)/result/result.bff.types';
 import { FormData } from '@/presentation/(system)/validation/validation.types';
 import { post } from '@/presentation/contact/mvvm/bff/contact.action';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
@@ -45,7 +45,7 @@ const viaRoute: Send = async (formData) => {
     //body: { name, email, body }, // オブジェクトのまま（JSON.stringify不要）で渡す
     body: formData,
   });
-  return parseBffResult<void, FormKeys>(res.rawBody);
+  return bffResult<void, FormKeys>(res.rawBody);
 };
 
 /**

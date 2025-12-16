@@ -7,7 +7,7 @@ import {
   FetchPage,
   FetchPageResult,
 } from '@/presentation/(system)/pagination/min/modules/pagination.requester';
-import { parseBffResult } from '@/presentation/(system)/result/result.bff.helpers';
+import { bffResult } from '@/presentation/(system)/result/result.bff.factories';
 import { action } from '@/presentation/users/min/modules/users.action';
 import { FormKeys, User } from '@/presentation/users/min/modules/users.types';
 
@@ -29,7 +29,7 @@ const viaRoute: FetchPage<User[], FormKeys> = async (offset, limit, query) => {
     headers: { ...CONTENT_TYPE_APPLICATION_JSON_UTF8 },
     body: { offset, limit, query },
   });
-  return parseBffResult<FetchPageResult<User[]>, FormKeys>(result.rawBody);
+  return bffResult<FetchPageResult<User[]>, FormKeys>(result.rawBody);
 
   // const res = await window.fetch(url, {
   // method: POST,

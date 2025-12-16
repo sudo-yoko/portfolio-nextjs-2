@@ -1,6 +1,5 @@
 import 'client-only';
 
-import { parseBffResult } from '@/presentation/(system)/result/result.bff.helpers';
 import client from '@/presentation/(system)/client/client.c';
 import { CONTENT_TYPE_APPLICATION_JSON_UTF8 } from '@/presentation/(system)/client/client.constants';
 import { Method } from '@/presentation/(system)/client/client.types';
@@ -8,6 +7,7 @@ import {
   FetchPage,
   FetchPageResult,
 } from '@/presentation/(system)/pagination/mvvm/models/pagination.requester';
+import { bffResult } from '@/presentation/(system)/result/result.bff.factories';
 import { action } from '@/presentation/users/mvvm/bff/users.action';
 import { FormKeys, User } from '@/presentation/users/mvvm/models/users.types';
 
@@ -19,7 +19,7 @@ const _viaAction: FetchPage<User[], FormKeys> = async (offset, limit, query) => 
 };
 
 /**
- * Route Handlers経由バックエンド実行
+ * RouteHandlers経由バックエンド実行
  */
 const viaRoute: FetchPage<User[], FormKeys> = async (offset, limit, query) => {
   const url = '/api/users/mvvm';
@@ -29,7 +29,7 @@ const viaRoute: FetchPage<User[], FormKeys> = async (offset, limit, query) => {
     headers: { ...CONTENT_TYPE_APPLICATION_JSON_UTF8 },
     body: { offset, limit, query },
   });
-  return parseBffResult<FetchPageResult<User[]>, FormKeys>(result.rawBody);
+  return bffResult<FetchPageResult<User[]>, FormKeys>(result.rawBody);
 
   // const res = await window.fetch(url, {
   // method: POST,

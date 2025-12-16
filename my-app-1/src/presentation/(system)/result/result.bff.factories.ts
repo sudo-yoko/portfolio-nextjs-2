@@ -1,9 +1,22 @@
 //
-// BFF結果オブジェクト ファクトリー関数
+// BFF結果オブジェクト ファクトリー
 //
-import { Ok } from '@/presentation/(system)/result/result.bff.types';
+import { parseBffResultError } from '@/presentation/(system)/error/error.factories';
+import { stringify } from '@/presentation/(system)/error/error.helper.stringify';
+import { BffResult, Ok } from '@/presentation/(system)/result/result.bff.types';
 import { okData, okEmpty } from '@/presentation/(system)/result/result.core.factories';
+import { parseResult } from '@/presentation/(system)/result/result.core.helpers';
 import { OkData, OkEmpty } from '@/presentation/(system)/result/result.core.types';
+
+export function bffResult<DATA, FIELD extends string>(text: string): BffResult<DATA, FIELD> {
+  try {
+    const result = parseResult(text);
+    return result as BffResult<DATA, FIELD>;
+  } catch (e) {
+    // TODO: BffResult型にパースできませんでした。
+    throw parseBffResultError(text, stringify(e).message);
+  }
+}
 
 export function ok(): OkEmpty;
 export function ok<DATA>(data: DATA): OkData<DATA>;

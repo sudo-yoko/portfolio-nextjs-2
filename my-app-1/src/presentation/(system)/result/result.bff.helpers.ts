@@ -1,24 +1,19 @@
 //
 // BFFのRESULT型 ヘルパー関数
 //
-import { parseBffResultError } from '@/presentation/(system)/error/error.factories';
-import { stringify } from '@/presentation/(system)/error/error.helper.stringify';
-import { BffResult } from '@/presentation/(system)/result/result.bff.types';
-import { parseResult } from './result.core.helpers';
 
 //////////////////////////
 // 型解析、型ガード関数
 //////////////////////////
 
-export function parseBffResult<DATA, FIELD extends string>(text: string): BffResult<DATA, FIELD> {
-  try {
-    const result = parseResult(text);
-    return result as BffResult<DATA, FIELD>;
-  } catch (e) {
-    // TODO: BffResult型にパースできませんでした。
-    throw parseBffResultError(text, stringify(e).message);
-  }
-}
+// export function bffResult<DATA, FIELD extends string>(text: string): BffResult<DATA, FIELD> {
+  // try {
+    // const result = parseResult(text);
+    // return result as BffResult<DATA, FIELD>;
+  // } catch (e) {
+    // throw parseBffResultError(text, stringify(e).message);
+  // }
+// }
 
 // function isBffResult<DATA, FIELD extends string>(text: unknown): text is BffResult<DATA, FIELD> {
 // if (text === null) {
