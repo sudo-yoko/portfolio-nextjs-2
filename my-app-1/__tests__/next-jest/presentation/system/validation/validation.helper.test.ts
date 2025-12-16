@@ -1,4 +1,4 @@
-import { isViolations } from '@/presentation/(system)/validation/validation.helper';
+import { isViolations } from '@/presentation/(system)/validation/validation.helpers';
 
 // npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/validation/validation.helper.test.ts -t 'test1-1'
 test('test1-1', () => {

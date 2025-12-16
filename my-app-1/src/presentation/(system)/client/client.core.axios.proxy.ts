@@ -3,7 +3,7 @@
 //
 import 'server-only';
 
-import { env, envNumber, envProtocol } from '@/presentation/(system)/env/env-validated.s';
+import { env, envNumber, envProtocol } from '@/presentation/(system)/env/env.helper.validated';
 import type { AxiosInstance } from 'axios';
 import axios from 'axios';
 

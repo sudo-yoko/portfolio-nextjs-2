@@ -3,7 +3,7 @@ import 'server-only';
 import { FetchPageResult } from '@/presentation/(system)/pagination/min/modules/pagination.requester';
 import { BffResult } from '@/presentation/(system)/result/result.bff.types';
 import { invalid, okData } from '@/presentation/(system)/result/result.core.factories';
-import { hasError } from '@/presentation/(system)/validation/validation.helper';
+import { hasError } from '@/presentation/(system)/validation/validation.helpers';
 import { FormData } from '@/presentation/(system)/validation/validation.types';
 import { send } from '@/presentation/users/min/modules/users.client';
 import { FormKeys, User } from '@/presentation/users/min/modules/users.types';

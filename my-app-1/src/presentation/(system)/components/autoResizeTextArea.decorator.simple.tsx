@@ -3,14 +3,7 @@
  */
 'use client';
 
-import { AutoResizeTextAreaCore } from '@/presentation/(system)/components/autoResizeTextArea.core';
-import { Violation } from '@/presentation/(system)/validation/validation.types';
-
-export type Props = {
-  value: string;
-  onChange: (value: string) => void;
-  violation?: Violation;
-};
+import { AutoResizeTextAreaCore, Props } from '@/presentation/(system)/components/autoResizeTextArea.core';
 
 export function AutoResizeTextAreaSimple(props: Props) {
   return (

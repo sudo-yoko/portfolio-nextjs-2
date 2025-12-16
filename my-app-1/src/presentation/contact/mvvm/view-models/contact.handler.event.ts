@@ -6,7 +6,7 @@
 import { executeAsync } from '@/presentation/(system)/aop/aop.feature.client';
 import { bffError } from '@/presentation/(system)/error/error.factories';
 import { isInvalid, isOkEmpty } from '@/presentation/(system)/result/result.core.helpers';
-import { hasError } from '@/presentation/(system)/validation/validation.helper';
+import { hasError } from '@/presentation/(system)/validation/validation.helpers';
 import { Violations } from '@/presentation/(system)/validation/validation.types';
 import { send } from '@/presentation/contact/mvvm/models/contact.requester';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';

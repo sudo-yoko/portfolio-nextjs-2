@@ -2,7 +2,7 @@ import 'server-only';
 
 import client from '@/presentation/(system)/client/client.s';
 import { Method } from '@/presentation/(system)/client/client.types';
-import { env } from '@/presentation/(system)/env/env-validated.s';
+import { env } from '@/presentation/(system)/env/env.helper.validated';
 import { Users, UsersQuery } from '@/presentation/users/mvvm/models/users.types';
 
 // type RES = {

@@ -6,7 +6,7 @@ import {
   offsetOfLastPage,
   pageToOffset,
   toEffectiveOffsetMin,
-} from '@/presentation/(system)/pagination/min/modules/pagination.helper';
+} from '@/presentation/(system)/pagination/min/modules/pagination.helpers';
 import { FetchPage } from '@/presentation/(system)/pagination/min/modules/pagination.requester';
 import { PageData, Pager } from '@/presentation/(system)/pagination/min/modules/pagination.types';
 import { BffResult } from '@/presentation/(system)/result/result.bff.types';

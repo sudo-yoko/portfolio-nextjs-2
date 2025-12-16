@@ -6,7 +6,7 @@ import 'server-only';
 import type { BffResult } from '@/presentation/(system)/result/result.bff.types';
 import logger from '@/presentation/(system)/logging/logger.s';
 import { invalid, okEmpty } from '@/presentation/(system)/result/result.core.factories';
-import { hasError } from '@/presentation/(system)/validation/validation.helper';
+import { hasError } from '@/presentation/(system)/validation/validation.helpers';
 import { FormData } from '@/presentation/(system)/validation/validation.types';
 import { send } from '@/presentation/contact/mvvm/bff/contact.webToCase-client';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';

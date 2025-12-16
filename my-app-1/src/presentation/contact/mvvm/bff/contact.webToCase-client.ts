@@ -7,7 +7,7 @@ import 'server-only';
 import { CONTENT_TYPE_APPLICATION_FORM } from '@/presentation/(system)/client/client.constants';
 import client from '@/presentation/(system)/client/client.s';
 import { Method } from '@/presentation/(system)/client/client.types';
-import { env } from '@/presentation/(system)/env/env-validated.s';
+import { env } from '@/presentation/(system)/env/env.helper.validated';
 import logger from '@/presentation/(system)/logging/logger.s';
 import { ContactBody } from '@/presentation/contact/mvvm/models/contact.types';
 

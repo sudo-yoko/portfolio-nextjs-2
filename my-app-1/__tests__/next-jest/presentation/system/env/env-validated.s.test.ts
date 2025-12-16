@@ -25,7 +25,7 @@ test('test1-1', async () => {
       return undefined;
     },
   }));
-  const { env } = await import('@/presentation/(system)/env/env-validated.s');
+  const { env } = await import('@/presentation/(system)/env/env.helper.validated');
   print('start');
   expect(() => env('test')).toThrow(Error);
   print('end');
@@ -43,7 +43,7 @@ test('test1-2', async () => {
       return 'OK';
     },
   }));
-  const { env } = await import('@/presentation/(system)/env/env-validated.s');
+  const { env } = await import('@/presentation/(system)/env/env.helper.validated');
   expect(env('test')).toBe('OK');
 });
 
@@ -63,7 +63,7 @@ test('test2-1', async () => {
       return undefined;
     },
   }));
-  const { envNumber } = await import('@/presentation/(system)/env/env-validated.s');
+  const { envNumber } = await import('@/presentation/(system)/env/env.helper.validated');
   expect(() => envNumber('test')).toThrow(Error);
 });
 
@@ -79,7 +79,7 @@ test('test2-2', async () => {
       return 'AAA';
     },
   }));
-  const { envNumber } = await import('@/presentation/(system)/env/env-validated.s');
+  const { envNumber } = await import('@/presentation/(system)/env/env.helper.validated');
   expect(() => envNumber('test')).toThrow(Error);
 });
 
@@ -95,6 +95,6 @@ test('test2-3', async () => {
       return '123';
     },
   }));
-  const { envNumber } = await import('@/presentation/(system)/env/env-validated.s');
+  const { envNumber } = await import('@/presentation/(system)/env/env.helper.validated');
   expect(envNumber('test')).toBe(123);
 });
