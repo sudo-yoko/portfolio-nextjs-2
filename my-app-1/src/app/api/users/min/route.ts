@@ -2,7 +2,7 @@ import 'server-only';
 
 import { executeAsync } from '@/presentation/(system)/aop/aop.feature.bff.route';
 import { FetchPageResult } from '@/presentation/(system)/pagination/min/modules/pagination.requester';
-import { bffRouteResponse } from '@/presentation/(system)/result/result.bff.factories.s';
+import { bffResponse } from '@/presentation/(system)/result/result.bff.factories.s';
 import { okData } from '@/presentation/(system)/result/result.core.factories';
 import { send } from '@/presentation/users/min/modules/users.client';
 import { User, UsersQuery } from '@/presentation/users/min/modules/users.types';
@@ -22,7 +22,7 @@ export async function POST(req: Request): Promise<Response> {
     const { limit, offset, query } = reqBody;
     const { total, users } = await send(offset, limit, query);
     const result: FetchPageResult<User[]> = { total, items: users };
-    return bffRouteResponse(okData(result));
+    return bffResponse(okData(result));
     // return new Response(JSON.stringify(resBody), { status: 200 });
   }
 }

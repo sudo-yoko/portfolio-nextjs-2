@@ -18,7 +18,14 @@ import React, { Reducer } from 'react';
  * ステップ定義
  * 入力、確認、送信中、完了
  */
-export type Step = 'input' | 'confirm' | 'sending' | 'complete';
+// export type Step = 'input' | 'confirm' | 'sending' | 'complete';
+export const Step = {
+  input: 'input',
+  confirm: 'confirm',
+  sending: 'sending',
+  complete: 'complete',
+} as const;
+export type Step = (typeof Step)[keyof typeof Step];
 
 /**
  * 状態定義
@@ -34,7 +41,7 @@ export type State = {
  * 初期状態
  */
 export const initialState: State = {
-  step: 'input',
+  step: Step.input,
   formData: { name: '', email: '', body: '' },
   violations: {},
 };
@@ -42,13 +49,23 @@ export const initialState: State = {
 /**
  * アクション定義
  */
+export const ActionType = {
+  toInput: 'toInput',
+  toConfirm: 'toConfirm',
+  toSending: 'toSending',
+  toComplete: 'toComplete',
+  setValue: 'setValue',
+  setViolations: 'setViolations',
+} as const;
+export type ActionType = (typeof ActionType)[keyof typeof ActionType];
+
 export type Action =
-  | { type: 'toInput' }
-  | { type: 'toConfirm' }
-  | { type: 'toSending' }
-  | { type: 'toComplete' }
-  | { type: 'setValue'; key: FormKeys; value: string }
-  | { type: 'setViolations'; violations: Violations<FormKeys> };
+  | { type: typeof ActionType.toInput }
+  | { type: typeof ActionType.toConfirm }
+  | { type: typeof ActionType.toSending }
+  | { type: typeof ActionType.toComplete }
+  | { type: typeof ActionType.setValue; key: FormKeys; value: string }
+  | { type: typeof ActionType.setViolations; violations: Violations<FormKeys> };
 
 /**
  * 状態の更新：フォームに値を入力
@@ -58,35 +75,35 @@ export function setValue(
   key: FormKeys,
   value: string,
 ): void {
-  dispatch({ type: 'setValue', key, value });
+  dispatch({ type: ActionType.setValue, key, value });
 }
 
 /**
  * 状態の更新：入力モード
  */
 export function toInput(dispatch: React.ActionDispatch<[action: Action]>): void {
-  dispatch({ type: 'toInput' });
+  dispatch({ type: ActionType.toInput });
 }
 
 /**
  * 状態の更新：確認モード
  */
 export function toConfirm(dispatch: React.ActionDispatch<[action: Action]>): void {
-  dispatch({ type: 'toConfirm' });
+  dispatch({ type: ActionType.toConfirm });
 }
 
 /**
  * 状態の更新：送信中
  */
 export function toSending(dispatch: React.ActionDispatch<[action: Action]>): void {
-  dispatch({ type: 'toSending' });
+  dispatch({ type: ActionType.toSending });
 }
 
 /**
  * 状態の更新：完了
  */
 export function toComplete(dispatch: React.ActionDispatch<[action: Action]>): void {
-  dispatch({ type: 'toComplete' });
+  dispatch({ type: ActionType.toComplete });
 }
 
 /**
@@ -96,7 +113,7 @@ export function setViolations(
   dispatch: React.ActionDispatch<[action: Action]>,
   violations: Violations<FormKeys>,
 ): void {
-  dispatch({ type: 'setViolations', violations });
+  dispatch({ type: ActionType.setViolations, violations });
 }
 
 /**
@@ -109,24 +126,27 @@ export function setViolations(
  */
 export const reducer: Reducer<State, Action> = (state: State, action: Action): State => {
   switch (action.type) {
-    case 'setValue':
+    case ActionType.setValue:
       return setValueState(state, action);
-    case 'toInput':
-      return { ...state, step: 'input' };
-    case 'toConfirm':
-      return { ...state, step: 'confirm', violations: {} };
-    case 'toSending':
-      return { ...state, step: 'sending' };
-    case 'toComplete':
+    case ActionType.toInput:
+      return { ...state, step: Step.input };
+    case ActionType.toConfirm:
+      return { ...state, step: Step.confirm, violations: {} };
+    case ActionType.toSending:
+      return { ...state, step: Step.sending };
+    case ActionType.toComplete:
       return toCompleteState(state);
-    case 'setViolations':
+    case ActionType.setViolations:
       return { ...state, violations: action.violations };
     default:
       return state;
   }
 };
 
-const setValueState = (state: State, action: Extract<Action, { type: 'setValue' }>): State => {
+const setValueState = (
+  state: State,
+  action: Extract<Action, { type: typeof ActionType.setValue }>,
+): State => {
   return {
     ...state,
     formData: { ...state.formData, [action.key]: action.value },
@@ -136,7 +156,7 @@ const setValueState = (state: State, action: Extract<Action, { type: 'setValue' 
 const toCompleteState = (state: State): State => {
   return {
     ...state,
-    step: 'complete',
+    step: Step.complete,
     violations: {},
   };
 };

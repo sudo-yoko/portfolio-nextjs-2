@@ -5,7 +5,7 @@ import { stringify } from '@/presentation/(system)/error/error.helper.stringify'
 import { isCustomError } from '@/presentation/(system)/error/error.helpers';
 import { CUSTOM_ERROR_TAG } from '@/presentation/(system)/error/error.types';
 import logger from '@/presentation/(system)/logging/logger.s';
-import { bffRouteResponse } from '@/presentation/(system)/result/result.bff.factories.s';
+import { bffResponse } from '@/presentation/(system)/result/result.bff.factories.s';
 import { abort } from '@/presentation/(system)/result/result.core.factories';
 
 const logPrefix = 'aop.core.exception.bff.route.ts: ';
@@ -26,7 +26,7 @@ export async function withErrorHandlingAsync(thunk: () => Promise<Response>): Pr
       args = { ...{ errType: e[CUSTOM_ERROR_TAG] } };
     }
     const result = abort({ message, ...args });
-    return bffRouteResponse(result);
+    return bffResponse(result);
   }
 }
 
@@ -46,6 +46,6 @@ export function withErrorHandling(thunk: () => Response): Response {
       args = { ...{ errType: e[CUSTOM_ERROR_TAG] } };
     }
     const result = abort({ message, ...args });
-    return bffRouteResponse(result);
+    return bffResponse(result);
   }
 }
