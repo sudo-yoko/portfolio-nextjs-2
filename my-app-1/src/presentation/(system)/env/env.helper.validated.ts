@@ -1,9 +1,10 @@
 //
 // バリデーション付きで安全に環境変数を取得する。
 //
+import 'server-only';
+
 import { envByDynamicKey } from '@/presentation/(system)/env/env.s';
 import logger from '@/presentation/(system)/logging/logger.s';
-import 'server-only';
 
 export function env(key: string): string {
   const value = envByDynamicKey(key)?.trim();

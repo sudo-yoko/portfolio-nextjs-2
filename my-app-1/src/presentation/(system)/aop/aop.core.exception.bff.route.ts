@@ -21,12 +21,11 @@ export async function withErrorHandlingAsync(thunk: () => Promise<Response>): Pr
     const { message, all } = stringify(e);
     logger.error(logPrefix + fname + all);
 
-    let args = {};
+    const aborted = abort({ message });
     if (isCustomError(e)) {
-      args = { ...{ errType: e[CUSTOM_ERROR_TAG] } };
+      aborted.errType = e[CUSTOM_ERROR_TAG];
     }
-    const result = abort({ message, ...args });
-    return bffResponse(result);
+    return bffResponse(aborted);
   }
 }
 
@@ -41,11 +40,10 @@ export function withErrorHandling(thunk: () => Response): Response {
     const { message, all } = stringify(e);
     logger.error(logPrefix + fname + all);
 
-    let args = {};
+    const aborted = abort({ message });
     if (isCustomError(e)) {
-      args = { ...{ errType: e[CUSTOM_ERROR_TAG] } };
+      aborted.errType = e[CUSTOM_ERROR_TAG];
     }
-    const result = abort({ message, ...args });
-    return bffResponse(result);
+    return bffResponse(aborted);
   }
 }

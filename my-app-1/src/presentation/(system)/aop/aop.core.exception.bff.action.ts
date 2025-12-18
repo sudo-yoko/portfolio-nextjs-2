@@ -23,11 +23,11 @@ export async function withErrorHandlingAsync<DATA, FIELD extends string>(
     const { message, all } = stringify(e);
     logger.error(logPrefix + fname + all);
 
-    let args = {};
+    const aborted = abort({ message });
     if (isCustomError(e)) {
-      args = { errType: e[CUSTOM_ERROR_TAG] };
+      aborted.errType = e[CUSTOM_ERROR_TAG];
     }
-    return abort({ message, ...args });
+    return aborted;
   }
 }
 
@@ -44,10 +44,10 @@ export function withErrorHandling<DATA, FIELD extends string>(
     const { message, all } = stringify(e);
     logger.error(logPrefix + fname + all);
 
-    let args = {};
+    const aborted = abort({ message });
     if (isCustomError(e)) {
-      args = { errType: e[CUSTOM_ERROR_TAG] };
+      aborted.errType = e[CUSTOM_ERROR_TAG];
     }
-    return abort({ message, ...args });
+    return aborted;
   }
 }
