@@ -1,5 +1,5 @@
 //
-// 検索ボタン押下時のカスタムフック
+// カスタムフック＆関連するイベントハンドラー
 //
 import 'client-only';
 
@@ -18,7 +18,9 @@ import { isInvalid, isOkData } from '@/presentation/(system)/result/result.core.
 import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
 import React, { useEffect, useReducer, useRef, useState } from 'react';
 
-//
+/**
+ * 検索 カスタムフック
+ */
 export function usePagination<DATA, FIELD extends string>({
   search,
   fetchCallback,
@@ -87,7 +89,7 @@ export function usePagination<DATA, FIELD extends string>({
 }
 
 /**
- * 次へ／前へボタンを押したとき
+ * 次へ／前へボタン イベントハンドラー
  *
  * @typeParam T - アイテムの型
  */
@@ -112,4 +114,16 @@ export async function handlePagination<ITEMS, FIELD extends string>(
       toInvalid(dispatch, page.violations);
     }
   }
+}
+
+/**
+ * 検索 イベントハンドラー
+ */
+export function handleSearch<FIELD extends string>(
+  query: FormData<FIELD>,
+  setQuery: React.Dispatch<React.SetStateAction<FormData<FIELD>>>,
+  setSearch: React.Dispatch<React.SetStateAction<boolean>>,
+) {
+  setQuery(query);
+  setSearch(true);
 }

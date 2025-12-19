@@ -4,6 +4,7 @@ import { ErrorRedirect } from '@/presentation/(system)/error/views/component.err
 import { Step } from '@/presentation/(system)/pagination/mvvm/view-models/pagination.reducer';
 import {
   handlePagination,
+  handleSearch,
   usePagination,
 } from '@/presentation/(system)/pagination/mvvm/view-models/pagination.use-pagination';
 import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
@@ -36,11 +37,6 @@ export function Main() {
     setViolations,
   });
 
-  function handleSearch() {
-    setQuery({ ...query, userName: formData.userName });
-    setSearch(true);
-  }
-
   return (
     <div>
       <div>
@@ -52,7 +48,11 @@ export function Main() {
             onChange={(e) => setFormData({ ...formData, userName: e.target.value })}
             className="w-80 border-2 border-gray-400"
           />
-          <button type="button" onClick={handleSearch} className="rounded-lg bg-indigo-300 px-4 py-2">
+          <button
+            type="button"
+            onClick={() => handleSearch({ ...query, userName: formData.userName }, setQuery, setSearch)}
+            className="rounded-lg bg-indigo-300 px-4 py-2"
+          >
             検索
           </button>
         </div>
