@@ -6,7 +6,7 @@ import 'server-only';
 import { executeAsync } from '@/presentation/(system)/aop/aop.feature.server';
 import { SearchParams } from '@/presentation/(system)/types/search-params';
 import { handleRequest } from '@/presentation/contact/mvvm/view-models/contact.handler.request';
-import Steps from '@/presentation/contact/mvvm/views/contact.component.steps';
+import Main from '@/presentation/contact/mvvm/views/contact.component.main';
 
 export default async function Page(props: { searchParams?: SearchParams }) {
   return await executeAsync(() => func());
@@ -16,7 +16,7 @@ export default async function Page(props: { searchParams?: SearchParams }) {
     return (
       <>
         <div>
-          <Steps />
+          <Main />
         </div>
       </>
     );

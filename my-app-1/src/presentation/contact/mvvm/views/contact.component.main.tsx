@@ -11,7 +11,7 @@ import { useReducer, useState } from 'react';
 /**
  * お問い合わせフォーム 親クライアントコンポーネント
  */
-export default function Steps() {
+export default function Main() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [error, setError] = useState(false);
   return (

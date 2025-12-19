@@ -1,5 +1,5 @@
 //
-// カスタムフック
+// 検索ボタン押下時のカスタムフック
 //
 import { execute, executeAsync } from '@/presentation/(system)/aop/aop.feature.client';
 import { createPager } from '@/presentation/(system)/pagination/mvvm/models/pagination.pager';
