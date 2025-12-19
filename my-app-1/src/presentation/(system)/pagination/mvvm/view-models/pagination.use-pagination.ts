@@ -1,11 +1,14 @@
 //
 // 検索ボタン押下時のカスタムフック
 //
+import 'client-only';
+
 import { execute, executeAsync } from '@/presentation/(system)/aop/aop.feature.client';
 import { createPager } from '@/presentation/(system)/pagination/mvvm/models/pagination.pager';
 import { FetchPage } from '@/presentation/(system)/pagination/mvvm/models/pagination.requester';
 import { Pager } from '@/presentation/(system)/pagination/mvvm/models/pegination.types';
 import {
+  Action,
   reducer,
   Step,
   toInvalid,
@@ -81,4 +84,32 @@ export function usePagination<DATA, FIELD extends string>({
   }, [setItems, setViolations, state]);
 
   return { error, state, pager, dispatch, setError };
+}
+
+/**
+ * 次へ／前へボタンを押したとき
+ *
+ * @typeParam T - アイテムの型
+ */
+export async function handlePagination<ITEMS, FIELD extends string>(
+  destination: 'next' | 'prev',
+  pager: React.RefObject<Pager<ITEMS, FIELD> | null>,
+  dispatch: React.ActionDispatch<[action: Action<ITEMS>]>,
+  setError: React.Dispatch<React.SetStateAction<boolean>>,
+): Promise<void> {
+  await executeAsync(() => func(), setError);
+
+  async function func() {
+    if (pager?.current == null) {
+      return;
+    }
+    const page = destination === 'next' ? await pager.current.next() : await pager.current.prev();
+    // if (page.tag === 'ok') {
+    if (isOkData(page)) {
+      toOk(dispatch, page.data.items, page.data.currentPage);
+    }
+    if (isInvalid(page)) {
+      toInvalid(dispatch, page.violations);
+    }
+  }
 }

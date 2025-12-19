@@ -1,9 +1,11 @@
 'use client';
 
 import { ErrorRedirect } from '@/presentation/(system)/error/views/component.error-redirect';
-import { handlePagination } from '@/presentation/(system)/pagination/mvvm/view-models/pagination.event-handlers';
 import { Step } from '@/presentation/(system)/pagination/mvvm/view-models/pagination.reducer';
-import { usePagination } from '@/presentation/(system)/pagination/mvvm/view-models/pagination.use-pagination';
+import {
+  handlePagination,
+  usePagination,
+} from '@/presentation/(system)/pagination/mvvm/view-models/pagination.use-pagination';
 import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
 import { fetchPage } from '@/presentation/users/mvvm/models/users.requester';
 import { FormKeys, User } from '@/presentation/users/mvvm/models/users.types';
@@ -60,20 +62,6 @@ export function Main() {
               {err}
             </div>
           ))}
-        {/*
-        <div>
-          <Pagination
-            search={search}
-            fetchCallback={fetchCallback}
-            initialPage={initialPage}
-            perPage={perPage}
-            query={query}
-            setItems={setUsers}
-          >
-            <UserList users={users} />
-          </Pagination>
-        </div>
-        */}
         <div>
           {error && <ErrorRedirect />}
           {search && state.step === Step.Ok && (
