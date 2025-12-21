@@ -20,7 +20,7 @@ const logPrefix = 'aop.feature.bff.ts';
 export function execute<DATA, FIELD extends string>(
   thunk: () => BffResult<DATA, FIELD>,
 ): BffResult<DATA, FIELD> {
-  const ctx: Ctx = { logger, logPrefix, process: 'sync bff process' };
+  const ctx: Ctx = { logger, logPrefix, process: 'sync action process' };
   return withLogging(ctx, () => withErrorHandling(() => withAuth(thunk)));
 }
 
@@ -30,6 +30,6 @@ export function execute<DATA, FIELD extends string>(
 export async function executeAsync<DATA, FIELD extends string>(
   thunk: () => Promise<BffResult<DATA, FIELD>>,
 ): Promise<BffResult<DATA, FIELD>> {
-  const ctx: Ctx = { logger, logPrefix, process: 'async bff process' };
+  const ctx: Ctx = { logger, logPrefix, process: 'async action process' };
   return await withLoggingAsync(ctx, () => withErrorHandlingAsync(() => withAuthAsync(thunk)));
 }

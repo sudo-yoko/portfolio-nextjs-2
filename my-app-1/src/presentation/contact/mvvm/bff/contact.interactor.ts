@@ -1,5 +1,5 @@
 //
-// お問い合わせの送信 ユースケース
+// お問い合わせの送信 バックエンド呼び出しのユースケース
 //
 import 'server-only';
 
@@ -15,7 +15,7 @@ import { validate } from '@/presentation/contact/mvvm/models/contact.validator';
 const logPrefix = 'contact.interactor.ts: ';
 
 /**
- * ユースケースの実行
+ * バックエンド呼び出しユースケースの実行
  */
 export async function execute(formData: FormData<FormKeys>): Promise<BffResult<void, FormKeys>> {
   logger.info(logPrefix + `formData=${JSON.stringify(formData)}`);
