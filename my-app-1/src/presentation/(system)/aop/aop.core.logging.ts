@@ -1,12 +1,11 @@
 // ロギングAOP部品
-import 'server-only';
-
-import logger from '@/presentation/(system)/logging/logger.s';
+import { Logger } from '@/presentation/(system)/logging/logging.types';
 
 /**
- * 引数
+ * ロギングコンテキスト
  */
-export type Props = {
+export type Ctx = {
+  logger: Logger;
   logPrefix: string;
   process: string;
 };
@@ -14,7 +13,7 @@ export type Props = {
 /**
  * 引数に渡されたサンクの前後にログ出力を追加して実行する
  */
-export function withLogging<T>({ logPrefix, process }: Props, thunk: () => T): T {
+export function withLogging<T>({ logger, logPrefix, process }: Ctx, thunk: () => T): T {
   logger.info(`${logPrefix}>>>>>>>>>>>>>>>>>>>>> ${process} start.`);
   const result = thunk();
   logger.info(`${logPrefix}<<<<<<<<<<<<<<<<<<<<< ${process} end.`);
@@ -25,7 +24,7 @@ export function withLogging<T>({ logPrefix, process }: Props, thunk: () => T): T
  * 引数に渡されたサンクの前後にログ出力を追加して実行する
  */
 export async function withLoggingAsync<T>(
-  { logPrefix, process }: Props,
+  { logger, logPrefix, process }: Ctx,
   thunk: () => Promise<T>,
 ): Promise<T> {
   logger.info(`${logPrefix}>>>>>>>>>>>>>>>>>>>>> ${process} start.`);

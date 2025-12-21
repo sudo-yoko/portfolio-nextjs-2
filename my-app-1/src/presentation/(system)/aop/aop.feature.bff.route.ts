@@ -5,7 +5,8 @@ import 'server-only';
 
 import { withAuthAsync } from '@/presentation/(system)/aop/aop.core.auth';
 import { withErrorHandlingAsync } from '@/presentation/(system)/aop/aop.core.exception.bff.route';
-import { Props, withLoggingAsync } from '@/presentation/(system)/aop/aop.core.logging.s';
+import { Ctx, withLoggingAsync } from '@/presentation/(system)/aop/aop.core.logging';
+import logger from '@/presentation/(system)/logging/logger.s';
 
 const logPrefix = 'aop.feature.bff.route.ts: ';
 
@@ -13,6 +14,6 @@ const logPrefix = 'aop.feature.bff.route.ts: ';
  * 引数に渡されたサンクに共通処理を追加して実行する。
  */
 export async function executeAsync(thunk: () => Promise<Response>): Promise<Response> {
-  const props: Props = { logPrefix, process: 'bff route process' };
-  return await withLoggingAsync(props, () => withErrorHandlingAsync(() => withAuthAsync(thunk)));
+  const ctx: Ctx = { logger, logPrefix, process: 'bff route process' };
+  return await withLoggingAsync(ctx, () => withErrorHandlingAsync(() => withAuthAsync(thunk)));
 }

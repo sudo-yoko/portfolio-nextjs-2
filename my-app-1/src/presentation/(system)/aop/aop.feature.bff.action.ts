@@ -8,7 +8,8 @@ import {
   withErrorHandling,
   withErrorHandlingAsync,
 } from '@/presentation/(system)/aop/aop.core.exception.bff.action';
-import { Props, withLogging, withLoggingAsync } from '@/presentation/(system)/aop/aop.core.logging.s';
+import { Ctx, withLogging, withLoggingAsync } from '@/presentation/(system)/aop/aop.core.logging';
+import logger from '@/presentation/(system)/logging/logger.s';
 import { BffResult } from '@/presentation/(system)/result/result.bff.types';
 
 const logPrefix = 'aop.feature.bff.ts';
@@ -19,8 +20,8 @@ const logPrefix = 'aop.feature.bff.ts';
 export function execute<DATA, FIELD extends string>(
   thunk: () => BffResult<DATA, FIELD>,
 ): BffResult<DATA, FIELD> {
-  const props: Props = { logPrefix, process: 'sync bff process' };
-  return withLogging(props, () => withErrorHandling(() => withAuth(thunk)));
+  const ctx: Ctx = { logger, logPrefix, process: 'sync bff process' };
+  return withLogging(ctx, () => withErrorHandling(() => withAuth(thunk)));
 }
 
 /**
@@ -29,6 +30,6 @@ export function execute<DATA, FIELD extends string>(
 export async function executeAsync<DATA, FIELD extends string>(
   thunk: () => Promise<BffResult<DATA, FIELD>>,
 ): Promise<BffResult<DATA, FIELD>> {
-  const props: Props = { logPrefix, process: 'async bff process' };
-  return await withLoggingAsync(props, () => withErrorHandlingAsync(() => withAuthAsync(thunk)));
+  const ctx: Ctx = { logger, logPrefix, process: 'async bff process' };
+  return await withLoggingAsync(ctx, () => withErrorHandlingAsync(() => withAuthAsync(thunk)));
 }
