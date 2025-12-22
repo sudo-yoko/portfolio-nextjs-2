@@ -2,13 +2,13 @@
 // カスタムエラーファクトリー
 //
 import {
-  BFF_RESULT,
+  RESULT_TYPE,
   BffError,
   CUSTOM_ERROR_TAG,
   CustomError,
   ErrType,
 } from '@/presentation/(system)/error/error.types';
-import { BffResult } from '@/presentation/(system)/result/result.bff.types';
+import { RESULT } from '@/presentation/(system)/result/result.core.types';
 import { Violations } from '@/presentation/(system)/validation/validation.types';
 
 /**
@@ -88,18 +88,18 @@ export function parseBffResultError(text: string, message?: string): CustomError
 /**
  * BffError を生成する
  */
-export function bffError(bffResult: BffResult, msg?: string): BffError {
+export function bffError(result: RESULT, msg?: string): BffError {
   const message: string[] = [];
   message.push('バックエンドエラー');
   if (msg) {
     message.push(msg);
   }
-  message.push(`bffResult=${JSON.stringify(bffResult)}`);
+  message.push(`bffResult=${JSON.stringify(result)}`);
 
   const base = new Error(`${ErrType.BffError}: ${message.join(', ')}`);
   const error = Object.assign(base, {
     [CUSTOM_ERROR_TAG]: ErrType.BffError,
-    [BFF_RESULT]: bffResult,
+    [RESULT_TYPE]: result,
   });
   return error;
 }

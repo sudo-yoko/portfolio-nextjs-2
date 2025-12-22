@@ -1,5 +1,6 @@
 //
 // RESULT型
+// - BFFからクライアントに返す戻り値の型を標準化する
 //
 import { ErrType } from '@/presentation/(system)/error/error.types';
 import { Violations } from '@/presentation/(system)/validation/validation.types';
@@ -11,7 +12,7 @@ export const Tag = {
   /**
    * 正常終了
    */
-  Ok: 'ok',
+  Ok: 'ok',   // TODO: OkEmptyとOkDataを用意すればよいのでは
   /**
    * バリデーションエラー
    */

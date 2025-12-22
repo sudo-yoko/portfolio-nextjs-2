@@ -5,9 +5,9 @@ import { CONTENT_TYPE_APPLICATION_JSON_UTF8 } from '@/presentation/(system)/clie
 import { Method } from '@/presentation/(system)/client/client.types';
 import {
   FetchPage,
-  FetchPageResult,
+  FetchData,
 } from '@/presentation/(system)/pagination/mvvm/models/pagination.requester';
-import { bffResult } from '@/presentation/(system)/result/result.bff.factories';
+import { parseFromResult, parseFromText } from '@/presentation/(system)/result/pagination.result.lib';
 import { action } from '@/presentation/users/mvvm/bff/users.action';
 import { FormKeys, User } from '@/presentation/users/mvvm/models/users.types';
 
@@ -15,7 +15,8 @@ import { FormKeys, User } from '@/presentation/users/mvvm/models/users.types';
  * ServerActions経由バックエンド実行
  */
 const _viaAction: FetchPage<User[], FormKeys> = async (offset, limit, query) => {
-  return await action(offset, limit, query);
+  const result = await action(offset, limit, query);
+  return parseFromResult<FetchData<User[]>, FormKeys>(result);
 };
 
 /**
@@ -29,7 +30,7 @@ const viaRoute: FetchPage<User[], FormKeys> = async (offset, limit, query) => {
     headers: { ...CONTENT_TYPE_APPLICATION_JSON_UTF8 },
     body: { offset, limit, query },
   });
-  return bffResult<FetchPageResult<User[]>, FormKeys>(result.rawBody);
+  return parseFromText<FetchData<User[]>, FormKeys>(result.rawBody);
 
   // const res = await window.fetch(url, {
   // method: POST,

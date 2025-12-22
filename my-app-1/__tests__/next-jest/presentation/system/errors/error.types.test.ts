@@ -1,6 +1,6 @@
 import { printf } from '@/__tests__/test-logger';
 import {
-  BFF_RESULT,
+  RESULT_TYPE,
   BffError,
   CUSTOM_ERROR_TAG,
   CustomError,
@@ -33,12 +33,12 @@ test('test1-2', () => {
     message: 'message',
     cause: 'cause',
     stack: 'stack',
-    [BFF_RESULT]: {
+    [RESULT_TYPE]: {
       tag: 'abort',
     },
   };
   print(`error[CUSTOM_ERROR_TAG]=${error[CUSTOM_ERROR_TAG]}`);
-  print(`error[BFF_RESULT]=${JSON.stringify(error[BFF_RESULT])}`);
+  print(`error[BFF_RESULT]=${JSON.stringify(error[RESULT_TYPE])}`);
   print(`error.name=${error.name}`);
   print(`error.message=${error.message}`);
   print(`error.cause=${error.cause}`);

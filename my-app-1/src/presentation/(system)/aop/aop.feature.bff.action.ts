@@ -7,29 +7,31 @@ import { withAuth, withAuthAsync } from '@/presentation/(system)/aop/aop.core.au
 import {
   withErrorHandling,
   withErrorHandlingAsync,
-} from '@/presentation/(system)/aop/aop.core.exception.bff.action';
+} from '@/presentation/(system)/aop/aop.core.exception.bff';
 import { Ctx, withLogging, withLoggingAsync } from '@/presentation/(system)/aop/aop.core.logging';
+import {
+  withResultParsing,
+  withResultParsingAsync,
+} from '@/presentation/(system)/aop/aop.core.result.bff.action';
 import logger from '@/presentation/(system)/logging/logger.s';
-import { BffResult } from '@/presentation/(system)/result/result.bff.types';
+import { RESULT } from '@/presentation/(system)/result/result.core.types';
 
 const logPrefix = 'aop.feature.bff.ts';
 
 /**
  * 引数に渡されたサンクに共通処理を追加して実行する。
  */
-export function execute<DATA, FIELD extends string>(
-  thunk: () => BffResult<DATA, FIELD>,
-): BffResult<DATA, FIELD> {
+export function execute(thunk: () => RESULT): RESULT {
   const ctx: Ctx = { logger, logPrefix, process: 'sync action process' };
-  return withLogging(ctx, () => withErrorHandling(() => withAuth(thunk)));
+  return withLogging(ctx, () => withResultParsing(() => withErrorHandling(() => withAuth(thunk))));
 }
 
 /**
  * 引数に渡されたサンクに共通処理を追加して実行する。
  */
-export async function executeAsync<DATA, FIELD extends string>(
-  thunk: () => Promise<BffResult<DATA, FIELD>>,
-): Promise<BffResult<DATA, FIELD>> {
+export async function executeAsync(thunk: () => Promise<RESULT>): Promise<RESULT> {
   const ctx: Ctx = { logger, logPrefix, process: 'async action process' };
-  return await withLoggingAsync(ctx, () => withErrorHandlingAsync(() => withAuthAsync(thunk)));
+  return await withLoggingAsync(ctx, () =>
+    withResultParsingAsync(() => withErrorHandlingAsync(() => withAuthAsync(thunk))),
+  );
 }

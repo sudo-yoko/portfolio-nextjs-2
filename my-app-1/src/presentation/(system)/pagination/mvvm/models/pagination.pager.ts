@@ -9,9 +9,9 @@ import {
 } from '@/presentation/(system)/pagination/mvvm/models/pagination.helpers';
 import { FetchPage } from '@/presentation/(system)/pagination/mvvm/models/pagination.requester';
 import { PageData, Pager } from '@/presentation/(system)/pagination/mvvm/models/pegination.types';
-import { BffResult } from '@/presentation/(system)/result/result.bff.types';
 import { invalid, okData } from '@/presentation/(system)/result/result.core.factories';
-import { isAborted, isInvalid, isOkData } from '@/presentation/(system)/result/result.core.helpers';
+import { isAborted, isInvalid } from '@/presentation/(system)/result/result.core.helpers';
+import { PaginationResult } from '@/presentation/(system)/result/pagination.result.lib';
 import { FormData } from '@/presentation/(system)/validation/validation.types';
 
 /**
@@ -36,7 +36,7 @@ export function createPager<ITEMS, FIELD extends string>(
   /**
    * データ取得関数を使ってページデータを取得する関数
    */
-  const fetchData = async (): Promise<BffResult<PageData<ITEMS>, FIELD>> => {
+  const fetchData = async (): Promise<PaginationResult<PageData<ITEMS>, FIELD>> => {
     //
     // 実効オフセットに補正（下限値）
     //
@@ -53,9 +53,9 @@ export function createPager<ITEMS, FIELD extends string>(
       return invalid(result.violations);
     }
     // TODO: BffResultの設計見直し
-    if (!isOkData(result)) {
-      throw bffError(result);
-    }
+    // if (!isOkData(result)) {
+    // throw bffError(result);
+    // }
     let { total, items } = result.data;
     //
     // データなし
@@ -91,9 +91,9 @@ export function createPager<ITEMS, FIELD extends string>(
         return invalid(result.violations);
       }
       // TODO: BffResultの設計見直し
-      if (!isOkData(result)) {
-        throw bffError(result);
-      }
+      // if (!isOkData(result)) {
+      // throw bffError(result);
+      // }
       ({ total, items } = result.data);
     }
     //

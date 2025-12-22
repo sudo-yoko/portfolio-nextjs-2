@@ -5,18 +5,20 @@
 
 import { executeAsync } from '@/presentation/(system)/aop/aop.feature.bff.action';
 import logger from '@/presentation/(system)/logging/logger.s';
-import { BffResult } from '@/presentation/(system)/result/result.bff.types';
+import { RESULT } from '@/presentation/(system)/result/result.core.types';
 import { FormData } from '@/presentation/(system)/validation/validation.types';
 import { execute } from '@/presentation/contact/mvvm/bff/contact.interactor';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 
 const logPrefix = 'contact.action.ts: ';
 
-export async function post(formData: FormData<FormKeys>): Promise<BffResult<void, FormKeys>> {
+export async function post(formData: FormData<FormKeys>): Promise<RESULT> {
   return await executeAsync(() => func());
 
   async function func() {
     logger.info(logPrefix + `formData=${JSON.stringify(formData)}`);
-    return await execute(formData);
+    const result = await execute(formData);
+    // return JSON.stringify(result);
+    return result;
   }
 }

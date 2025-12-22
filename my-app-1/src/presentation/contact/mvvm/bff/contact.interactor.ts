@@ -3,9 +3,9 @@
 //
 import 'server-only';
 
-import type { BffResult } from '@/presentation/(system)/result/result.bff.types';
 import logger from '@/presentation/(system)/logging/logger.s';
 import { invalid, okEmpty } from '@/presentation/(system)/result/result.core.factories';
+import type { ContactResult } from '@/presentation/(system)/result/contact.result.lib';
 import { hasError } from '@/presentation/(system)/validation/validation.helpers';
 import { FormData } from '@/presentation/(system)/validation/validation.types';
 import { send } from '@/presentation/contact/mvvm/bff/contact.webToCase-client';
@@ -17,7 +17,7 @@ const logPrefix = 'contact.interactor.ts: ';
 /**
  * バックエンド呼び出しユースケースの実行
  */
-export async function execute(formData: FormData<FormKeys>): Promise<BffResult<void, FormKeys>> {
+export async function execute(formData: FormData<FormKeys>): Promise<ContactResult<FormKeys>> {
   logger.info(logPrefix + `formData=${JSON.stringify(formData)}`);
   //
   // バリデーション

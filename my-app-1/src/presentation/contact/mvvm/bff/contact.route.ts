@@ -2,7 +2,6 @@ import 'server-only';
 
 import { executeAsync } from '@/presentation/(system)/aop/aop.feature.bff.route';
 import logger from '@/presentation/(system)/logging/logger.s';
-import { bffResponse } from '@/presentation/(system)/result/result.bff.factories.s';
 import { FormData } from '@/presentation/(system)/validation/validation.types';
 import { execute } from '@/presentation/contact/mvvm/bff/contact.interactor';
 import { ContactBody, FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
@@ -22,6 +21,7 @@ export async function POST(req: Request): Promise<Response> {
       body: contactBody.body,
     };
     const result = await execute(formData);
-    return bffResponse(result);
+    // return resultResponse(result);
+    return result;
   }
 }

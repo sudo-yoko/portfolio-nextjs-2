@@ -1,7 +1,7 @@
 //
 // カスタムエラー型定義
 //
-import { BffResult } from '@/presentation/(system)/result/result.bff.types';
+import { RESULT } from '@/presentation/(system)/result/result.core.types';
 
 /**
  * カスタムエラーの種類
@@ -19,7 +19,7 @@ export type ErrType = (typeof ErrType)[keyof typeof ErrType]; // 型
 
 // カスタムエラー固有のプロパティ名をシンボルで定義
 export const CUSTOM_ERROR_TAG = Symbol.for('MyApp.CustomErrorTag');
-export const BFF_RESULT = Symbol.for('MyApp.BffResult');
+export const RESULT_TYPE = Symbol.for('MyApp.ResultType');
 
 /**
  * 基本のカスタムエラー型
@@ -29,6 +29,6 @@ export type CustomError<T extends ErrType> = Error & { [CUSTOM_ERROR_TAG]: T }; 
 
 /**
  * BFFエラー
- * CustomErrorに [BFF_RESULT] プロパティを追加したもの
+ * CustomErrorに [RESULT_TYPE] プロパティを追加したもの
  */
-export type BffError = CustomError<typeof ErrType.BffError> & { [BFF_RESULT]: BffResult }; // 型の合成
+export type BffError = CustomError<typeof ErrType.BffError> & { [RESULT_TYPE]: RESULT }; // 型の合成

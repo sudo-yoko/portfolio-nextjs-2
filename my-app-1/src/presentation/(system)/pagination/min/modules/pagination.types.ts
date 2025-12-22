@@ -3,7 +3,7 @@
 //
 import 'client-only';
 
-import { BffResult } from '@/presentation/(system)/result/result.bff.types';
+import { PaginationResult } from '@/presentation/(system)/result/pagination.result.lib';
 
 /**
  * ページャ関数のインターフェース型
@@ -12,15 +12,15 @@ export type Pager<ITEMS, FIELD extends string> = {
   /**
    * 現在のページを取得する
    */
-  current(): Promise<BffResult<PageData<ITEMS>, FIELD>>;
+  current(): Promise<PaginationResult<PageData<ITEMS>, FIELD>>;
   /**
    * 次ページを取得する
    */
-  next(): Promise<BffResult<PageData<ITEMS>, FIELD>>;
+  next(): Promise<PaginationResult<PageData<ITEMS>, FIELD>>;
   /**
    * 前ページを取得する
    */
-  prev(): Promise<BffResult<PageData<ITEMS>, FIELD>>;
+  prev(): Promise<PaginationResult<PageData<ITEMS>, FIELD>>;
 };
 
 /**

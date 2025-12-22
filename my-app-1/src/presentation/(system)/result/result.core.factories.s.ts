@@ -1,11 +1,11 @@
 //
-// BFFのRESULT型 生成ファクトリー
+// RESULT型 生成ファクトリー
 //
 import 'server-only';
 
-import { BffResult } from '@/presentation/(system)/result/result.bff.types';
+import { RESULT } from '@/presentation/(system)/result/result.core.types';
 
-export function bffResponse<DATA, FIELD extends string>(result: BffResult<DATA, FIELD>): Response {
+export function resultResponse(result: RESULT): Response {
   // BFFのAPIルートでは、ステータスコードは必ず200を返す。エラーがあればボディに設定する。
   return new Response(JSON.stringify(result), { status: 200 });
 }

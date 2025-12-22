@@ -5,17 +5,15 @@ import { stringify } from '@/presentation/(system)/error/error.helper.stringify'
 import { isCustomError } from '@/presentation/(system)/error/error.helpers';
 import { CUSTOM_ERROR_TAG } from '@/presentation/(system)/error/error.types';
 import logger from '@/presentation/(system)/logging/logger.s';
-import type { BffResult } from '@/presentation/(system)/result/result.bff.types';
 import { abort } from '@/presentation/(system)/result/result.core.factories';
+import { RESULT } from '@/presentation/(system)/result/result.core.types';
 
 const logPrefix = 'aop.core.exception.bff.action.ts: ';
 
 /**
  * 引数に渡されたサンクにエラーハンドリングを追加して実行する。
  */
-export async function withErrorHandlingAsync<DATA, FIELD extends string>(
-  thunk: () => Promise<BffResult<DATA, FIELD>>,
-): Promise<BffResult<DATA, FIELD>> {
+export async function _withErrorHandlingAsync(thunk: () => Promise<RESULT>): Promise<RESULT> {
   const fname = 'withErrorHandlingAsync: ';
   try {
     return await thunk();
@@ -34,9 +32,7 @@ export async function withErrorHandlingAsync<DATA, FIELD extends string>(
 /**
  * 引数に渡されたサンクにエラーハンドリングを追加して実行する。
  */
-export function withErrorHandling<DATA, FIELD extends string>(
-  thunk: () => BffResult<DATA, FIELD>,
-): BffResult<DATA, FIELD> {
+export function _withErrorHandling(thunk: () => RESULT): RESULT {
   const fname = 'withErrorHandling: ';
   try {
     return thunk();

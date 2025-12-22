@@ -3,12 +3,12 @@
 //
 import { parseBffResultError } from '@/presentation/(system)/error/error.factories';
 import { stringify } from '@/presentation/(system)/error/error.helper.stringify';
-import { BffResult, Ok } from '@/presentation/(system)/result/result.bff.types';
+import { BffResult, Ok } from '@/__tests__/_bk/_/result.bff.types';
 import { okData, okEmpty } from '@/presentation/(system)/result/result.core.factories';
 import { parseResult } from '@/presentation/(system)/result/result.core.helpers';
 import { OkData, OkEmpty } from '@/presentation/(system)/result/result.core.types';
 
-export function bffResult<DATA, FIELD extends string>(text: string): BffResult<DATA, FIELD> {
+export function _bffResult<DATA, FIELD extends string>(text: string): BffResult<DATA, FIELD> {
   try {
     const result = parseResult(text);
     return result as BffResult<DATA, FIELD>;
@@ -18,9 +18,9 @@ export function bffResult<DATA, FIELD extends string>(text: string): BffResult<D
   }
 }
 
-export function ok(): OkEmpty;
-export function ok<DATA>(data: DATA): OkData<DATA>;
-export function ok<DATA>(data?: DATA): Ok<DATA> {
+export function _ok(): OkEmpty;
+export function _ok<DATA>(data: DATA): OkData<DATA>;
+export function _ok<DATA>(data?: DATA): Ok<DATA> {
   if (data === undefined) {
     return okEmpty() as Ok<DATA>;
   } else {

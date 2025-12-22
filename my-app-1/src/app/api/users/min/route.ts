@@ -1,7 +1,6 @@
 import 'server-only';
 
 import { executeAsync } from '@/presentation/(system)/aop/aop.feature.bff.route';
-import { bffResponse } from '@/presentation/(system)/result/result.bff.factories.s';
 import { FormData } from '@/presentation/(system)/validation/validation.types';
 import { execute } from '@/presentation/users/min/modules/users.interactor';
 import { FormKeys } from '@/presentation/users/min/modules/users.types';
@@ -28,6 +27,7 @@ export async function POST(req: Request): Promise<Response> {
     const reqBody: ReqBody = await req.json();
     const { offset, limit, query } = reqBody;
     const result = await execute(offset, limit, query);
-    return bffResponse(result);
+    // return resultResponse(result);
+    return result;
   }
 }

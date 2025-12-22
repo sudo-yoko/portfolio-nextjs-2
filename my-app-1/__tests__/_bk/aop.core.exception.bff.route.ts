@@ -5,15 +5,15 @@ import { stringify } from '@/presentation/(system)/error/error.helper.stringify'
 import { isCustomError, isRetryableError } from '@/presentation/(system)/error/error.helpers';
 import { CUSTOM_ERROR_TAG } from '@/presentation/(system)/error/error.types';
 import logger from '@/presentation/(system)/logging/logger.s';
-import { bffResponse } from '@/presentation/(system)/result/result.bff.factories.s';
 import { abort, retry } from '@/presentation/(system)/result/result.core.factories';
+import { RESULT } from '@/presentation/(system)/result/result.core.types';
 
 const logPrefix = 'aop.core.exception.bff.route.ts: ';
 
 /**
  * 引数に渡されたサンクにエラーハンドリングを追加して実行する。
  */
-export async function withErrorHandlingAsync(thunk: () => Promise<Response>): Promise<Response> {
+export async function _withErrorHandlingAsync(thunk: () => Promise<RESULT>): Promise<RESULT> {
   const fname = 'withErrorHandlingAsync: ';
   try {
     return await thunk();
@@ -25,7 +25,8 @@ export async function withErrorHandlingAsync(thunk: () => Promise<Response>): Pr
     //
     if (isRetryableError(e)) {
       const retryable = retry();
-      return bffResponse(retryable);
+      // return resultResponse(retryable);
+      return retryable;
     }
     //
     // その他続行不可能なエラー
@@ -34,14 +35,15 @@ export async function withErrorHandlingAsync(thunk: () => Promise<Response>): Pr
     if (isCustomError(e)) {
       aborted.errType = e[CUSTOM_ERROR_TAG];
     }
-    return bffResponse(aborted);
+    // return resultResponse(aborted);
+    return aborted;
   }
 }
 
 /**
  * 引数に渡されたサンクにエラーハンドリングを追加して実行する。
  */
-export function withErrorHandling(thunk: () => Response): Response {
+export function _withErrorHandling(thunk: () => RESULT): RESULT {
   const fname = 'withErrorHandling: ';
   try {
     return thunk();
@@ -53,6 +55,7 @@ export function withErrorHandling(thunk: () => Response): Response {
     if (isCustomError(e)) {
       aborted.errType = e[CUSTOM_ERROR_TAG];
     }
-    return bffResponse(aborted);
+    // return resultResponse(aborted);
+    return aborted;
   }
 }

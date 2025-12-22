@@ -15,7 +15,7 @@ import {
  * @typeParam RESULT - BFFが返却するデータの型。返却データが無い場合は void を指定する。
  */
 // export type Ok<RESULT = void> = [RESULT] extends [void] ? { tag: 'ok' } : { tag: 'ok'; data: RESULT };
-export type Ok<DATA = void> = [DATA] extends [void] ? OkEmpty : OkData<DATA>;
+export type _Ok<DATA = void> = [DATA] extends [void] ? OkEmpty : OkData<DATA>;
 
 /**
  * バリデーションエラーを表す型
@@ -31,8 +31,8 @@ export type Ok<DATA = void> = [DATA] extends [void] ? OkEmpty : OkData<DATA>;
  * すべての型（正常終了｜バリデーションエラー｜失敗）を包括して総称するユニオン型
  */
 // export type BffResult<RESULT = void, REASON = never> = Ok<RESULT> | Rejected<REASON> | Aborted;
-export type BffResult<DATA = void, FIELD extends string = never> =
-  | Ok<DATA>
+export type _BffResult<DATA = void, FIELD extends string = never> =
+  | _Ok<DATA>
   | Invalid<FIELD>
   | Retryable
   | Aborted;

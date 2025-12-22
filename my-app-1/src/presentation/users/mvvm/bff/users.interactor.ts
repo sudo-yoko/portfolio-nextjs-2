@@ -1,8 +1,8 @@
 import 'server-only';
 
-import { BffResult } from '@/presentation/(system)/result/result.bff.types';
-import { FetchPageResult } from '@/presentation/(system)/pagination/mvvm/models/pagination.requester';
+import { FetchData } from '@/presentation/(system)/pagination/mvvm/models/pagination.requester';
 import { invalid, okData } from '@/presentation/(system)/result/result.core.factories';
+import { PaginationResult } from '@/presentation/(system)/result/pagination.result.lib';
 import { hasError } from '@/presentation/(system)/validation/validation.helpers';
 import { FormData } from '@/presentation/(system)/validation/validation.types';
 import { send } from '@/presentation/users/mvvm/bff/users.client';
@@ -14,7 +14,7 @@ export async function execute(
   limit: number,
   query: FormData<FormKeys>,
   // TODO: REASON型を指定しないのにコンパイルエラーにならない
-): Promise<BffResult<FetchPageResult<User[]>, FormKeys>> {
+): Promise<PaginationResult<FetchData<User[]>, FormKeys>> {
   //
   // バリデーション
   //
@@ -34,6 +34,6 @@ export async function execute(
   // if (total === 0) {
   // return reject(REJECTION_LABELS.NO_DATA);
   // }
-  const data: FetchPageResult<User[]> = { total, items: users };
+  const data: FetchData<User[]> = { total, items: users };
   return okData(data);
 }
