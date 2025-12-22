@@ -52,10 +52,6 @@ export function createPager<ITEMS, FIELD extends string>(
     if (isInvalid(result)) {
       return invalid(result.violations);
     }
-    // TODO: BffResultの設計見直し
-    // if (!isOkData(result)) {
-    // throw bffError(result);
-    // }
     let { total, items } = result.data;
     //
     // データなし
@@ -90,10 +86,6 @@ export function createPager<ITEMS, FIELD extends string>(
       if (isInvalid(result)) {
         return invalid(result.violations);
       }
-      // TODO: BffResultの設計見直し
-      // if (!isOkData(result)) {
-      // throw bffError(result);
-      // }
       ({ total, items } = result.data);
     }
     //

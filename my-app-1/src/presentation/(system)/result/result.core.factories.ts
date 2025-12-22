@@ -19,11 +19,11 @@ import { Violations } from '@/presentation/(system)/validation/validation.types'
 // }
 
 export function okEmpty(): OkEmpty {
-  return { tag: Tag.Ok };
+  return { tag: Tag.OkEmpty };
 }
 
 export function okData<DATA>(data: DATA): OkData<DATA> {
-  return { tag: Tag.Ok, data };
+  return { tag: Tag.OkData, data };
 }
 
 /**

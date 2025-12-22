@@ -13,37 +13,34 @@ import {
   Tag,
 } from '@/presentation/(system)/result/result.core.types';
 
-function isOk(result: RESULT): result is OkEmpty | OkData<unknown> {
-  return result.tag === Tag.Ok;
-}
+// function isOk(result: RESULT): result is OkEmpty | OkData<unknown> {
+// return result.tag === Tag.Ok;
+// }
 
 export function isOkEmpty(result: RESULT): result is OkEmpty {
-  return isOk(result) && !('data' in result);
+  // return isOk(result) && !('data' in result);
+  return result.tag === Tag.OkEmpty;
 }
 
-export function isOkData<DATA>(result: RESULT): result is OkData<DATA> {
-  return isOk(result) && 'data' in result;
+// 型パラメータを検証していないのでつけるべきではない
+// export function isOkData<DATA>(result: RESULT): result is OkData<DATA> {
+export function isOkData(result: RESULT): result is OkData<unknown> {
+  // return isOk(result) && 'data' in result;
+  return result.tag === Tag.OkData;
 }
 
-export function isInvalid<FIELD extends string>(result: RESULT): result is Invalid<FIELD> {
-  if (result.tag === Tag.Invalid) {
-    return true;
-  }
-  return false;
+// 型パラメータを検証していないのでつけるべきではない
+// export function isInvalid<FIELD extends string>(result: RESULT): result is Invalid<FIELD> {
+export function isInvalid(result: RESULT): result is Invalid<string> {
+  return result.tag === Tag.Invalid;
 }
 
 export function isRetryable(result: RESULT): result is Retryable {
-  if (result.tag === Tag.Retryable) {
-    return true;
-  }
-  return false;
+  return result.tag === Tag.Retryable;
 }
 
 export function isAborted(result: RESULT): result is Aborted {
-  if (result.tag === Tag.Aborted) {
-    return true;
-  }
-  return false;
+  return result.tag === Tag.Aborted;
 }
 
 export function parseResult(text: string): RESULT {
@@ -52,13 +49,13 @@ export function parseResult(text: string): RESULT {
     if (isResult(parsed)) {
       return parsed;
     }
-    throw parseResultError(text, 'RESULT型にパースできませんでした。');
+    throw parseResultError(text);
   } catch (e) {
     throw parseResultError(text, stringify(e).message);
   }
 }
 
-export function isResult(text: unknown): text is RESULT {
+function isResult(text: unknown): text is RESULT {
   if (text === null) {
     return false;
   }
@@ -68,7 +65,10 @@ export function isResult(text: unknown): text is RESULT {
   }
 
   const tag = (text as RESULT).tag;
-  if (tag === Tag.Ok) {
+  if (tag === Tag.OkEmpty) {
+    return true;
+  }
+  if (tag === Tag.OkData) {
     return true;
   }
   if (tag === Tag.Invalid) {

@@ -36,6 +36,7 @@ export async function withErrorHandlingAsync<T>(
   try {
     return await thunk();
   } catch (e) {
+    // TODO: クライアントサイドでBffRESULTのパースエラーチェック
     void logger.errorAsync(logPrefix + fname + stringify(e).all);
     setHasError(true);
   }

@@ -66,24 +66,25 @@ export function retryableError(message?: string): CustomError<ErrType> {
  */
 export function parseResultError(text: string, message?: string): CustomError<ErrType> {
   const cause: string[] = [];
+  cause.push('RESULT 型にパースできませんでした。');
+  cause.push(text);
   if (message) {
     cause.push(message);
   }
-  cause.push(text);
   return customError(ErrType.ParseResultError, cause.join(', '));
 }
 
 /**
  * BffResultParseError を生成する
  */
-export function parseBffResultError(text: string, message?: string): CustomError<ErrType> {
-  const cause: string[] = [];
-  if (message) {
-    cause.push(message);
-  }
-  cause.push(text);
-  return customError(ErrType.ParseBffResultError, cause.join(', '));
-}
+// export function parseResultError(text: string, message?: string): CustomError<ErrType> {
+// const cause: string[] = [];
+// if (message) {
+// cause.push(message);
+// }
+// cause.push(text);
+// return customError(ErrType.ParseResultError, cause.join(', '));
+// }
 
 /**
  * BffError を生成する

@@ -10,9 +10,13 @@ import { Violations } from '@/presentation/(system)/validation/validation.types'
  */
 export const Tag = {
   /**
-   * 正常終了
+   * 正常終了(返却データなし)
    */
-  Ok: 'ok',   // TODO: OkEmptyとOkDataを用意すればよいのでは
+  OkEmpty: 'okEmpty',
+  /**
+   * 正常終了(返却データあり)
+   */
+  OkData: 'okData',
   /**
    * バリデーションエラー
    */
@@ -36,12 +40,12 @@ export type RESULT = { tag: Tag };
 /**
  * 正常終了（返却データなし）を表す型
  */
-export type OkEmpty = RESULT & { tag: typeof Tag.Ok };
+export type OkEmpty = RESULT & { tag: typeof Tag.OkEmpty };
 
 /**
  * 正常終了（返却データあり）を表す型
  */
-export type OkData<DATA> = RESULT & { tag: typeof Tag.Ok; data: DATA };
+export type OkData<DATA> = RESULT & { tag: typeof Tag.OkData; data: DATA };
 
 /**
  * バリデーションエラーを表す型

@@ -6,7 +6,8 @@ import 'client-only';
 import client from '@/presentation/(system)/client/client.c';
 import { CONTENT_TYPE_APPLICATION_JSON_UTF8 } from '@/presentation/(system)/client/client.constants';
 import { Method } from '@/presentation/(system)/client/client.types';
-import { parseFromText, ContactResult, parseFromResult } from '@/presentation/(system)/result/contact.result.lib';
+import { ContactResult } from '@/presentation/(system)/result/contact.result.lib';
+import { parseResult } from '@/presentation/(system)/result/result.core.helpers';
 import { FormData } from '@/presentation/(system)/validation/validation.types';
 import { post } from '@/presentation/contact/mvvm/bff/contact.action';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
@@ -26,7 +27,8 @@ type Send = {
  */
 const _viaAction: Send = async (formData) => {
   const result = await post(formData);
-  return parseFromResult<FormKeys>(result);
+  // return parseFromResult<FormKeys>(result);
+  return result as ContactResult<FormKeys>;
 };
 
 /**
@@ -45,7 +47,9 @@ const viaRoute: Send = async (formData) => {
     //body: { name, email, body }, // オブジェクトのまま（JSON.stringify不要）で渡す
     body: formData,
   });
-  return parseFromText<FormKeys>(res.rawBody);
+  // return parseFromText<FormKeys>(res.rawBody);
+  const result = parseResult(res.rawBody);
+  return result as ContactResult<FormKeys>;
 };
 
 /**

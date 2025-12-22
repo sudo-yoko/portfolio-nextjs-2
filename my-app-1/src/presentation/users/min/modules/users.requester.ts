@@ -4,10 +4,11 @@ import client from '@/presentation/(system)/client/client.c';
 import { CONTENT_TYPE_APPLICATION_JSON_UTF8 } from '@/presentation/(system)/client/client.constants';
 import { Method } from '@/presentation/(system)/client/client.types';
 import {
-  FetchPage,
   FetchData,
+  FetchPage,
 } from '@/presentation/(system)/pagination/min/modules/pagination.requester';
-import { parseFromResult, parseFromText } from '@/presentation/(system)/result/pagination.result.lib';
+import { PaginationResult } from '@/presentation/(system)/result/pagination.result.lib';
+import { parseResult } from '@/presentation/(system)/result/result.core.helpers';
 import { action } from '@/presentation/users/min/modules/users.action';
 import { FormKeys, User } from '@/presentation/users/min/modules/users.types';
 
@@ -16,7 +17,8 @@ import { FormKeys, User } from '@/presentation/users/min/modules/users.types';
  */
 const _viaAction: FetchPage<User[], FormKeys> = async (offset, limit, query) => {
   const result = await action(offset, limit, query);
-  return parseFromResult<FetchData<User[]>, FormKeys>(result);
+  // return parseFromResult<FetchData<User[]>, FormKeys>(result);
+  return result as PaginationResult<FetchData<User[]>, FormKeys>;
 };
 
 /**
@@ -24,13 +26,15 @@ const _viaAction: FetchPage<User[], FormKeys> = async (offset, limit, query) => 
  */
 const viaRoute: FetchPage<User[], FormKeys> = async (offset, limit, query) => {
   const url = '/api/users/min';
-  const result = await client.send({
+  const res = await client.send({
     url,
     method: Method.POST,
     headers: { ...CONTENT_TYPE_APPLICATION_JSON_UTF8 },
     body: { offset, limit, query },
   });
-  return parseFromText<FetchData<User[]>, FormKeys>(result.rawBody);
+  // return parseFromText<FetchData<User[]>, FormKeys>(result.rawBody);
+  const result = parseResult(res.rawBody);
+  return result as PaginationResult<FetchData<User[]>, FormKeys>;
 
   // const res = await window.fetch(url, {
   // method: POST,
