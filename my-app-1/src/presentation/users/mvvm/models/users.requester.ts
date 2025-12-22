@@ -4,7 +4,7 @@ import client from '@/presentation/(system)/client/client.c';
 import { CONTENT_TYPE_APPLICATION_JSON_UTF8 } from '@/presentation/(system)/client/client.constants';
 import { Method } from '@/presentation/(system)/client/client.types';
 import { FetchData, FetchPage } from '@/presentation/(system)/pagination/mvvm/models/pagination.requester';
-import { PaginationResult } from '@/presentation/(system)/result/pagination.result.lib';
+import { PaginationResult } from '@/presentation/(system)/pagination/mvvm/models/pagination.types';
 import { parseResult } from '@/presentation/(system)/result/result.core.helpers';
 import { action } from '@/presentation/users/mvvm/bff/users.action';
 import { FormKeys, User } from '@/presentation/users/mvvm/models/users.types';

@@ -3,7 +3,7 @@
 import { withErrorHandlingAsync } from '@/presentation/(system)/aop/aop.core.exception.client';
 import { ErrorRedirect } from '@/presentation/(system)/error/views/component.error-redirect';
 import { createPager } from '@/presentation/(system)/pagination/min/modules/pagination.pager';
-import { Pager } from '@/presentation/(system)/pagination/min/modules/pagination.types';
+import { Pager } from '@/presentation/(system)/pagination/min/modules/pagination.types.c';
 import { isInvalid, isOkData } from '@/presentation/(system)/result/result.core.helpers';
 import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
 import { fetchPage } from '@/presentation/users/min/modules/users.requester';

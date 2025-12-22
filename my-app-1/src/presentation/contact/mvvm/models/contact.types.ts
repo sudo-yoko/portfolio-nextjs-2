@@ -1,3 +1,4 @@
+import { Aborted, Invalid, OkEmpty, Retryable } from '@/presentation/(system)/result/result.core.types';
 import { SearchParam } from '@/presentation/(system)/types/search-params';
 
 /**
@@ -22,3 +23,8 @@ export type ContactBody = {
   email: string;
   body: string;
 };
+
+/**
+ * お問い合わせフォームのRESULT型
+ */
+export type ContactResult<FIELD extends string = never> = OkEmpty | Invalid<FIELD> | Retryable | Aborted;

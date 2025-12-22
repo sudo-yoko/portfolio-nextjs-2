@@ -5,11 +5,10 @@ import 'server-only';
 
 import logger from '@/presentation/(system)/logging/logger.s';
 import { invalid, okEmpty } from '@/presentation/(system)/result/result.core.factories';
-import type { ContactResult } from '@/presentation/(system)/result/contact.result.lib';
 import { hasError } from '@/presentation/(system)/validation/validation.helpers';
 import { FormData } from '@/presentation/(system)/validation/validation.types';
 import { send } from '@/presentation/contact/mvvm/bff/contact.webToCase-client';
-import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
+import { ContactResult, FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 import { validate } from '@/presentation/contact/mvvm/models/contact.validator';
 
 const logPrefix = 'contact.interactor.ts: ';

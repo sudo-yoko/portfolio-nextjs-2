@@ -8,10 +8,10 @@ import {
   toEffectiveOffsetMin,
 } from '@/presentation/(system)/pagination/min/modules/pagination.helpers';
 import { FetchPage } from '@/presentation/(system)/pagination/min/modules/pagination.requester';
-import { PageData, Pager } from '@/presentation/(system)/pagination/min/modules/pagination.types';
+import { PaginationResult } from '@/presentation/(system)/pagination/min/modules/pagination.types';
+import { PageData, Pager } from '@/presentation/(system)/pagination/min/modules/pagination.types.c';
 import { invalid, okData } from '@/presentation/(system)/result/result.core.factories';
 import { isAborted, isInvalid } from '@/presentation/(system)/result/result.core.helpers';
-import { PaginationResult } from '@/presentation/(system)/result/pagination.result.lib';
 import { FormData } from '@/presentation/(system)/validation/validation.types';
 
 /**

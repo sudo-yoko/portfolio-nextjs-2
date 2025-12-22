@@ -1,12 +1,6 @@
 //
 // お問い合わせフォームRESULT型 ライブラリ
 //
-import { Aborted, Invalid, OkEmpty, Retryable } from '@/presentation/(system)/result/result.core.types';
-
-/**
- * お問い合わせフォームのRESULT型
- */
-export type ContactResult<FIELD extends string = never> = OkEmpty | Invalid<FIELD> | Retryable | Aborted;
 
 /*
 export function parseFromText<FIELD extends string>(text: string): ContactResult<FIELD> {

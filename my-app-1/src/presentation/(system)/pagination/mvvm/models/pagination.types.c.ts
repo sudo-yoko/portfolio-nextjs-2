@@ -3,7 +3,7 @@
 //
 import 'client-only';
 
-import { PaginationResult } from '@/presentation/(system)/result/pagination.result.lib';
+import { PaginationResult } from '@/presentation/(system)/pagination/mvvm/models/pagination.types';
 
 /**
  * ページャ関数のインターフェース型

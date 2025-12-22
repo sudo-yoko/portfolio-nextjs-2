@@ -3,7 +3,7 @@
 //
 import 'client-only';
 
-import { PaginationResult } from '@/presentation/(system)/result/pagination.result.lib';
+import { PaginationResult } from '@/presentation/(system)/pagination/mvvm/models/pagination.types';
 import { FormData } from '@/presentation/(system)/validation/validation.types';
 
 /**
@@ -15,11 +15,7 @@ import { FormData } from '@/presentation/(system)/validation/validation.types';
  * BoundaryResult型。正常時の返却データがFetchPageResult<TItems>型、Rejectなし。
  */
 export interface FetchPage<ITEMS, FIELD extends string> {
-  (
-    offset: number,
-    limit: number,
-    query: FormData<FIELD>,
-  ): Promise<PaginationResult<FetchData<ITEMS>, FIELD>>;
+  (offset: number, limit: number, query: FormData<FIELD>): Promise<PaginationResult<FetchData<ITEMS>, FIELD>>;
 }
 
 /**

@@ -1,8 +1,8 @@
 import 'server-only';
 
 import { FetchData } from '@/presentation/(system)/pagination/mvvm/models/pagination.requester';
+import { PaginationResult } from '@/presentation/(system)/pagination/mvvm/models/pagination.types';
 import { invalid, okData } from '@/presentation/(system)/result/result.core.factories';
-import { PaginationResult } from '@/presentation/(system)/result/pagination.result.lib';
 import { hasError } from '@/presentation/(system)/validation/validation.helpers';
 import { FormData } from '@/presentation/(system)/validation/validation.types';
 import { send } from '@/presentation/users/mvvm/bff/users.client';

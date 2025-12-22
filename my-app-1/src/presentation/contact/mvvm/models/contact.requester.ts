@@ -6,11 +6,10 @@ import 'client-only';
 import client from '@/presentation/(system)/client/client.c';
 import { CONTENT_TYPE_APPLICATION_JSON_UTF8 } from '@/presentation/(system)/client/client.constants';
 import { Method } from '@/presentation/(system)/client/client.types';
-import { ContactResult } from '@/presentation/(system)/result/contact.result.lib';
 import { parseResult } from '@/presentation/(system)/result/result.core.helpers';
 import { FormData } from '@/presentation/(system)/validation/validation.types';
 import { post } from '@/presentation/contact/mvvm/bff/contact.action';
-import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
+import { ContactResult, FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 
 /**
  * バックエンド呼び出しのインターフェース型

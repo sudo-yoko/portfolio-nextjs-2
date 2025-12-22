@@ -1,12 +1,6 @@
 //
 // ページネーションRESULT型 ライブラリ
 //
-import { Aborted, Invalid, OkData } from '@/presentation/(system)/result/result.core.types';
-
-/**
- * ページネーションのRESULT型
- */
-export type PaginationResult<DATA, FIELD extends string = never> = OkData<DATA> | Invalid<FIELD> | Aborted;
 
 /*
 export function parseFromText<DATA, FIELD extends string>(text: string): PaginationResult<DATA, FIELD> {
