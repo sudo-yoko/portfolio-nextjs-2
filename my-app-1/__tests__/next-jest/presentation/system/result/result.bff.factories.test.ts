@@ -12,6 +12,6 @@ test('test1-2', () => {
 });
 
 test('test1-3', () => {
-  // TODO; dataにnullも入れられる
+  // TODO: dataにnullも入れられる
   const result = ok(null);
 });

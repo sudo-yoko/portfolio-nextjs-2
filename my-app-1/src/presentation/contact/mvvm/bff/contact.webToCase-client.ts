@@ -8,6 +8,7 @@ import { CONTENT_TYPE_APPLICATION_FORM } from '@/presentation/(system)/client/cl
 import client from '@/presentation/(system)/client/client.s';
 import { Method } from '@/presentation/(system)/client/client.types';
 import { env } from '@/presentation/(system)/env/env.helper.validated';
+import { retryableError } from '@/presentation/(system)/error/error.factories';
 import logger from '@/presentation/(system)/logging/logger.s';
 import { ContactBody } from '@/presentation/contact/mvvm/models/contact.types';
 
@@ -23,7 +24,12 @@ export async function send(model: ContactBody): Promise<void> {
     url,
     body,
     headers: { ...CONTENT_TYPE_APPLICATION_FORM },
-    validateStatus: (status) => status === 200, // ステータスコード200以外はエラーをスローする
+    // ステータスコード200,408(タイムアウト)以外はエラーをスローする
+    validateStatus: (status) => status === 200 || status === 408,
   });
+
   logger.info(logPrefix + `Response(Inbound) -> status=${result.status}`);
+  if (result.status === 408) {
+    throw retryableError(`web-to-case response status=${result.status}`);
+  }
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import { AutoResizeTextAreaSimple } from '@/presentation/(system)/components/autoResizeTextArea.decorator.simple';
+import { Toast } from '@/presentation/(system)/components/toast.core';
 import { applyViolations, handleNext } from '@/presentation/contact/mvvm/view-models/contact.handler.event';
 import { Action, setValue, State } from '@/presentation/contact/mvvm/view-models/contact.reducer';
 import { useEffect } from 'react';
@@ -24,6 +25,7 @@ export default function Input({
       <div>
         <div>お問い合わせフォーム</div>
       </div>
+      {state.retryMsg.length > 0 && <Toast message={state.retryMsg} />}
       <div>
         <div>
           <div>お名前：</div>

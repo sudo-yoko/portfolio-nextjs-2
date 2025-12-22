@@ -17,6 +17,10 @@ export const Tag = {
    */
   Invalid: 'invalid',
   /**
+   * 再試行可能なエラー
+   */
+  Retryable: 'retryable',
+  /**
    * 異常終了
    */
   Aborted: 'aborted',
@@ -47,6 +51,17 @@ export type Invalid<FIELD extends string> = RESULT & {
 };
 
 /**
+ * 再試行可能なエラーを表す型
+ */
+export type Retryable = RESULT & {
+  tag: typeof Tag.Retryable;
+  retryMsg: string[];
+};
+
+/**
  * 異常終了を表す型
  */
 export type Aborted = RESULT & { tag: typeof Tag.Aborted; errType?: ErrType; message?: string };
+// TODO: messageはいらないかも。
+// RESULT型にセットするメッセージはクライアントに表示するもの（システムメッセージではない）
+// -> クライアントでエラーを投げるときにセットするメッセージで使用

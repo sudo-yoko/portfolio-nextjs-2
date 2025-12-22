@@ -9,6 +9,7 @@ import {
   OkData,
   OkEmpty,
   RESULT,
+  Retryable,
   Tag,
 } from '@/presentation/(system)/result/result.core.types';
 
@@ -26,6 +27,13 @@ export function isOkData<DATA>(result: RESULT): result is OkData<DATA> {
 
 export function isInvalid<FIELD extends string>(result: RESULT): result is Invalid<FIELD> {
   if (result.tag === Tag.Invalid) {
+    return true;
+  }
+  return false;
+}
+
+export function isRetryable(result: RESULT): result is Retryable {
+  if (result.tag === Tag.Retryable) {
     return true;
   }
   return false;
@@ -64,6 +72,9 @@ export function isResult(text: unknown): text is RESULT {
     return true;
   }
   if (tag === Tag.Invalid) {
+    return true;
+  }
+  if (tag === Tag.Retryable) {
     return true;
   }
   if (tag === Tag.Aborted) {

@@ -22,7 +22,7 @@ const _viaAction: FetchPage<User[], FormKeys> = async (offset, limit, query) => 
  * Route Handlers経由バックエンド実行
  */
 const viaRoute: FetchPage<User[], FormKeys> = async (offset, limit, query) => {
-  const url = '/api/users/mvvm';
+  const url = '/api/users/min';
   const result = await client.send({
     url,
     method: Method.POST,

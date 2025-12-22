@@ -1,7 +1,13 @@
 //
 // BFFのRESULT型（BFFの処理結果を返す際の統一的な返却フォーマット）
 //
-import { Aborted, Invalid, OkData, OkEmpty } from '@/presentation/(system)/result/result.core.types';
+import {
+  Aborted,
+  Invalid,
+  OkData,
+  OkEmpty,
+  Retryable,
+} from '@/presentation/(system)/result/result.core.types';
 
 /**
  * 正常終了を表す型
@@ -25,12 +31,16 @@ export type Ok<DATA = void> = [DATA] extends [void] ? OkEmpty : OkData<DATA>;
  * すべての型（正常終了｜バリデーションエラー｜失敗）を包括して総称するユニオン型
  */
 // export type BffResult<RESULT = void, REASON = never> = Ok<RESULT> | Rejected<REASON> | Aborted;
-export type BffResult<DATA = void, FIELD extends string = never> = Ok<DATA> | Invalid<FIELD> | Aborted;
+export type BffResult<DATA = void, FIELD extends string = never> =
+  | Ok<DATA>
+  | Invalid<FIELD>
+  | Retryable
+  | Aborted;
 
 /**
  * 差し戻し（バリデーションエラーなどの再試行可能な戻り）を表す型
  */
-// TODO; BFFが複数の差し戻し状態を返すようになると複雑になって難しくなるのでこれは使用しない
+// TODO: BFFが複数の差し戻し状態を返すようになると複雑になって難しくなるのでこれは使用しない
 // export type Rejected<REASON = never> = [REASON] extends [never]
 // ? { tag: 'reject'; label: string }
 // : { tag: 'reject'; label: string; data: REASON };

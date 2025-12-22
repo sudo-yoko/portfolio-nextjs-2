@@ -52,6 +52,15 @@ export function backendApiError(message: string): CustomError<ErrType> {
   return customError(ErrType.BackendApiError, message);
 }
 
+export function retryableError(message?: string): CustomError<ErrType> {
+  const cause: string[] = [];
+  cause.push('再試行可能エラー');
+  if (message) {
+    cause.push(message);
+  }
+  return customError(ErrType.RetryableError, cause.join(', '));
+}
+
 /**
  * ResultParseError を生成する
  */

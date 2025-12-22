@@ -35,6 +35,7 @@ export type State = {
   step: Step;
   formData: FormData<FormKeys>;
   violations: Violations<FormKeys>;
+  retryMsg: string[];
 };
 
 /**
@@ -44,6 +45,7 @@ export const initialState: State = {
   step: Step.input,
   formData: { name: '', email: '', body: '' },
   violations: {},
+  retryMsg: [],
 };
 
 /**
@@ -56,6 +58,7 @@ export const ActionType = {
   toComplete: 'toComplete',
   setValue: 'setValue',
   setViolations: 'setViolations',
+  setRetryable: 'setRetryable',
 } as const;
 export type ActionType = (typeof ActionType)[keyof typeof ActionType];
 
@@ -65,7 +68,8 @@ export type Action =
   | { type: typeof ActionType.toSending }
   | { type: typeof ActionType.toComplete }
   | { type: typeof ActionType.setValue; key: FormKeys; value: string }
-  | { type: typeof ActionType.setViolations; violations: Violations<FormKeys> };
+  | { type: typeof ActionType.setViolations; violations: Violations<FormKeys> }
+  | { type: typeof ActionType.setRetryable; retryMsg: string[] };
 
 /**
  * 状態の更新：フォームに値を入力
@@ -117,6 +121,13 @@ export function setViolations(
 }
 
 /**
+ * 状態の更新：再試行可能なエラー
+ */
+export function setRetryable(dispatch: React.ActionDispatch<[action: Action]>, retryMsg: string[]): void {
+  dispatch({ type: ActionType.setRetryable, retryMsg });
+}
+
+/**
  * 状態管理関数
  * 現在の状態とアクションを受け取り、新しい状態を返す
  *
@@ -138,6 +149,8 @@ export const reducer: Reducer<State, Action> = (state: State, action: Action): S
       return toCompleteState(state);
     case ActionType.setViolations:
       return { ...state, violations: action.violations };
+    case ActionType.setRetryable:
+      return { ...state, retryMsg: action.retryMsg };
     default:
       return state;
   }

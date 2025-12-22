@@ -13,6 +13,7 @@ export const ErrType = {
   BackendApiError: 'BackendApiError',
   ParseResultError: 'ParseResultError',
   ParseBffResultError: 'ParseBffResultError',
+  RetryableError: 'RetryableError',
 } as const; // 定数オブジェクト
 export type ErrType = (typeof ErrType)[keyof typeof ErrType]; // 型
 

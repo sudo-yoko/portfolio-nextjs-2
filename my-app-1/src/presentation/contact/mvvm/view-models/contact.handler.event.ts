@@ -5,7 +5,7 @@
 
 import { executeAsync } from '@/presentation/(system)/aop/aop.feature.client';
 import { bffError } from '@/presentation/(system)/error/error.factories';
-import { isInvalid, isOkEmpty } from '@/presentation/(system)/result/result.core.helpers';
+import { isInvalid, isOkEmpty, isRetryable } from '@/presentation/(system)/result/result.core.helpers';
 import { hasError } from '@/presentation/(system)/validation/validation.helpers';
 import { Violations } from '@/presentation/(system)/validation/validation.types';
 import { send } from '@/presentation/contact/mvvm/models/contact.requester';
@@ -13,6 +13,7 @@ import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 import { validate } from '@/presentation/contact/mvvm/models/contact.validator';
 import {
   Action,
+  setRetryable,
   setViolations,
   State,
   toComplete,
@@ -73,6 +74,12 @@ export async function submit(
         toInput(dispatch);
         return;
       }
+    }
+    // 再試行可能なエラー
+    if (isRetryable(result)) {
+      setRetryable(dispatch, result.retryMsg);
+      toInput(dispatch);
+      return;
     }
     // Aborted やその他想定外の返却値の場合
     throw bffError(result);

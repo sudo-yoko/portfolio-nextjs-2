@@ -36,14 +36,16 @@ function isErrorOf<T extends ErrType>(type: T) {
  */
 export const isAuthError = isErrorOf(ErrType.AuthError);
 
+export const isRetryableError = isErrorOf(ErrType.RetryableError);
+
 /**
  * client-only
  */
 // export function isBffAuthError(bffResult: BffResult): boolean {
-  // if (isAbort(bffResult)) {
-    // if (ErrType.AuthError === bffResult.type) {
-      // return true;
-    // }
-  // }
-  // return false;
+// if (isAbort(bffResult)) {
+// if (ErrType.AuthError === bffResult.type) {
+// return true;
+// }
+// }
+// return false;
 // }

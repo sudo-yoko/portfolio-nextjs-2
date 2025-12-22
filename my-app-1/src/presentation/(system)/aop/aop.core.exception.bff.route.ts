@@ -2,11 +2,11 @@
 import 'server-only';
 
 import { stringify } from '@/presentation/(system)/error/error.helper.stringify';
-import { isCustomError } from '@/presentation/(system)/error/error.helpers';
+import { isCustomError, isRetryableError } from '@/presentation/(system)/error/error.helpers';
 import { CUSTOM_ERROR_TAG } from '@/presentation/(system)/error/error.types';
 import logger from '@/presentation/(system)/logging/logger.s';
 import { bffResponse } from '@/presentation/(system)/result/result.bff.factories.s';
-import { abort } from '@/presentation/(system)/result/result.core.factories';
+import { abort, retry } from '@/presentation/(system)/result/result.core.factories';
 
 const logPrefix = 'aop.core.exception.bff.route.ts: ';
 
@@ -20,7 +20,16 @@ export async function withErrorHandlingAsync(thunk: () => Promise<Response>): Pr
   } catch (e) {
     const { message, all } = stringify(e);
     logger.error(logPrefix + fname + all);
-
+    //
+    // 再試行可能エラー
+    //
+    if (isRetryableError(e)) {
+      const retryable = retry();
+      return bffResponse(retryable);
+    }
+    //
+    // その他続行不可能なエラー
+    //
     const aborted = abort({ message });
     if (isCustomError(e)) {
       aborted.errType = e[CUSTOM_ERROR_TAG];

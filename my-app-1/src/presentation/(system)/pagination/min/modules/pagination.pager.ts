@@ -11,7 +11,7 @@ import { FetchPage } from '@/presentation/(system)/pagination/min/modules/pagina
 import { PageData, Pager } from '@/presentation/(system)/pagination/min/modules/pagination.types';
 import { BffResult } from '@/presentation/(system)/result/result.bff.types';
 import { invalid, okData } from '@/presentation/(system)/result/result.core.factories';
-import { isAborted, isInvalid } from '@/presentation/(system)/result/result.core.helpers';
+import { isAborted, isInvalid, isOkData } from '@/presentation/(system)/result/result.core.helpers';
 import { FormData } from '@/presentation/(system)/validation/validation.types';
 
 /**
@@ -52,6 +52,10 @@ export function createPager<ITEMS, FIELD extends string>(
     if (isInvalid(result)) {
       return invalid(result.violations);
     }
+    // TODO: BffResultの設計見直し
+    if (!isOkData(result)) {
+      throw bffError(result);
+    }
     let { total, items } = result.data;
     //
     // データなし
@@ -85,6 +89,10 @@ export function createPager<ITEMS, FIELD extends string>(
       }
       if (isInvalid(result)) {
         return invalid(result.violations);
+      }
+      // TODO: BffResultの設計見直し
+      if (!isOkData(result)) {
+        throw bffError(result);
       }
       ({ total, items } = result.data);
     }
