@@ -85,3 +85,11 @@ export async function submit(
         throw bffError(result);
     }
 }
+
+/**
+ * リトライメッセージを閉じる
+ */
+export function closeRetry(dispatch: React.ActionDispatch<[action: Action]>) {
+    setRetryable(dispatch, []);
+    toInput(dispatch);
+}

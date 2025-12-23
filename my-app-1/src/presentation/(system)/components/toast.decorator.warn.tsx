@@ -5,6 +5,6 @@
 
 import { ToastCore } from '@/presentation/(system)/components/toast.core';
 
-export function ToastWarn({ message }: { message: string[] }) {
-    return <ToastCore message={message} bgColor="bg-yellow-500" textColor="text-black" />;
+export function ToastWarn({ message, onClose }: { message: string[]; onClose: () => void }) {
+    return <ToastCore message={message} bgColor="bg-yellow-500" textColor="text-black" onClose={onClose} />;
 }
