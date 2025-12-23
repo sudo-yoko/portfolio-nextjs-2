@@ -21,14 +21,19 @@ export function ToastCore(props: Props) {
         }, 10);
     });
 
+    function handleClose() {
+        setOpen(false);
+    }
+
     return (
-        <div
-            className={`center-4 center-4 fixed ${open ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500`}
-        >
-            <div className={`rounded ${props.bgColor} px-4 py-2 ${props.textColor} shadow-lg`}>
-                {props.message.map((msg, index) => (
-                    <div key={index}>{msg}</div>
-                ))}
+        // TODO: center-4というクラスは存在しない。TailWindCSSのlintをセットアップする
+        <div className="center-4 center-4 fixed" onClick={handleClose}>
+            <div className={`${open ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500`}>
+                <div className={`rounded ${props.bgColor} px-4 py-2 ${props.textColor} shadow-lg`}>
+                    {props.message.map((msg, index) => (
+                        <div key={index}>{msg}</div>
+                    ))}
+                </div>
             </div>
         </div>
     );
