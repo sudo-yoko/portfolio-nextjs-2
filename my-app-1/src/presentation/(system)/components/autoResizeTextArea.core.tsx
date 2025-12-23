@@ -21,7 +21,6 @@ export function AutoResizeTextAreaCore(props: Props) {
             resizeTextArea(ref.current);
         }
     }, [props.value, props.violation]); // 入力値が変わった場合と、バリデーションエラーの状態が変わった場合にリサイズする
-    // TODO: Retryableの時もリサイズされるので後で調査
 
     return (
         <textarea
