@@ -5,26 +5,26 @@
 export type ActionResult<T> = Aborted | Completed<T>;
 
 type Aborted = {
-  abort: true;
-  cause?: string;
-  //data?: never;
+    abort: true;
+    cause?: string;
+    //data?: never;
 };
 
 type Completed<T> = {
-  abort: false;
-  data: T;
+    abort: false;
+    data: T;
 };
 
 /**
  * ActionResult を生成する
  */
 export const ActionResult = {
-  complete<T>(data: T): ActionResult<T> {
-    return { abort: false, data };
-  },
-  abort(cause?: string): ActionResult<never> {
-    return { abort: true, cause };
-  },
+    complete<T>(data: T): ActionResult<T> {
+        return { abort: false, data };
+    },
+    abort(cause?: string): ActionResult<never> {
+        return { abort: true, cause };
+    },
 };
 
 /*

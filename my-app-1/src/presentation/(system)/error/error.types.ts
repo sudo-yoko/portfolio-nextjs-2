@@ -7,12 +7,12 @@ import { RESULT } from '@/presentation/(system)/result/result.core.types';
  * カスタムエラーの種類
  */
 export const ErrType = {
-  AuthError: 'AuthError',
-  ValidationError: 'ValidationError',
-  BffError: 'BffError',
-  BackendApiError: 'BackendApiError',
-  ParseResultError: 'ParseResultError',
-  RetryableError: 'RetryableError',
+    AuthError: 'AuthError',
+    ValidationError: 'ValidationError',
+    BffError: 'BffError',
+    BackendApiError: 'BackendApiError',
+    ParseResultError: 'ParseResultError',
+    RetryableError: 'RetryableError',
 } as const; // 定数オブジェクト
 export type ErrType = (typeof ErrType)[keyof typeof ErrType]; // 型
 

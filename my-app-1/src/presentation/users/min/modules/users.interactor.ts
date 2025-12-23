@@ -11,30 +11,30 @@ import { FormKeys, User } from '@/presentation/users/min/modules/users.types';
 import { validate } from '@/presentation/users/min/modules/users.validator';
 
 export async function execute(
-  offset: number,
-  limit: number,
-  query: FormData<FormKeys>,
-  // TODO: REASON型を指定しないのにコンパイルエラーにならない
+    offset: number,
+    limit: number,
+    query: FormData<FormKeys>,
+    // TODO: REASON型を指定しないのにコンパイルエラーにならない
 ): Promise<PaginationResult<FetchData<User[]>, FormKeys>> {
-  //
-  // バリデーション
-  //
-  const violations = validate(query);
-  if (hasError(violations)) {
-    // return reject(REJECTION_LABELS.VIOLATION, violations);
-    return invalid(violations);
-  }
+    //
+    // バリデーション
+    //
+    const violations = validate(query);
+    if (hasError(violations)) {
+        // return reject(REJECTION_LABELS.VIOLATION, violations);
+        return invalid(violations);
+    }
 
-  // const query: UsersQuery = {
-  // userName: formData.userName,
-  // };
-  //
-  // データ取得
-  //
-  const { total, users } = await send(offset, limit, query);
-  // if (total === 0) {
-  // return reject(REJECTION_LABELS.NO_DATA);
-  // }
-  const data: FetchData<User[]> = { total, items: users };
-  return okData(data);
+    // const query: UsersQuery = {
+    // userName: formData.userName,
+    // };
+    //
+    // データ取得
+    //
+    const { total, users } = await send(offset, limit, query);
+    // if (total === 0) {
+    // return reject(REJECTION_LABELS.NO_DATA);
+    // }
+    const data: FetchData<User[]> = { total, items: users };
+    return okData(data);
 }

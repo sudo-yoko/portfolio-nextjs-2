@@ -9,16 +9,16 @@ import { handleRequest } from '@/presentation/contact/mvvm/view-models/contact.h
 import Main from '@/presentation/contact/mvvm/views/contact.component.main';
 
 export default async function Page(props: { searchParams?: SearchParams }) {
-  return await executeAsync(() => func());
+    return await executeAsync(() => func());
 
-  async function func() {
-    const _result = handleRequest(props);
-    return (
-      <>
-        <div>
-          <Main />
-        </div>
-      </>
-    );
-  }
+    async function func() {
+        const _result = handleRequest(props);
+        return (
+            <>
+                <div>
+                    <Main />
+                </div>
+            </>
+        );
+    }
 }

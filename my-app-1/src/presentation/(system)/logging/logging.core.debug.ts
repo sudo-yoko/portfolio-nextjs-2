@@ -25,14 +25,14 @@ const noop: DebugLogger = () => {}; // 空実装を適用する
  * ロガーの実装を決定する
  */
 function createDebugLogger(): DebugLogger {
-  // productionモードの場合でもでバックロガーを使いたい場合
-  if (env.NEXT_PUBLIC_DEBUG_LOGGER) {
+    // productionモードの場合でもでバックロガーを使いたい場合
+    if (env.NEXT_PUBLIC_DEBUG_LOGGER) {
+        return debugLogger;
+    }
+    if (env.NODE_ENV === 'production') {
+        return noop;
+    }
     return debugLogger;
-  }
-  if (env.NODE_ENV === 'production') {
-    return noop;
-  }
-  return debugLogger;
 }
 
 /**

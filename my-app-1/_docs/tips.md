@@ -7,3 +7,8 @@ setting.json
   "editor.detectIndentation": false,
   "editor.tabSize": 4
 →エディターで、スペース４つごとの縦線が入るようになる。.prettierrc.cjsのtabWidthも４にするとインデントと縦線が一致して見やすくなる
+
+特定ディレクトリ配下をすべて整形
+npx prettier --write src/app/api/users
+npx prettier --write "src/app/(system)"
+

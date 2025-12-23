@@ -13,12 +13,12 @@ import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 const logPrefix = 'contact.action.ts: ';
 
 export async function post(formData: FormData<FormKeys>): Promise<RESULT> {
-  return await executeAsync(() => func());
+    return await executeAsync(() => func());
 
-  async function func() {
-    logger.info(logPrefix + `formData=${JSON.stringify(formData)}`);
-    const result = await execute(formData);
-    // return JSON.stringify(result);
-    return result;
-  }
+    async function func() {
+        logger.info(logPrefix + `formData=${JSON.stringify(formData)}`);
+        const result = await execute(formData);
+        // return JSON.stringify(result);
+        return result;
+    }
 }

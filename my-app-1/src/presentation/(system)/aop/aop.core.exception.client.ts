@@ -11,33 +11,33 @@ const logPrefix = 'aop.core.exception.client.ts: ';
  * 引数に渡されたサンクにエラーハンドリングを追加して実行する。
  */
 export function withErrorHandling<T>(
-  thunk: () => T,
-  setHasError: React.Dispatch<React.SetStateAction<boolean>>,
+    thunk: () => T,
+    setHasError: React.Dispatch<React.SetStateAction<boolean>>,
 ): T | void {
-  const fname = 'withErrorHandling: ';
-  try {
-    // 引数に渡されたサンクを実行
-    return thunk();
-  } catch (e) {
-    // 非同期関数を呼ぶときにvoidを付けると、awaitしないことを明示的に示せる
-    void logger.errorAsync(logPrefix + fname + stringify(e).all);
-    setHasError(true);
-  }
+    const fname = 'withErrorHandling: ';
+    try {
+        // 引数に渡されたサンクを実行
+        return thunk();
+    } catch (e) {
+        // 非同期関数を呼ぶときにvoidを付けると、awaitしないことを明示的に示せる
+        void logger.errorAsync(logPrefix + fname + stringify(e).all);
+        setHasError(true);
+    }
 }
 
 /**
  * 引数に渡されたサンクにエラーハンドリングを追加して実行する。
  */
 export async function withErrorHandlingAsync<T>(
-  thunk: () => Promise<T>,
-  setHasError: React.Dispatch<React.SetStateAction<boolean>>,
+    thunk: () => Promise<T>,
+    setHasError: React.Dispatch<React.SetStateAction<boolean>>,
 ): Promise<T | void> {
-  const fname = 'withErrorHandlingAsync: ';
-  try {
-    return await thunk();
-  } catch (e) {
-    // TODO: クライアントサイドでBffRESULTのパースエラーチェック
-    void logger.errorAsync(logPrefix + fname + stringify(e).all);
-    setHasError(true);
-  }
+    const fname = 'withErrorHandlingAsync: ';
+    try {
+        return await thunk();
+    } catch (e) {
+        // TODO: クライアントサイドでBffRESULTのパースエラーチェック
+        void logger.errorAsync(logPrefix + fname + stringify(e).all);
+        setHasError(true);
+    }
 }

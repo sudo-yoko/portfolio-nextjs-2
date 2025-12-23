@@ -9,19 +9,19 @@ import { ContactBody, FormKeys } from '@/presentation/contact/mvvm/models/contac
 const logPrefix = 'contact.route.ts: ';
 
 export async function POST(req: Request): Promise<Response> {
-  return executeAsync(() => func());
+    return executeAsync(() => func());
 
-  async function func() {
-    const contactBody: ContactBody = await req.json();
-    logger.info(logPrefix + `contactBody=${JSON.stringify(contactBody)}`);
+    async function func() {
+        const contactBody: ContactBody = await req.json();
+        logger.info(logPrefix + `contactBody=${JSON.stringify(contactBody)}`);
 
-    const formData: FormData<FormKeys> = {
-      name: contactBody.name,
-      email: contactBody.email,
-      body: contactBody.body,
-    };
-    const result = await execute(formData);
-    // return resultResponse(result);
-    return result;
-  }
+        const formData: FormData<FormKeys> = {
+            name: contactBody.name,
+            email: contactBody.email,
+            body: contactBody.body,
+        };
+        const result = await execute(formData);
+        // return resultResponse(result);
+        return result;
+    }
 }

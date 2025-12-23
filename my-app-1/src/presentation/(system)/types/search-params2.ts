@@ -17,10 +17,10 @@ export type SearchParams = Promise<Record<string, SearchParam>>;
  * @param searchParams -
  */
 export async function getQueryParams<K extends string>(
-  searchParams?: SearchParams,
-  ...keys: readonly K[] // readonlyにすることで、呼び元でas constを付けた場合にリテラル型推論が効く。
+    searchParams?: SearchParams,
+    ...keys: readonly K[] // readonlyにすることで、呼び元でas constを付けた場合にリテラル型推論が効く。
 ): Promise<Record<K, SearchParam>> {
-  const params = await searchParams;
-  const result = Object.fromEntries(keys.map((key) => [key, params?.[key]]));
-  return result as Record<K, SearchParam>;
+    const params = await searchParams;
+    const result = Object.fromEntries(keys.map((key) => [key, params?.[key]]));
+    return result as Record<K, SearchParam>;
 }

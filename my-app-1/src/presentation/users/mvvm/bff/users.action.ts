@@ -7,11 +7,11 @@ import { execute } from '@/presentation/users/mvvm/bff/users.interactor';
 import { FormKeys } from '@/presentation/users/mvvm/models/users.types';
 
 export async function action(offset: number, limit: number, query: FormData<FormKeys>): Promise<RESULT> {
-  return await executeAsync(() => func());
+    return await executeAsync(() => func());
 
-  async function func() {
-    const result = await execute(offset, limit, query);
-    // return JSON.stringify(result);
-    return result;
-  }
+    async function func() {
+        const result = await execute(offset, limit, query);
+        // return JSON.stringify(result);
+        return result;
+    }
 }

@@ -14,15 +14,15 @@ import { Users, UsersQuery } from '@/presentation/users/mvvm/models/users.types'
 // };
 
 export async function send(offset: number, limit: number, query: UsersQuery): Promise<Users> {
-  const url = env('USERS_API');
-  // const res = await client.get<RES>(url, { params: { offset, limit, ...query } });
+    const url = env('USERS_API');
+    // const res = await client.get<RES>(url, { params: { offset, limit, ...query } });
 
-  const res = await client.send({
-    method: Method.GET,
-    url,
-    params: { offset, limit, ...query },
-  });
-  
-  const result: Users = JSON.parse(res.rawBody);
-  return result;
+    const res = await client.send({
+        method: Method.GET,
+        url,
+        params: { offset, limit, ...query },
+    });
+
+    const result: Users = JSON.parse(res.rawBody);
+    return result;
 }

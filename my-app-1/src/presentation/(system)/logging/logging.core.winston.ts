@@ -18,39 +18,39 @@ const logName = 'app-%DATE%.log';
 
 // ログフォルダが存在しない場合は作成する
 if (!fs.existsSync(logDir)) {
-  fs.mkdirSync(logDir, { recursive: true });
+    fs.mkdirSync(logDir, { recursive: true });
 }
 
 // ログフォーマットの指定
 const logFormat = format.printf(({ level, message, timestamp, ...meta }) => {
-  const { extra1 = '', extra2 = '', extra3 = '', extra4 = '', extra5 = '' } = meta; // 拡張項目
-  return `[${timestamp}] [${level}] [${appName}] [${extra1}] [${extra2}] [${extra3}] [${extra4}] [${extra5}] [[${message}]]`;
+    const { extra1 = '', extra2 = '', extra3 = '', extra4 = '', extra5 = '' } = meta; // 拡張項目
+    return `[${timestamp}] [${level}] [${appName}] [${extra1}] [${extra2}] [${extra3}] [${extra4}] [${extra5}] [[${message}]]`;
 });
 
 // タイムスタンプの形式。日本時間 YYYY/MM/DD hh:mm:ss 形式
 const timeStampFormat = format.timestamp({
-  format: () =>
-    new Intl.DateTimeFormat('ja-JP', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      timeZone: 'Asia/Tokyo',
-    }).format(new Date()),
+    format: () =>
+        new Intl.DateTimeFormat('ja-JP', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            timeZone: 'Asia/Tokyo',
+        }).format(new Date()),
 });
 
 // ロガーの作成
 const logger = createLogger({
-  format: format.combine(timeStampFormat, logFormat),
+    format: format.combine(timeStampFormat, logFormat),
 });
 
 // ログローテーションの設定
 const options: DailyRotateFile.DailyRotateFileTransportOptions = {
-  filename: logName,
-  dirname: logDir,
-  datePattern: 'YYYY-MM-DD',
+    filename: logName,
+    dirname: logDir,
+    datePattern: 'YYYY-MM-DD',
 };
 options.maxSize = '1000k'; // ローテーションの最大ファイルサイズ：1000KB
 options.maxFiles = '1d'; // ログの保管期間：1日
@@ -60,12 +60,12 @@ const transport = new winston.transports.DailyRotateFile(options);
 logger.add(transport);
 // 開発時はコンソールにも出力
 if (env.NODE_ENV != 'production') {
-  logger.add(new transports.Console());
+    logger.add(new transports.Console());
 }
 
 // ロガーの設定完了メッセージ
 console.log(
-  `Logger setup complete. Log directory=${logDir}, Rotation max size=${options.maxSize}, Rotation max files=${options.maxFiles}`,
+    `Logger setup complete. Log directory=${logDir}, Rotation max size=${options.maxSize}, Rotation max files=${options.maxFiles}`,
 );
 
 export default logger;

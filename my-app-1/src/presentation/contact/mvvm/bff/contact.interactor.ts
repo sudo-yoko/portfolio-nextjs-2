@@ -17,19 +17,19 @@ const logPrefix = 'contact.interactor.ts: ';
  * バックエンド呼び出しユースケースの実行
  */
 export async function execute(formData: FormData<FormKeys>): Promise<ContactResult<FormKeys>> {
-  logger.info(logPrefix + `formData=${JSON.stringify(formData)}`);
-  //
-  // バリデーション
-  //
-  const violations = validate(formData);
-  if (hasError(violations)) {
-    logger.info(logPrefix + `validation error. ${JSON.stringify(violations)}`);
-    //return reject(REJECTION_LABELS.VIOLATION, violations);
-    return invalid(violations);
-  }
-  //
-  // 送信
-  //
-  await send({ ...formData });
-  return okEmpty();
+    logger.info(logPrefix + `formData=${JSON.stringify(formData)}`);
+    //
+    // バリデーション
+    //
+    const violations = validate(formData);
+    if (hasError(violations)) {
+        logger.info(logPrefix + `validation error. ${JSON.stringify(violations)}`);
+        //return reject(REJECTION_LABELS.VIOLATION, violations);
+        return invalid(violations);
+    }
+    //
+    // 送信
+    //
+    await send({ ...formData });
+    return okEmpty();
 }

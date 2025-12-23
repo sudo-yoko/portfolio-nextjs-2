@@ -16,8 +16,8 @@ const logPrefix = 'aop.feature.bff.route.ts: ';
  * 引数に渡されたサンクに共通処理を追加して実行する。
  */
 export async function executeAsync(thunk: () => Promise<RESULT>): Promise<Response> {
-  const ctx: Ctx = { logger, logPrefix, process: 'bff route process' };
-  return await withLoggingAsync(ctx, () =>
-    withResultParsingAsync(() => withErrorHandlingAsync(() => withAuthAsync(thunk))),
-  );
+    const ctx: Ctx = { logger, logPrefix, process: 'bff route process' };
+    return await withLoggingAsync(ctx, () =>
+        withResultParsingAsync(() => withErrorHandlingAsync(() => withAuthAsync(thunk))),
+    );
 }

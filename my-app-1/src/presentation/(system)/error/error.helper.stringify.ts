@@ -4,37 +4,37 @@ import axios from 'axios';
  * Errorオブジェクトの文字列表現を作成する
  */
 export function stringify(
-  error: unknown,
-  description?: string,
+    error: unknown,
+    description?: string,
 ): {
-  /**
-   * エラーメッセージのみ（スタックトレースを含まない）
-   */
-  message: string;
-  /**
-   * スタックトレースを含むすべてのメッセージ
-   */
-  all: string;
+    /**
+     * エラーメッセージのみ（スタックトレースを含まない）
+     */
+    message: string;
+    /**
+     * スタックトレースを含むすべてのメッセージ
+     */
+    all: string;
 } {
-  if (typeof error === 'string') {
-    const message = error;
-    return { message, all: join({ description, message }) };
-  } else if (axios.isAxiosError(error)) {
-    const { message } = error;
-    const stacks = getStackTrace(error);
-    let details;
-    if (error.response) {
-      details = `Axios Error: Response(Inbound) -> status=${error.response.status}, data=${error.response.data}`;
+    if (typeof error === 'string') {
+        const message = error;
+        return { message, all: join({ description, message }) };
+    } else if (axios.isAxiosError(error)) {
+        const { message } = error;
+        const stacks = getStackTrace(error);
+        let details;
+        if (error.response) {
+            details = `Axios Error: Response(Inbound) -> status=${error.response.status}, data=${error.response.data}`;
+        }
+        return { message, all: join({ description, message, details, stacks }) };
+    } else if (error instanceof Error) {
+        const { message } = error;
+        const stacks = getStackTrace(error);
+        return { message, all: join({ description, message, stacks }) };
+    } else {
+        const message = 'unknown type error.';
+        return { message, all: join({ description, message }) };
     }
-    return { message, all: join({ description, message, details, stacks }) };
-  } else if (error instanceof Error) {
-    const { message } = error;
-    const stacks = getStackTrace(error);
-    return { message, all: join({ description, message, stacks }) };
-  } else {
-    const message = 'unknown type error.';
-    return { message, all: join({ description, message }) };
-  }
 }
 
 /**
@@ -44,15 +44,15 @@ export function stringify(
  * @returns スタックトレースの配列
  */
 function getStackTrace(error: Error): string[] {
-  const stacks: string[] = [];
-  if (error.stack) stacks.push(error.stack);
-  let { cause } = error;
-  while (cause instanceof Error) {
-    if (cause.stack) stacks.push(cause.stack);
-    cause = cause.cause;
-  }
-  // スタックトレースを発生した順番に並べ替える
-  return stacks.reverse();
+    const stacks: string[] = [];
+    if (error.stack) stacks.push(error.stack);
+    let { cause } = error;
+    while (cause instanceof Error) {
+        if (cause.stack) stacks.push(cause.stack);
+        cause = cause.cause;
+    }
+    // スタックトレースを発生した順番に並べ替える
+    return stacks.reverse();
 }
 
 /**
@@ -65,28 +65,28 @@ function getStackTrace(error: Error): string[] {
  * @returns エラーメッセージ
  */
 function join({
-  description,
-  message,
-  details,
-  stacks,
+    description,
+    message,
+    details,
+    stacks,
 }: {
-  description?: string;
-  message?: string;
-  details?: string;
-  stacks?: string[];
+    description?: string;
+    message?: string;
+    details?: string;
+    stacks?: string[];
 }): string {
-  const errMessage: string[] = [];
-  if (description) {
-    errMessage.push(description);
-  }
-  if (message) {
-    errMessage.push(`\nmessage: ${message}`);
-  }
-  if (details) {
-    errMessage.push(`\ndetails: ${details}`);
-  }
-  if (stacks) {
-    errMessage.push(`\nstacks: \n${stacks?.join('\n')}`);
-  }
-  return errMessage.join('');
+    const errMessage: string[] = [];
+    if (description) {
+        errMessage.push(description);
+    }
+    if (message) {
+        errMessage.push(`\nmessage: ${message}`);
+    }
+    if (details) {
+        errMessage.push(`\ndetails: ${details}`);
+    }
+    if (stacks) {
+        errMessage.push(`\nstacks: \n${stacks?.join('\n')}`);
+    }
+    return errMessage.join('');
 }

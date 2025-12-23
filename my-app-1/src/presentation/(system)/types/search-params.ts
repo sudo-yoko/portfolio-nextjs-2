@@ -15,13 +15,13 @@ export type SearchParams = Promise<{ [key: string]: SearchParam }>;
  * @param searchParams -
  */
 export async function getQueryParams<K extends string>(
-  searchParams?: SearchParams,
-  ...keys: readonly K[] // readonlyにすることで、呼び元でas constを付けた場合にリテラル型推論が効く。
+    searchParams?: SearchParams,
+    ...keys: readonly K[] // readonlyにすることで、呼び元でas constを付けた場合にリテラル型推論が効く。
 ): Promise<{ [P in K]: SearchParam }> {
-  const params = await searchParams;
-  const result = {} as { [key in K]: SearchParam };
-  for (const key of keys) {
-    result[key] = params?.[key];
-  }
-  return result;
+    const params = await searchParams;
+    const result = {} as { [key in K]: SearchParam };
+    for (const key of keys) {
+        result[key] = params?.[key];
+    }
+    return result;
 }

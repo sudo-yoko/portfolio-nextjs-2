@@ -11,40 +11,40 @@ import logger from '@/presentation/(system)/logging/logger.s';
 const logPrefix = 'client.impl.axios.ts: ';
 
 export const clientImpl: Client = {
-  send: async <BODY = never, PARAMS = never>(req: Req<BODY, PARAMS>) => {
-    // デフォルトは、500 以上のステータスコードの場合はエラーをスローする
-    const validateStatus = req.validateStatus ?? ((status: number) => status < 500);
+    send: async <BODY = never, PARAMS = never>(req: Req<BODY, PARAMS>) => {
+        // デフォルトは、500 以上のステータスコードの場合はエラーをスローする
+        const validateStatus = req.validateStatus ?? ((status: number) => status < 500);
 
-    logger.info(logPrefix + req.url);
-    const res = await client.request({
-      method: req.method,
-      url: req.url,
-      params: req.params,
-      validateStatus,
-    });
+        logger.info(logPrefix + req.url);
+        const res = await client.request({
+            method: req.method,
+            url: req.url,
+            params: req.params,
+            validateStatus,
+        });
 
-    // ステータスコードの検証
-    // if (!validateStatus(res.status)) {
-    // const err = backendApiError(`Request -> ${JSON.stringify(req)}, Response -> status=${res.status}`);
-    // logger.error(logPrefix + err.message);
-    // throw err;
-    // }
+        // ステータスコードの検証
+        // if (!validateStatus(res.status)) {
+        // const err = backendApiError(`Request -> ${JSON.stringify(req)}, Response -> status=${res.status}`);
+        // logger.error(logPrefix + err.message);
+        // throw err;
+        // }
 
-    const result: Result = {
-      status: res.status,
-      rawBody: toStringSafe(res.data),
-    };
-    logger.info(logPrefix + `Request -> ${JSON.stringify(req)}, Result -> ${JSON.stringify(result)}`);
-    return result;
-  },
+        const result: Result = {
+            status: res.status,
+            rawBody: toStringSafe(res.data),
+        };
+        logger.info(logPrefix + `Request -> ${JSON.stringify(req)}, Result -> ${JSON.stringify(result)}`);
+        return result;
+    },
 };
 
 function toStringSafe(value: unknown): string {
-  if (typeof value === 'string') {
-    return value;
-  }
-  if (value != null && typeof value === 'object') {
-    return JSON.stringify(value);
-  }
-  throw Error();
+    if (typeof value === 'string') {
+        return value;
+    }
+    if (value != null && typeof value === 'object') {
+        return JSON.stringify(value);
+    }
+    throw Error();
 }

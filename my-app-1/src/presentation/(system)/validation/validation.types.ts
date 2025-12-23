@@ -16,7 +16,7 @@ export type Violation = string[];
  * 入力フォームの各フィールドのバリデーションエラーメッセージを保持する
  */
 export type Violations<FIELD extends string> = {
-  [F in FIELD]?: Violation;
+    [F in FIELD]?: Violation;
 };
 
 /**

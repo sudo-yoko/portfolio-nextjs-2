@@ -6,20 +6,20 @@ import { execute } from '@/presentation/users/mvvm/bff/users.interactor';
 import { FormKeys } from '@/presentation/users/mvvm/models/users.types';
 
 interface ReqBody {
-  offset: number;
-  limit: number;
-  // query: UsersQuery;
-  query: FormData<FormKeys>;
+    offset: number;
+    limit: number;
+    // query: UsersQuery;
+    query: FormData<FormKeys>;
 }
 
 export async function POST(req: Request): Promise<Response> {
-  return await executeAsync(() => func());
+    return await executeAsync(() => func());
 
-  async function func() {
-    const reqBody: ReqBody = await req.json();
-    const { offset, limit, query } = reqBody;
-    const result = await execute(offset, limit, query);
-    // return resultResponse(result);
-    return result;
-  }
+    async function func() {
+        const reqBody: ReqBody = await req.json();
+        const { offset, limit, query } = reqBody;
+        const result = await execute(offset, limit, query);
+        // return resultResponse(result);
+        return result;
+    }
 }

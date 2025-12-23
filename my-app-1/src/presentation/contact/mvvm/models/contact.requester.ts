@@ -18,37 +18,37 @@ import { ContactResult, FormKeys } from '@/presentation/contact/mvvm/models/cont
  * @returns 正常終了の場合はvoid、差し戻しの場合はバリデーションエラーをBffResultにラップして返す
  */
 type Send = {
-  (formData: FormData<FormKeys>): Promise<ContactResult<FormKeys>>;
+    (formData: FormData<FormKeys>): Promise<ContactResult<FormKeys>>;
 };
 
 /**
  * バックエンド呼び出しの実装：ServerActions経由バックエンド呼び出し
  */
 const _viaAction: Send = async (formData) => {
-  const result = await post(formData);
-  // return parseFromResult<FormKeys>(result);
-  return result as ContactResult<FormKeys>;
+    const result = await post(formData);
+    // return parseFromResult<FormKeys>(result);
+    return result as ContactResult<FormKeys>;
 };
 
 /**
  * バックエンド呼び出しの実装：RouteHandlers経由バックエンド呼び出し
  */
 const viaRoute: Send = async (formData) => {
-  const url = '/api/contact/mvvm';
-  // const { name, email, body } = formData;
+    const url = '/api/contact/mvvm';
+    // const { name, email, body } = formData;
 
-  const res = await client.send({
-    url,
-    method: Method.POST,
-    headers: {
-      ...CONTENT_TYPE_APPLICATION_JSON_UTF8,
-    },
-    //body: { name, email, body }, // オブジェクトのまま（JSON.stringify不要）で渡す
-    body: formData,
-  });
-  // return parseFromText<FormKeys>(res.rawBody);
-  const result = parseResult(res.rawBody);
-  return result as ContactResult<FormKeys>;
+    const res = await client.send({
+        url,
+        method: Method.POST,
+        headers: {
+            ...CONTENT_TYPE_APPLICATION_JSON_UTF8,
+        },
+        //body: { name, email, body }, // オブジェクトのまま（JSON.stringify不要）で渡す
+        body: formData,
+    });
+    // return parseFromText<FormKeys>(res.rawBody);
+    const result = parseResult(res.rawBody);
+    return result as ContactResult<FormKeys>;
 };
 
 /**

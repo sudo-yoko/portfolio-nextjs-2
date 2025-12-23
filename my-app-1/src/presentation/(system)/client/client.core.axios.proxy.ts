@@ -8,14 +8,14 @@ import type { AxiosInstance } from 'axios';
 import axios from 'axios';
 
 function create(): AxiosInstance {
-  const protocol = envProtocol('PROXY_PROTOCOL');
-  const host = env('PROXY_HOST');
-  const port = envNumber('PROXY_PORT');
+    const protocol = envProtocol('PROXY_PROTOCOL');
+    const host = env('PROXY_HOST');
+    const port = envNumber('PROXY_PORT');
 
-  return axios.create({
-    proxy: { protocol, host, port },
-    timeout: 10000,
-  });
+    return axios.create({
+        proxy: { protocol, host, port },
+        timeout: 10000,
+    });
 }
 
 export const client: AxiosInstance = create();
