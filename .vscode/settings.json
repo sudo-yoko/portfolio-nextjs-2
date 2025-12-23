@@ -24,5 +24,7 @@
     "editor.selectionHighlightBackground": "#4f93ff44",  // 通常された単語と同じ単語の選択色（少し透明度をつけた一致色）
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "window.zoomLevel": 1
+  "window.zoomLevel": 1,
+  "editor.detectIndentation": false,
+  "editor.tabSize": 4
 }
