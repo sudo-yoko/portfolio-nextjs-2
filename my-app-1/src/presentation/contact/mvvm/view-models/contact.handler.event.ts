@@ -4,7 +4,7 @@
 'use client';
 
 import { executeAsync } from '@/presentation/(system)/aop/aop.feature.client';
-import { backendError } from '@/presentation/(system)/error/error.factories';
+import { backendError, malformedResultError } from '@/presentation/(system)/error/error.factories';
 import { isInvalid, isOkEmpty, isRetryable } from '@/presentation/(system)/result/result.core.helpers';
 import { hasError } from '@/presentation/(system)/validation/validation.helpers';
 import { Violations } from '@/presentation/(system)/validation/validation.types';
@@ -74,8 +74,8 @@ export async function submit(
                 toInput(dispatch);
                 return;
             }
-            // TODO: 不正なRESULT
-            throw new Error();
+            // RESULTの形式が不正
+            throw malformedResultError(result);
         }
         // 再試行可能なエラー
         if (isRetryable(result)) {

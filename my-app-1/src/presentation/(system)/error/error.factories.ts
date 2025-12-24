@@ -2,11 +2,11 @@
 // カスタムエラーファクトリー
 //
 import {
-    RESULT_TYPE,
     BackendError,
     CUSTOM_ERROR_TAG,
     CustomError,
     ErrType,
+    RESULT_TYPE,
 } from '@/presentation/(system)/error/error.types';
 import { RESULT } from '@/presentation/(system)/result/result.core.types';
 import { Violations } from '@/presentation/(system)/validation/validation.types';
@@ -103,6 +103,19 @@ export function backendError(result: RESULT, msg?: string): BackendError {
         [RESULT_TYPE]: result,
     });
     return error;
+}
+
+/**
+ * MalformedResultError を生成する
+ */
+export function malformedResultError(result: RESULT, msg?: string): CustomError<ErrType> {
+    const cause: string[] = [];
+    cause.push('RESULTの形式が不正です。');
+    if (msg) {
+        cause.push(msg);
+    }
+    cause.push(`RESULT=${JSON.stringify(result)}`);
+    return customError(ErrType.MalformedResultError, cause.join(', '));
 }
 
 // export function bffError(bffResult: BffResult, message?: string): BffError {
