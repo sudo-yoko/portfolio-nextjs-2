@@ -21,7 +21,7 @@ import React, { useEffect, useReducer, useRef, useState } from 'react';
 /**
  * 検索 カスタムフック
  */
-export function usePagination<DATA, FIELD extends string>({
+export function usePagination<ITEMS, FIELD extends string>({
     search,
     fetchCallback,
     initialPage,
@@ -31,16 +31,16 @@ export function usePagination<DATA, FIELD extends string>({
     setViolations,
 }: {
     search: boolean;
-    fetchCallback: FetchPage<DATA, FIELD>;
+    fetchCallback: FetchPage<ITEMS, FIELD>;
     initialPage: number;
     perPage: number;
     query: FormData<FIELD>;
-    setItems: React.Dispatch<React.SetStateAction<DATA>>;
+    setItems: React.Dispatch<React.SetStateAction<ITEMS>>;
     setViolations: React.Dispatch<React.SetStateAction<Violations<FIELD>>>;
 }) {
-    const [state, dispatch] = useReducer(reducer<DATA>, { step: Step.Initial });
+    const [state, dispatch] = useReducer(reducer<ITEMS>, { step: Step.Initial });
     const [error, setError] = useState(false);
-    const pager = useRef<Pager<DATA, FIELD>>(null);
+    const pager = useRef<Pager<ITEMS, FIELD>>(null);
 
     /**
      * 検索時

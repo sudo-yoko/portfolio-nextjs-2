@@ -44,7 +44,7 @@ test('test1-3', () => {
 test('test1-4', () => {
   const aborted: Aborted = {
     tag: 'abort',
-    type: ErrType.BffError,
+    type: ErrType.BackendError,
     cause: '認証エラー１',
   };
   expect(isBffAuthError(aborted)).toBe(false);

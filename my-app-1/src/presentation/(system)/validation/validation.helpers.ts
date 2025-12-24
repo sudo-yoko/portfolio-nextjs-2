@@ -8,6 +8,7 @@ import { Violations } from '@/presentation/(system)/validation/validation.types'
 /**
  * バリデーションエラーの有無を調べる
  */
+// export function hasError(errors: Violations<string>): boolean {
 export function hasError<T extends string>(errors: Violations<T>): boolean {
     return Object.values(errors).some((err) => (err as string[]).length > 0);
 }

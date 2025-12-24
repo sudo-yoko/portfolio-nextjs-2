@@ -3,7 +3,7 @@
 //
 import {
     RESULT_TYPE,
-    BffError,
+    BackendError,
     CUSTOM_ERROR_TAG,
     CustomError,
     ErrType,
@@ -87,19 +87,19 @@ export function parseResultError(text: string, message?: string): CustomError<Er
 // }
 
 /**
- * BffError を生成する
+ * BackendError を生成する
  */
-export function bffError(result: RESULT, msg?: string): BffError {
+export function backendError(result: RESULT, msg?: string): BackendError {
     const message: string[] = [];
     message.push('バックエンドエラー');
     if (msg) {
         message.push(msg);
     }
-    message.push(`bffResult=${JSON.stringify(result)}`);
+    message.push(`RESULT=${JSON.stringify(result)}`);
 
-    const base = new Error(`${ErrType.BffError}: ${message.join(', ')}`);
+    const base = new Error(`${ErrType.BackendError}: ${message.join(', ')}`);
     const error = Object.assign(base, {
-        [CUSTOM_ERROR_TAG]: ErrType.BffError,
+        [CUSTOM_ERROR_TAG]: ErrType.BackendError,
         [RESULT_TYPE]: result,
     });
     return error;

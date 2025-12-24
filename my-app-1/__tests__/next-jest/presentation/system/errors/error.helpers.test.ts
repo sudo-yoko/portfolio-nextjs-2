@@ -1,6 +1,6 @@
 import { printf } from '@/__tests__/test-logger';
 import { BffResult } from '@/__tests__/_bk/_/result.bff.types';
-import { actionError, authError, bffError, routeError } from '@/presentation/(system)/error/error.factories';
+import { actionError, authError, backendError, routeError } from '@/presentation/(system)/error/error.factories';
 import {
   isActionError,
   isAuthError,
@@ -33,7 +33,7 @@ test('test1-3', () => {
   const bffResult: BffResult = {
     tag: 'abort',
   };
-  const e = bffError(bffResult);
+  const e = backendError(bffResult);
   print(e[CUSTOM_ERROR_TAG]);
   expect(isCustomError(e)).toBe(true);
 });

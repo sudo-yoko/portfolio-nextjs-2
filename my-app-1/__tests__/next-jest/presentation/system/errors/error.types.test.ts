@@ -1,7 +1,7 @@
 import { printf } from '@/__tests__/test-logger';
 import {
   RESULT_TYPE,
-  BffError,
+  BackendError,
   CUSTOM_ERROR_TAG,
   CustomError,
   ErrType,
@@ -27,8 +27,8 @@ test('test1-1', () => {
 
 // npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/errors/error.types.test.ts -t '^test1-2$'
 test('test1-2', () => {
-  const error: BffError = {
-    [CUSTOM_ERROR_TAG]: ErrType.BffError,
+  const error: BackendError = {
+    [CUSTOM_ERROR_TAG]: ErrType.BackendError,
     name: 'name',
     message: 'message',
     cause: 'cause',

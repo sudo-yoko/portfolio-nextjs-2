@@ -9,7 +9,7 @@ import { RESULT } from '@/presentation/(system)/result/result.core.types';
 export const ErrType = {
     AuthError: 'AuthError',
     ValidationError: 'ValidationError',
-    BffError: 'BffError',
+    BackendError: 'BackendError',
     BackendApiError: 'BackendApiError',
     ParseResultError: 'ParseResultError',
     RetryableError: 'RetryableError',
@@ -27,7 +27,7 @@ export const RESULT_TYPE = Symbol.for('MyApp.ResultType');
 export type CustomError<T extends ErrType> = Error & { [CUSTOM_ERROR_TAG]: T }; // 型の合成
 
 /**
- * BFFエラー
+ * バックエンドエラー
  * CustomErrorに [RESULT_TYPE] プロパティを追加したもの
  */
-export type BffError = CustomError<typeof ErrType.BffError> & { [RESULT_TYPE]: RESULT }; // 型の合成
+export type BackendError = CustomError<typeof ErrType.BackendError> & { [RESULT_TYPE]: RESULT }; // 型の合成

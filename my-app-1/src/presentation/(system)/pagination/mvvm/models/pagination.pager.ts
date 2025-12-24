@@ -1,6 +1,6 @@
 import 'client-only';
 
-import { bffError } from '@/presentation/(system)/error/error.factories';
+import { backendError } from '@/presentation/(system)/error/error.factories';
 import {
     calcPagination,
     offsetOfLastPage,
@@ -45,9 +45,8 @@ export function createPager<ITEMS, FIELD extends string>(
         // データ取得
         //
         let result = await fetchPage(offset, limit, query);
-        // BffResult -> PagerResultに変換して返す
         if (isAborted(result)) {
-            throw bffError(result);
+            throw backendError(result);
         }
         if (isInvalid(result)) {
             return invalid(result.violations);
@@ -81,7 +80,7 @@ export function createPager<ITEMS, FIELD extends string>(
             offset = offsetOfLastPage(total, limit); // 最終ページの先頭の1件目
             result = await fetchPage(offset, limit, query);
             if (isAborted(result)) {
-                throw bffError(result);
+                throw backendError(result);
             }
             if (isInvalid(result)) {
                 return invalid(result.violations);

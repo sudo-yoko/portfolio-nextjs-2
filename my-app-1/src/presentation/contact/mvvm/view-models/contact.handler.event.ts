@@ -4,7 +4,7 @@
 'use client';
 
 import { executeAsync } from '@/presentation/(system)/aop/aop.feature.client';
-import { bffError } from '@/presentation/(system)/error/error.factories';
+import { backendError } from '@/presentation/(system)/error/error.factories';
 import { isInvalid, isOkEmpty, isRetryable } from '@/presentation/(system)/result/result.core.helpers';
 import { hasError } from '@/presentation/(system)/validation/validation.helpers';
 import { Violations } from '@/presentation/(system)/validation/validation.types';
@@ -66,7 +66,7 @@ export async function submit(
             return;
         }
         // バリデーションエラーあり
-        if (isInvalid(result)) {
+        if (isInvalid<FormKeys>(result)) {
             // if (isReject(result) && result.label === REJECTION_LABELS.VIOLATION) {
             const violations = result.violations;
             if (hasError(violations)) {
@@ -74,6 +74,8 @@ export async function submit(
                 toInput(dispatch);
                 return;
             }
+            // TODO: 不正なRESULT
+            throw new Error();
         }
         // 再試行可能なエラー
         if (isRetryable(result)) {
@@ -81,8 +83,8 @@ export async function submit(
             toInput(dispatch);
             return;
         }
-        // Aborted やその他想定外の返却値の場合
-        throw bffError(result);
+        // Aborted
+        throw backendError(result);
     }
 }
 
