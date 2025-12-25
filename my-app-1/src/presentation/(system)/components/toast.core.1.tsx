@@ -40,7 +40,6 @@ export function ToastCore(props: Props) {
         }, 1000);
     }
 
-    // TODO: onTransitionEndイベントというのがあるらしい
     return (
         <div title="閉じる" className="fixed animate-bounce cursor-pointer" onClick={handleClose}>
             <div className={`${open ? 'opacity-100' : 'opacity-0'} transition-opacity duration-1000`}>
