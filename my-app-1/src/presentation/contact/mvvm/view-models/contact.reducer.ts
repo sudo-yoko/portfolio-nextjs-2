@@ -44,7 +44,7 @@ export type State = {
 export const initialState: State = {
     step: Step.input,
     formData: { name: '', email: '', body: '' },
-    violations: {},
+    violations: [],
     retryMsg: [],
 };
 
@@ -142,7 +142,7 @@ export const reducer: Reducer<State, Action> = (state: State, action: Action): S
         case ActionType.toInput:
             return { ...state, step: Step.input };
         case ActionType.toConfirm:
-            return { ...state, step: Step.confirm, violations: {} };
+            return { ...state, step: Step.confirm, violations: [] };
         case ActionType.toSending:
             return { ...state, step: Step.sending };
         case ActionType.toComplete:
@@ -170,6 +170,6 @@ const toCompleteState = (state: State): State => {
     return {
         ...state,
         step: Step.complete,
-        violations: {},
+        violations: [],
     };
 };

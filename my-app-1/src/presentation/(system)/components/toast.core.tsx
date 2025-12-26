@@ -40,6 +40,7 @@ export function ToastCore(props: Props) {
         setOpen(false);
     }
 
+    // TODO: アニメーション付き開閉を共通コンポーネント化
     return (
         <div title="閉じる" className="fixed cursor-pointer" onClick={handleClose}>
             {/* onTransitionEndイベント使った開閉制御 */}

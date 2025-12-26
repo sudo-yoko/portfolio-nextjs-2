@@ -5,6 +5,7 @@ import { ErrorRedirect } from '@/presentation/(system)/error/views/component.err
 import { createPager } from '@/presentation/(system)/pagination/min/modules/pagination.pager';
 import { Pager } from '@/presentation/(system)/pagination/min/modules/pagination.types.c';
 import { isInvalid, isOkData } from '@/presentation/(system)/result/result.core.helpers';
+import { getViolationsMap } from '@/presentation/(system)/validation/validation.helpers';
 import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
 import { fetchPage } from '@/presentation/users/min/modules/users.requester';
 import { FormKeys, User } from '@/presentation/users/min/modules/users.types';
@@ -20,8 +21,8 @@ export default function UserList() {
     const { userName } = formData; // 各レンダーで作り直される“その回のスナップショット”
     const [query, setQuery] = useState<FormData<FormKeys>>({ userName });
     //const queryMemo: UsersQuery = useMemo(() => ({ userId: '', userName:'' }), []);
-    const [violations, setViolations] = useState<Violations<FormKeys>>({});
-
+    const [violations, setViolations] = useState<Violations<FormKeys>>([]);
+    const violationsMap = getViolationsMap(violations);
     const [error, setError] = useState(false);
     const [page, setPage] = useState(initialPage);
     const pager = useRef<Pager<User[], FormKeys>>(null);
@@ -46,7 +47,7 @@ export default function UserList() {
             if (isOkData(page)) {
                 setUsers(page.data.items);
                 setPage(page.data.currentPage);
-                setViolations({});
+                setViolations([]);
             }
             if (isInvalid(page)) {
                 setUsers([]);
@@ -107,7 +108,7 @@ export default function UserList() {
                                 検索
                             </button>
                         </div>
-                        {violations.userName?.map((err, index) => (
+                        {violationsMap.userName?.map((err, index) => (
                             <div key={index} className="text-red-500">
                                 {err}
                             </div>

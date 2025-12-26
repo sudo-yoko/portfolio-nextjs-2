@@ -66,7 +66,7 @@ export async function submit(
             return;
         }
         // バリデーションエラーあり
-        if (isInvalid<FormKeys>(result)) {
+        if (isInvalid(result)) {
             // if (isReject(result) && result.label === REJECTION_LABELS.VIOLATION) {
             const violations = result.violations;
             if (hasError(violations)) {

@@ -29,9 +29,9 @@ export function isOkData(result: RESULT): result is OkData<unknown> {
     return result.tag === Tag.OkData;
 }
 
-// 型パラメータを検証していないのでつけるべきではないが、invalidの場合はviolationがマップド型になっている関係で引数resultから型の推論ができないので
-// 型パラメータを渡すことで戻り値に型を保つ
-export function isInvalid<FIELD extends string>(result: RESULT): result is Invalid<FIELD> {
+// 型パラメータを検証していないのでつけるべきではない
+// export function isInvalid<FIELD extends string>(result: RESULT): result is Invalid<FIELD> {
+export function isInvalid(result: RESULT): result is Invalid<string> {
     return result.tag === Tag.Invalid;
 }
 

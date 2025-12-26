@@ -7,6 +7,7 @@ import {
     handleSearch,
     usePagination,
 } from '@/presentation/(system)/pagination/mvvm/view-models/pagination.use-pagination';
+import { getViolationsMap } from '@/presentation/(system)/validation/validation.helpers';
 import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
 import { fetchPage } from '@/presentation/users/mvvm/models/users.requester';
 import { FormKeys, User } from '@/presentation/users/mvvm/models/users.types';
@@ -18,7 +19,8 @@ export function Main() {
     const [formData, setFormData] = useState<FormData<FormKeys>>({ userName: '' });
     const { userName } = formData;
     const [users, setUsers] = useState<User[]>([]);
-    const [violations, setViolations] = useState<Violations<FormKeys>>({ userName: [''] });
+    const [violations, setViolations] = useState<Violations<FormKeys>>([]);
+    const violationsMap = getViolationsMap(violations);
     //const [query, setQuery] = useState<UsersQuery>({ userId: '', userName });
     const [query, setQuery] = useState<FormData<FormKeys>>({ userName });
     // const fetchCallback = useCallback(fetchPage, [fetchPage]);
@@ -59,7 +61,7 @@ export function Main() {
                     </button>
                 </div>
                 {state.step === Step.Invalid &&
-                    violations.userName?.map((err, index) => (
+                    violationsMap.userName?.map((err, index) => (
                         <div key={index} className="text-red-500">
                             {err}
                         </div>

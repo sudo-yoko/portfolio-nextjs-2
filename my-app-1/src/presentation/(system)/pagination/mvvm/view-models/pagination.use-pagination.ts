@@ -38,7 +38,7 @@ export function usePagination<ITEMS, FIELD extends string>({
     setItems: React.Dispatch<React.SetStateAction<ITEMS>>;
     setViolations: React.Dispatch<React.SetStateAction<Violations<FIELD>>>;
 }) {
-    const [state, dispatch] = useReducer(reducer<ITEMS>, { step: Step.Initial });
+    const [state, dispatch] = useReducer(reducer<ITEMS, FIELD>, { step: Step.Initial });
     const [error, setError] = useState(false);
     const pager = useRef<Pager<ITEMS, FIELD>>(null);
 
@@ -96,7 +96,7 @@ export function usePagination<ITEMS, FIELD extends string>({
 export async function handlePagination<ITEMS, FIELD extends string>(
     destination: 'next' | 'prev',
     pager: React.RefObject<Pager<ITEMS, FIELD> | null>,
-    dispatch: React.ActionDispatch<[action: Action<ITEMS>]>,
+    dispatch: React.ActionDispatch<[action: Action<ITEMS, FIELD>]>,
     setError: React.Dispatch<React.SetStateAction<boolean>>,
 ): Promise<void> {
     await executeAsync(() => func(), setError);

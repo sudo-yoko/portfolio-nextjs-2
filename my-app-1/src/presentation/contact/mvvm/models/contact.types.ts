@@ -13,7 +13,13 @@ export type ContactParams = {
  * 入力フォームのキー
  * お名前、メールアドレス、お問い合わせ内容
  */
-export type FormKeys = 'name' | 'email' | 'body';
+// export type FormKeys = 'name' | 'email' | 'body';
+export const FormKeys = {
+    name: 'name',
+    email: 'email',
+    body: 'body',
+} as const;
+export type FormKeys = (typeof FormKeys)[keyof typeof FormKeys];
 
 /**
  * お問い合わせ入力内容

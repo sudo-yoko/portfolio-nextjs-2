@@ -8,12 +8,36 @@ import { z } from 'zod';
  * フォームのバリデーション
  */
 export const validate: FormValidator<FormKeys> = (formData) => {
-    const errors: Violations<FormKeys> = {};
-    errors['name'] = required(formData.name, 'お名前');
-    errors['email'] = requiredEmail(formData.email, 'メールアドレス');
-    errors['body'] = requiredMax50(formData.body, 'お問い合わせ内容');
+    const errors: Violations<FormKeys> = [];
+    errors.push({
+        field: FormKeys.name,
+        violation: validateName(formData.name),
+    });
+    errors.push({
+        field: FormKeys.email,
+        violation: validateEmail(formData.email),
+    });
+    errors.push({
+        field: FormKeys.body,
+        violation: validateBody(formData.body),
+    });
+    // errors['name'] = required(formData.name, 'お名前');
+    // errors['email'] = requiredEmail(formData.email, 'メールアドレス');
+    // errors['body'] = requiredMax50(formData.body, 'お問い合わせ内容');
     return errors;
 };
+
+function validateName(name: string) {
+    return required(name, 'お名前');
+}
+
+function validateEmail(email: string) {
+    return requiredEmail(email, 'メールアドレス');
+}
+
+function validateBody(body: string) {
+    return requiredMax50(body, 'お問い合わせ内容');
+}
 
 /**
  * バリデーション：必須で最大５０桁まで
