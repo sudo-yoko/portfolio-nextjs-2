@@ -93,7 +93,6 @@ export async function submit(
         }
         // RESULTの形式が不正
         throw malformedResultError(result);
-        // TODO; この時エラー画面にうまく遷移しない
     }
 }
 
