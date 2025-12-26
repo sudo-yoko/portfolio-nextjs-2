@@ -27,6 +27,11 @@ export async function execute(formData: FormData<FormKeys>): Promise<ContactResu
         //return reject(REJECTION_LABELS.VIOLATION, violations);
         return invalid(violations);
     }
+    // 不正なRESULTを返すコード
+    // return {
+    // tag: Tag.Invalid,
+    // violations: [],
+    // };
     //
     // 送信
     //

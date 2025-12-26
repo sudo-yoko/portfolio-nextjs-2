@@ -1,6 +1,12 @@
+import { printf } from '@/__tests__/test-logger';
+import { stringify } from '@/presentation/(system)/error/error.helper.stringify';
+import { isInvalid } from '@/presentation/(system)/result/result.core.helpers';
+import { Invalid, Tag } from '@/presentation/(system)/result/result.core.types';
 import { hasError } from '@/presentation/(system)/validation/validation.helpers';
 import { Violations } from '@/presentation/(system)/validation/validation.types';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
+
+const print = printf({ logPrefix: '>>> [validation.types.test.ts]', stdout: true });
 
 // ==============================
 // 1. hasError
@@ -104,7 +110,37 @@ test('test1-7', () => {
     expect(result).toBe(false);
 });
 
-// TODO; invalidでviolationsが無い場合のhasErrorのテスト
+// invalidでviolationsが無い場合のhasErrorのテスト
+// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/validation/validation.helper.test.ts -t 'test1-8'
+test('test1-8', () => {
+    // 不正なInvalid
+    const result = {
+        tag: Tag.Invalid,
+    };
+    if (isInvalid(result)) {
+        print(`result=${result.violations}`);
+        expect(() => hasError(result.violations)).toThrow(Error);
+        try {
+            hasError(result.violations);
+        } catch (e) {
+            print(stringify(e).all);
+        }
+    }
+});
+
+// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/validation/validation.helper.test.ts -t 'test1-9'
+test('test1-9', () => {
+    const result: Invalid<FormKeys> = {
+        tag: Tag.Invalid,
+        // violations: [{ field: FormKeys.body, violation: ['aaa', 'zzz'] }],
+        violations: [],
+    };
+    if (isInvalid(result)) {
+        print(`result=${JSON.stringify(result.violations)}`);
+        const isError = hasError(result.violations);
+        expect(isError).toBe(false);
+    }
+});
 
 // ==============================
 // 2. isViolations

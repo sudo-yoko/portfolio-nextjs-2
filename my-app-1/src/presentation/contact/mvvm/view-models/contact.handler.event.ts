@@ -5,7 +5,12 @@
 
 import { executeAsync } from '@/presentation/(system)/aop/aop.feature.client';
 import { backendError, malformedResultError } from '@/presentation/(system)/error/error.factories';
-import { isInvalid, isOkEmpty, isRetryable } from '@/presentation/(system)/result/result.core.helpers';
+import {
+    isAborted,
+    isInvalid,
+    isOkEmpty,
+    isRetryable,
+} from '@/presentation/(system)/result/result.core.helpers';
 import { hasError } from '@/presentation/(system)/validation/validation.helpers';
 import { Violations } from '@/presentation/(system)/validation/validation.types';
 import { send } from '@/presentation/contact/mvvm/models/contact.requester';
@@ -59,7 +64,12 @@ export async function submit(
     await executeAsync(() => func(), setError);
 
     async function func() {
+        // バックエンド呼び出し
         const result = await send(state.formData);
+        // 異常
+        if (isAborted(result)) {
+            throw backendError(result);
+        }
         // 正常
         if (isOkEmpty(result)) {
             toComplete(dispatch);
@@ -74,8 +84,6 @@ export async function submit(
                 toInput(dispatch);
                 return;
             }
-            // RESULTの形式が不正
-            throw malformedResultError(result);
         }
         // 再試行可能なエラー
         if (isRetryable(result)) {
@@ -83,8 +91,9 @@ export async function submit(
             toInput(dispatch);
             return;
         }
-        // Aborted
-        throw backendError(result);
+        // RESULTの形式が不正
+        throw malformedResultError(result);
+        // TODO; この時エラー画面にうまく遷移しない
     }
 }
 
