@@ -1,7 +1,6 @@
 import 'server-only';
 
 import { FetchData } from '@/presentation/(system)/pagination/min/modules/pagination.requester';
-
 import { PaginationResult } from '@/presentation/(system)/pagination/min/modules/pagination.types';
 import { invalid, okData } from '@/presentation/(system)/result/result.core.factories';
 import { hasError } from '@/presentation/(system)/validation/validation.helpers';
