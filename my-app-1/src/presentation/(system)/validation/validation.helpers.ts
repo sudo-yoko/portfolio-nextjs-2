@@ -1,8 +1,6 @@
 //
 // バリデーションのヘルパー関数
 //
-import { stringify } from '@/presentation/(system)/error/error.helper.stringify';
-import logger from '@/presentation/(system)/logging/logger';
 import { Violations, ViolationsMap } from '@/presentation/(system)/validation/validation.types';
 
 /**
@@ -17,31 +15,6 @@ export function hasError<FIELD extends string>(violations: Violations<FIELD>): b
 // }
 
 /**
- * Violations型に適合するか調べる
- */
-// TODO: 再テスト
-export function isViolations(text: string, ...keys: string[]): boolean {
-    try {
-        // JSONにパースできること
-        const parsed = JSON.parse(text);
-        for (const [key, value] of Object.entries(parsed)) {
-            // 値がstring[]であること
-            if (!Array.isArray(value)) {
-                return false;
-            }
-            // キーの配列も渡せる場合はキーのチェックも行う
-            if (keys.length > 0 && !keys.includes(key)) {
-                return false;
-            }
-        }
-        return true;
-    } catch (e) {
-        logger.debug(stringify(e).message);
-        return false;
-    }
-}
-
-/**
  * Violationsをマップド型に変換する
  */
 export function getViolationsMap<FIELD extends string>(input: Violations<FIELD>): ViolationsMap<FIELD> {
@@ -52,3 +25,27 @@ export function getViolationsMap<FIELD extends string>(input: Violations<FIELD>)
     }
     return out;
 }
+
+/**
+ * Violations型に適合するか調べる
+ */
+// export function isViolations(text: string, ...keys: string[]): boolean {
+// try {
+// JSONにパースできること
+// const parsed = JSON.parse(text);
+// for (const [key, value] of Object.entries(parsed)) {
+// 値がstring[]であること
+// if (!Array.isArray(value)) {
+// return false;
+// }
+// キーの配列も渡せる場合はキーのチェックも行う
+// if (keys.length > 0 && !keys.includes(key)) {
+// return false;
+// }
+// }
+// return true;
+// } catch (e) {
+// logger.debug(stringify(e).message);
+// return false;
+// }
+// }

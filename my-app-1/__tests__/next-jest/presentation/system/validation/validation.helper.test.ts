@@ -1,4 +1,4 @@
-import { hasError, isViolations } from '@/presentation/(system)/validation/validation.helpers';
+import { hasError } from '@/presentation/(system)/validation/validation.helpers';
 import { Violations } from '@/presentation/(system)/validation/validation.types';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 
@@ -104,28 +104,30 @@ test('test1-7', () => {
     expect(result).toBe(false);
 });
 
+// TODO; invalidでviolationsが無い場合のhasErrorのテスト
+
 // ==============================
 // 2. isViolations
 // ==============================
 // npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/validation/validation.helper.test.ts -t 'test2-1'
-test('test2-1', () => {
-    const text = ''; // JSONパース不可
-    const result = isViolations(text);
-    expect(result).toBe(false);
-});
+// test('test2-1', () => {
+// const text = ''; // JSONパース不可
+// const result = isViolations(text);
+// expect(result).toBe(false);
+// });
 
 // npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/validation/validation.helper.test.ts -t 'test2-2'
-test('test2-2', () => {
-    const text = { name: [''], email: [''], body: [''] };
-    const json = JSON.stringify(text);
-    const result = isViolations(json);
-    expect(result).toBe(true);
-});
+// test('test2-2', () => {
+// const text = { name: [''], email: [''], body: [''] };
+// const json = JSON.stringify(text);
+// const result = isViolations(json);
+// expect(result).toBe(true);
+// });
 
 // npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/validation/validation.helper.test.ts -t 'test2-3'
-test('test2-3', () => {
-    const text = { name: [''], email: [''], body: [''] };
-    const json = JSON.stringify(text);
-    const result = isViolations(json, 'name', 'email');
-    expect(result).toBe(false);
-});
+// test('test2-3', () => {
+// const text = { name: [''], email: [''], body: [''] };
+// const json = JSON.stringify(text);
+// const result = isViolations(json, 'name', 'email');
+// expect(result).toBe(false);
+// });
