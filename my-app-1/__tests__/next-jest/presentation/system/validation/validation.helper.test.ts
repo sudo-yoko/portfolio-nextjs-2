@@ -53,7 +53,7 @@ test('test1-4', () => {
         },
         {
             field: FormKeys.email,
-            violation: ['aaa'],
+            violation: ['a　aa'],
         },
     ];
     const result = hasError(violations);
@@ -65,7 +65,7 @@ test('test1-5', () => {
     const violations: Violations<FormKeys> = [
         {
             field: FormKeys.body,
-            violation: [''], // TODO: 空文字の場合もエラーとして判定される
+            violation: [''],
         },
         {
             field: FormKeys.email,
@@ -73,7 +73,35 @@ test('test1-5', () => {
         },
     ];
     const result = hasError(violations);
-    expect(result).toBe(true);
+    expect(result).toBe(false);
+});
+
+// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/validation/validation.helper.test.ts -t 'test1-6'
+test('test1-6', () => {
+    const violations: Violations<FormKeys> = [
+        {
+            field: FormKeys.body,
+            violation: [],
+        },
+        {
+            field: FormKeys.email,
+            violation: [' '],
+        },
+    ];
+    const result = hasError(violations);
+    expect(result).toBe(false);
+});
+
+// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/validation/validation.helper.test.ts -t 'test1-7'
+test('test1-7', () => {
+    const violations: Violations<FormKeys> = [
+        {
+            field: FormKeys.body,
+            violation: ['　'],
+        },
+    ];
+    const result = hasError(violations);
+    expect(result).toBe(false);
 });
 
 // ==============================

@@ -9,7 +9,7 @@ import { Violations, ViolationsMap } from '@/presentation/(system)/validation/va
  * バリデーションエラーの有無を調べる
  */
 export function hasError<FIELD extends string>(violations: Violations<FIELD>): boolean {
-    return violations.some((v) => v.violation.length > 0);
+    return violations.some((vio) => vio.violation.some((str) => str.trim() !== ''));
 }
 // export function hasError(errors: Violations<string>): boolean {
 // export function hasError<T extends string>(errors: Violations<T>): boolean {
