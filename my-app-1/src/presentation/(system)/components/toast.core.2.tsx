@@ -1,5 +1,6 @@
 //
 // トースト通知
+// （requestAnimationFrame を使った開閉アニメーション）
 //
 'use client';
 

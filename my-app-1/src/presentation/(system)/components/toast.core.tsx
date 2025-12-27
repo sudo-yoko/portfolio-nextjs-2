@@ -1,19 +1,24 @@
 //
 // トースト通知
+// （開閉アニメーションを共通コンポーネント化）
 //
 'use client';
 
 import { OpacityTransition } from '@/presentation/(system)/components/opacityTransition';
+import { XCircleIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 
-export type Props = {
+export function ToastCore({
+    message,
+    bgColor,
+    textColor,
+    onClose,
+}: {
     message: string[];
     bgColor: string;
     textColor: string;
     onClose: () => void;
-};
-
-export function ToastCore(props: Props) {
+}) {
     const [open, setOpen] = useState(true);
 
     // トーストを閉じる
@@ -22,14 +27,23 @@ export function ToastCore(props: Props) {
     }
 
     return (
-        <div title="閉じる" className="fixed cursor-pointer" onClick={handleClose}>
-            <OpacityTransition open={open} onClose={props.onClose}>
+        <div className="fixed">
+            <OpacityTransition open={open} onExit={onClose}>
                 <div
-                    className={`rounded ${props.bgColor} px-4 py-2 ${props.textColor} shadow-lg transition-all hover:brightness-95 active:scale-95`}
+                    className={`flex cursor-context-menu items-start gap-0 rounded ${bgColor} px-4 py-2 ${textColor} shadow-lg transition-all hover:brightness-95`}
                 >
-                    {props.message.map((msg, index) => (
-                        <div key={index}>{msg}</div>
-                    ))}
+                    <div>
+                        {message.map((msg, index) => (
+                            <div key={index}>{msg}</div>
+                        ))}
+                    </div>
+                    <div>
+                        <XCircleIcon
+                            title="閉じる"
+                            onClick={handleClose}
+                            className="h-7 w-7 cursor-pointer transition-all active:scale-95"
+                        />
+                    </div>
                 </div>
             </OpacityTransition>
         </div>

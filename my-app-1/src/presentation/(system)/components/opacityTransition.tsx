@@ -8,32 +8,32 @@ import React, { useEffect, useState } from 'react';
 export function OpacityTransition({
     children,
     open,
-    onClose,
+    onExit,
 }: {
     children: React.ReactNode;
     open: boolean;
-    onClose: () => void;
+    onExit: () => void;
 }) {
-    const [appear, setAppear] = useState(() => (open ? false : true));
+    const [visible, setVisible] = useState(false);
 
     useEffect(() => {
-        const id = requestAnimationFrame(() => setAppear(open));
+        const id = requestAnimationFrame(() => setVisible(open));
         return () => cancelAnimationFrame(id);
     }, [open]);
 
     function handleTransitionEnd(e: React.TransitionEvent) {
-        if (appear) {
+        if (visible) {
             return;
         }
         if (e.propertyName !== 'opacity') {
             return;
         }
-        onClose();
+        onExit();
     }
 
     return (
         <div
-            className={`${appear ? 'opacity-100' : 'opacity-0'} transition-opacity duration-1000`}
+            className={`${visible ? 'opacity-100' : 'opacity-0'} transition-opacity duration-1000`}
             onTransitionEnd={handleTransitionEnd}
         >
             {children}

@@ -17,6 +17,7 @@
     "start:mock": "npm-run-all --parallel start mock1 mock2 mock3 mock4 mock5"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "axios": "^1.13.2",
     "next": "16.0.3",
     "react": "19.2.0",
