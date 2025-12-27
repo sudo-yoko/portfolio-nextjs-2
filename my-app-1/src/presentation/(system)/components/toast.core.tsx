@@ -3,7 +3,7 @@
 //
 'use client';
 
-import { TransitionPresence } from '@/presentation/(system)/components/transitionPresence';
+import { OpacityTransition } from '@/presentation/(system)/components/opacityTransition';
 import { useState } from 'react';
 
 export type Props = {
@@ -18,19 +18,20 @@ export function ToastCore(props: Props) {
 
     // トーストを閉じる
     function handleClose() {
-        if (!open) return; // 連打防止
-        setOpen(false);
+        if (open) setOpen(false);
     }
 
     return (
         <div title="閉じる" className="fixed cursor-pointer" onClick={handleClose}>
-            <TransitionPresence open={open} onClose={props.onClose}>
-                <div className={`rounded ${props.bgColor} px-4 py-2 ${props.textColor} shadow-lg`}>
+            <OpacityTransition open={open} onClose={props.onClose}>
+                <div
+                    className={`rounded ${props.bgColor} px-4 py-2 ${props.textColor} shadow-lg transition-all hover:brightness-95 active:scale-95`}
+                >
                     {props.message.map((msg, index) => (
                         <div key={index}>{msg}</div>
                     ))}
                 </div>
-            </TransitionPresence>
+            </OpacityTransition>
         </div>
     );
 }

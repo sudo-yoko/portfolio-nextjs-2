@@ -5,7 +5,7 @@
 
 import React, { useEffect, useState } from 'react';
 
-export function TransitionPresence({
+export function OpacityTransition({
     children,
     open,
     onClose,
@@ -14,15 +14,15 @@ export function TransitionPresence({
     open: boolean;
     onClose: () => void;
 }) {
-    const [visible, setVisible] = useState(!open);
+    const [appear, setAppear] = useState(() => (open ? false : true));
 
     useEffect(() => {
-        const id = requestAnimationFrame(() => setVisible(open));
+        const id = requestAnimationFrame(() => setAppear(open));
         return () => cancelAnimationFrame(id);
     }, [open]);
 
     function handleTransitionEnd(e: React.TransitionEvent) {
-        if (visible) {
+        if (appear) {
             return;
         }
         if (e.propertyName !== 'opacity') {
@@ -32,15 +32,11 @@ export function TransitionPresence({
     }
 
     return (
-        <div>
-            <div>
-                <div
-                    className={`${visible ? 'opacity-100' : 'opacity-10'} transition-opacity duration-1000`}
-                    onTransitionEnd={handleTransitionEnd}
-                >
-                    {children}
-                </div>
-            </div>
+        <div
+            className={`${appear ? 'opacity-100' : 'opacity-0'} transition-opacity duration-1000`}
+            onTransitionEnd={handleTransitionEnd}
+        >
+            {children}
         </div>
     );
 }
