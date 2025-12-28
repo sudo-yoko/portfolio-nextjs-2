@@ -1,6 +1,7 @@
 'use client';
 
 import { withErrorHandlingAsync } from '@/presentation/(system)/aop/aop.core.exception.client';
+import { Button } from '@/presentation/(system)/components/button.decorator.simple';
 import { ErrorRedirect } from '@/presentation/(system)/error/views/component.error-redirect';
 import { createPager } from '@/presentation/(system)/pagination/min/modules/pagination.pager';
 import { Pager } from '@/presentation/(system)/pagination/min/modules/pagination.types.c';
@@ -100,13 +101,7 @@ export default function UserList() {
                                 onChange={(e) => setFormData({ ...formData, userName: e.target.value })}
                                 className="w-80 border-2 border-gray-400"
                             />
-                            <button
-                                type="button"
-                                onClick={handleSearch}
-                                className="rounded-lg bg-indigo-300 px-4 py-2"
-                            >
-                                検索
-                            </button>
+                            <Button onClick={handleSearch}>検索</Button>
                         </div>
                         {violationsMap.userName?.map((err, index) => (
                             <div key={index} className="text-red-500">
@@ -121,21 +116,9 @@ export default function UserList() {
                         <div>
                             <div>検索条件：{JSON.stringify(query)}</div>
                             <div>
-                                <button
-                                    type="button"
-                                    onClick={() => handlePrev()}
-                                    className="rounded-lg bg-indigo-300 px-4 py-2"
-                                >
-                                    前へ
-                                </button>
+                                <Button onClick={() => handlePrev()}>前へ</Button>
                                 {page}
-                                <button
-                                    type="button"
-                                    onClick={() => handleNext()}
-                                    className="rounded-lg bg-indigo-300 px-4 py-2"
-                                >
-                                    次へ
-                                </button>
+                                <Button onClick={() => handleNext()}>次へ</Button>
                             </div>
                         </div>
                     )}

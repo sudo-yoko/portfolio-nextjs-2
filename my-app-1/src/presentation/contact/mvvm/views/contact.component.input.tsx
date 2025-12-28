@@ -1,6 +1,7 @@
 'use client';
 
 import { AutoResizeTextAreaSimple } from '@/presentation/(system)/components/autoResizeTextArea.decorator.simple';
+import { Button } from '@/presentation/(system)/components/button.decorator.simple';
 import { ToastError } from '@/presentation/(system)/components/toast.decorator.error';
 import { getViolationsMap } from '@/presentation/(system)/validation/validation.helpers';
 import {
@@ -84,13 +85,7 @@ export default function Input({
                     ))}
                 </div>
                 <div>
-                    <button
-                        type="button"
-                        onClick={() => handleNext(state, dispatch)}
-                        className="rounded-lg bg-indigo-300 px-4 py-2"
-                    >
-                        次へ
-                    </button>
+                    <Button onClick={() => handleNext(state, dispatch)}>次へ</Button>
                 </div>
             </div>
         </>

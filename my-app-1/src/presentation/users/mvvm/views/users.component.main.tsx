@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/presentation/(system)/components/button.decorator.simple';
 import { ErrorRedirect } from '@/presentation/(system)/error/views/component.error-redirect';
 import { Step } from '@/presentation/(system)/pagination/mvvm/view-models/pagination.reducer';
 import {
@@ -50,15 +51,13 @@ export function Main() {
                         onChange={(e) => setFormData({ ...formData, userName: e.target.value })}
                         className="w-80 border-2 border-gray-400"
                     />
-                    <button
-                        type="button"
+                    <Button
                         onClick={() =>
                             handleSearch({ ...query, userName: formData.userName }, setQuery, setSearch)
                         }
-                        className="rounded-lg bg-indigo-300 px-4 py-2"
                     >
                         検索
-                    </button>
+                    </Button>
                 </div>
                 {state.step === Step.Invalid &&
                     violationsMap.userName?.map((err, index) => (
@@ -96,13 +95,9 @@ export function Main() {
 function Controller({ onPrev, onNext, page }: { onPrev: () => void; onNext: () => void; page?: number }) {
     return (
         <div>
-            <button type="button" onClick={onPrev} className="rounded-lg bg-indigo-300 px-4 py-2">
-                前へ
-            </button>
+            <Button onClick={onPrev}>前へ</Button>
             {page && page}
-            <button type="button" onClick={onNext} className="rounded-lg bg-indigo-300 px-4 py-2">
-                次へ
-            </button>
+            <Button onClick={onNext}>次へ</Button>
         </div>
     );
 }

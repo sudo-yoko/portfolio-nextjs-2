@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/presentation/(system)/components/button.decorator.simple';
 import { Action, State, toInput, toSending } from '@/presentation/contact/mvvm/view-models/contact.reducer';
 
 /**
@@ -25,20 +26,8 @@ export default function Confirm({
                     <div className="whitespace-pre-line">{state.formData.body}</div>
                 </div>
                 <div className="space-x-4">
-                    <button
-                        type="button"
-                        onClick={() => toInput(dispatch)}
-                        className="rounded-lg bg-indigo-300 px-4 py-2"
-                    >
-                        修正する
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => toSending(dispatch)}
-                        className="rounded-lg bg-indigo-300 px-4 py-2"
-                    >
-                        送信する
-                    </button>
+                    <Button onClick={() => toInput(dispatch)}>修正する</Button>
+                    <Button onClick={() => toSending(dispatch)}>送信する</Button>
                 </div>
             </div>
         </>
