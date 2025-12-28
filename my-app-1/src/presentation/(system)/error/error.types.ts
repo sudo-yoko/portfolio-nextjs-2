@@ -13,7 +13,21 @@ export const ErrType = {
     BackendApiError: 'BackendApiError',
     ParseResultError: 'ParseResultError',
     RetryableError: 'RetryableError',
-    MalformedResultError: 'MalformedResultError', // RESULTの形式が不正
+
+    /**
+     * RESULTの形式が不正
+     */
+    MalformedResultError: 'MalformedResultError',
+
+    /**
+     * HTTP呼び出し自体の失敗（通信エラー）
+     */
+    HttpRequestError: 'HttpRequestError',
+
+    /**
+     * ステータスコードによるエラー（レスポンスエラー）
+     */
+    HttpResponseError: 'HttpResponseError',
 } as const; // 定数オブジェクト
 export type ErrType = (typeof ErrType)[keyof typeof ErrType]; // 型
 

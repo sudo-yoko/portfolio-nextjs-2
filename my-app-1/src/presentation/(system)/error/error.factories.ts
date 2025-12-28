@@ -14,9 +14,17 @@ import { Violations } from '@/presentation/(system)/validation/validation.types'
 /**
  * カスタムエラーを生成する
  */
-function customError<T extends ErrType>(type: T, msg?: string): CustomError<T> {
+function customError<T extends ErrType>({
+    type,
+    message,
+    cause,
+}: {
+    type: T;
+    message?: string;
+    cause?: unknown;
+}): CustomError<T> {
     // Errorインスタンスを作成
-    const base = new Error(`${type}: ${msg ?? ''}`);
+    const base = new Error(`${type}: ${message ?? ''}`, { cause });
     // Errorインスタンスにプロパティを足す（マージする）
     const error = Object.assign(base, {
         [CUSTOM_ERROR_TAG]: type,
@@ -30,7 +38,7 @@ function customError<T extends ErrType>(type: T, msg?: string): CustomError<T> {
 const errorOfType =
     <T extends ErrType>(type: T, message: string) =>
     () =>
-        customError(type, message);
+        customError({ type, message });
 
 /**
  * AuthErrorを生成する
@@ -45,11 +53,11 @@ export function validationError<T extends string>(violations: Violations<T>): Cu
     const message: string[] = [];
     message.push('検証エラー');
     message.push(`violations=${JSON.stringify(violations)}`);
-    return customError(ErrType.ValidationError, message.join(', '));
+    return customError({ type: ErrType.ValidationError, message: message.join(', ') });
 }
 
 export function backendApiError(message: string): CustomError<ErrType> {
-    return customError(ErrType.BackendApiError, message);
+    return customError({ type: ErrType.BackendApiError, message });
 }
 
 export function retryableError(message?: string): CustomError<ErrType> {
@@ -58,7 +66,7 @@ export function retryableError(message?: string): CustomError<ErrType> {
     if (message) {
         cause.push(message);
     }
-    return customError(ErrType.RetryableError, cause.join(', '));
+    return customError({ type: ErrType.RetryableError, message: cause.join(', ') });
 }
 
 /**
@@ -71,7 +79,7 @@ export function parseResultError(text: string, message?: string): CustomError<Er
     if (message) {
         cause.push(message);
     }
-    return customError(ErrType.ParseResultError, cause.join(', '));
+    return customError({ type: ErrType.ParseResultError, message: cause.join(', ') });
 }
 
 /**
@@ -115,7 +123,7 @@ export function malformedResultError(result: RESULT, msg?: string): CustomError<
         cause.push(msg);
     }
     cause.push(`RESULT=${JSON.stringify(result)}`);
-    return customError(ErrType.MalformedResultError, cause.join(', '));
+    return customError({ type: ErrType.MalformedResultError, message: cause.join(', ') });
 }
 
 // export function bffError(bffResult: BffResult, message?: string): BffError {
@@ -124,3 +132,30 @@ export function malformedResultError(result: RESULT, msg?: string): CustomError<
 // err[BFF_RESULT] = bffResult;
 // return err;
 // }
+
+export function httpRequestError({
+    cause,
+    detail,
+}: {
+    cause?: unknown;
+    detail: string;
+}): CustomError<ErrType> {
+    const message: string[] = [];
+    message.push('HTTPリクエストが失敗しました。');
+    if (detail) {
+        message.push(detail);
+    }
+    return customError({ type: ErrType.HttpRequestError, message: message.join(', '), cause });
+}
+
+export function httpResponseError({ status, body }: { status: number; body: string }): CustomError<ErrType> {
+    const cause: string[] = [];
+    cause.push('');
+    if (status) {
+        cause.push(`status=${status}`);
+    }
+    if (body) {
+        cause.push(`body=${body}`);
+    }
+    return customError({ type: ErrType.HttpResponseError, message: cause.join(', ') });
+}

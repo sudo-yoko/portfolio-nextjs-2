@@ -5,7 +5,8 @@
 import 'client-only';
 
 import { Client, Req, Result } from '@/presentation/(system)/client/client.types';
-import { backendApiError } from '@/presentation/(system)/error/error.factories';
+import { httpRequestError, httpResponseError } from '@/presentation/(system)/error/error.factories';
+import { stringify } from '@/presentation/(system)/error/error.helper.stringify';
 import logger from '@/presentation/(system)/logging/logger.c';
 
 const logPrefix = 'client.impl.fetch.ts: ';
@@ -17,17 +18,29 @@ export const clientImpl: Client = {
         // 200以外が返ってきたら例外をスローする
         const validateStatus = req.validateStatus ?? ((status: number) => status === 200);
 
-        const res = await fetch(req.url, {
-            method: req.method,
-            headers: req.headers,
-            body: JSON.stringify(req.body), // オブジェクトをJSON.stringifyして渡す
-        });
+        let res;
+        try {
+            res = await fetch(req.url, {
+                method: req.method,
+                headers: req.headers,
+                // TODO: GETリクエストではボディは送らない
+                body: JSON.stringify(req.body), // オブジェクトをJSON.stringifyして渡す
+            });
+        } catch (e) {
+            logger.error(logPrefix + stringify(e).message);
+            if (e instanceof TypeError) {
+                // ブラウザ環境では通信エラー（クライント側エラー）はTypeErrorになる？
+                throw httpRequestError({ cause: e, detail: `request=${JSON.stringify(req)}` });
+            }
+            throw httpRequestError({ cause: e, detail: `request=${JSON.stringify(req)}` });
+        }
 
         // ステータスコードの検証
         if (!validateStatus(res.status)) {
-            const err = backendApiError(
-                `Request -> ${JSON.stringify(req)}, Response -> status=${res.status}`,
-            );
+            const err = httpResponseError({ status: res.status, body: await res.text() }); // TODO: ボディは100文字くらいでカットする
+            // const err = backendApiError(
+            // `Request -> ${JSON.stringify(req)}, Response -> status=${res.status}`,
+            // );
             logger.error(logPrefix + err.message);
             throw err;
         }
