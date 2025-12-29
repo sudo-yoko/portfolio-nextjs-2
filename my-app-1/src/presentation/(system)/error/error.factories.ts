@@ -9,7 +9,6 @@ import {
     RESULT_TYPE,
 } from '@/presentation/(system)/error/error.types';
 import { RESULT } from '@/presentation/(system)/result/result.core.types';
-import { Violations } from '@/presentation/(system)/validation/validation.types';
 
 /**
  * カスタムエラーを生成する
@@ -45,21 +44,6 @@ const errorOfType =
  */
 export const authError = errorOfType(ErrType.AuthError, '認証エラー');
 
-/**
- *
- * ValidationError を生成する
- */
-export function validationError<T extends string>(violations: Violations<T>): CustomError<ErrType> {
-    const message: string[] = [];
-    message.push('検証エラー');
-    message.push(`violations=${JSON.stringify(violations)}`);
-    return customError({ type: ErrType.ValidationError, message: message.join(', ') });
-}
-
-export function backendApiError(message: string): CustomError<ErrType> {
-    return customError({ type: ErrType.BackendApiError, message });
-}
-
 export function retryableError(message?: string): CustomError<ErrType> {
     const cause: string[] = [];
     cause.push('再試行可能エラー');
@@ -81,18 +65,6 @@ export function parseResultError(text: string, message?: string): CustomError<Er
     }
     return customError({ type: ErrType.ParseResultError, message: cause.join(', ') });
 }
-
-/**
- * BffResultParseError を生成する
- */
-// export function parseResultError(text: string, message?: string): CustomError<ErrType> {
-// const cause: string[] = [];
-// if (message) {
-// cause.push(message);
-// }
-// cause.push(text);
-// return customError(ErrType.ParseResultError, cause.join(', '));
-// }
 
 /**
  * BackendError を生成する
@@ -126,13 +98,6 @@ export function malformedResultError(result: RESULT, msg?: string): CustomError<
     return customError({ type: ErrType.MalformedResultError, message: cause.join(', ') });
 }
 
-// export function bffError(bffResult: BffResult, message?: string): BffError {
-// const err = new Error(message) as BffError;
-// err.name = ErrType.BffError;
-// err[BFF_RESULT] = bffResult;
-// return err;
-// }
-
 export function httpRequestError({
     cause,
     detail,
@@ -148,14 +113,44 @@ export function httpRequestError({
     return customError({ type: ErrType.HttpRequestError, message: message.join(', '), cause });
 }
 
-export function httpResponseError({ status, body }: { status: number; body: string }): CustomError<ErrType> {
+export function httpResponseError({ status, body }: { status: number; body?: string }): CustomError<ErrType> {
     const cause: string[] = [];
-    cause.push('');
-    if (status) {
-        cause.push(`status=${status}`);
-    }
+    cause.push(`status=${status}`);
     if (body) {
         cause.push(`body=${body}`);
     }
     return customError({ type: ErrType.HttpResponseError, message: cause.join(', ') });
 }
+
+// export function bffError(bffResult: BffResult, message?: string): BffError {
+// const err = new Error(message) as BffError;
+// err.name = ErrType.BffError;
+// err[BFF_RESULT] = bffResult;
+// return err;
+// }
+/**
+ *
+ * ValidationError を生成する
+ */
+// export function validationError<T extends string>(violations: Violations<T>): CustomError<ErrType> {
+// const message: string[] = [];
+// message.push('検証エラー');
+// message.push(`violations=${JSON.stringify(violations)}`);
+// return customError({ type: ErrType.ValidationError, message: message.join(', ') });
+// }
+
+// export function backendApiError(message: string): CustomError<ErrType> {
+// return customError({ type: ErrType.BackendApiError, message });
+// }
+
+/**
+ * BffResultParseError を生成する
+ */
+// export function parseResultError(text: string, message?: string): CustomError<ErrType> {
+// const cause: string[] = [];
+// if (message) {
+// cause.push(message);
+// }
+// cause.push(text);
+// return customError(ErrType.ParseResultError, cause.join(', '));
+// }

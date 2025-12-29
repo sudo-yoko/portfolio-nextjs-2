@@ -48,11 +48,15 @@ function getStackTrace(error: Error): string[] {
     if (error.stack) stacks.push(error.stack);
     let { cause } = error;
     while (cause instanceof Error) {
-        if (cause.stack) stacks.push(cause.stack);
+        if (cause.stack) {
+            stacks.push('Caused by');
+            stacks.push(cause.stack);
+        }
         cause = cause.cause;
     }
     // スタックトレースを発生した順番に並べ替える
-    return stacks.reverse();
+    // return stacks.reverse();
+    return stacks;
 }
 
 /**
