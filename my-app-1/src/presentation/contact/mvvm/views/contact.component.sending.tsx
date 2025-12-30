@@ -1,7 +1,7 @@
 'use client';
 
 import { submit } from '@/presentation/contact/mvvm/view-models/contact.handler.event';
-import { Action, State } from '@/presentation/contact/mvvm/view-models/contact.reducer';
+import { Action, State, toAbort } from '@/presentation/contact/mvvm/view-models/contact.reducer';
 import React, { useEffect } from 'react';
 
 /**
@@ -10,16 +10,14 @@ import React, { useEffect } from 'react';
 export default function Sending({
     state,
     dispatch,
-    setError,
 }: {
     state: State;
     dispatch: React.ActionDispatch<[action: Action]>;
-    setError: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
     useEffect(() => {
         // 書き方その１
         void (async () => {
-            await submit(state, dispatch, setError);
+            await submit(state, dispatch, () => toAbort(dispatch));
         })();
 
         // 書き方その２
@@ -30,7 +28,7 @@ export default function Sending({
 
         // 書き方その３
         // void send(state, dispatch, setError).then(() => {});
-    }, [dispatch, setError, state, state.formData]);
+    }, [dispatch, state, state.formData]);
 
     return (
         <div>

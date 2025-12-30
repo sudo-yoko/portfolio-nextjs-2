@@ -47,9 +47,11 @@ export function usePagination<ITEMS, FIELD extends string>({
      */
     useEffect(() => {
         void (async () => {
-            await executeAsync(() => func(), setError);
+            await executeAsync(
+                () => func(),
+                () => setError(true),
+            );
         })();
-
         async function func() {
             if (!search) {
                 return;
@@ -73,8 +75,10 @@ export function usePagination<ITEMS, FIELD extends string>({
         // dispatchした結果のstateを同じeffect内で安全に見られない。
         // dispatchした結果のstateを他コンポーネントに連携する関係で結果のstateを取得する必要がある。
         // そのため別の依存配列の別effectにしている。
-        execute(() => func(), setError);
-
+        execute(
+            () => func(),
+            () => setError(true),
+        );
         function func() {
             if (state.step === Step.Ok) {
                 setItems(state.items);
@@ -99,8 +103,10 @@ export async function handlePagination<ITEMS, FIELD extends string>(
     dispatch: React.ActionDispatch<[action: Action<ITEMS, FIELD>]>,
     setError: React.Dispatch<React.SetStateAction<boolean>>,
 ): Promise<void> {
-    await executeAsync(() => func(), setError);
-
+    await executeAsync(
+        () => func(),
+        () => setError(true),
+    );
     async function func() {
         if (pager?.current == null) {
             return;

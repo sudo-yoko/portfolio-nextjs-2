@@ -12,9 +12,12 @@ export function ErrorRedirect() {
 
     useEffect(() => {
         // devモードでは、StrictModeでuseEffectが２回実行されるためページ遷移が上手くいかないのでuseRefフラグで制御する
-        //if (redirected.current) return;
+        // if (redirected.current) return;
         // redirected.current = true;
-        router.replace('/system-error');
+
+        // NOTE: router.replaceのページ遷移だと、開発(Strict Mode)で2回連続実行されるとナビゲーション競合／キャンセルが起こって上手く遷移しない。
+        // router.replace('/system-error');
+        window.location.replace('/system-error');
     }, [router]);
     return null;
 }

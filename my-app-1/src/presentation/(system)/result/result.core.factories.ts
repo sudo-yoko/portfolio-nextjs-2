@@ -40,6 +40,7 @@ export function invalid<FIELD extends string>(violations: Violations<FIELD>): In
  * 再試行可能なエラーを表すオブジェクトを生成する
  */
 export function retry(retryMsg?: string[]): Retryable {
+    // TODO: メッセージは呼び元で作成するか
     const defaultMsg: string[] = ['エラーが発生しました。', 'しばらく経ってから再実行してください。'];
     return { tag: Tag.Retryable, retryMsg: retryMsg ?? defaultMsg };
 }

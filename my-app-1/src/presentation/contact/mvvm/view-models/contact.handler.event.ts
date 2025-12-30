@@ -58,10 +58,10 @@ export function handleNext(state: State, dispatch: React.ActionDispatch<[action:
 export async function submit(
     state: State,
     dispatch: React.ActionDispatch<[action: Action]>,
-    setError: React.Dispatch<React.SetStateAction<boolean>>,
+    onAbort: () => void,
 ) {
     // エラーハンドリングを追加して処理を実行する。
-    await executeAsync(() => func(), setError);
+    await executeAsync(() => func(), onAbort);
 
     async function func() {
         // バックエンド呼び出し

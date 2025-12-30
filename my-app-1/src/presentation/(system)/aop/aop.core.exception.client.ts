@@ -3,25 +3,23 @@ import 'client-only';
 
 import { stringify } from '@/presentation/(system)/error/error.helper.stringify';
 import logger from '@/presentation/(system)/logging/logger.c';
-import React from 'react';
 
 const logPrefix = 'aop.core.exception.client.ts: ';
 
 /**
  * 引数に渡されたサンクにエラーハンドリングを追加して実行する。
  */
-export function withErrorHandling<T>(
-    thunk: () => T,
-    setHasError: React.Dispatch<React.SetStateAction<boolean>>,
-): T | void {
+export function withErrorHandling<T>(thunk: () => T, onAbort: () => void): T | void {
     const fname = 'withErrorHandling: ';
     try {
         // 引数に渡されたサンクを実行
         return thunk();
     } catch (e) {
-        // 非同期関数を呼ぶときにvoidを付けると、awaitしないことを明示的に示せる
+        // TODO: クライアントサイドでBffRESULTのパースエラーチェック
+        // NOTE: 非同期関数を呼ぶときにvoidを付けると、awaitしないことを明示的に示せる
         void logger.errorAsync(logPrefix + fname + stringify(e).all);
-        setHasError(true);
+        // setHasError(true);
+        onAbort();
     }
 }
 
@@ -30,14 +28,14 @@ export function withErrorHandling<T>(
  */
 export async function withErrorHandlingAsync<T>(
     thunk: () => Promise<T>,
-    setHasError: React.Dispatch<React.SetStateAction<boolean>>,
+    onAbort: () => void,
 ): Promise<T | void> {
     const fname = 'withErrorHandlingAsync: ';
     try {
         return await thunk();
     } catch (e) {
-        // TODO: クライアントサイドでBffRESULTのパースエラーチェック
+        // エラーログをサーバーに送信
         void logger.errorAsync(logPrefix + fname + stringify(e).all);
-        setHasError(true);
+        onAbort();
     }
 }
