@@ -7,7 +7,7 @@ import { Fade } from '@/presentation/(system)/components/fade';
 import { ErrorModalCore } from '@/presentation/(system)/error/views/component.error-modal.core';
 import { useState } from 'react';
 
-export function ErrorModalSimple({
+export function ErrorModalFade({
     onAction,
     actionLabel,
     primaryMessage,

@@ -1,34 +1,28 @@
 //
 // トースト通知
-// （開閉アニメーションを共通コンポーネント化）
 //
 'use client';
 
-import { Fade } from '@/presentation/(system)/components/fade';
 import { XCircleIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import React from 'react';
 
 export function ToastCore({
+    children,
     message,
     bgColor,
     textColor,
     onClose,
 }: {
+    children: (innerElem: React.ReactNode) => React.ReactNode;
     message: string[];
     bgColor: string;
     textColor: string;
     onClose: () => void;
 }) {
-    const [open, setOpen] = useState(true);
-
-    // トーストを閉じる
-    function handleClose() {
-        if (open) setOpen(false);
-    }
-
     return (
         <div className="fixed">
-            <Fade open={open} onExit={onClose}>
+            {/* NOTE: レンダープロップス方式で外部から渡されたデコレーター要素を挟み込む */}
+            {children(
                 <div
                     className={`flex cursor-context-menu items-start gap-0 rounded ${bgColor} px-4 py-2 ${textColor} shadow-lg transition-all hover:brightness-95`}
                 >
@@ -40,12 +34,12 @@ export function ToastCore({
                     <div>
                         <XCircleIcon
                             title="閉じる"
-                            onClick={handleClose}
+                            onClick={onClose}
                             className="h-7 w-7 cursor-pointer transition-all active:scale-95"
                         />
                     </div>
-                </div>
-            </Fade>
+                </div>,
+            )}
         </div>
     );
 }

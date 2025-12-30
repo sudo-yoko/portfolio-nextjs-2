@@ -3,8 +3,8 @@
 //
 'use client';
 
-import { ToastCore } from '@/presentation/(system)/components/toast.core';
+import { ToastFade } from '@/presentation/(system)/components/toast.core.decorator.fade';
 
 export function ToastInfo({ message, onClose }: { message: string[]; onClose: () => void }) {
-    return <ToastCore message={message} bgColor="bg-blue-500" textColor="text-white" onClose={onClose} />;
+    return <ToastFade message={message} bgColor="bg-blue-500" textColor="text-white" onClose={onClose} />;
 }
