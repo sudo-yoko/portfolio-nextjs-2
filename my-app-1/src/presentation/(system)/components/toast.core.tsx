@@ -4,7 +4,7 @@
 //
 'use client';
 
-import { OpacityTransition } from '@/presentation/(system)/components/opacityTransition';
+import { Fade } from '@/presentation/(system)/components/fade';
 import { XCircleIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 
@@ -28,7 +28,7 @@ export function ToastCore({
 
     return (
         <div className="fixed">
-            <OpacityTransition open={open} onExit={onClose}>
+            <Fade open={open} onExit={onClose}>
                 <div
                     className={`flex cursor-context-menu items-start gap-0 rounded ${bgColor} px-4 py-2 ${textColor} shadow-lg transition-all hover:brightness-95`}
                 >
@@ -45,7 +45,7 @@ export function ToastCore({
                         />
                     </div>
                 </div>
-            </OpacityTransition>
+            </Fade>
         </div>
     );
 }

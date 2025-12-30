@@ -3,7 +3,7 @@
 //
 'use client';
 
-import { OpacityTransition } from '@/presentation/(system)/components/opacityTransition';
+import { Fade } from '@/presentation/(system)/components/fade';
 import { ErrorModalCore } from '@/presentation/(system)/error/views/component.error-modal.core';
 import { useState } from 'react';
 
@@ -20,13 +20,13 @@ export function ErrorModalSimple({
 }) {
     const [open, setOpen] = useState(true);
     return (
-        <OpacityTransition open={open} onExit={() => onAction()}>
+        <Fade open={open} onExit={() => onAction()}>
             <ErrorModalCore
                 actionLabel={actionLabel}
                 primaryMessage={primaryMessage}
                 secondaryMessage={secondaryMessage}
                 onAction={() => setOpen(false)}
             />
-        </OpacityTransition>
+        </Fade>
     );
 }

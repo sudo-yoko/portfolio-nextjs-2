@@ -2,7 +2,7 @@
 
 import { AutoResizeTextAreaSimple } from '@/presentation/(system)/components/autoResizeTextArea.decorator.simple';
 import { Button } from '@/presentation/(system)/components/button.decorator.simple';
-import { ToastError } from '@/presentation/(system)/components/toast.decorator.error';
+import { ToastError } from '@/presentation/(system)/components/toast.feature.error';
 import { getViolationsMap } from '@/presentation/(system)/validation/validation.helpers';
 import {
     applyViolations,

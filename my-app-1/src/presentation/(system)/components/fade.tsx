@@ -5,7 +5,7 @@
 
 import React, { useEffect, useState } from 'react';
 
-export function OpacityTransition({
+export function Fade({
     children,
     open,
     onExit,
