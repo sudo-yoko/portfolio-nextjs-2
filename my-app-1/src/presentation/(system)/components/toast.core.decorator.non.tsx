@@ -18,7 +18,7 @@ export function Toast({
 }) {
     return (
         <ToastCore message={message} bgColor={bgColor} textColor={textColor} onClose={onClose}>
-            {/* NOTE: デコレーターなし */}
+            {/* デコレーターなし */}
             {(innerElem) => innerElem}
         </ToastCore>
     );

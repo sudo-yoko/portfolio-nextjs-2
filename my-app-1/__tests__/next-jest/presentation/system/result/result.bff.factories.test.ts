@@ -1,4 +1,4 @@
-import { ok } from '@/__tests__/_bk/_/result.bff.factories';
+import { ok } from '../../../../../__proto__/result.bff.factories';
 
 test('test1-1', () => {
   const result = ok();

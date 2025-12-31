@@ -27,7 +27,7 @@ export function ToastFade({
 
     return (
         <ToastCore message={message} bgColor={bgColor} textColor={textColor} onClose={handleClose}>
-            {/* NOTE: レンダープロップス方式でFade要素を挟み込む */}
+            {/* NOTE: レンダープロップス方式で、Toastコンポーネントの中にFade要素を挟み込む */}
             {(innerElem) => (
                 <Fade open={open} onExit={onClose}>
                     {innerElem}

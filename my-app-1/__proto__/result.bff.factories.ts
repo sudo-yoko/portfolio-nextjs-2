@@ -3,30 +3,32 @@
 //
 import { parseResultError } from '@/presentation/(system)/error/error.factories';
 import { stringify } from '@/presentation/(system)/error/error.helper.stringify';
-import { BffResult, Ok } from '@/__tests__/_bk/_/result.bff.types';
+
 import { okData, okEmpty } from '@/presentation/(system)/result/result.core.factories';
 import { parseResult } from '@/presentation/(system)/result/result.core.helpers';
 import { OkData, OkEmpty } from '@/presentation/(system)/result/result.core.types';
+import { _BffResult } from './result.bff.types';
+import { Ok } from '@/presentation/(system)/pagination/mvvm/view-models/pagination.reducer';
 
-export function _bffResult<DATA, FIELD extends string>(text: string): BffResult<DATA, FIELD> {
+export function _bffResult<DATA, FIELD extends string>(text: string): _BffResult<DATA, FIELD> {
   try {
     const result = parseResult(text);
-    return result as BffResult<DATA, FIELD>;
+    return result as _BffResult<DATA, FIELD>;
   } catch (e) {
     // TODO: BffResult型にパースできませんでした。
     throw parseResultError(text, stringify(e).message);
   }
 }
 
-export function _ok(): OkEmpty;
-export function _ok<DATA>(data: DATA): OkData<DATA>;
-export function _ok<DATA>(data?: DATA): Ok<DATA> {
-  if (data === undefined) {
-    return okEmpty() as Ok<DATA>;
-  } else {
-    return okData(data) as Ok<DATA>;
-  }
-}
+// export function _ok(): OkEmpty;
+// export function _ok<DATA>(data: DATA): OkData<DATA>;
+// export function _ok<DATA>(data?: DATA): Ok<DATA> {
+//   if (data === undefined) {
+    // return okEmpty() as Ok<DATA>;
+//   } else {
+    // return okData(data) as Ok<DATA>;
+//   }
+// }
 
 /*
 作成中
