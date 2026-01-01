@@ -19,6 +19,7 @@ export function ErrorModalCore({
     const primaryMessageDefault = ['システムエラーが発生しました。'];
 
     const message: string[] = [];
+    // message.push(...(primaryMessage ?? primaryMessageDefault));
     if (primaryMessage) {
         message.push(...primaryMessage);
     } else {

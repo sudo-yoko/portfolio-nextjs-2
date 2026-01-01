@@ -2,7 +2,7 @@
 
 import { withErrorHandlingAsync } from '@/presentation/(system)/aop/aop.core.exception.client';
 import { Button } from '@/presentation/(system)/components/button.decorator.simple';
-import { ErrorModal } from '@/presentation/(system)/error/views/component.error-modal.feature.close';
+import { ErrorRedirect } from '@/presentation/(system)/error/views/component.error-redirect';
 import { createPager } from '@/presentation/(system)/pagination/min/modules/pagination.pager';
 import { Pager } from '@/presentation/(system)/pagination/min/modules/pagination.types.c';
 import { isInvalid, isOkData } from '@/presentation/(system)/result/result.core.helpers';
@@ -113,7 +113,7 @@ export default function UserList() {
                     </div>
                 </div>
                 <div>
-                    {error && <ErrorModal onAction={() => setError(false)} />}
+                    {error && <ErrorRedirect />}
                     {search && users.length > 0 && (
                         <div>
                             <div>検索条件：{JSON.stringify(query)}</div>

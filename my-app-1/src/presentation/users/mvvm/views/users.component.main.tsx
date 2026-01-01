@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/presentation/(system)/components/button.decorator.simple';
-import { ErrorRedirect } from '@/presentation/(system)/error/views/component.error-redirect';
+import { ErrorModal } from '@/presentation/(system)/error/views/component.error-modal.feature.reset';
 import { Step } from '@/presentation/(system)/pagination/mvvm/view-models/pagination.reducer';
 import {
     handlePagination,
@@ -66,7 +66,7 @@ export function Main() {
                         </div>
                     ))}
                 <div>
-                    {error && <ErrorRedirect />}
+                    {error && <ErrorModal onAction={() => setError(false)} />}
                     {search && state.step === Step.Ok && (
                         <div>
                             <div>検索条件：{JSON.stringify(query)}</div>
