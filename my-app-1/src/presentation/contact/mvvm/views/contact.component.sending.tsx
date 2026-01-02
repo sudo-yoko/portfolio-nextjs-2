@@ -1,5 +1,6 @@
 'use client';
 
+import { Processing } from '@/presentation/(system)/components/processing';
 import { submit } from '@/presentation/contact/mvvm/view-models/contact.handler.event';
 import { Action, State, toAbort } from '@/presentation/contact/mvvm/view-models/contact.reducer';
 import React, { useEffect } from 'react';
@@ -30,14 +31,5 @@ export default function Sending({
         // void send(state, dispatch, setError).then(() => {});
     }, [dispatch, state, state.formData]);
 
-    return (
-        <div>
-            <div className="inset-0 z-50 flex flex-col items-center justify-center bg-white/50">
-                <div className="size-16 animate-spin rounded-full border-t-4 border-solid border-t-gray-300"></div>
-                <p className="mt-4 animate-pulse text-lg text-gray-700">
-                    送信中です。しばらくお待ちください・・・
-                </p>
-            </div>
-        </div>
-    );
+    return <Processing>送信中です。お待ちください・・・</Processing>;
 }

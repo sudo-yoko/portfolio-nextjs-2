@@ -1,17 +1,19 @@
 'use client';
 
 import { Button } from '@/presentation/(system)/components/button.decorator.simple';
+import { Processing } from '@/presentation/(system)/components/processing.modal';
 import { ErrorModal } from '@/presentation/(system)/error/views/component.error-modal.feature.reset';
-import { Step } from '@/presentation/(system)/pagination/mvvm/view-models/pagination.reducer';
+import { Step, toInvalid } from '@/presentation/(system)/pagination/mvvm/view-models/pagination.reducer';
 import {
-    handlePagination,
-    handleSearch,
+    executePagination,
+    executeSearch,
     usePagination,
 } from '@/presentation/(system)/pagination/mvvm/view-models/pagination.use-pagination';
-import { getViolationsMap } from '@/presentation/(system)/validation/validation.helpers';
-import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
+import { getViolationsMap, hasError } from '@/presentation/(system)/validation/validation.helpers';
+import { FormData, Violations, ViolationsMap } from '@/presentation/(system)/validation/validation.types';
 import { fetchPage } from '@/presentation/users/mvvm/models/users.requester';
 import { FormKeys, User } from '@/presentation/users/mvvm/models/users.types';
+import { validate } from '@/presentation/users/mvvm/models/users.validator';
 import UserList from '@/presentation/users/mvvm/views/users.component.list';
 import { useCallback, useState } from 'react';
 
@@ -21,7 +23,7 @@ export function Main() {
     const { userName } = formData;
     const [users, setUsers] = useState<User[]>([]);
     const [violations, setViolations] = useState<Violations<FormKeys>>([]);
-    const violationsMap = getViolationsMap(violations);
+    const violationsMap: ViolationsMap<FormKeys> = getViolationsMap(violations); // NOTE: setViolationsでviolationsの内容が変わったとき、再レンダリングでここが再実行され新しいマップが再取得される
     //const [query, setQuery] = useState<UsersQuery>({ userId: '', userName });
     const [query, setQuery] = useState<FormData<FormKeys>>({ userName });
     // const fetchCallback = useCallback(fetchPage, [fetchPage]);
@@ -40,8 +42,19 @@ export function Main() {
         setViolations,
     });
 
+    function handleSearch() {
+        const data: FormData<FormKeys> = { ...query, userName: formData.userName };
+        const violations = validate(data);
+        if (hasError(violations)) {
+            toInvalid(dispatch, violations);
+            return;
+        }
+        executeSearch<User[], FormKeys>(dispatch, data, setQuery, setSearch);
+    }
+
     return (
         <div>
+            {state.step === Step.Waiting && <Processing>検索しています。お待ちください・・・</Processing>}
             <div>
                 <div>検索条件を入力してください。</div>
                 <div>
@@ -51,13 +64,7 @@ export function Main() {
                         onChange={(e) => setFormData({ ...formData, userName: e.target.value })}
                         className="w-80 border-2 border-gray-400"
                     />
-                    <Button
-                        onClick={() =>
-                            handleSearch({ ...query, userName: formData.userName }, setQuery, setSearch)
-                        }
-                    >
-                        検索
-                    </Button>
+                    <Button onClick={handleSearch}>検索</Button>
                 </div>
                 {state.step === Step.Invalid &&
                     violationsMap.userName?.map((err, index) => (
@@ -70,17 +77,17 @@ export function Main() {
                     {search && state.step === Step.Ok && (
                         <div>
                             <div>検索条件：{JSON.stringify(query)}</div>
-                            <Controller
-                                onPrev={() => handlePagination('prev', pager, dispatch, setError)}
-                                onNext={() => handlePagination('next', pager, dispatch, setError)}
+                            <PageController
+                                onPrev={() => executePagination('prev', pager, dispatch, setError)}
+                                onNext={() => executePagination('next', pager, dispatch, setError)}
                                 page={state.page}
                             />
                             {users && (
                                 <div>
                                     <UserList users={users} />
-                                    <Controller
-                                        onPrev={() => handlePagination('prev', pager, dispatch, setError)}
-                                        onNext={() => handlePagination('next', pager, dispatch, setError)}
+                                    <PageController
+                                        onPrev={() => executePagination('prev', pager, dispatch, setError)}
+                                        onNext={() => executePagination('next', pager, dispatch, setError)}
                                     />
                                 </div>
                             )}
@@ -92,7 +99,7 @@ export function Main() {
     );
 }
 
-function Controller({ onPrev, onNext, page }: { onPrev: () => void; onNext: () => void; page?: number }) {
+function PageController({ onPrev, onNext, page }: { onPrev: () => void; onNext: () => void; page?: number }) {
     return (
         <div>
             <Button onClick={onPrev}>前へ</Button>

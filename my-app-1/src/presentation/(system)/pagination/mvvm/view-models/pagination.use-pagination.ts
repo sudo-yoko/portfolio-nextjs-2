@@ -13,6 +13,7 @@ import {
     Step,
     toInvalid,
     toOk,
+    toWaiting,
 } from '@/presentation/(system)/pagination/mvvm/view-models/pagination.reducer';
 import { isInvalid, isOkData } from '@/presentation/(system)/result/result.core.helpers';
 import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
@@ -56,6 +57,7 @@ export function usePagination<ITEMS, FIELD extends string>({
             if (!search) {
                 return;
             }
+            toWaiting(dispatch);
             pager.current = createPager(fetchCallback, { initialPage, perPage, query });
             const page = await pager.current.current();
             // if (page.tag === 'ok') {
@@ -97,7 +99,7 @@ export function usePagination<ITEMS, FIELD extends string>({
  *
  * @typeParam T - アイテムの型
  */
-export async function handlePagination<ITEMS, FIELD extends string>(
+export async function executePagination<ITEMS, FIELD extends string>(
     destination: 'next' | 'prev',
     pager: React.RefObject<Pager<ITEMS, FIELD> | null>,
     dispatch: React.ActionDispatch<[action: Action<ITEMS, FIELD>]>,
@@ -111,6 +113,7 @@ export async function handlePagination<ITEMS, FIELD extends string>(
         if (pager?.current == null) {
             return;
         }
+        toWaiting(dispatch);
         const page = destination === 'next' ? await pager.current.next() : await pager.current.prev();
         // if (page.tag === 'ok') {
         if (isOkData(page)) {
@@ -122,10 +125,8 @@ export async function handlePagination<ITEMS, FIELD extends string>(
     }
 }
 
-/**
- * 検索 イベントハンドラー
- */
-export function handleSearch<FIELD extends string>(
+export function executeSearch<ITEMS, FIELD extends string>(
+    dispatch: React.ActionDispatch<[action: Action<ITEMS, FIELD>]>,
     query: FormData<FIELD>,
     setQuery: React.Dispatch<React.SetStateAction<FormData<FIELD>>>,
     setSearch: React.Dispatch<React.SetStateAction<boolean>>,
