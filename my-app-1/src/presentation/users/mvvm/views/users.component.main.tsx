@@ -1,7 +1,6 @@
 'use client';
 
 import { Button } from '@/presentation/(system)/components/button.decorator.simple';
-import { Processing } from '@/presentation/(system)/components/processing.modal';
 import { ErrorModal } from '@/presentation/(system)/error/views/component.error-modal.feature.reset';
 import { Step, toInvalid } from '@/presentation/(system)/pagination/mvvm/view-models/pagination.reducer';
 import {
@@ -54,7 +53,6 @@ export function Main() {
 
     return (
         <div>
-            {state.step === Step.Waiting && <Processing>検索しています。お待ちください・・・</Processing>}
             <div>
                 <div>検索条件を入力してください。</div>
                 <div>

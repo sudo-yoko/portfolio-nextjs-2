@@ -12,7 +12,6 @@ import React from 'react';
 //export type Step = 'initial' | 'results';
 export const Step = {
     Initial: 'initial',
-    Waiting: 'waiting',
     Ok: 'ok',
     Invalid: 'invalid',
 } as const;
@@ -23,16 +22,12 @@ export type Step = (typeof Step)[keyof typeof Step];
  * - step   - ステップ
  * - items  - リストアイテム
  */
-export type State<ITEMS, FIELD extends string = never> = Initial | Waiting | Ok<ITEMS> | Invalid<FIELD>;
+export type State<ITEMS, FIELD extends string = never> = Initial | Ok<ITEMS> | Invalid<FIELD>;
 
 export type Initial = {
     step: typeof Step.Initial;
     // items?: undefined;
     // page?: undefined;
-};
-
-export type Waiting = {
-    step: typeof Step.Waiting;
 };
 
 export type Ok<ITEMS> = {
@@ -52,7 +47,6 @@ export type Invalid<FIELD extends string> = {
  * - reset    - 検索結果のリセット
  */
 export const ActionType = {
-    Waiting: 'waiting',
     SetItems: 'setItems',
     Reset: 'reset',
     SetViolations: 'setViolations',
@@ -61,7 +55,6 @@ export type ActionType = (typeof ActionType)[keyof typeof ActionType];
 
 // export type Action<T> = { type: 'setItems'; items: T; page: number } | { type: 'reset' };
 export type Action<ITEMS, FIELD extends string = never> =
-    | { type: typeof ActionType.Waiting }
     | { type: typeof ActionType.SetItems; items: ITEMS; page: number }
     | { type: typeof ActionType.Reset }
     | { type: typeof ActionType.SetViolations; violations: Violations<FIELD> };
@@ -77,9 +70,6 @@ export function reducer<ITEMS, FIELD extends string = never>(
     action: Action<ITEMS, FIELD>,
 ): State<ITEMS, FIELD> {
     switch (action.type) {
-        case ActionType.Waiting:
-            const waiting: Waiting = { step: Step.Waiting };
-            return waiting;
         case ActionType.SetItems:
             const results: Ok<ITEMS> = { step: Step.Ok, items: action.items, page: action.page };
             return results;
@@ -92,14 +82,6 @@ export function reducer<ITEMS, FIELD extends string = never>(
         default:
             return state;
     }
-}
-
-/**
- * 状態の更新：処理中
- */
-export function toWaiting<ITEMS>(dispatch: React.ActionDispatch<[action: Action<ITEMS>]>) {
-    const action: Action<ITEMS> = { type: ActionType.Waiting };
-    dispatch(action);
 }
 
 /**

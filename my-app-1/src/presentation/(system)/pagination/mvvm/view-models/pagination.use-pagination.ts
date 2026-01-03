@@ -13,7 +13,6 @@ import {
     Step,
     toInvalid,
     toOk,
-    toWaiting,
 } from '@/presentation/(system)/pagination/mvvm/view-models/pagination.reducer';
 import { isInvalid, isOkData } from '@/presentation/(system)/result/result.core.helpers';
 import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
@@ -57,7 +56,6 @@ export function usePagination<ITEMS, FIELD extends string>({
             if (!search) {
                 return;
             }
-            toWaiting(dispatch);
             pager.current = createPager(fetchCallback, { initialPage, perPage, query });
             const page = await pager.current.current();
             // if (page.tag === 'ok') {
@@ -113,7 +111,6 @@ export async function executePagination<ITEMS, FIELD extends string>(
         if (pager?.current == null) {
             return;
         }
-        toWaiting(dispatch);
         const page = destination === 'next' ? await pager.current.next() : await pager.current.prev();
         // if (page.tag === 'ok') {
         if (isOkData(page)) {
