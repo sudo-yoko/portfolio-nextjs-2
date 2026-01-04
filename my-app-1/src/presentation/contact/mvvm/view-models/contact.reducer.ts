@@ -22,7 +22,7 @@ export const Step = {
     confirm: 'confirm',
     sending: 'sending',
     complete: 'complete',
-    abort: 'abort',
+    abort: 'abort', // TODO: Invalidの状態をつくるか
 } as const;
 export type Step = (typeof Step)[keyof typeof Step];
 
@@ -50,6 +50,7 @@ export const initialState: State = {
 /**
  * フォームの初期値
  */
+// TODO: 共通化できるか
 function initialFormData(): FormData<FormKeys> {
     const initial = Object.fromEntries(Object.values(FormKeys).map((key) => [key, ''])) as FormData<FormKeys>;
     initial.email = 'test@mail.com';

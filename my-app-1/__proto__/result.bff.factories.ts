@@ -8,7 +8,7 @@ import { okData, okEmpty } from '@/presentation/(system)/result/result.core.fact
 import { parseResult } from '@/presentation/(system)/result/result.core.helpers';
 import { OkData, OkEmpty } from '@/presentation/(system)/result/result.core.types';
 import { _BffResult } from './result.bff.types';
-import { Ok } from '@/presentation/(system)/pagination/mvvm/view-models/pagination.reducer';
+// import { Ok } from '@/presentation/(system)/pagination/mvvm/view-models/pagination.reducer';
 
 export function _bffResult<DATA, FIELD extends string>(text: string): _BffResult<DATA, FIELD> {
   try {

@@ -3,44 +3,55 @@
 //
 import 'client-only';
 
-import { execute, executeAsync } from '@/presentation/(system)/aop/aop.feature.client';
+import { executeAsync } from '@/presentation/(system)/aop/aop.feature.client';
 import { createPager } from '@/presentation/(system)/pagination/mvvm/models/pagination.pager';
-import { FetchPage } from '@/presentation/(system)/pagination/mvvm/models/pagination.requester';
 import { Pager } from '@/presentation/(system)/pagination/mvvm/models/pagination.types.c';
 import {
     Action,
     reducer,
+    reset,
+    setViolations,
+    State,
     Step,
-    toInvalid,
     toOk,
+    toSearch,
 } from '@/presentation/(system)/pagination/mvvm/view-models/pagination.reducer';
 import { isInvalid, isOkData } from '@/presentation/(system)/result/result.core.helpers';
-import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
-import React, { useEffect, useReducer, useRef, useState } from 'react';
+import { hasError } from '@/presentation/(system)/validation/validation.helpers';
+import { FormData } from '@/presentation/(system)/validation/validation.types';
+import { fetchPage } from '@/presentation/users/mvvm/models/users.requester';
+import { FormKeys, User } from '@/presentation/users/mvvm/models/users.types';
+import { validate } from '@/presentation/users/mvvm/models/users.validator';
+import { initialState } from '@/presentation/users/mvvm/view-models/users.reducer';
+import React, { useCallback, useEffect, useReducer, useRef, useState } from 'react';
 
 /**
  * 検索 カスタムフック
  */
-export function usePagination<ITEMS, FIELD extends string>({
-    search,
-    fetchCallback,
+export function usePagination({
+    // search,
+    // fetchCallback,
     initialPage,
     perPage,
-    query,
-    setItems,
-    setViolations,
+    // query,
+    // setItems,
+    // setViolations,
 }: {
-    search: boolean;
-    fetchCallback: FetchPage<ITEMS, FIELD>;
+    // search: boolean;
+    // fetchCallback: FetchPage<User[], FormKeys>;
     initialPage: number;
     perPage: number;
-    query: FormData<FIELD>;
-    setItems: React.Dispatch<React.SetStateAction<ITEMS>>;
-    setViolations: React.Dispatch<React.SetStateAction<Violations<FIELD>>>;
+    // query: FormData<FormKeys>;
+    // setItems: React.Dispatch<React.SetStateAction<ITEMS>>;
+    // setViolations: React.Dispatch<React.SetStateAction<Violations<FIELD>>>;
 }) {
-    const [state, dispatch] = useReducer(reducer<ITEMS, FIELD>, { step: Step.Initial });
+    const [state, dispatch] = useReducer(reducer<User[], FormKeys>, initialState);
     const [error, setError] = useState(false);
-    const pager = useRef<Pager<ITEMS, FIELD>>(null);
+    const pager = useRef<Pager<User[], FormKeys>>(null);
+    const fetchCallback = useCallback(
+        (offset: number, perPage: number, query: FormData<FormKeys>) => fetchPage(offset, perPage, query),
+        [],
+    );
 
     /**
      * 検索時
@@ -53,43 +64,64 @@ export function usePagination<ITEMS, FIELD extends string>({
             );
         })();
         async function func() {
-            if (!search) {
+            // if (!search) {
+            if (state.step !== Step.Search) {
                 return;
             }
-            pager.current = createPager(fetchCallback, { initialPage, perPage, query });
+            pager.current = createPager(fetchCallback, { initialPage, perPage, query: state.query });
             const page = await pager.current.current();
             // if (page.tag === 'ok') {
             if (isOkData(page)) {
                 toOk(dispatch, page.data.items, page.data.currentPage);
             }
             if (isInvalid(page)) {
-                toInvalid(dispatch, page.violations);
+                setViolations(dispatch, page.violations);
             }
         }
-    }, [fetchCallback, initialPage, perPage, query, search]);
+    }, [fetchCallback, initialPage, perPage, state.query, state.step]);
 
     /**
      * 検索結果の反映
      */
-    useEffect(() => {
-        // dispatchした結果のstateを同じeffect内で安全に見られない。
-        // dispatchした結果のstateを他コンポーネントに連携する関係で結果のstateを取得する必要がある。
-        // そのため別の依存配列の別effectにしている。
-        execute(
-            () => func(),
-            () => setError(true),
-        );
-        function func() {
-            if (state.step === Step.Ok) {
-                setItems(state.items);
-            }
-            if (state.step === Step.Invalid) {
-                setViolations(state.violations);
-            }
-        }
-    }, [setItems, setViolations, state]);
+    // useEffect(() => {
+    // dispatchした結果のstateを同じeffect内で安全に見られない。
+    // dispatchした結果のstateを他コンポーネントに連携する関係で結果のstateを取得する必要がある。
+    // そのため別の依存配列の別effectにしている。
+    // execute(
+    // () => func(),
+    // () => setError(true),
+    // );
+    // function func() {
+    // if (state.step === Step.Ok) {
+    // setItems(state.items);
+    // toOk(dispatch, state.items, state.page);
+    // }
+    // if (state.step === Step.Invalid) {
+    // setViolations(state.violations);
+    // toInvalid(dispatch, state.violations);
+    // }
+    // }
+    // }, [state.items, state.page, state.step, state.violations]);
 
     return { error, state, pager, dispatch, setError };
+}
+
+export function handleReset(dispatch: React.ActionDispatch<[action: Action<User[], FormKeys>]>) {
+    reset(dispatch, initialState);
+}
+
+export function handleSearch(
+    state: State<User[], FormKeys>,
+    dispatch: React.ActionDispatch<[action: Action<User[], FormKeys>]>,
+) {
+    const query: FormData<FormKeys> = { userName: state.query.userName };
+    const violations = validate(query);
+    if (hasError(violations)) {
+        setViolations(dispatch, violations);
+        return;
+    }
+    toSearch(dispatch, query);
+    // executeSearch<User[], FormKeys>(dispatch, data, setQuery, setSearch);
 }
 
 /**
@@ -97,10 +129,10 @@ export function usePagination<ITEMS, FIELD extends string>({
  *
  * @typeParam T - アイテムの型
  */
-export async function executePagination<ITEMS, FIELD extends string>(
+export async function handlePagination(
     destination: 'next' | 'prev',
-    pager: React.RefObject<Pager<ITEMS, FIELD> | null>,
-    dispatch: React.ActionDispatch<[action: Action<ITEMS, FIELD>]>,
+    pager: React.RefObject<Pager<User[], FormKeys> | null>,
+    dispatch: React.ActionDispatch<[action: Action<User[], FormKeys>]>,
     setError: React.Dispatch<React.SetStateAction<boolean>>,
 ): Promise<void> {
     await executeAsync(
@@ -117,17 +149,14 @@ export async function executePagination<ITEMS, FIELD extends string>(
             toOk(dispatch, page.data.items, page.data.currentPage);
         }
         if (isInvalid(page)) {
-            toInvalid(dispatch, page.violations);
+            setViolations(dispatch, page.violations);
         }
     }
 }
 
-export function executeSearch<ITEMS, FIELD extends string>(
-    dispatch: React.ActionDispatch<[action: Action<ITEMS, FIELD>]>,
-    query: FormData<FIELD>,
-    setQuery: React.Dispatch<React.SetStateAction<FormData<FIELD>>>,
-    setSearch: React.Dispatch<React.SetStateAction<boolean>>,
-) {
-    setQuery(query);
-    setSearch(true);
-}
+// export function executeSearch<ITEMS, FIELD extends string>(
+// dispatch: React.ActionDispatch<[action: Action<ITEMS, FIELD>]>,
+// query: FormData<FIELD>,
+// ) {
+// toSearch(dispatch, query);
+// }

@@ -22,7 +22,7 @@ export default function Input({
     state: State;
     dispatch: React.ActionDispatch<[action: Action]>;
 }) {
-    const violationsMap = getViolationsMap(state.violations);
+    const violationsMap = getViolationsMap(state.violations);   // TODO: stateに追加すれば
 
     useEffect(() => {
         applyViolations(state.violations, dispatch);
