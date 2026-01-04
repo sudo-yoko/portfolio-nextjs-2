@@ -8,7 +8,7 @@ import {
     handleReset,
     handleSearch,
     usePagination,
-} from '@/presentation/users/mvvm/view-models/users.use-pagination;';
+} from '@/presentation/users/mvvm/view-models/users.use-pagination';
 import UserList from '@/presentation/users/mvvm/views/users.component.list';
 
 export function Main() {
