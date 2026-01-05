@@ -13,9 +13,9 @@ import {
     setViolations,
     State,
     Step,
-    toOk,
+    // toResult,
     toSearch,
-} from '@/presentation/(system)/pagination/mvvm/view-models/pagination.reducer';
+} from '@/presentation/(system)/pagination/mvvm/view-models/pagination.reducer.2';
 import { isInvalid, isOkData } from '@/presentation/(system)/result/result.core.helpers';
 import { hasError } from '@/presentation/(system)/validation/validation.helpers';
 import { FormData } from '@/presentation/(system)/validation/validation.types';
@@ -72,7 +72,7 @@ export function usePagination({
             const page = await pager.current.current();
             // if (page.tag === 'ok') {
             if (isOkData(page)) {
-                toOk(dispatch, page.data.items, page.data.currentPage);
+                // toResult(dispatch, page.data.items, page.data.currentPage);
             }
             if (isInvalid(page)) {
                 setViolations(dispatch, page.violations);
@@ -146,7 +146,7 @@ export async function handlePagination(
         const page = destination === 'next' ? await pager.current.next() : await pager.current.prev();
         // if (page.tag === 'ok') {
         if (isOkData(page)) {
-            toOk(dispatch, page.data.items, page.data.currentPage);
+            // toResult(dispatch, page.data.items, page.data.currentPage);
         }
         if (isInvalid(page)) {
             setViolations(dispatch, page.violations);
