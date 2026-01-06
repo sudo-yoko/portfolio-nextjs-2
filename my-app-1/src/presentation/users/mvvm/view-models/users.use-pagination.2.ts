@@ -86,9 +86,10 @@ async function handleResult(
         return;
     }
     if (isInvalid(result)) {
-        // TODO: hasError
-        setViolations(dispatch, result.violations);
-        return;
+        if (hasError(result.violations)) {
+            setViolations(dispatch, result.violations);
+            return;
+        }
     }
     // 異常
     if (isAborted(result)) {
@@ -108,46 +109,19 @@ export async function handleSearch(
         setViolations(dispatch, violations);
         return;
     }
-    await executeAsync(
-        () => func(),
-        () => {
-            cancel(dispatch);
-            setError(dispatch, true);
-        },
-    );
-    async function func() {
-        toSearch(dispatch, query);
-    }
+    toSearch(dispatch, query);
 }
 
 export async function handleNext(
     dispatch: React.ActionDispatch<[action: Action<User[], FormKeys>]>,
 ): Promise<void> {
-    await executeAsync(
-        () => func(),
-        () => {
-            cancel(dispatch);
-            setError(dispatch, true);
-        },
-    );
-    async function func() {
-        toNext(dispatch);
-    }
+    toNext(dispatch);
 }
 
 export async function handlePrev(
     dispatch: React.ActionDispatch<[action: Action<User[], FormKeys>]>,
 ): Promise<void> {
-    await executeAsync(
-        () => func(),
-        () => {
-            cancel(dispatch);
-            setError(dispatch, true);
-        },
-    );
-    async function func() {
-        toPrev(dispatch);
-    }
+    toPrev(dispatch);
 }
 
 export function handleReset(dispatch: React.ActionDispatch<[action: Action<User[], FormKeys>]>) {

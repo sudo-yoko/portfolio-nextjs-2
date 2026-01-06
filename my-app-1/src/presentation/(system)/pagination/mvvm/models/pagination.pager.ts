@@ -1,6 +1,5 @@
 import 'client-only';
 
-import { backendError } from '@/presentation/(system)/error/error.factories';
 import {
     calcPagination,
     offsetOfLastPage,
@@ -8,10 +7,10 @@ import {
     toEffectiveOffsetMin,
 } from '@/presentation/(system)/pagination/mvvm/models/pagination.helpers';
 import { FetchPage } from '@/presentation/(system)/pagination/mvvm/models/pagination.requester';
-import { PageData, Pager } from '@/presentation/(system)/pagination/mvvm/models/pagination.types.c';
-import { invalid, okData } from '@/presentation/(system)/result/result.core.factories';
-import { isAborted, isInvalid } from '@/presentation/(system)/result/result.core.helpers';
 import { PaginationResult } from '@/presentation/(system)/pagination/mvvm/models/pagination.types';
+import { PageData, Pager } from '@/presentation/(system)/pagination/mvvm/models/pagination.types.c';
+import { abort, invalid, okData } from '@/presentation/(system)/result/result.core.factories';
+import { isAborted, isInvalid } from '@/presentation/(system)/result/result.core.helpers';
 import { FormData } from '@/presentation/(system)/validation/validation.types';
 
 /**
@@ -46,7 +45,8 @@ export function createPager<ITEMS, FIELD extends string>(
         //
         let result = await fetchPage(offset, limit, query);
         if (isAborted(result)) {
-            throw backendError(result);
+            // throw backendError(result);
+            return abort(result);
         }
         if (isInvalid(result)) {
             return invalid(result.violations);
@@ -80,7 +80,8 @@ export function createPager<ITEMS, FIELD extends string>(
             offset = offsetOfLastPage(total, limit); // 最終ページの先頭の1件目
             result = await fetchPage(offset, limit, query);
             if (isAborted(result)) {
-                throw backendError(result);
+                // throw backendError(result);
+                return abort(result);
             }
             if (isInvalid(result)) {
                 return invalid(result.violations);
