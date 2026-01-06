@@ -3,7 +3,6 @@
 import { AutoResizeTextAreaSimple } from '@/presentation/(system)/components/autoResizeTextArea.decorator.simple';
 import { Button } from '@/presentation/(system)/components/button.decorator.simple';
 import { ToastError } from '@/presentation/(system)/components/toast.feature.error';
-import { getViolationsMap } from '@/presentation/(system)/validation/validation.helpers';
 import {
     applyViolations,
     closeRetry,
@@ -22,7 +21,7 @@ export default function Input({
     state: State;
     dispatch: React.ActionDispatch<[action: Action]>;
 }) {
-    const violationsMap = getViolationsMap(state.violations);   // TODO: stateに追加すれば
+    // const violationsMap = getViolationsMap(state.violations);   // TODO: stateに追加すれば
 
     useEffect(() => {
         applyViolations(state.violations, dispatch);
@@ -47,7 +46,7 @@ export default function Input({
                             className="w-80 border-2 border-black"
                         />
                     </div>
-                    {violationsMap.name?.map((err, index) => (
+                    {state.violationsMap.name?.map((err, index) => (
                         <div key={index}>
                             <p className="text-red-500">{err}</p>
                         </div>
@@ -63,7 +62,7 @@ export default function Input({
                             className="w-80 border-2 border-black"
                         />
                     </div>
-                    {violationsMap.email?.map((err, index) => (
+                    {state.violationsMap.email?.map((err, index) => (
                         <div key={index}>
                             <p className="text-red-500">{err}</p>
                         </div>
@@ -75,10 +74,10 @@ export default function Input({
                         <AutoResizeTextAreaSimple
                             value={state.formData.body}
                             onChange={(value) => setValue(dispatch, 'body', value)}
-                            violation={violationsMap.body}
+                            violation={state.violationsMap.body}
                         />
                     </div>
-                    {violationsMap.body?.map((err, index) => (
+                    {state.violationsMap.body?.map((err, index) => (
                         <div key={index}>
                             <p className="text-red-500">{err}</p>
                         </div>

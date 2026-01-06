@@ -3,7 +3,8 @@
 //
 'use client';
 
-import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
+import { getViolationsMap } from '@/presentation/(system)/validation/validation.helpers';
+import { FormData, Violations, ViolationsMap } from '@/presentation/(system)/validation/validation.types';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 import React, { Reducer } from 'react';
 
@@ -34,6 +35,7 @@ export type State = {
     step: Step;
     formData: FormData<FormKeys>;
     violations: Violations<FormKeys>;
+    violationsMap: ViolationsMap<FormKeys>;
     retryMsg: string[];
 };
 
@@ -44,6 +46,7 @@ export const initialState: State = {
     step: Step.input,
     formData: initialFormData(),
     violations: [],
+    violationsMap: {},
     retryMsg: [],
 };
 
@@ -83,7 +86,11 @@ export type Action =
     | { type: typeof ActionType.toComplete }
     | { type: typeof ActionType.toAbort }
     | { type: typeof ActionType.setValue; key: FormKeys; value: string }
-    | { type: typeof ActionType.setViolations; violations: Violations<FormKeys> }
+    | {
+          type: typeof ActionType.setViolations;
+          violations: Violations<FormKeys>;
+          violationsMap: ViolationsMap<FormKeys>;
+      }
     | { type: typeof ActionType.setRetryable; retryMsg: string[] }
     | { type: typeof ActionType.reset };
 
@@ -140,7 +147,7 @@ export function setViolations(
     dispatch: React.ActionDispatch<[action: Action]>,
     violations: Violations<FormKeys>,
 ): void {
-    dispatch({ type: ActionType.setViolations, violations });
+    dispatch({ type: ActionType.setViolations, violations, violationsMap: getViolationsMap(violations) });
 }
 
 /**
@@ -172,7 +179,7 @@ export const reducer: Reducer<State, Action> = (state: State, action: Action): S
         case ActionType.toInput:
             return { ...state, step: Step.input };
         case ActionType.toConfirm:
-            return { ...state, step: Step.confirm, violations: [] };
+            return { ...state, step: Step.confirm, violations: [], violationsMap: {} };
         case ActionType.toSending:
             return { ...state, step: Step.sending };
         case ActionType.toComplete:
@@ -180,7 +187,7 @@ export const reducer: Reducer<State, Action> = (state: State, action: Action): S
         case ActionType.toAbort:
             return { ...state, step: Step.abort };
         case ActionType.setViolations:
-            return { ...state, violations: action.violations };
+            return { ...state, violations: action.violations, violationsMap: action.violationsMap };
         case ActionType.setRetryable:
             return { ...state, retryMsg: action.retryMsg };
         case ActionType.reset:
