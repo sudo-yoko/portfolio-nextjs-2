@@ -1,0 +1,24 @@
+//
+// お問い合わせフォーム ページ
+//
+import 'server-only';
+
+import { executeAsync } from '@/presentation/(system)/aop/aop.feature.server';
+import { SearchParams } from '@/presentation/(system)/types/search-params';
+import { handleRequest } from '@/presentation/contact/small/view-models/contact.handler.request';
+import Main from '@/presentation/contact/small/views/contact.component.main';
+
+export default async function Page(props: { searchParams?: SearchParams }) {
+    return await executeAsync(() => func());
+
+    async function func() {
+        const _result = handleRequest(props);
+        return (
+            <>
+                <div>
+                    <Main />
+                </div>
+            </>
+        );
+    }
+}

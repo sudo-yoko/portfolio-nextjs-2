@@ -1,0 +1,105 @@
+//
+// お問い合わせフォーム イベントハンドラー
+//
+'use client';
+
+import { executeAsync } from '@/presentation/(system)/aop/aop.feature.client';
+import { backendError, malformedResultError } from '@/presentation/(system)/error/error.factories';
+import {
+    isAborted,
+    isInvalid,
+    isOkEmpty,
+    isRetryable,
+} from '@/presentation/(system)/result/result.core.helpers';
+import { hasError } from '@/presentation/(system)/validation/validation.helpers';
+import { Violations } from '@/presentation/(system)/validation/validation.types';
+import { send } from '@/presentation/contact/small/models/contact.requester';
+import { FormKeys } from '@/presentation/contact/small/models/contact.types';
+import { validate } from '@/presentation/contact/small/models/contact.validator';
+import {
+    Action,
+    setRetryable,
+    setViolations,
+    State,
+    toComplete,
+    toConfirm,
+    toInput,
+} from '@/presentation/contact/small/view-models/contact.reducer';
+
+/**
+ * バリデーションエラーが取得されている場合にUIに反映する。
+ */
+export const applyViolations = (
+    violations: Violations<FormKeys>,
+    dispatch: React.ActionDispatch<[action: Action]>,
+) => {
+    if (violations && hasError(violations)) {
+        setViolations(dispatch, violations);
+    }
+};
+
+/**
+ * 次へボタンを押したときの処理
+ */
+export function handleNext(state: State, dispatch: React.ActionDispatch<[action: Action]>) {
+    // バリデーション
+    ((violations: Violations<FormKeys>) => {
+        if (hasError(violations)) {
+            setViolations(dispatch, violations);
+            return;
+        }
+        toConfirm(dispatch);
+    })(validate(state.formData));
+}
+
+/**
+ * 送信中が表示中の処理
+ */
+export async function submit(
+    state: State,
+    dispatch: React.ActionDispatch<[action: Action]>,
+    onAbort: () => void,
+) {
+    // エラーハンドリングを追加して処理を実行する。
+    await executeAsync(() => func(), onAbort);
+
+    async function func() {
+        // バックエンド呼び出し
+        const result = await send(state.formData);
+        // 異常
+        if (isAborted(result)) {
+            throw backendError(result);
+        }
+        // 正常
+        if (isOkEmpty(result)) {
+            toComplete(dispatch);
+            return;
+        }
+        // バリデーションエラーあり
+        if (isInvalid(result)) {
+            // if (isReject(result) && result.label === REJECTION_LABELS.VIOLATION) {
+            const violations = result.violations;
+            if (hasError(violations)) {
+                setViolations(dispatch, violations);
+                toInput(dispatch);
+                return;
+            }
+        }
+        // 再試行可能なエラー
+        if (isRetryable(result)) {
+            setRetryable(dispatch, result.retryMsg);
+            toInput(dispatch);
+            return;
+        }
+        // RESULTの形式が不正
+        throw malformedResultError(result);
+    }
+}
+
+/**
+ * リトライメッセージを閉じる
+ */
+export function closeRetry(dispatch: React.ActionDispatch<[action: Action]>) {
+    setRetryable(dispatch, []);
+    toInput(dispatch);
+}
