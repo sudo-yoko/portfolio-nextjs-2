@@ -8,30 +8,23 @@ import { FormData, Violations, ViolationsMap } from '@/presentation/(system)/val
 import { FormKeys } from '@/presentation/contact/small/models/contact.types';
 import React, { Reducer } from 'react';
 
-/**
- * フォームの値を格納するオブジェクトの定義
- */
-//export type FormData = {
-//  [key in FormKey]: string;
-//};
+export const Mode = {
+    Input: 'input',
+    Confirm: 'confirm',
+    Complete: 'complete',
+};
+export type Mode = (typeof Mode)[keyof typeof Mode];
 
-/**
- * ステップ定義
- */
 export const Step = {
-    input: 'input',
-    confirm: 'confirm',
-    sending: 'sending',
-    complete: 'complete',
-    abort: 'abort', // TODO: Invalidの状態をつくるか
+    Idle: 'idle',
+    Send: 'send',
+    Complete: 'complete',
+    Abort: 'abort',
 } as const;
 export type Step = (typeof Step)[keyof typeof Step];
 
-/**
- * 状態定義
- * ステップ、フォームデータ、バリデーションエラー
- */
 export type State = {
+    mode: Mode;
     step: Step;
     formData: FormData<FormKeys>;
     violations: Violations<FormKeys>;
@@ -39,20 +32,15 @@ export type State = {
     retryMsg: string[];
 };
 
-/**
- * 初期状態
- */
 export const initialState: State = {
-    step: Step.input,
+    mode: Mode.Input,
+    step: Step.Idle,
     formData: initialFormData(),
     violations: [],
     violationsMap: {},
     retryMsg: [],
 };
 
-/**
- * フォームの初期値
- */
 // TODO: 共通化できるか
 function initialFormData(): FormData<FormKeys> {
     const initial = Object.fromEntries(Object.values(FormKeys).map((key) => [key, ''])) as FormData<FormKeys>;
@@ -60,39 +48,33 @@ function initialFormData(): FormData<FormKeys> {
     return initial;
 }
 
-/**
- * アクションの種類
- */
 export const ActionType = {
-    toInput: 'toInput',
-    toConfirm: 'toConfirm',
-    toSending: 'toSending',
-    toComplete: 'toComplete',
-    toAbort: 'toAbort',
-    setValue: 'setValue',
-    setViolations: 'setViolations',
-    setRetryable: 'setRetryable',
-    reset: 'reset',
+    SetValue: 'setValue',
+    SetViolations: 'setViolations',
+    ToConfirm: 'toConfirm',
+    ToInput: 'toInput',
+    ToSend: 'toSend',
+    SetRetryable: 'setRetryable',
+    SetAbort: 'setAbort',
+    ToComplete: 'toComplete',
+    Reset: 'reset',
 } as const;
 export type ActionType = (typeof ActionType)[keyof typeof ActionType];
 
-/**
- * アクション型
- */
 export type Action =
-    | { type: typeof ActionType.toInput }
-    | { type: typeof ActionType.toConfirm }
-    | { type: typeof ActionType.toSending }
-    | { type: typeof ActionType.toComplete }
-    | { type: typeof ActionType.toAbort }
-    | { type: typeof ActionType.setValue; key: FormKeys; value: string }
+    | { type: typeof ActionType.SetValue; key: FormKeys; value: string }
     | {
-          type: typeof ActionType.setViolations;
+          type: typeof ActionType.SetViolations;
           violations: Violations<FormKeys>;
           violationsMap: ViolationsMap<FormKeys>;
       }
-    | { type: typeof ActionType.setRetryable; retryMsg: string[] }
-    | { type: typeof ActionType.reset };
+    | { type: typeof ActionType.ToConfirm }
+    | { type: typeof ActionType.ToInput }
+    | { type: typeof ActionType.ToSend }
+    | { type: typeof ActionType.SetRetryable; retryMsg: string[] }
+    | { type: typeof ActionType.SetAbort }
+    | { type: typeof ActionType.ToComplete }
+    | { type: typeof ActionType.Reset };
 
 /**
  * 状態の更新：フォームに値を入力
@@ -102,42 +84,7 @@ export function setValue(
     key: FormKeys,
     value: string,
 ): void {
-    dispatch({ type: ActionType.setValue, key, value });
-}
-
-/**
- * 状態の更新：入力モード
- */
-export function toInput(dispatch: React.ActionDispatch<[action: Action]>): void {
-    dispatch({ type: ActionType.toInput });
-}
-
-/**
- * 状態の更新：確認モード
- */
-export function toConfirm(dispatch: React.ActionDispatch<[action: Action]>): void {
-    dispatch({ type: ActionType.toConfirm });
-}
-
-/**
- * 状態の更新：送信中
- */
-export function toSending(dispatch: React.ActionDispatch<[action: Action]>): void {
-    dispatch({ type: ActionType.toSending });
-}
-
-/**
- * 状態の更新：完了
- */
-export function toComplete(dispatch: React.ActionDispatch<[action: Action]>): void {
-    dispatch({ type: ActionType.toComplete });
-}
-
-/**
- * 状態の更新：続行不可能なエラー
- */
-export function toAbort(dispatch: React.ActionDispatch<[action: Action]>): void {
-    dispatch({ type: ActionType.toAbort });
+    dispatch({ type: ActionType.SetValue, key, value });
 }
 
 /**
@@ -147,21 +94,53 @@ export function setViolations(
     dispatch: React.ActionDispatch<[action: Action]>,
     violations: Violations<FormKeys>,
 ): void {
-    dispatch({ type: ActionType.setViolations, violations, violationsMap: getViolationsMap(violations) });
+    dispatch({ type: ActionType.SetViolations, violations, violationsMap: getViolationsMap(violations) });
+}
+
+/**
+ * 状態の更新：確認
+ */
+export function toConfirm(dispatch: React.ActionDispatch<[action: Action]>): void {
+    dispatch({ type: ActionType.ToConfirm });
+}
+
+export function toInput(dispatch: React.ActionDispatch<[action: Action]>): void {
+    dispatch({ type: ActionType.ToInput });
+}
+
+/**
+ * 状態の更新：送信中
+ */
+export function toSend(dispatch: React.ActionDispatch<[action: Action]>): void {
+    dispatch({ type: ActionType.ToSend });
 }
 
 /**
  * 状態の更新：再試行可能なエラー
  */
 export function setRetryable(dispatch: React.ActionDispatch<[action: Action]>, retryMsg: string[]): void {
-    dispatch({ type: ActionType.setRetryable, retryMsg });
+    dispatch({ type: ActionType.SetRetryable, retryMsg });
+}
+
+/**
+ * 状態の更新：続行不可能なエラー
+ */
+export function setAbort(dispatch: React.ActionDispatch<[action: Action]>): void {
+    dispatch({ type: ActionType.SetAbort });
+}
+
+/**
+ * 状態の更新：完了
+ */
+export function toComplete(dispatch: React.ActionDispatch<[action: Action]>): void {
+    dispatch({ type: ActionType.ToComplete });
 }
 
 /**
  * 状態の更新：フォームをリセット
  */
 export function reset(dispatch: React.ActionDispatch<[action: Action]>): void {
-    dispatch({ type: ActionType.reset });
+    dispatch({ type: ActionType.Reset });
 }
 
 /**
@@ -174,43 +153,32 @@ export function reset(dispatch: React.ActionDispatch<[action: Action]>): void {
  */
 export const reducer: Reducer<State, Action> = (state: State, action: Action): State => {
     switch (action.type) {
-        case ActionType.setValue:
-            return setValueState(state, action);
-        case ActionType.toInput:
-            return { ...state, step: Step.input };
-        case ActionType.toConfirm:
-            return { ...state, step: Step.confirm, violations: [], violationsMap: {} };
-        case ActionType.toSending:
-            return { ...state, step: Step.sending };
-        case ActionType.toComplete:
-            return toCompleteState(state);
-        case ActionType.toAbort:
-            return { ...state, step: Step.abort };
-        case ActionType.setViolations:
+        case ActionType.SetValue:
+            return {
+                ...state,
+                formData: { ...state.formData, [action.key]: action.value },
+            };
+        case ActionType.SetViolations:
             return { ...state, violations: action.violations, violationsMap: action.violationsMap };
-        case ActionType.setRetryable:
-            return { ...state, retryMsg: action.retryMsg };
-        case ActionType.reset:
+        case ActionType.ToConfirm:
+            return { ...state, mode: Mode.Confirm };
+        case ActionType.ToInput:
+            return { ...state, mode: Mode.Input };
+        case ActionType.ToSend:
+            return { ...state, step: Step.Send };
+        case ActionType.SetRetryable:
+            return { ...state, retryMsg: action.retryMsg, step: Step.Idle };
+        case ActionType.SetAbort:
+            return { ...state, step: Step.Abort };
+        case ActionType.ToComplete:
+            return {
+                ...state,
+                mode: Mode.Complete,
+                step: Step.Complete,
+            };
+        case ActionType.Reset:
             return { ...initialState };
         default:
             return state;
     }
-};
-
-const setValueState = (
-    state: State,
-    action: Extract<Action, { type: typeof ActionType.setValue }>,
-): State => {
-    return {
-        ...state,
-        formData: { ...state.formData, [action.key]: action.value },
-    };
-};
-
-const toCompleteState = (state: State): State => {
-    return {
-        ...state,
-        step: Step.complete,
-        violations: [],
-    };
 };

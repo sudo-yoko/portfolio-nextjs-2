@@ -2,14 +2,8 @@
 
 import { AutoResizeTextAreaSimple } from '@/presentation/(system)/components/autoResizeTextArea.decorator.simple';
 import { Button } from '@/presentation/(system)/components/button.decorator.simple';
-import { ToastError } from '@/presentation/(system)/components/toast.feature.error';
-import {
-    applyViolations,
-    closeRetry,
-    handleNext,
-} from '@/presentation/contact/small/view-models/contact.handler.event';
+import { handleNext } from '@/presentation/contact/small/view-models/contact.reducer.hooks';
 import { Action, setValue, State } from '@/presentation/contact/small/view-models/contact.reducer';
-import { useEffect } from 'react';
 
 /**
  * 入力フォームコンポーネント
@@ -21,20 +15,11 @@ export default function Input({
     state: State;
     dispatch: React.ActionDispatch<[action: Action]>;
 }) {
-    // const violationsMap = getViolationsMap(state.violations);   // TODO: stateに追加すれば
-
-    useEffect(() => {
-        applyViolations(state.violations, dispatch);
-    }, [dispatch, state.violations]);
-
     return (
         <>
             <div>
                 <div>お問い合わせフォーム</div>
             </div>
-            {state.retryMsg.length > 0 && (
-                <ToastError message={state.retryMsg} onClose={() => closeRetry(dispatch)} />
-            )}
             <div>
                 <div>
                     <div>お名前：</div>

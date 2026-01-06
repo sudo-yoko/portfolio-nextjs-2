@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/presentation/(system)/components/button.decorator.simple';
-import { Action, State, toInput, toSending } from '@/presentation/contact/small/view-models/contact.reducer';
+import { Action, State, toInput, toSend } from '@/presentation/contact/small/view-models/contact.reducer';
 
 /**
  * 確認表示コンポーネント
@@ -27,7 +27,7 @@ export default function Confirm({
                 </div>
                 <div className="space-x-4">
                     <Button onClick={() => toInput(dispatch)}>修正する</Button>
-                    <Button onClick={() => toSending(dispatch)}>送信する</Button>
+                    <Button onClick={() => toSend(dispatch)}>送信する</Button>
                 </div>
             </div>
         </>
