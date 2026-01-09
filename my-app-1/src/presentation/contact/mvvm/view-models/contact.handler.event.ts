@@ -99,7 +99,7 @@ export async function submit(
 /**
  * リトライメッセージを閉じる
  */
-export function closeRetry(dispatch: React.ActionDispatch<[action: Action]>) {
+export function dismissRetry(dispatch: React.ActionDispatch<[action: Action]>) {
     setRetryable(dispatch, []);
     toInput(dispatch);
 }

@@ -11,25 +11,25 @@ export function ToastFade({
     message,
     bgColor,
     textColor,
-    onClose,
+    onDismiss,
 }: {
     message: string[];
     bgColor: string;
     textColor: string;
-    onClose: () => void;
+    onDismiss: () => void;
 }) {
     const [open, setOpen] = useState(true);
 
     // トーストを閉じる
-    function handleClose() {
+    function handleDismiss() {
         if (open) setOpen(false);
     }
 
     return (
-        <ToastCore message={message} bgColor={bgColor} textColor={textColor} onClose={handleClose}>
+        <ToastCore message={message} bgColor={bgColor} textColor={textColor} onDismiss={handleDismiss}>
             {/* NOTE: レンダープロップス方式で、Toastコンポーネントの中にFade要素を挟み込む */}
             {(innerElem) => (
-                <Fade open={open} onExit={onClose}>
+                <Fade open={open} onExit={onDismiss}>
                     {innerElem}
                 </Fade>
             )}

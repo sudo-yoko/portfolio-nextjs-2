@@ -9,15 +9,15 @@ export function Toast({
     message,
     bgColor,
     textColor,
-    onClose,
+    onDismiss,
 }: {
     message: string[];
     bgColor: string;
     textColor: string;
-    onClose: () => void;
+    onDismiss: () => void;
 }) {
     return (
-        <ToastCore message={message} bgColor={bgColor} textColor={textColor} onClose={onClose}>
+        <ToastCore message={message} bgColor={bgColor} textColor={textColor} onDismiss={onDismiss}>
             {/* デコレーターなし */}
             {(innerElem) => innerElem}
         </ToastCore>

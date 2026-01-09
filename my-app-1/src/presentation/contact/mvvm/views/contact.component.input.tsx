@@ -5,7 +5,7 @@ import { Button } from '@/presentation/(system)/components/button.decorator.simp
 import { ToastError } from '@/presentation/(system)/components/toast.feature.error';
 import {
     applyViolations,
-    closeRetry,
+    dismissRetry,
     handleNext,
 } from '@/presentation/contact/mvvm/view-models/contact.handler.event';
 import { Action, setValue, State } from '@/presentation/contact/mvvm/view-models/contact.reducer';
@@ -33,7 +33,7 @@ export default function Input({
                 <div>お問い合わせフォーム</div>
             </div>
             {state.retryMsg.length > 0 && (
-                <ToastError message={state.retryMsg} onClose={() => closeRetry(dispatch)} />
+                <ToastError message={state.retryMsg} onDismiss={() => dismissRetry(dispatch)} />
             )}
             <div>
                 <div>

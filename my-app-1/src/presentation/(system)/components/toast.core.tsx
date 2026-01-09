@@ -11,13 +11,13 @@ export function ToastCore({
     message,
     bgColor,
     textColor,
-    onClose,
+    onDismiss,
 }: {
     children: (innerElem: React.ReactNode) => React.ReactNode;
     message: string[];
     bgColor: string;
     textColor: string;
-    onClose: () => void;
+    onDismiss: () => void;
 }) {
     return (
         <div className="fixed">
@@ -34,7 +34,7 @@ export function ToastCore({
                     <div>
                         <XCircleIcon
                             title="閉じる"
-                            onClick={onClose}
+                            onClick={onDismiss}
                             className="h-7 w-7 cursor-pointer transition-all active:scale-95"
                         />
                     </div>

@@ -39,7 +39,8 @@ app.post(path, async (req: Request<undefined, undefined, FormData>, res: Respons
     // });
 
     // const status = 200;
-    const status = 408;
+    // const status = 408;
+    const status = 500;
     console.log(logPrefix + `Response(Outbound) -> status=${status}`);
     res.sendStatus(status);
 });

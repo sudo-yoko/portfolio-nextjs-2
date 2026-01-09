@@ -29,7 +29,8 @@ export type State = {
     formData: FormData<FormKeys>;
     violations: Violations<FormKeys>;
     violationsMap: ViolationsMap<FormKeys>;
-    retryMsg: string[];
+    retryMsg: string[]; // TODO: リトライ回数３回くらいでAbort
+    retryableCount: number;
 };
 
 export const initialState: State = {
@@ -39,6 +40,7 @@ export const initialState: State = {
     violations: [],
     violationsMap: {},
     retryMsg: [],
+    retryableCount: 0,
 };
 
 // TODO: 共通化できるか
@@ -54,7 +56,7 @@ export const ActionType = {
     ToConfirm: 'toConfirm',
     ToInput: 'toInput',
     ToSend: 'toSend',
-    SetRetryable: 'setRetryable',
+    SetRetryMsg: 'setRetryMsg',
     SetAbort: 'setAbort',
     ToComplete: 'toComplete',
     Reset: 'reset',
@@ -71,7 +73,7 @@ export type Action =
     | { type: typeof ActionType.ToConfirm }
     | { type: typeof ActionType.ToInput }
     | { type: typeof ActionType.ToSend }
-    | { type: typeof ActionType.SetRetryable; retryMsg: string[] }
+    | { type: typeof ActionType.SetRetryMsg; retryMsg: string[] }
     | { type: typeof ActionType.SetAbort }
     | { type: typeof ActionType.ToComplete }
     | { type: typeof ActionType.Reset };
@@ -104,6 +106,9 @@ export function toConfirm(dispatch: React.ActionDispatch<[action: Action]>): voi
     dispatch({ type: ActionType.ToConfirm });
 }
 
+/**
+ * 状態の更新：入力
+ */
 export function toInput(dispatch: React.ActionDispatch<[action: Action]>): void {
     dispatch({ type: ActionType.ToInput });
 }
@@ -118,8 +123,8 @@ export function toSend(dispatch: React.ActionDispatch<[action: Action]>): void {
 /**
  * 状態の更新：再試行可能なエラー
  */
-export function setRetryable(dispatch: React.ActionDispatch<[action: Action]>, retryMsg: string[]): void {
-    dispatch({ type: ActionType.SetRetryable, retryMsg });
+export function setRetryMsg(dispatch: React.ActionDispatch<[action: Action]>, retryMsg: string[]): void {
+    dispatch({ type: ActionType.SetRetryMsg, retryMsg });
 }
 
 /**
@@ -161,13 +166,18 @@ export const reducer: Reducer<State, Action> = (state: State, action: Action): S
         case ActionType.SetViolations:
             return { ...state, violations: action.violations, violationsMap: action.violationsMap };
         case ActionType.ToConfirm:
-            return { ...state, mode: Mode.Confirm };
+            return { ...state, mode: Mode.Confirm, retryMsg: [] };
         case ActionType.ToInput:
             return { ...state, mode: Mode.Input };
         case ActionType.ToSend:
-            return { ...state, step: Step.Send };
-        case ActionType.SetRetryable:
-            return { ...state, retryMsg: action.retryMsg, step: Step.Idle };
+            return { ...state, step: Step.Send, retryMsg: [] };
+        case ActionType.SetRetryMsg:
+            return {
+                ...state,
+                retryMsg: action.retryMsg,
+                step: Step.Idle,
+                retryableCount: action.retryMsg.length > 0 ? state.retryableCount + 1 : state.retryableCount, // NOTE: ++は使わないこと
+            };
         case ActionType.SetAbort:
             return { ...state, step: Step.Abort };
         case ActionType.ToComplete:

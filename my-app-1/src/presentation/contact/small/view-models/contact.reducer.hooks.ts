@@ -1,5 +1,5 @@
 //
-// お問い合わせフォーム イベントハンドラー
+// お問い合わせフォーム カスタムフックと関連するイベントハンドラー
 //
 'use client';
 
@@ -18,25 +18,42 @@ import { FormKeys } from '@/presentation/contact/small/models/contact.types';
 import { validate } from '@/presentation/contact/small/models/contact.validator';
 import {
     Action,
-    setRetryable,
+    initialState,
+    reducer,
+    setAbort,
+    setRetryMsg,
     setViolations,
     State,
+    Step,
     toComplete,
     toConfirm,
     toInput,
 } from '@/presentation/contact/small/view-models/contact.reducer';
+import { useEffect, useReducer } from 'react';
 
 /**
- * バリデーションエラーが取得されている場合にUIに反映する。
+ * お問い合わせフォーム カスタムフック
  */
-export const applyViolations = (
-    violations: Violations<FormKeys>,
-    dispatch: React.ActionDispatch<[action: Action]>,
-) => {
-    if (violations && hasError(violations)) {
-        setViolations(dispatch, violations);
-    }
-};
+export function useContact() {
+    const [state, dispatch] = useReducer(reducer, initialState);
+
+    useEffect(() => {
+        void (async () => {
+            if (state.step === Step.Send) {
+                await submit(state, dispatch, () => setAbort(dispatch));
+            }
+        })();
+    }, [state]);
+
+    useEffect(() => {
+        // バリデーションエラーが取得されている場合にUIに反映する。(サーバーサイドバリデーションで戻された時)
+        if (state.violations && hasError(state.violations)) {
+            setViolations(dispatch, state.violations);
+        }
+    }, [dispatch, state.violations]);
+
+    return { state, dispatch };
+}
 
 /**
  * 次へボタンを押したときの処理
@@ -48,6 +65,7 @@ export function handleNext(state: State, dispatch: React.ActionDispatch<[action:
             setViolations(dispatch, violations);
             return;
         }
+        setViolations(dispatch, []);
         toConfirm(dispatch);
     })(validate(state.formData));
 }
@@ -77,7 +95,6 @@ export async function submit(
         }
         // バリデーションエラーあり
         if (isInvalid(result)) {
-            // if (isReject(result) && result.label === REJECTION_LABELS.VIOLATION) {
             const violations = result.violations;
             if (hasError(violations)) {
                 setViolations(dispatch, violations);
@@ -87,7 +104,11 @@ export async function submit(
         }
         // 再試行可能なエラー
         if (isRetryable(result)) {
-            setRetryable(dispatch, result.retryMsg);
+            if (state.retryableCount >= 3) {
+                setAbort(dispatch);
+                return;
+            }
+            setRetryMsg(dispatch, result.retryMsg);
             toInput(dispatch);
             return;
         }
@@ -99,7 +120,7 @@ export async function submit(
 /**
  * リトライメッセージを閉じる
  */
-export function closeRetry(dispatch: React.ActionDispatch<[action: Action]>) {
-    setRetryable(dispatch, []);
+export function dismissRetryMsg(dispatch: React.ActionDispatch<[action: Action]>) {
+    setRetryMsg(dispatch, []);
     toInput(dispatch);
 }

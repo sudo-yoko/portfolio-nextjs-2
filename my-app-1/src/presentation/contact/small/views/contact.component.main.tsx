@@ -3,42 +3,17 @@
 import { ProcessingModal } from '@/presentation/(system)/components/processing.modal';
 import { ToastError } from '@/presentation/(system)/components/toast.feature.error';
 import { ErrorModal } from '@/presentation/(system)/error/views/component.error-modal.feature.reset';
-import {
-    applyViolations,
-    closeRetry,
-    submit,
-} from '@/presentation/contact/small/view-models/contact.reducer.hooks';
-import {
-    initialState,
-    Mode,
-    reducer,
-    reset,
-    setAbort,
-    Step,
-} from '@/presentation/contact/small/view-models/contact.reducer';
+import { Mode, reset, Step } from '@/presentation/contact/small/view-models/contact.reducer';
+import { dismissRetryMsg, useContact } from '@/presentation/contact/small/view-models/contact.reducer.hooks';
 import Complete from '@/presentation/contact/small/views/contact.component.complete';
 import Confirm from '@/presentation/contact/small/views/contact.component.confirm';
 import Input from '@/presentation/contact/small/views/contact.component.input';
-import { useEffect, useReducer } from 'react';
 
 /**
  * お問い合わせフォーム 親クライアントコンポーネント
  */
 export default function Main() {
-    const [state, dispatch] = useReducer(reducer, initialState);
-
-    useEffect(() => {
-        void (async () => {
-            if (state.step === Step.Send) {
-                await submit(state, dispatch, () => setAbort(dispatch));
-            }
-        });
-    }, [dispatch, state]);
-
-    useEffect(() => {
-        applyViolations(state.violations, dispatch);
-    }, [dispatch, state.violations]);
-
+    const { state, dispatch } = useContact();
     return (
         <div>
             <div>{JSON.stringify(state)}</div>
@@ -47,11 +22,11 @@ export default function Main() {
                 {state.mode === Mode.Confirm && <Confirm state={state} dispatch={dispatch} />}
                 {state.mode === Mode.Complete && <Complete />}
                 {state.step === Step.Send && (
-                    <ProcessingModal>送信しています。お待ちください・・・</ProcessingModal>
+                    <ProcessingModal>送信しています・・・</ProcessingModal>
                 )}
                 {state.step === Step.Abort && <ErrorModal onAction={() => reset(dispatch)} />}
                 {state.retryMsg.length > 0 && (
-                    <ToastError message={state.retryMsg} onClose={() => closeRetry(dispatch)} />
+                    <ToastError message={state.retryMsg} onDismiss={() => dismissRetryMsg(dispatch)} />
                 )}
             </div>
         </div>

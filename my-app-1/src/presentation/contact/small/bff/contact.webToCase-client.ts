@@ -24,12 +24,11 @@ export async function send(model: ContactBody): Promise<void> {
         url,
         body,
         headers: { ...CONTENT_TYPE_APPLICATION_FORM },
-        // ステータスコード200,408(タイムアウト)以外はエラーをスローする
-        validateStatus: (status) => status === 200 || status === 408,
+        validateStatus: () => true,
     });
 
     logger.info(logPrefix + `Response(Inbound) -> status=${result.status}`);
-    if (result.status === 408) {
+    if (result.status !== 200) {
         throw retryableError(`web-to-case response status=${result.status}`);
     }
 }

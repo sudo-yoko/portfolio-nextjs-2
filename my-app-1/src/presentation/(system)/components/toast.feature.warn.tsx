@@ -5,6 +5,8 @@
 
 import { ToastFade } from '@/presentation/(system)/components/toast.core.decorator.fade';
 
-export function ToastWarn({ message, onClose }: { message: string[]; onClose: () => void }) {
-    return <ToastFade message={message} bgColor="bg-yellow-500" textColor="text-black" onClose={onClose} />;
+export function ToastWarn({ message, onDismiss }: { message: string[]; onDismiss: () => void }) {
+    return (
+        <ToastFade message={message} bgColor="bg-yellow-500" textColor="text-black" onDismiss={onDismiss} />
+    );
 }
