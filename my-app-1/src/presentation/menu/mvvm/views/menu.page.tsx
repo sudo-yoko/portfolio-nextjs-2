@@ -1,4 +1,4 @@
-import Menu from '@/presentation/menu/mvvm/views/menu';
+import Menu from '@/presentation/(system)/menu/mvvm/views/menu';
 import { Bars3Icon } from '@heroicons/react/16/solid';
 
 export default function Page() {
