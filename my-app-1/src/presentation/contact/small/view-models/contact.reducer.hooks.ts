@@ -109,7 +109,7 @@ export async function submit(
                 return;
             }
             setRetryMsg(dispatch, result.retryMsg);
-            toInput(dispatch);
+            // toInput(dispatch);
             return;
         }
         // RESULTの形式が不正
@@ -122,5 +122,5 @@ export async function submit(
  */
 export function dismissRetryMsg(dispatch: React.ActionDispatch<[action: Action]>) {
     setRetryMsg(dispatch, []);
-    toInput(dispatch);
+    // toInput(dispatch);
 }

@@ -29,8 +29,8 @@ app.use(delay(5000)); // 5秒待機して、処理待ち時間をシミュレー
 app.use(logging()); // リクエスト情報をログに出力
 
 app.post(path, async (req: Request<undefined, undefined, FormData>, res: Response<void>) => {
-    // const body = req.body;
-    // console.log(logPrefix + `Request(Inbound) -> formData=${JSON.stringify(body)}`);
+    const body = req.body;
+    console.log(logPrefix + `Request(Inbound) -> formData=${JSON.stringify(body)}`);
     // 1秒待機
     // await new Promise<void>((resolve) => {
     // setTimeout(() => {

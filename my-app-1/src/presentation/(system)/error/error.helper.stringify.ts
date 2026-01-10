@@ -18,22 +18,22 @@ export function stringify(
 } {
     if (typeof error === 'string') {
         const message = error;
-        return { message, all: join({ description, message }) };
+        return { message, all: joinAll({ description, message }) };
     } else if (axios.isAxiosError(error)) {
         const { message } = error;
         const stacks = getStackTrace(error);
-        let details;
+        const all: All = { message, stacks };
         if (error.response) {
-            details = `Axios Error: Response(Inbound) -> status=${error.response.status}, data=${error.response.data}`;
+            all.details = `Axios Error: Response(Inbound) -> status=${error.response.status}, data=${error.response.data}`;
         }
-        return { message, all: join({ description, message, details, stacks }) };
+        return { message, all: joinAll(all) };
     } else if (error instanceof Error) {
         const { message } = error;
         const stacks = getStackTrace(error);
-        return { message, all: join({ description, message, stacks }) };
+        return { message, all: joinAll({ description, message, stacks }) };
     } else {
         const message = 'unknown type error.';
-        return { message, all: join({ description, message }) };
+        return { message, all: joinAll({ description, message }) };
     }
 }
 
@@ -68,7 +68,7 @@ function getStackTrace(error: Error): string[] {
  * @param stack - スタックトレース
  * @returns エラーメッセージ
  */
-function join({
+function joinAll({
     description,
     message,
     details,
@@ -94,3 +94,6 @@ function join({
     }
     return errMessage.join('');
 }
+
+// 引数の型
+type All = Parameters<typeof joinAll>[0];

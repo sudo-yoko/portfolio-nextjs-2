@@ -16,11 +16,13 @@ export const clientImpl: Client = {
         const validateStatus = req.validateStatus ?? ((status: number) => status < 500);
 
         logger.info(logPrefix + req.url);
+        logger.info(logPrefix + req.body);
         const res = await client.request({
             method: req.method,
             url: req.url,
             params: req.params,
             validateStatus,
+            // TODO: リクエストボディ
         });
 
         // ステータスコードの検証
