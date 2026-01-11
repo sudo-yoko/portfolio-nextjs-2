@@ -1,23 +1,23 @@
-import { MenuInfo, MenuResult } from '@/presentation/(system)/menu/mvvm/models/menu.types';
+import { Header, HeaderResult } from '@/presentation/(system)/header/mvvm/models/header.types';
 import { Tag } from '@/presentation/(system)/result/result.core.types';
 
 /**
  * バックエンド呼び出しのインターフェース型
  */
-type FetchMenuInfo = {
-    (): Promise<MenuResult>;
+type FetchHeader = {
+    (): Promise<HeaderResult>;
 };
 
 /**
  * モックコード
  */
-const mock: FetchMenuInfo = async () => {
+const mock: FetchHeader = async () => {
     await new Promise<void>((resolve) => {
         setTimeout(() => {
             resolve();
         }, 5000);
     });
-    const result: MenuResult = {
+    const result: HeaderResult = {
         tag: Tag.OkData,
         data: {
             profile: {
@@ -30,4 +30,4 @@ const mock: FetchMenuInfo = async () => {
     return result;
 };
 
-export const fetchMenuInfo: FetchMenuInfo = mock;
+export const fetchHeader: FetchHeader = mock;

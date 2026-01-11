@@ -6,12 +6,12 @@ import {
     popoverClose,
     State,
     Step,
-} from '@/presentation/(system)/menu/mvvm/view-models/menu.reducer';
+} from '@/presentation/(system)/header/mvvm/view-models/header.reducer';
 import {
     handlePopover,
     handleSidePeek,
-    useMenu,
-} from '@/presentation/(system)/menu/mvvm/view-models/menu.reducer.hooks';
+    useHeader,
+} from '@/presentation/(system)/header/mvvm/view-models/header.reducer.hooks';
 import {
     BellAlertIcon,
     BuildingOfficeIcon,
@@ -24,7 +24,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 export default function Menu() {
-    const { state, dispatch } = useMenu();
+    const { state, dispatch } = useHeader();
 
     return (
         <div>
@@ -49,17 +49,17 @@ function SidePeek({ state }: { state: State }) {
                 <div className="flex h-8 items-center gap-2">
                     <BuildingOfficeIcon className="h-5 w-5" />
                     {state.step === Step.Processing && <SkeletonText />}
-                    {state.step === Step.Idle && <div>{state.menuInfo.profile.orgName}</div>}
+                    {state.step === Step.Idle && <div>{state.header.profile.orgName}</div>}
                 </div>
                 <div className="flex h-8 items-center gap-2">
                     <UserIcon className="h-5 w-5" />
                     {state.step === Step.Processing && <SkeletonText />}
-                    {state.step === Step.Idle && <div>{state.menuInfo.profile.userName}</div>}
+                    {state.step === Step.Idle && <div>{state.header.profile.userName}</div>}
                 </div>
                 <div className="flex h-8 items-center gap-2">
                     <EnvelopeIcon className="h-5 w-5" />
                     {state.step === Step.Processing && <SkeletonText />}
-                    {state.step === Step.Idle && <div>{state.menuInfo.profile.mailAddress}</div>}
+                    {state.step === Step.Idle && <div>{state.header.profile.mailAddress}</div>}
                 </div>
             </div>
         </aside>

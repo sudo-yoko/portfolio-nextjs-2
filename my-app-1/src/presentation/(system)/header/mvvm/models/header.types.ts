@@ -1,6 +1,6 @@
 import { Aborted, OkData, Retryable } from '@/presentation/(system)/result/result.core.types';
 
-export type MenuInfo = {
+export type Header = {
     profile: {
         userName: string;
         orgName: string;
@@ -8,4 +8,4 @@ export type MenuInfo = {
     };
 };
 
-export type MenuResult = OkData<MenuInfo> | Retryable | Aborted;
+export type HeaderResult = OkData<Header> | Retryable | Aborted;

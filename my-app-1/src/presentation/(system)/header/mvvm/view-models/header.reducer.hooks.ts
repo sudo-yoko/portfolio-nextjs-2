@@ -1,6 +1,6 @@
 'use client';
 
-import { fetchMenuInfo } from '@/presentation/(system)/menu/mvvm/models/menu.requester';
+import { fetchHeader } from '@/presentation/(system)/header/mvvm/models/header.requester';
 import {
     Action,
     initialState,
@@ -12,11 +12,11 @@ import {
     sidePeekClose,
     sidePeekOpen,
     State,
-} from '@/presentation/(system)/menu/mvvm/view-models/menu.reducer';
+} from '@/presentation/(system)/header/mvvm/view-models/header.reducer';
 import { isAborted, isOkData, isRetryable } from '@/presentation/(system)/result/result.core.helpers';
 import React, { useEffect, useReducer } from 'react';
 
-export function useMenu() {
+export function useHeader() {
     const [state, dispatch] = useReducer(reducer, initialState);
 
     useEffect(() => {
@@ -26,7 +26,7 @@ export function useMenu() {
         async function func() {
             processStart(dispatch);
 
-            const result = await fetchMenuInfo();
+            const result = await fetchHeader();
             if (isOkData(result)) {
                 setProfile(dispatch, result.data);
                 return;

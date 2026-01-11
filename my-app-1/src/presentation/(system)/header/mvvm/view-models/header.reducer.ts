@@ -1,6 +1,6 @@
 'use client';
 
-import { MenuInfo } from '@/presentation/(system)/menu/mvvm/models/menu.types';
+import { Header } from '@/presentation/(system)/header/mvvm/models/header.types';
 import React, { Reducer } from 'react';
 
 export const Step = {
@@ -14,14 +14,14 @@ export type State = {
     step: Step;
     isSidePeek: boolean;
     isPopover: boolean;
-    menuInfo: MenuInfo;
+    header: Header;
 };
 
 export const initialState: State = {
     step: Step.Idle,
     isSidePeek: false,
     isPopover: false,
-    menuInfo: {
+    header: {
         profile: {
             userName: '',
             orgName: '',
@@ -48,7 +48,7 @@ export type Action =
     | { type: typeof ActionType.PopoverClosed }
     | { type: typeof ActionType.ProcessStarted }
     | { type: typeof ActionType.ProcessAborted }
-    | { type: typeof ActionType.ProfileLoaded; menuInfo: MenuInfo };
+    | { type: typeof ActionType.ProfileLoaded; header: Header };
 
 export function sidePeekOpen(dispatch: React.Dispatch<Action>): void {
     dispatch({ type: ActionType.SidePeekOpened });
@@ -73,8 +73,8 @@ export function processAbort(dispatch: React.Dispatch<Action>): void {
     dispatch({ type: ActionType.ProcessAborted });
 }
 
-export function setProfile(dispatch: React.Dispatch<Action>, menuInfo: MenuInfo): void {
-    dispatch({ type: ActionType.ProfileLoaded, menuInfo });
+export function setProfile(dispatch: React.Dispatch<Action>, header: Header): void {
+    dispatch({ type: ActionType.ProfileLoaded, header: header });
 }
 
 export const reducer: Reducer<State, Action> = (state: State, action: Action): State => {
@@ -113,7 +113,7 @@ export const reducer: Reducer<State, Action> = (state: State, action: Action): S
             return {
                 ...state,
                 step: Step.Idle,
-                menuInfo: action.menuInfo,
+                header: action.header,
             };
         default:
             return state;
