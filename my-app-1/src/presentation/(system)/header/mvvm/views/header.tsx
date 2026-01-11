@@ -23,7 +23,7 @@ import {
     WrenchIcon,
 } from '@heroicons/react/24/outline';
 
-export default function Menu() {
+export default function Header() {
     const { state, dispatch } = useHeader();
 
     return (
@@ -31,7 +31,29 @@ export default function Menu() {
             {/* サイドピーク */}
             <SidePeek state={state} />
             {/* ヘッダー */}
-            <Header state={state} dispatch={dispatch} />
+            <header className="fixed top-0 right-0 z-30 flex h-10 w-full bg-indigo-200">
+                <div className="mx-5 flex h-full w-full flex-row items-center">
+                    <div className="basis-1/2"></div>
+                    <div className="flex basis-1/2 items-center justify-end gap-4">
+                        {/* ======== */}
+                        <div className="relative">
+                            <Squares2X2Icon
+                                onClick={() => handlePopover(state, dispatch)}
+                                className="h-7 w-7 cursor-pointer active:scale-90"
+                            />
+                            <div className="absolute top-12 right-0">
+                                {/* ポップオーバー */}
+                                <Popover state={state} dispatch={dispatch} />
+                            </div>
+                        </div>
+                        {/* ======== */}
+                        <UserCircleIcon
+                            onClick={() => handleSidePeek(state, dispatch)}
+                            className="h-7 w-7 cursor-pointer active:scale-90"
+                        />
+                    </div>
+                </div>
+            </header>
         </div>
     );
 }
@@ -71,37 +93,6 @@ function SkeletonText() {
         <div className="animate-pulse">
             <div className="h-4 w-50 rounded bg-indigo-200"></div>
         </div>
-    );
-}
-
-/**
- * ヘッダー
- */
-function Header({ state, dispatch }: { state: State; dispatch: React.Dispatch<Action> }) {
-    return (
-        <header className="fixed top-0 right-0 z-30 flex h-10 w-full bg-indigo-200">
-            <div className="mx-5 flex h-full w-full flex-row items-center">
-                <div className="basis-1/2"></div>
-                <div className="flex basis-1/2 items-center justify-end gap-4">
-                    {/* ======== */}
-                    <div className="relative">
-                        <Squares2X2Icon
-                            onClick={() => handlePopover(state, dispatch)}
-                            className="h-7 w-7 cursor-pointer active:scale-90"
-                        />
-                        <div className="absolute top-12 right-0">
-                            {/* ポップオーバー */}
-                            <Popover state={state} dispatch={dispatch} />
-                        </div>
-                    </div>
-                    {/* ======== */}
-                    <UserCircleIcon
-                        onClick={() => handleSidePeek(state, dispatch)}
-                        className="h-7 w-7 cursor-pointer active:scale-90"
-                    />
-                </div>
-            </div>
-        </header>
     );
 }
 

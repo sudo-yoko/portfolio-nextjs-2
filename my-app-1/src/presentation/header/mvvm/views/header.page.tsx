@@ -1,11 +1,11 @@
 import { Button } from '@/presentation/(system)/components/button.decorator.simple';
-import Menu from '@/presentation/(system)/header/mvvm/views/header';
+import Header from '@/presentation/(system)/header/mvvm/views/header';
 import { Bars3Icon } from '@heroicons/react/16/solid';
 
 export default function Page() {
     return (
         <div>
-            <Menu />
+            <Header />
             <div className="h-full bg-white">
                 <div className="h-10"></div>
                 <div className="flex items-center">
@@ -13,7 +13,7 @@ export default function Page() {
                     <Bars3Icon className="h-4 w-4" />
                     ]を押してください。
                 </div>
-                <Button >aaaaa</Button>
+                <Button>aaaaa</Button>
             </div>
         </div>
     );
