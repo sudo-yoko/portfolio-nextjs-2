@@ -1,6 +1,6 @@
 'use client';
 
-import { ProcessingModal } from '@/presentation/(system)/components/processing.modal';
+import { ProcessingModalB } from '@/presentation/(system)/components/processing.modal.b';
 import { ToastError } from '@/presentation/(system)/components/toast.feature.error';
 import { ErrorModal } from '@/presentation/(system)/error/views/component.error-modal.feature.reset';
 import { Mode, reset, Step } from '@/presentation/contact/small/view-models/contact.reducer';
@@ -22,7 +22,8 @@ export default function Main() {
                 {state.mode === Mode.Confirm && <Confirm state={state} dispatch={dispatch} />}
                 {state.mode === Mode.Complete && <Complete />}
                 {state.step === Step.Send && (
-                    <ProcessingModal>送信しています・・・</ProcessingModal>
+                    /*<ProcessingModalA>送信しています・・・</ProcessingModalA>*/
+                    <ProcessingModalB />
                 )}
                 {state.step === Step.Abort && <ErrorModal onAction={() => reset(dispatch)} />}
                 {state.retryMsg.length > 0 && (

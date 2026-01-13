@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/presentation/(system)/components/button.decorator.simple';
-import { ProcessingModal } from '@/presentation/(system)/components/processing.modal';
+import { ProcessingModalB } from '@/presentation/(system)/components/processing.modal.b';
 import { ErrorModal } from '@/presentation/(system)/error/views/component.error-modal.feature.close';
 import {
     setError,
@@ -22,7 +22,8 @@ export function Main() {
     return (
         <div>
             {(state.step === Step.Search || state.step === Step.Next || state.step === Step.Prev) && (
-                <ProcessingModal>検索しています。お待ちください・・・</ProcessingModal>
+                /*<ProcessingModal>検索しています。お待ちください・・・</ProcessingModal>*/
+                <ProcessingModalB />
             )}
             {state.error && <ErrorModal onAction={() => setError(dispatch, false)} />}
             <div>
