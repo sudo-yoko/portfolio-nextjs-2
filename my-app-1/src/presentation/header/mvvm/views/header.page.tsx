@@ -13,7 +13,17 @@ export default function Page() {
                     <Bars3Icon className="h-4 w-4" />
                     ]を押してください。
                 </div>
-                <Button>aaaaa</Button>
+                <div className="flex items-center gap-1">
+                    <Button>aaaaa</Button>
+                    <Button>aaaaa</Button>
+                    <Button>aaaaa</Button>
+                    <Button>aaaaa</Button>
+                    <Button>aaaaa</Button>
+                    <Button>aaaaa</Button>
+                    <Button>aaaaa</Button>
+                    <Button>aaaaa</Button>
+                    <Button>aaaaa</Button>
+                </div>
             </div>
         </div>
     );

@@ -1,17 +1,20 @@
 'use client';
 
+import { withErrorHandlingAsync } from '@/presentation/(system)/aop/aop.core.exception.client';
 import { fetchHeader } from '@/presentation/(system)/header/mvvm/models/header.requester';
 import {
     Action,
     initialState,
     popoverClose,
     popoverOpen,
+    processAbort,
     processStart,
     reducer,
     setProfile,
     sidePeekClose,
     sidePeekOpen,
     State,
+    Step,
 } from '@/presentation/(system)/header/mvvm/view-models/header.reducer';
 import { isAborted, isOkData, isRetryable } from '@/presentation/(system)/result/result.core.helpers';
 import React, { useEffect, useReducer } from 'react';
@@ -20,12 +23,19 @@ export function useHeader() {
     const [state, dispatch] = useReducer(reducer, initialState);
 
     useEffect(() => {
-        void (async () => {
-            await func();
-        })();
-        async function func() {
-            processStart(dispatch);
+        processStart(dispatch);
+    }, []);
 
+    useEffect(() => {
+        if (state.step === Step.Processing) {
+            void (async () => {
+                await withErrorHandlingAsync(
+                    () => func(),
+                    () => processAbort(dispatch),
+                );
+            })();
+        }
+        async function func() {
             const result = await fetchHeader();
             if (isOkData(result)) {
                 setProfile(dispatch, result.data);
@@ -38,8 +48,7 @@ export function useHeader() {
                 return;
             }
         }
-    }, []);
-
+    }, [state.step]);
     return { state, dispatch };
 }
 

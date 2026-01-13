@@ -1,4 +1,6 @@
-import { Header, HeaderResult } from '@/presentation/(system)/header/mvvm/models/header.types';
+import 'client-only';
+
+import { HeaderResult } from '@/presentation/(system)/header/mvvm/models/header.types';
 import { Tag } from '@/presentation/(system)/result/result.core.types';
 
 /**
