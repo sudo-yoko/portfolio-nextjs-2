@@ -1,8 +1,8 @@
 'use client';
 
-export default function ApiResult() {
-        return (
-        <div className="w-150 rounded-3xl bg-white h-80">
+export default function ApiResult({ className }: { className: string }) {
+    return (
+        <div className={className}>
             <div>API結果</div>
         </div>
     );

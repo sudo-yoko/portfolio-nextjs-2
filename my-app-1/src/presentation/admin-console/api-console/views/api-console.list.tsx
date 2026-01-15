@@ -1,8 +1,8 @@
 'use client';
 
-export default function ApiList() {
+export default function ApiList({ className }: { className: string }) {
     return (
-        <div className="h-150 w-100 rounded-3xl bg-white">
+        <div className={className}>
             <div>API一覧</div>
         </div>
     );

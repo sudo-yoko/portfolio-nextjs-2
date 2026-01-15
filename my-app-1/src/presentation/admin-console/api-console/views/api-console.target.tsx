@@ -1,9 +1,12 @@
 'use client';
 
-export default function TargetApi() {
+import { Button } from "@/presentation/(system)/components/button.decorator.simple";
+
+export default function TargetApi({ className }: { className: string }) {
     return (
-        <div className="w-150 rounded-3xl bg-white h-80">
+        <div className={className}>
             <div>選択されたAPI</div>
+            <Button>実行する</Button>
         </div>
     );
 }
