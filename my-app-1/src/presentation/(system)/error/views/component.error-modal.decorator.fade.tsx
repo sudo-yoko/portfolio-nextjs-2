@@ -23,8 +23,8 @@ export function ErrorModalFade({
         <Fade open={open} onExit={() => onAction()}>
             <ErrorModalCore
                 actionLabel={actionLabel}
-                primaryMessage={primaryMessage}
-                secondaryMessage={secondaryMessage}
+                userFacingMessagePrimary={primaryMessage}
+                userFacingMessageSecondary={secondaryMessage}
                 onAction={() => setOpen(false)}
             />
         </Fade>

@@ -8,25 +8,25 @@ import { Button } from '@/presentation/(system)/components/button.decorator.simp
 export function ErrorModalCore({
     onAction,
     actionLabel,
-    primaryMessage,
-    secondaryMessage,
+    userFacingMessagePrimary,
+    userFacingMessageSecondary,
 }: {
     onAction: () => void;
     actionLabel: string;
-    primaryMessage?: string[];
-    secondaryMessage?: string[];
+    userFacingMessagePrimary?: string[];
+    userFacingMessageSecondary?: string[];
 }) {
     const primaryMessageDefault = ['システムエラーが発生しました。'];
 
     const message: string[] = [];
     // message.push(...(primaryMessage ?? primaryMessageDefault));
-    if (primaryMessage) {
-        message.push(...primaryMessage);
+    if (userFacingMessagePrimary) {
+        message.push(...userFacingMessagePrimary);
     } else {
         message.push(...primaryMessageDefault);
     }
-    if (secondaryMessage) {
-        message.push(...secondaryMessage);
+    if (userFacingMessageSecondary) {
+        message.push(...userFacingMessageSecondary);
     }
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
