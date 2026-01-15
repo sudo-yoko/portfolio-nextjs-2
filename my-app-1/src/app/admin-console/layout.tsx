@@ -1,3 +1,5 @@
+import 'server-only';
+
 export default function AdminConsoleLayout({ children }: { children: React.ReactNode }) {
     return (
         <section>

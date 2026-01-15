@@ -1,0 +1,25 @@
+'use client';
+
+import { Fade } from '@/presentation/(system)/components/fade';
+import { AdminConsoleHeader } from '@/presentation/admin-console/(shared)/views/admin-console.header';
+
+export default function Dashboard() {
+    return (
+        <div>
+            <Fade
+                open={true}
+                onExit={() => {
+                    return;
+                }}
+            >
+                <div className="flex justify-center">
+                    <div className="w-full max-w-4xl">
+                        <div className="flex flex-col gap-5">
+                            <AdminConsoleHeader />
+                        </div>
+                    </div>
+                </div>
+            </Fade>
+        </div>
+    );
+}
