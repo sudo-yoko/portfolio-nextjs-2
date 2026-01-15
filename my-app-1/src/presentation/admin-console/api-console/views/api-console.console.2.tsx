@@ -1,10 +1,10 @@
-import 'server-only';
+'use client';
 
 import ApiList from '@/presentation/admin-console/api-console/views/api-console.list';
 import ApiResult from '@/presentation/admin-console/api-console/views/api-console.result';
 import TargetApi from '@/presentation/admin-console/api-console/views/api-console.target';
 
-export default function Page() {
+export default function Console() {
     return (
         <div className="animate-in fade-in flex w-full justify-center duration-700">
             <div className="w-full max-w-6xl">
