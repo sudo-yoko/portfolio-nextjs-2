@@ -18,42 +18,16 @@ export default function Console() {
                 <div className="w-full max-w-4xl">
                     <div className="flex flex-col gap-5">
                         <AdminConsoleHeader />
-                        {/* Header Area 
-                        <header className="flex items-center justify-between">
-                            <div>
-                                <h1 className="text-3xl font-extrabold text-white">Admin Console</h1>
-                                <p className="mt-1 text-sm text-indigo-200/60">運用管理コントロールパネル</p>
+                        <div className="flex flex-row items-stretch gap-5">
+                            <div className="h-96 w-1/3">
+                                <ApiList className="h-full rounded-3xl border border-white/10 bg-white/5 p-5 text-white shadow-2xl backdrop-blur-xl" />
                             </div>
-                            <div className="flex flex-row gap-3">
-                                <div className="cursor-pointer rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-medium text-white transition-all hover:scale-105 hover:brightness-95">
-                                    API コンソール
+                            <div className="flex w-2/3 flex-col gap-5">
+                                <div className="flex-1">
+                                    <TargetApi className="h-full rounded-3xl bg-white p-5 shadow-2xl" />
                                 </div>
-                                <div className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-medium text-white">
-                                    ジョブ・ダッシュボード
-                                </div>
-                                <div className="cursor-pointer rounded-full border border-amber-400 bg-amber-400/10 px-4 py-2 text-xs font-bold text-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.4)] transition-all active:scale-95">
-                                    API コンソール
-                                </div>
-                            </div>
-                        </header>*/}
-
-                        {/* Main Console Layout */}
-                        <div className="flex flex-row items-stretch gap-6">
-                            {/* Left: API List (Glass Effect) */}
-                            <div className="min-h-[650px] w-1/3">
-                                <ApiList className="h-full rounded-[2rem] border border-white/10 bg-white/[0.03] p-6 text-white shadow-2xl backdrop-blur-xl" />
-                            </div>
-
-                            {/* Right: Interaction Area */}
-                            <div className="flex w-2/3 flex-col gap-6">
-                                {/* Target API Panel */}
-                                <div className="group flex-1 overflow-hidden">
-                                    <TargetApi className="h-full rounded-[2rem] bg-white/95 p-8 shadow-2xl backdrop-blur-md transition-all duration-300 group-hover:bg-white" />
-                                </div>
-
-                                {/* API Result Panel */}
-                                <div className="group flex-1 overflow-hidden">
-                                    <ApiResult className="h-full rounded-[2rem] border border-white/5 bg-slate-900/90 p-8 text-indigo-100 shadow-2xl backdrop-blur-md" />
+                                <div className="flex-1">
+                                    <ApiResult className="h-full rounded-3xl bg-slate-900 p-5 text-indigo-100 shadow-2xl" />
                                 </div>
                             </div>
                         </div>

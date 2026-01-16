@@ -2,10 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 
-import {
-    AdminConsoleButton,
-    AdminConsoleButtonGlow,
-} from '@/presentation/admin-console/(shared)/views/admin-console.buttons';
+import { AdminConsoleButton } from '@/presentation/admin-console/(shared)/views/admin-console.buttons';
 
 export function AdminConsoleHeader() {
     const pathname = usePathname();
@@ -13,19 +10,15 @@ export function AdminConsoleHeader() {
         <header className="flex items-center justify-between">
             <div>
                 <h1 className="text-3xl font-extrabold text-white">Admin Console</h1>
-                <p className="mt-1 text-sm text-indigo-200/60">運用管理コントロールパネル</p>
+                <p className="mt-1 text-sm text-indigo-200/60">運用管理コンソール</p>
             </div>
             <div className="flex flex-row gap-3">
-                {pathname === '/admin-console/job-dashboard' ? (
-                    <AdminConsoleButtonGlow>ジョブ・ダッシュボード</AdminConsoleButtonGlow>
-                ) : (
-                    <AdminConsoleButton>ジョブ・ダッシュボード</AdminConsoleButton>
-                )}
-                {pathname === '/admin-console/api-console' ? (
-                    <AdminConsoleButtonGlow>API コンソール</AdminConsoleButtonGlow>
-                ) : (
-                    <AdminConsoleButton>API コンソール</AdminConsoleButton>
-                )}
+                <AdminConsoleButton active={pathname === '/admin-console/job-dashboard'}>
+                    ジョブ・ダッシュボード
+                </AdminConsoleButton>
+                <AdminConsoleButton active={pathname === '/admin-console/api-console'}>
+                    API コンソール
+                </AdminConsoleButton>
             </div>
         </header>
     );
