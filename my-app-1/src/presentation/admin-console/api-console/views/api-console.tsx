@@ -2,12 +2,10 @@
 
 import { Fade } from '@/presentation/(system)/components/fade';
 import { AdminConsoleHeader } from '@/presentation/admin-console/(shared)/views/admin-console.header';
+import { useApiConsole } from '@/presentation/admin-console/api-console/view-models/api-console.reducer.hooks';
 import ApiList from '@/presentation/admin-console/api-console/views/api-console.list';
 import ApiResult from '@/presentation/admin-console/api-console/views/api-console.result';
 import TargetApi from '@/presentation/admin-console/api-console/views/api-console.target';
-import { useApiConsole } from '../view-models/api-console.reducer.hooks';
-import { State } from '../view-models/api-console.reducer';
-import { JSX } from 'react';
 
 export default function Console() {
     const { state, dispatch } = useApiConsole();
@@ -49,5 +47,3 @@ export default function Console() {
         </Fade>
     );
 }
-
-

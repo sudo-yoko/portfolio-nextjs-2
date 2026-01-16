@@ -1,9 +1,9 @@
 'use client';
 
-import { ItemListButton } from '@/presentation/admin-console/(shared)/views/admin-console.buttons';
 import { apiList } from '@/presentation/admin-console/api-console/models/api-console.data';
-import { Action, State } from '../view-models/api-console.reducer';
-import { handleItemSelect } from '../view-models/api-console.reducer.hooks';
+import { Action, State } from '@/presentation/admin-console/api-console/view-models/api-console.reducer';
+import { handleItemSelect } from '@/presentation/admin-console/api-console/view-models/api-console.reducer.hooks';
+import { ApiListButton } from '@/presentation/admin-console/api-console/views/api-console.buttons';
 
 export default function ApiList({
     state,
@@ -26,7 +26,7 @@ export default function ApiList({
                     <div className="flex flex-col gap-2">
                         {apiList.map((item) => {
                             return (
-                                <ItemListButton
+                                <ApiListButton
                                     key={item.id}
                                     onClick={() => handleItemSelect(dispatch, item)}
                                     item={item}
