@@ -24,7 +24,7 @@ export default function Console() {
                             </div>
                             <div className="flex w-2/3 flex-col gap-5">
                                 <div className="flex-1">
-                                    <TargetApi className="h-full rounded-3xl bg-white p-5 shadow-2xl" />
+                                    <TargetApi className="h-full rounded-3xl bg-indigo-100 p-5 shadow-2xl" />
                                 </div>
                                 <div className="flex-1">
                                     <ApiResult className="h-full rounded-3xl bg-slate-900 p-5 text-indigo-100 shadow-2xl" />

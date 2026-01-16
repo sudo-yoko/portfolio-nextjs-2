@@ -7,6 +7,7 @@ export default function TargetApi({ className }: { className: string }) {
         <div className={className}>
             <div>選択されたAPI</div>
             <Button>実行する</Button>
+            <Button>選択解除</Button>
         </div>
     );
 }
