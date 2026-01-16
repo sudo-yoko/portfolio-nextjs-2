@@ -1,8 +1,8 @@
 'use client';
 
-import ApiList from '@/presentation/admin-console/api-console/views/api-console.list';
+import ListPanel from '@/presentation/admin-console/api-console/views/api-console.list';
 import ApiResult from '@/presentation/admin-console/api-console/views/api-console.result';
-import TargetApi from '@/presentation/admin-console/api-console/views/api-console.target';
+import InputPanel from '@/presentation/admin-console/api-console/views/api-console.input';
 
 export default function Console() {
     return (
@@ -26,14 +26,14 @@ export default function Console() {
                     <div className="flex flex-row items-stretch gap-6">
                         {/* Left: API List (Glass Effect) */}
                         <div className="min-h-[650px] w-1/3">
-                            <ApiList className="h-full rounded-[2rem] border border-white/10 bg-white/[0.03] p-6 text-white shadow-2xl backdrop-blur-xl" />
+                            <ListPanel className="h-full rounded-[2rem] border border-white/10 bg-white/[0.03] p-6 text-white shadow-2xl backdrop-blur-xl" />
                         </div>
 
                         {/* Right: Interaction Area */}
                         <div className="flex w-2/3 flex-col gap-6">
                             {/* Target API Panel */}
                             <div className="group flex-1 overflow-hidden">
-                                <TargetApi className="h-full rounded-[2rem] bg-white/95 p-8 shadow-2xl backdrop-blur-md transition-all duration-300 group-hover:bg-white" />
+                                <InputPanel className="h-full rounded-[2rem] bg-white/95 p-8 shadow-2xl backdrop-blur-md transition-all duration-300 group-hover:bg-white" />
                             </div>
 
                             {/* API Result Panel */}

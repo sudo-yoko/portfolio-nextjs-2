@@ -8,7 +8,7 @@ import { Item } from '../models/api-console.types';
 /**
  * API選択パネル
  */
-export default function ApiList({
+export default function ListPanel({
     state,
     dispatch,
     className,

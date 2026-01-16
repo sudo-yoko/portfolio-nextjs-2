@@ -7,7 +7,7 @@ import { handleItemClear } from '../view-models/api-console.reducer.hooks';
 /**
  * API実行パネル
  */
-export default function TargetApi({
+export default function InputPanel({
     state,
     dispatch,
     className,
@@ -51,7 +51,7 @@ export default function TargetApi({
                             </div>
 
                             {/* 入力エリア */}
-                            <InputPanel state={state} />
+                            <ParameterPanel state={state} />
 
                             {/* アクションボタン */}
                             <div className="flex gap-3 border-t border-white/5 pt-4">
@@ -89,6 +89,6 @@ function MethodBadgeS({ method }: { method: string }) {
     );
 }
 
-function InputPanel({ state }: { state: State }) {
+function ParameterPanel({ state }: { state: State }) {
     return state.selectedItem?.inputPanel?.() || null;
 }
