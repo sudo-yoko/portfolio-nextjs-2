@@ -1,6 +1,9 @@
 'use client';
 
-import { SectionField, SectionLabelPathParameter } from './api-console.input.shared';
+import {
+    SectionField,
+    SectionLabelPathParameter,
+} from '@/presentation/admin-console/api-console/_individual/_shared/api-console.input.shared';
 
 export function customersInputFormFactory() {
     return <CustomersInputForm />;

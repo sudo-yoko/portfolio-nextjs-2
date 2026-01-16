@@ -1,9 +1,9 @@
 'use client';
 
 import { apiList } from '@/presentation/admin-console/api-console/models/api-console.data';
+import { Item } from '@/presentation/admin-console/api-console/models/api-console.types';
 import { Action, State } from '@/presentation/admin-console/api-console/view-models/api-console.reducer';
 import { handleItemSelect } from '@/presentation/admin-console/api-console/view-models/api-console.reducer.hooks';
-import { Item } from '../models/api-console.types';
 
 /**
  * API選択パネル

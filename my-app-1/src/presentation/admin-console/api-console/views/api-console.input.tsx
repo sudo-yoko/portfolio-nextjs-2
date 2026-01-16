@@ -1,8 +1,8 @@
 'use client';
 
 import { Fade } from '@/presentation/(system)/components/fade';
-import { Action, State } from '../view-models/api-console.reducer';
-import { handleItemClear } from '../view-models/api-console.reducer.hooks';
+import { Action, State } from '@/presentation/admin-console/api-console/view-models/api-console.reducer';
+import { handleItemClear } from '@/presentation/admin-console/api-console/view-models/api-console.reducer.hooks';
 import { JSX } from 'react';
 
 /**

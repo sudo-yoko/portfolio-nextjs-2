@@ -1,6 +1,6 @@
+import { customersInputFormFactory } from '@/presentation/admin-console/api-console/_individual/customers/views/api-console.input.customers';
+import { usersInputFormFactory } from '@/presentation/admin-console/api-console/_individual/users/views/api-console.input.users';
 import { Item } from '@/presentation/admin-console/api-console/models/api-console.types';
-import { customersInputFormFactory } from '../views/api-console.input.customers';
-import { usersInputFormFactory } from '../views/api-console.input.users';
 
 const _empty: Item[] = [];
 

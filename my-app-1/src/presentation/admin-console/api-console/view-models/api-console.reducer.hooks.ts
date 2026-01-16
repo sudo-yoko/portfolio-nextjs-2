@@ -1,5 +1,6 @@
 'use client';
 
+import { Item } from '@/presentation/admin-console/api-console/models/api-console.types';
 import {
     Action,
     initialState,
@@ -8,7 +9,6 @@ import {
     reducer,
 } from '@/presentation/admin-console/api-console/view-models/api-console.reducer';
 import React, { useReducer } from 'react';
-import { Item } from '../models/api-console.types';
 
 export function useApiConsole() {
     const [state, dispatch] = useReducer(reducer, initialState);

@@ -1,6 +1,9 @@
 'use client';
 
-import { SectionField, SectionLabelQueryParameter } from './api-console.input.shared';
+import {
+    SectionField,
+    SectionLabelQueryParameter,
+} from '@/presentation/admin-console/api-console/_individual/_shared/api-console.input.shared';
 
 export function usersInputFormFactory() {
     return <UsersInputForm />;
