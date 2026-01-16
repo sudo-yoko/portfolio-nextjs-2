@@ -21,13 +21,20 @@ export const initialState: State = {
 
 export const ActionType = {
     ItemSelected: 'itemSelected',
-};
+    ItemCleared: 'itemCleared',
+} as const;
 export type ActionType = (typeof ActionType)[keyof typeof ActionType];
 
-export type Action = { type: typeof ActionType.ItemSelected; item: Item };
+export type Action =
+    | { type: typeof ActionType.ItemSelected; item: Item }
+    | { type: typeof ActionType.ItemCleared };
 
 export function itemSelect(dispatch: React.Dispatch<Action>, item: Item): void {
     dispatch({ type: ActionType.ItemSelected, item });
+}
+
+export function itemClear(dispatch: React.Dispatch<Action>): void {
+    dispatch({ type: ActionType.ItemCleared });
 }
 
 export const reducer: Reducer<State, Action> = (state: State, action: Action): State => {
@@ -37,6 +44,8 @@ export const reducer: Reducer<State, Action> = (state: State, action: Action): S
                 ...state,
                 selectedItem: action.item,
             };
+        case ActionType.ItemCleared:
+            return initialState;
         default:
             return state;
     }

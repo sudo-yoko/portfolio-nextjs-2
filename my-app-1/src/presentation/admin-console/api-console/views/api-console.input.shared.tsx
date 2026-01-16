@@ -1,3 +1,6 @@
+//
+// API実行パネル 共通コンポーネント
+//
 'use client';
 
 export function SectionField({ field }: { field: string }) {
@@ -13,14 +16,23 @@ export function SectionField({ field }: { field: string }) {
     );
 }
 
+/**
+ * セクションラベル：PATH PARAMETER
+ */
 export function SectionLabelPathParameter() {
     return <SectionLabel label="Path Parameter" />;
 }
 
+/**
+ * セクションラベル：QUERY PARAMETER
+ */
 export function SectionLabelQueryParameter() {
     return <SectionLabel label="Query Parameter" />;
 }
 
+/**
+ * セクションラベル：BODY DATA
+ */
 export function SectionLabelBodyData() {
     return <SectionLabel label="Body Data" />;
 }

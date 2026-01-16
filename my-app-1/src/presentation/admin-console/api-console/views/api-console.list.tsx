@@ -46,7 +46,7 @@ export default function ApiList({
 
 function ApiListButton({ onClick, item, state }: { onClick: () => void; item: Item; state: State }) {
     return (
-        <div
+        <button
             onClick={onClick}
             className={`flex w-full cursor-pointer items-center gap-4 rounded-2xl border p-3 transition-all duration-300 active:scale-95 ${
                 item.id === state.selectedItem?.id
@@ -71,7 +71,7 @@ function ApiListButton({ onClick, item, state }: { onClick: () => void; item: It
             <div
                 className={`${item.id === state.selectedItem?.id ? '' : 'invisible'} ml-auto h-1.5 w-1.5 animate-pulse rounded-full bg-amber-400`}
             />
-        </div>
+        </button>
     );
 }
 

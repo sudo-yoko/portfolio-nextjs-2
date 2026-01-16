@@ -6,7 +6,7 @@ export function renderUsersPanel() {
     return <UsersPanel />;
 }
 
-export function UsersPanel() {
+function UsersPanel() {
     return (
         <div className="flex-1 space-y-6">
             <div className="space-y-3">

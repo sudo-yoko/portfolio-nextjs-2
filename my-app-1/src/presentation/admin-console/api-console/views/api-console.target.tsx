@@ -1,12 +1,21 @@
 'use client';
 
 import { Fade } from '@/presentation/(system)/components/fade';
-import { State } from '../view-models/api-console.reducer';
+import { Action, State } from '../view-models/api-console.reducer';
+import { handleItemClear } from '../view-models/api-console.reducer.hooks';
 
 /**
  * API実行パネル
  */
-export default function TargetApi({ state, className }: { state: State; className: string }) {
+export default function TargetApi({
+    state,
+    dispatch,
+    className,
+}: {
+    state: State;
+    dispatch: React.Dispatch<Action>;
+    className: string;
+}) {
     return (
         <div className={className}>
             <div className="flex h-full flex-col">
@@ -41,7 +50,7 @@ export default function TargetApi({ state, className }: { state: State; classNam
                                 </div>
                             </div>
 
-                            {/* 入力エリア（スクロール可能） */}
+                            {/* 入力エリア */}
                             <InputPanel state={state} />
 
                             {/* アクションボタン */}
@@ -49,7 +58,10 @@ export default function TargetApi({ state, className }: { state: State; classNam
                                 <button className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-amber-400 px-4 py-3 text-sm font-bold text-slate-950 shadow-[0_0_20px_rgba(251,191,36,0.2)] transition-all hover:bg-amber-300 active:scale-95">
                                     RUN REQUEST
                                 </button>
-                                <button className="flex items-center justify-center gap-2 rounded-xl bg-white/5 px-4 py-3 text-sm font-bold text-slate-400 transition-all hover:bg-white/10 hover:text-rose-400">
+                                <button
+                                    onClick={() => handleItemClear(dispatch)}
+                                    className="flex items-center justify-center gap-2 rounded-xl bg-white/5 px-4 py-3 text-sm font-bold text-slate-400 transition-all hover:bg-white/10 hover:text-rose-400"
+                                >
                                     CLEAR
                                 </button>
                             </div>

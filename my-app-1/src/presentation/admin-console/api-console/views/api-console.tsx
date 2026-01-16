@@ -36,6 +36,7 @@ export default function Console() {
                                 <div className="flex-1">
                                     <TargetApi
                                         state={state}
+                                        dispatch={dispatch}
                                         className="h-full rounded-3xl bg-slate-950 p-5"
                                     />
                                 </div>
