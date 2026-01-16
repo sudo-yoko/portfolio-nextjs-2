@@ -1,4 +1,5 @@
 import { Item } from '@/presentation/admin-console/api-console/models/api-console.types';
+import { customersApiPanel } from '../views/api-console.target';
 
 export const apiList: Item[] = [
     {
@@ -6,6 +7,7 @@ export const apiList: Item[] = [
         method: 'GET',
         path: '/customers/{customerId}',
         description: '顧客情報取得API',
+        inputPanel: (state) => customersApiPanel({ state }),
     },
     {
         id: '2',
@@ -25,7 +27,7 @@ export const apiList: Item[] = [
         path: '/customers/{customerId}',
         description: '顧客情報取得API',
     },
-        {
+    {
         id: '5',
         method: 'PUT',
         path: '/customers/{customerId}',

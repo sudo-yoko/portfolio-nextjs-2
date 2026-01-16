@@ -2,8 +2,18 @@
 
 import { ItemListButton } from '@/presentation/admin-console/(shared)/views/admin-console.buttons';
 import { apiList } from '@/presentation/admin-console/api-console/models/api-console.data';
+import { Action, State } from '../view-models/api-console.reducer';
+import { handleItemSelect } from '../view-models/api-console.reducer.hooks';
 
-export default function ApiList({ className }: { className: string }) {
+export default function ApiList({
+    state,
+    dispatch,
+    className,
+}: {
+    state: State;
+    dispatch: React.Dispatch<Action>;
+    className: string;
+}) {
     return (
         <div className={className}>
             <div className="flex h-full flex-col space-y-4">
@@ -12,12 +22,17 @@ export default function ApiList({ className }: { className: string }) {
                         Endpoints
                     </h2>
                 </div>
-
-                {/* 3. 一覧を表示するコンテナ */}
-                <div className="custom-scrollbar flex-1 overflow-y-auto pr-2">
+                <div className="flex-1">
                     <div className="flex flex-col gap-2">
                         {apiList.map((item) => {
-                            return <ItemListButton key={item.id} item={item} isSelected={item.id === '1'} />;
+                            return (
+                                <ItemListButton
+                                    key={item.id}
+                                    onClick={() => handleItemSelect(dispatch, item)}
+                                    item={item}
+                                    state={state}
+                                />
+                            );
                         })}
                     </div>
                 </div>

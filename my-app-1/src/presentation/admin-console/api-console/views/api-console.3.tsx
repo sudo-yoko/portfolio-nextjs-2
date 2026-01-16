@@ -5,8 +5,13 @@ import { AdminConsoleHeader } from '@/presentation/admin-console/(shared)/views/
 import ApiList from '@/presentation/admin-console/api-console/views/api-console.list';
 import ApiResult from '@/presentation/admin-console/api-console/views/api-console.result';
 import TargetApi from '@/presentation/admin-console/api-console/views/api-console.target';
+import { useApiConsole } from '../view-models/api-console.reducer.hooks';
+import { State } from '../view-models/api-console.reducer';
+import { JSX } from 'react';
 
 export default function Console() {
+    const { state, dispatch } = useApiConsole();
+
     return (
         <Fade
             open={true}
@@ -19,12 +24,19 @@ export default function Console() {
                     <div className="flex flex-col gap-5">
                         <AdminConsoleHeader />
                         <div className="flex flex-row items-stretch gap-5">
-                            <div className="h-96 w-1/3">
-                                <ApiList className="h-full rounded-3xl border border-white/10 bg-white/5 p-5 text-white shadow-2xl backdrop-blur-xl" />
+                            <div className="w-1/3">
+                                <ApiList
+                                    state={state}
+                                    dispatch={dispatch}
+                                    className="h-full rounded-3xl border border-white/10 bg-white/5 p-5 text-white shadow-2xl backdrop-blur-xl"
+                                />
                             </div>
                             <div className="flex w-2/3 flex-col gap-5">
                                 <div className="flex-1">
-                                    <TargetApi className="h-full rounded-3xl bg-indigo-100 p-5 shadow-2xl" />
+                                    <TargetApi
+                                        state={state}
+                                        className="h-full rounded-3xl bg-indigo-100 p-5 shadow-2xl"
+                                    />
                                 </div>
                                 <div className="flex-1">
                                     <ApiResult className="h-full rounded-3xl bg-slate-900 p-5 text-indigo-100 shadow-2xl" />
@@ -37,3 +49,5 @@ export default function Console() {
         </Fade>
     );
 }
+
+
