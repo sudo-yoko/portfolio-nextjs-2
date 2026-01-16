@@ -1,5 +1,6 @@
 import { Item } from '@/presentation/admin-console/api-console/models/api-console.types';
-import { customersApiPanel } from '../views/api-console.target';
+import { renderCustomersPanel } from '../views/api-console.input.customers';
+import { renderUsersPanel } from '../views/api-console.input.users';
 
 const _empty: Item[] = [];
 
@@ -10,7 +11,7 @@ const _item1: Item[] = [
         method: 'GET',
         path: '/customers/{customerId}',
         description: '顧客情報取得API',
-        inputPanel: (state) => customersApiPanel({ state }),
+        inputPanel: () => renderCustomersPanel(),
     },
 ]
 
@@ -20,13 +21,14 @@ const items: Item[] = [
         method: 'GET',
         path: '/customers/{customerId}',
         description: '顧客情報取得API',
-        inputPanel: (state) => customersApiPanel({ state }),
+        inputPanel: () => renderCustomersPanel(),
     },
     {
         id: '2',
-        method: 'POST',
-        path: '/customers/{customerId}',
-        description: '顧客情報取得API',
+        method: 'GET',
+        path: '/users',
+        description: 'ユーザー一覧取得API',
+        inputPanel: () => renderUsersPanel(),
     },
     {
         id: '3',
@@ -36,7 +38,7 @@ const items: Item[] = [
     },
     {
         id: '4',
-        method: 'PUT',
+        method: 'POST',
         path: '/customers/{customerId}',
         description: '顧客情報取得API',
     },

@@ -2,8 +2,10 @@
 
 import { Fade } from '@/presentation/(system)/components/fade';
 import { State } from '../view-models/api-console.reducer';
-import { MethodBadgeS } from './api-console.buttons';
 
+/**
+ * API実行パネル
+ */
 export default function TargetApi({ state, className }: { state: State; className: string }) {
     return (
         <div className={className}>
@@ -40,33 +42,7 @@ export default function TargetApi({ state, className }: { state: State; classNam
                             </div>
 
                             {/* 入力エリア（スクロール可能） */}
-                            <div className="custom-scrollbar flex-1 space-y-6 overflow-y-auto pr-2">
-                                {/* 各パラメータセクション */}
-                                {[
-                                    { label: 'Path Parameter', field: 'customerId' },
-                                    { label: 'Query Parameter', field: 'queryId' },
-                                    { label: 'Request Body', field: 'bodyData' },
-                                ].map((section) => (
-                                    <div key={section.label} className="space-y-3">
-                                        <div className="flex items-center gap-2">
-                                            <div className="h-px flex-1 bg-white/40" />
-                                            <span className="text-[10px] font-bold tracking-tighter text-slate-500 uppercase">
-                                                {section.label}
-                                            </span>
-                                        </div>
-                                        <div className="space-y-1.5">
-                                            <label className="ml-1 text-xs text-indigo-200/60">
-                                                {section.field}
-                                            </label>
-                                            <input
-                                                type="text"
-                                                placeholder={`Enter ${section.field}...`}
-                                                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white transition-all outline-none placeholder:text-slate-600 focus:border-amber-400/50 focus:ring-2 focus:ring-amber-400/20"
-                                            />
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
+                            <InputPanel state={state} />
 
                             {/* アクションボタン */}
                             <div className="flex gap-3 border-t border-white/5 pt-4">
@@ -85,10 +61,22 @@ export default function TargetApi({ state, className }: { state: State; classNam
     );
 }
 
-function InputPanel({ state }: { state: State }) {
-    return state.selectedItem?.inputPanel?.(state) || null;
+function MethodBadgeS({ method }: { method: string }) {
+    return (
+        <span
+            className={`rounded px-2 py-0.5 text-[10px] font-black ${
+                method === 'GET'
+                    ? 'bg-emerald-500/20 text-emerald-400'
+                    : method === 'POST'
+                      ? 'bg-blue-500/20 text-blue-400'
+                      : 'bg-rose-500/20 text-rose-400'
+            }`}
+        >
+            {method}
+        </span>
+    );
 }
 
-export function customersApiPanel({ state }: { state: State }) {
-    return <div>customerId</div>;
+function InputPanel({ state }: { state: State }) {
+    return state.selectedItem?.inputPanel?.() || null;
 }

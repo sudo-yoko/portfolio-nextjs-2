@@ -7,6 +7,9 @@ import ApiList from '@/presentation/admin-console/api-console/views/api-console.
 import ApiResult from '@/presentation/admin-console/api-console/views/api-console.result';
 import TargetApi from '@/presentation/admin-console/api-console/views/api-console.target';
 
+/**
+ * APIコンソール
+ */
 export default function Console() {
     const { state, dispatch } = useApiConsole();
 
