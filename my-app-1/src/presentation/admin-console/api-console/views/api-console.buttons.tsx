@@ -3,6 +3,38 @@
 import { Item } from '@/presentation/admin-console/api-console/models/api-console.types';
 import { State } from '@/presentation/admin-console/api-console/view-models/api-console.reducer';
 
+export function MethodBadgeS({ method }: { method: string }) {
+    return (
+        <span
+            className={`rounded px-2 py-0.5 text-[10px] font-black ${
+                method === 'GET'
+                    ? 'bg-emerald-500/20 text-emerald-400'
+                    : method === 'POST'
+                      ? 'bg-blue-500/20 text-blue-400'
+                      : 'bg-rose-500/20 text-rose-400'
+            }`}
+        >
+            {method}
+        </span>
+    );
+}
+
+function MethodBadgeM({ method }: { method: string }) {
+    return (
+        <span
+            className={`w-14 rounded-lg py-1 text-center text-[10px] font-black ${
+                method === 'GET'
+                    ? 'bg-emerald-500/20 text-emerald-400'
+                    : method === 'POST'
+                      ? 'bg-blue-500/20 text-blue-400'
+                      : 'bg-rose-500/20 text-rose-400'
+            } `}
+        >
+            {method}
+        </span>
+    );
+}
+
 export function ApiListButton({ onClick, item, state }: { onClick: () => void; item: Item; state: State }) {
     return (
         <div
@@ -14,17 +46,7 @@ export function ApiListButton({ onClick, item, state }: { onClick: () => void; i
             } `}
         >
             {/* メソッド別のバッジ */}
-            <div
-                className={`w-12 rounded-lg py-1 text-center text-[10px] font-black ${
-                    item.method === 'GET'
-                        ? 'bg-emerald-500/20 text-emerald-400'
-                        : item.method === 'POST'
-                          ? 'bg-blue-500/20 text-blue-400'
-                          : 'bg-rose-500/20 text-rose-400'
-                } `}
-            >
-                {item.method}
-            </div>
+            <MethodBadgeM method={item.method} />
 
             {/* テキスト情報 */}
             <div className="flex flex-col items-start overflow-hidden text-left">

@@ -1,7 +1,7 @@
 'use client';
 
 import { Item } from '@/presentation/admin-console/api-console/models/api-console.types';
-import React, { JSX, Reducer } from 'react';
+import React, { Reducer } from 'react';
 
 export const Step = {
     Idle: 'idle',

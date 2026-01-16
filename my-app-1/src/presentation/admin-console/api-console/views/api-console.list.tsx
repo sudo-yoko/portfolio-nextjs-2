@@ -18,7 +18,7 @@ export default function ApiList({
         <div className={className}>
             <div className="flex h-full flex-col space-y-4">
                 <div className="px-2">
-                    <h2 className="text-xs font-bold tracking-widest text-indigo-300/40 uppercase">
+                    <h2 className="text-sm font-bold tracking-widest text-indigo-300/40 uppercase">
                         Endpoints
                     </h2>
                 </div>
