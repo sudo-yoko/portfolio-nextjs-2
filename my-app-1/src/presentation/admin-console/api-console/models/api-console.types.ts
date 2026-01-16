@@ -6,7 +6,7 @@ export type Item = {
     method: string;
     path: string;
     description: string;
-    inputPanel?: () => JSX.Element;
+    inputFormFactory: () => JSX.Element;
 };
 
 export type ApiResponse = {

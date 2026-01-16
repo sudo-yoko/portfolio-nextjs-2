@@ -3,6 +3,7 @@
 import { Fade } from '@/presentation/(system)/components/fade';
 import { Action, State } from '../view-models/api-console.reducer';
 import { handleItemClear } from '../view-models/api-console.reducer.hooks';
+import { JSX } from 'react';
 
 /**
  * API実行パネル
@@ -50,8 +51,8 @@ export default function InputPanel({
                                 </div>
                             </div>
 
-                            {/* 入力エリア */}
-                            <ParameterPanel state={state} />
+                            {/* パラメーター入力フォーム */}
+                            <InputForm inputFormFactory={state.selectedItem.inputFormFactory} />
 
                             {/* アクションボタン */}
                             <div className="flex gap-3 border-t border-white/5 pt-4">
@@ -89,6 +90,6 @@ function MethodBadgeS({ method }: { method: string }) {
     );
 }
 
-function ParameterPanel({ state }: { state: State }) {
-    return state.selectedItem?.inputPanel?.() || null;
+function InputForm({ inputFormFactory }: { inputFormFactory: () => JSX.Element }) {
+    return inputFormFactory();
 }

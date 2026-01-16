@@ -2,11 +2,11 @@
 
 import { SectionField, SectionLabelQueryParameter } from './api-console.input.shared';
 
-export function renderUsersPanel() {
-    return <UsersPanel />;
+export function usersInputFormFactory() {
+    return <UsersInputForm />;
 }
 
-function UsersPanel() {
+function UsersInputForm() {
     return (
         <div className="flex-1 space-y-6">
             <div className="space-y-3">

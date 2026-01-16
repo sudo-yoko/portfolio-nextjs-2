@@ -1,6 +1,6 @@
 import { Item } from '@/presentation/admin-console/api-console/models/api-console.types';
-import { renderCustomersPanel } from '../views/api-console.input.customers';
-import { renderUsersPanel } from '../views/api-console.input.users';
+import { customersInputFormFactory } from '../views/api-console.input.customers';
+import { usersInputFormFactory } from '../views/api-console.input.users';
 
 const _empty: Item[] = [];
 
@@ -11,7 +11,7 @@ const _item1: Item[] = [
         method: 'GET',
         path: '/customers/{customerId}',
         description: '顧客情報取得API',
-        inputPanel: () => renderCustomersPanel(),
+        inputFormFactory: () => customersInputFormFactory(),
     },
 ]
 
@@ -21,32 +21,35 @@ const items: Item[] = [
         method: 'GET',
         path: '/customers/{customerId}',
         description: '顧客情報取得API',
-        inputPanel: () => renderCustomersPanel(),
+        inputFormFactory: () => customersInputFormFactory(),
     },
     {
         id: '2',
         method: 'GET',
         path: '/users',
         description: 'ユーザー一覧取得API',
-        inputPanel: () => renderUsersPanel(),
+        inputFormFactory: () => usersInputFormFactory(),
     },
     {
         id: '3',
         method: 'DELETE',
         path: '/customers/{customerId}',
         description: '顧客情報取得API',
+        inputFormFactory: () => customersInputFormFactory(),
     },
     {
         id: '4',
         method: 'POST',
         path: '/customers/{customerId}',
         description: '顧客情報取得API',
+        inputFormFactory: () => customersInputFormFactory(),
     },
     {
         id: '5',
         method: 'PUT',
         path: '/customers/{customerId}',
         description: '顧客情報取得API',
+        inputFormFactory: () => customersInputFormFactory(),
     },
 ];
 
