@@ -55,3 +55,25 @@ function SectionLabel({ label }: { label: string }) {
         </div>
     );
 }
+
+/**
+ * アクションボタン
+ */
+export function ActionButton({ onRun, onClear }: { onRun: () => void; onClear: () => void }) {
+    return (
+        <div className="flex gap-3 border-t border-white/40 pt-4">
+            <button
+                onClick={onRun}
+                className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl bg-amber-400 px-4 py-3 text-sm font-bold text-slate-950 transition-all hover:bg-amber-300 active:scale-95"
+            >
+                RUN REQUEST
+            </button>
+            <button
+                onClick={onClear}
+                className="flex cursor-pointer items-center justify-center rounded-xl bg-white/5 px-4 py-3 text-sm font-bold text-slate-400 transition-all hover:bg-white/10 hover:text-rose-400 active:scale-95"
+            >
+                CLEAR
+            </button>
+        </div>
+    );
+}

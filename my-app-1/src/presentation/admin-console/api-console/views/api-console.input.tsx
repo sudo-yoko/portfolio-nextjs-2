@@ -55,7 +55,7 @@ export default function InputPanel({
                             {/* パラメーター入力フォーム */}
                             {children}
 
-                            {/* アクションボタン */}
+                            {/* アクションボタン 
                             <div className="flex gap-3 border-t border-white/40 pt-4">
                                 <button className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl bg-amber-400 px-4 py-3 text-sm font-bold text-slate-950 transition-all hover:bg-amber-300 active:scale-95">
                                     RUN REQUEST
@@ -66,7 +66,7 @@ export default function InputPanel({
                                 >
                                     CLEAR
                                 </button>
-                            </div>
+                            </div>*/}
                         </div>
                     </Fade>
                 )}

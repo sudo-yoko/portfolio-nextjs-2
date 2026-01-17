@@ -3,6 +3,7 @@
 import { Fade } from '@/presentation/_system/components/fade';
 import { AdminConsoleHeader } from '@/presentation/admin-console/_shared/views/admin-console.header';
 import { InputFormFactory } from '@/presentation/admin-console/api-console/models/api-console.types';
+import { Action } from '@/presentation/admin-console/api-console/view-models/api-console.reducer';
 import { useApiConsole } from '@/presentation/admin-console/api-console/view-models/api-console.reducer.hooks';
 import InputPanel from '@/presentation/admin-console/api-console/views/api-console.input';
 import ListPanel from '@/presentation/admin-console/api-console/views/api-console.list';
@@ -34,6 +35,7 @@ export default function Console() {
                                     <InputPanel state={state} dispatch={dispatch}>
                                         {state.selectedItem && (
                                             <InputForm
+                                                dispatch={dispatch}
                                                 inputFormFactory={state.selectedItem.inputFormFactory}
                                             />
                                         )}
@@ -51,7 +53,13 @@ export default function Console() {
     );
 }
 
-function InputForm({ inputFormFactory }: { inputFormFactory: InputFormFactory }) {
+function InputForm({
+    dispatch,
+    inputFormFactory,
+}: {
+    dispatch: React.Dispatch<Action>;
+    inputFormFactory: InputFormFactory;
+}) {
     // コンポーネントを生成
-    return inputFormFactory();
+    return inputFormFactory(dispatch);
 }
