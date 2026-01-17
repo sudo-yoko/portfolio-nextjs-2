@@ -3,6 +3,10 @@
 //
 'use client';
 
+import { Action as ParentAction } from '@/presentation/admin-console/api-console/view-models/api-console.reducer';
+import { handleItemClear } from '@/presentation/admin-console/api-console/view-models/api-console.reducer.hooks';
+import React from 'react';
+
 export function SectionField({
     field,
     value,
@@ -59,7 +63,13 @@ function SectionLabel({ label }: { label: string }) {
 /**
  * アクションボタン
  */
-export function ActionButton({ onRun, onClear }: { onRun: () => void; onClear: () => void }) {
+export function ActionButton({
+    onRun,
+    parentDispatch,
+}: {
+    onRun: () => void;
+    parentDispatch: React.Dispatch<ParentAction>;
+}) {
     return (
         <div className="flex gap-3 border-t border-white/40 pt-4">
             <button
@@ -69,7 +79,7 @@ export function ActionButton({ onRun, onClear }: { onRun: () => void; onClear: (
                 RUN REQUEST
             </button>
             <button
-                onClick={onClear}
+                onClick={() => handleItemClear(parentDispatch)}
                 className="flex cursor-pointer items-center justify-center rounded-xl bg-white/5 px-4 py-3 text-sm font-bold text-slate-400 transition-all hover:bg-white/10 hover:text-rose-400 active:scale-95"
             >
                 CLEAR

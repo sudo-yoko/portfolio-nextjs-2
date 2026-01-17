@@ -1,22 +1,13 @@
 'use client';
 
 import { Fade } from '@/presentation/_system/components/fade';
-import { Action, State } from '@/presentation/admin-console/api-console/view-models/api-console.reducer';
-import { handleItemClear } from '@/presentation/admin-console/api-console/view-models/api-console.reducer.hooks';
+import { State } from '@/presentation/admin-console/api-console/view-models/api-console.reducer';
 import { CommandLineIcon } from '@heroicons/react/24/outline';
 
 /**
  * API実行パネル
  */
-export default function InputPanel({
-    state,
-    dispatch,
-    children,
-}: {
-    state: State;
-    dispatch: React.Dispatch<Action>;
-    children: React.ReactNode;
-}) {
+export default function InputPanel({ state, children }: { state: State; children: React.ReactNode }) {
     return (
         <div className="h-full rounded-3xl bg-slate-950 p-5">
             <div className="flex h-full flex-col">

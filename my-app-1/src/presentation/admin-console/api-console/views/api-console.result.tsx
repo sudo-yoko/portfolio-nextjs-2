@@ -1,6 +1,6 @@
 'use client';
 
-import { CodeBracketIcon } from '@heroicons/react/24/outline';
+import { BoltIcon } from '@heroicons/react/24/outline';
 
 export default function ApiResult() {
     return (
@@ -24,8 +24,10 @@ export default function ApiResult() {
                     <div className="absolute h-24 w-24 rounded-full bg-indigo-500/5 blur-2xl" />
 
                     {/* アイコン：Zap（稲妻）などで「実行待ち」を表現 
-                    <div className="relative rounded-2xl border border-white/5 bg-white/5 p-4 text-indigo-300/20"></div>*/}
-                    <CodeBracketIcon className="h-12 w-12 animate-[pulse_3s_ease-in-out_infinite] text-indigo-300" />
+                    <div className="relative rounded-2xl border border-white/5 bg-white/5 p-4 text-indigo-300/20"></div>
+                    CodeBracketIcon
+                    */}
+                    <BoltIcon className="h-12 w-12 animate-[pulse_3s_ease-in-out_infinite] text-indigo-300" />
                 </div>
 
                 {/* ガイドメッセージ */}

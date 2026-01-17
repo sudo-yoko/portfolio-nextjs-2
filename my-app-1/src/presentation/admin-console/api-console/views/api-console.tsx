@@ -32,7 +32,7 @@ export default function Console() {
                             </div>
                             <div className="flex w-2/3 flex-col gap-5">
                                 <div className="flex-1">
-                                    <InputPanel state={state} dispatch={dispatch}>
+                                    <InputPanel state={state}>
                                         {state.selectedItem && (
                                             <InputForm
                                                 dispatch={dispatch}

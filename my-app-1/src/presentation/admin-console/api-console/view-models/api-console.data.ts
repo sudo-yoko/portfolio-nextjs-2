@@ -3,6 +3,7 @@
 import { Item } from '@/presentation/admin-console/api-console/models/api-console.types';
 import {
     customersInputFormFactory,
+    dummyInputFormFactory,
     usersInputFormFactory,
 } from '@/presentation/admin-console/api-console/view-models/api-console.input.factories';
 import { Action } from '@/presentation/admin-console/api-console/view-models/api-console.reducer';
@@ -40,21 +41,21 @@ const items: Item[] = [
         method: 'DELETE',
         path: '/customers/{customerId}',
         description: '顧客情報取得API',
-        inputFormFactory: (dispatch: React.Dispatch<Action>) => customersInputFormFactory(dispatch),
+        inputFormFactory: (dispatch: React.Dispatch<Action>) => dummyInputFormFactory(dispatch),
     },
     {
         id: '4',
         method: 'POST',
         path: '/customers/{customerId}',
         description: '顧客情報取得API',
-        inputFormFactory: (dispatch: React.Dispatch<Action>) => customersInputFormFactory(dispatch),
+        inputFormFactory: (dispatch: React.Dispatch<Action>) => dummyInputFormFactory(dispatch),
     },
     {
         id: '5',
         method: 'PUT',
         path: '/customers/{customerId}',
         description: '顧客情報取得API',
-        inputFormFactory: (dispatch: React.Dispatch<Action>) => customersInputFormFactory(dispatch),
+        inputFormFactory: (dispatch: React.Dispatch<Action>) => dummyInputFormFactory(dispatch),
     },
 ];
 
