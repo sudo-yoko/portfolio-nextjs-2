@@ -1,7 +1,7 @@
 import { printf } from '@/__tests__/test-logger';
-import { Aborted } from '../../../../../__proto__/result.bff.types';
+import { Aborted } from '../../../../_proto/result.bff.types';
 import { bffError, isBffAuthError } from '@/presentation/(system)/errors/bff-error';
-import { ErrType } from '@/presentation/(system)/error/error.types';
+import { ErrType } from '@/presentation/_system/error/error.types';
 
 const print = printf({ logPrefix: '>>> [bff-error.test.ts]', stdout: true });
 

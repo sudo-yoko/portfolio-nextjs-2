@@ -1,6 +1,6 @@
 import { printf } from '@/__tests__/test-logger';
-import { clientImpl } from '@/presentation/(system)/client/client.impl.fetch';
-import { Method, Result } from '@/presentation/(system)/client/client.types';
+import { clientImpl } from '@/presentation/_system/client/client.impl.fetch';
+import { Method, Result } from '@/presentation/_system/client/client.types';
 import { jest } from '@jest/globals';
 
 // import { Method } from '@/presentation/(system)/client/client.types';

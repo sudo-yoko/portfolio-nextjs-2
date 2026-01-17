@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@/presentation/(system)/components/button.decorator.simple';
+import { Button } from '@/presentation/_system/components/button.decorator.simple';
 import { Action, State, toInput, toSending } from '@/presentation/contact/mvvm/view-models/contact.reducer';
 
 /**

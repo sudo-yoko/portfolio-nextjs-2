@@ -21,8 +21,8 @@
 // もしくは以下のコマンドで直接実行
 //　npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/logger.test.ts
 //
-import logger from '@/presentation/(system)/logging/logger.s';
-import { Level } from '@/presentation/(system)/logging/logging.types';
+import logger from '@/presentation/_system/logging/logger.s';
+import { Level } from '@/presentation/_system/logging/logging.types';
 
 // npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/logging/logger.s.test.ts -t 'test1-1'
 test('test1-1', () => {

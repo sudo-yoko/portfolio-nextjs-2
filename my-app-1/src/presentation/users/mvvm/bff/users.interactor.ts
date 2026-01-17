@@ -1,10 +1,10 @@
 import 'server-only';
 
-import { FetchData } from '@/presentation/(system)/pagination/mvvm/models/pagination.requester';
-import { PaginationResult } from '@/presentation/(system)/pagination/mvvm/models/pagination.types';
-import { invalid, okData } from '@/presentation/(system)/result/result.core.factories';
-import { hasError } from '@/presentation/(system)/validation/validation.helpers';
-import { FormData } from '@/presentation/(system)/validation/validation.types';
+import { FetchData } from '@/presentation/_system/pagination/mvvm/models/pagination.requester';
+import { PaginationResult } from '@/presentation/_system/pagination/mvvm/models/pagination.types';
+import { invalid, okData } from '@/presentation/_system/result/result.core.factories';
+import { hasError } from '@/presentation/_system/validation/validation.helpers';
+import { FormData } from '@/presentation/_system/validation/validation.types';
 import { send } from '@/presentation/users/mvvm/bff/users.client';
 import { FormKeys, User } from '@/presentation/users/mvvm/models/users.types';
 import { validate } from '@/presentation/users/mvvm/models/users.validator';

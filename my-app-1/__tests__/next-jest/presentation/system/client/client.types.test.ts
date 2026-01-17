@@ -1,5 +1,5 @@
 import { printf } from '@/__tests__/test-logger';
-import { Client, Method, Req, Result } from '@/presentation/(system)/client/client.types';
+import { Client, Method, Req, Result } from '@/presentation/_system/client/client.types';
 // import { Method } from '@/presentation/(system)/client/client.types';
 
 const print = printf({ logPrefix: '>>> [client.types.test.ts]', stdout: true });

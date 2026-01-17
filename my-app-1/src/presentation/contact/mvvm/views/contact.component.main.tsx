@@ -1,6 +1,6 @@
 'use client';
 
-import { ErrorModal } from '@/presentation/(system)/error/views/component.error-modal.feature.reset';
+import { ErrorModal } from '@/presentation/_system/error/views/component.error-modal.feature.reset';
 import { initialState, reducer, reset, Step } from '@/presentation/contact/mvvm/view-models/contact.reducer';
 import Complete from '@/presentation/contact/mvvm/views/contact.component.complete';
 import Confirm from '@/presentation/contact/mvvm/views/contact.component.confirm';

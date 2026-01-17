@@ -1,7 +1,7 @@
 import 'client-only';
 
-import { Tag } from '@/presentation/(system)/result/result.core.types';
-import { FormData } from '@/presentation/(system)/validation/validation.types';
+import { Tag } from '@/presentation/_system/result/result.core.types';
+import { FormData } from '@/presentation/_system/validation/validation.types';
 import { ApiResult } from '@/presentation/admin-console/api-console/models/api-console.types';
 
 export const FormKeys = {

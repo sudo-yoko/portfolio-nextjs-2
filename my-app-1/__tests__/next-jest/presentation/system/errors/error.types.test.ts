@@ -5,7 +5,7 @@ import {
   CUSTOM_ERROR_TAG,
   CustomError,
   ErrType,
-} from '@/presentation/(system)/error/error.types';
+} from '@/presentation/_system/error/error.types';
 
 const print = printf({ logPrefix: '>>> [error.types.test.ts]', stdout: true });
 

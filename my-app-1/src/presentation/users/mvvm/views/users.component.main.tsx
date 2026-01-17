@@ -1,13 +1,13 @@
 'use client';
 
-import { Button } from '@/presentation/(system)/components/button.decorator.simple';
-import { ProcessingModalB } from '@/presentation/(system)/components/processing.modal.b';
-import { ErrorModal } from '@/presentation/(system)/error/views/component.error-modal.feature.close';
+import { Button } from '@/presentation/_system/components/button.decorator.simple';
+import { ProcessingModalB } from '@/presentation/_system/components/processing.modal.b';
+import { ErrorModal } from '@/presentation/_system/error/views/component.error-modal.feature.close';
 import {
     setError,
     setQuery,
     Step,
-} from '@/presentation/(system)/pagination/mvvm/view-models/pagination.reducer.2';
+} from '@/presentation/_system/pagination/mvvm/view-models/pagination.reducer.2';
 import {
     handleNext,
     handlePrev,

@@ -5,11 +5,11 @@ import {
   authError,
   routeError,
   validationError,
-} from '@/presentation/(system)/error/error.factories';
-import { stringify } from '@/presentation/(system)/error/error.helper.stringify';
-import { CUSTOM_ERROR_TAG } from '@/presentation/(system)/error/error.types';
-import { ActionResult } from '@/presentation/(system)/types/action-result';
-import { Violations } from '@/presentation/(system)/validation/validation.types';
+} from '@/presentation/_system/error/error.factories';
+import { stringify } from '@/presentation/_system/error/error.helper.stringify';
+import { CUSTOM_ERROR_TAG } from '@/presentation/_system/error/error.types';
+import { ActionResult } from '@/presentation/_system/types/action-result';
+import { Violations } from '@/presentation/_system/validation/validation.types';
 
 const print = printf({ logPrefix: '>>> [error.factories.test.ts]', stdout: true });
 

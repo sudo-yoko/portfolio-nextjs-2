@@ -1,6 +1,6 @@
 'use client';
 
-import { Fade } from '@/presentation/(system)/components/fade';
+import { Fade } from '@/presentation/_system/components/fade';
 import { Action, State } from '@/presentation/admin-console/api-console/view-models/api-console.reducer';
 import { handleItemClear } from '@/presentation/admin-console/api-console/view-models/api-console.reducer.hooks';
 import { CommandLineIcon } from '@heroicons/react/24/outline';

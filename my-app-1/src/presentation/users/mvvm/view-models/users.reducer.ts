@@ -1,7 +1,7 @@
 import 'client-only';
 
-import { State, Step } from '@/presentation/(system)/pagination/mvvm/view-models/pagination.reducer.2';
-import { FormData } from '@/presentation/(system)/validation/validation.types';
+import { State, Step } from '@/presentation/_system/pagination/mvvm/view-models/pagination.reducer.2';
+import { FormData } from '@/presentation/_system/validation/validation.types';
 import { FormKeys, User } from '@/presentation/users/mvvm/models/users.types';
 
 export const initialPage = 1;

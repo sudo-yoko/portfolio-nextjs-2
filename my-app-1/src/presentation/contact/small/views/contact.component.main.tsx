@@ -1,8 +1,8 @@
 'use client';
 
-import { ProcessingModalB } from '@/presentation/(system)/components/processing.modal.b';
-import { ToastError } from '@/presentation/(system)/components/toast.feature.error';
-import { ErrorModal } from '@/presentation/(system)/error/views/component.error-modal.feature.reset';
+import { ProcessingModalB } from '@/presentation/_system/components/processing.modal.b';
+import { ToastError } from '@/presentation/_system/components/toast.feature.error';
+import { ErrorModal } from '@/presentation/_system/error/views/component.error-modal.feature.reset';
 import { Mode, reset, Step } from '@/presentation/contact/small/view-models/contact.reducer';
 import { dismissRetryMsg, useContact } from '@/presentation/contact/small/view-models/contact.reducer.hooks';
 import Complete from '@/presentation/contact/small/views/contact.component.complete';

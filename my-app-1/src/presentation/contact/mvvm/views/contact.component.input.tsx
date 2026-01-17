@@ -1,8 +1,8 @@
 'use client';
 
-import { AutoResizeTextAreaSimple } from '@/presentation/(system)/components/autoResizeTextArea.decorator.simple';
-import { Button } from '@/presentation/(system)/components/button.decorator.simple';
-import { ToastError } from '@/presentation/(system)/components/toast.feature.error';
+import { AutoResizeTextAreaSimple } from '@/presentation/_system/components/autoResizeTextArea.decorator.simple';
+import { Button } from '@/presentation/_system/components/button.decorator.simple';
+import { ToastError } from '@/presentation/_system/components/toast.feature.error';
 import {
     applyViolations,
     dismissRetry,

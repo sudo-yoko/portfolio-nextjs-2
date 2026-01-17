@@ -22,7 +22,7 @@ test('test1-1', async () => {
   }));
 
   // モック後にimport
-  const logger = (await import('@/presentation/(system)/logging/logging.core.winston')).default;
+  const logger = (await import('@/presentation/_system/logging/logging.core.winston')).default;
 
   print('start');
   logger.info('logger test', { extra1: '1', extra2: '2', extra3: '3', extra4: '4', extra5: '5' });

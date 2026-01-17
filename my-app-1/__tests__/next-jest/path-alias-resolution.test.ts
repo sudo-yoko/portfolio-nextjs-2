@@ -5,7 +5,7 @@
 // npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/path-alias-resolution.test.ts -t 'test1-1'
 //
 import { printf } from '@/__tests__/test-logger'; // パス解決ができること
-import logger from '@/presentation/(system)/logging/logger.s'; // パス解決ができること
+import logger from '@/presentation/_system/logging/logger.s'; // パス解決ができること
 const print = printf({ logPrefix: '>>> [test-logger.test.ts]', stdout: true });
 test('test1-1', () => {
   logger.info('##### logger OK! #####');
@@ -32,6 +32,6 @@ test('test1-2', async () => {
   }));
 
   // パス解決ができること
-  const debug = (await import('@/presentation/(system)/logging/logging.core.debug')).default;
+  const debug = (await import('@/presentation/_system/logging/logging.core.debug')).default;
   debug('##### debug OK! #####');
 });

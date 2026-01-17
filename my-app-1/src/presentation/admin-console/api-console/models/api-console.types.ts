@@ -1,4 +1,4 @@
-import { Aborted, OkData } from '@/presentation/(system)/result/result.core.types';
+import { Aborted, OkData } from '@/presentation/_system/result/result.core.types';
 import { JSX } from 'react';
 
 export type Item = {

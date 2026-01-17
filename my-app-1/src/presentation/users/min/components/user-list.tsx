@@ -1,13 +1,13 @@
 'use client';
 
-import { withErrorHandlingAsync } from '@/presentation/(system)/aop/aop.core.exception.client';
-import { Button } from '@/presentation/(system)/components/button.decorator.simple';
-import { ErrorRedirect } from '@/presentation/(system)/error/views/component.error-redirect';
-import { createPager } from '@/presentation/(system)/pagination/min/modules/pagination.pager';
-import { Pager } from '@/presentation/(system)/pagination/min/modules/pagination.types.c';
-import { isInvalid, isOkData } from '@/presentation/(system)/result/result.core.helpers';
-import { getViolationsMap } from '@/presentation/(system)/validation/validation.helpers';
-import { FormData, Violations } from '@/presentation/(system)/validation/validation.types';
+import { withErrorHandlingAsync } from '@/presentation/_system/aop/aop.core.exception.client';
+import { Button } from '@/presentation/_system/components/button.decorator.simple';
+import { ErrorRedirect } from '@/presentation/_system/error/views/component.error-redirect';
+import { createPager } from '@/presentation/_system/pagination/min/modules/pagination.pager';
+import { Pager } from '@/presentation/_system/pagination/min/modules/pagination.types.c';
+import { isInvalid, isOkData } from '@/presentation/_system/result/result.core.helpers';
+import { getViolationsMap } from '@/presentation/_system/validation/validation.helpers';
+import { FormData, Violations } from '@/presentation/_system/validation/validation.types';
 import { fetchPage } from '@/presentation/users/min/modules/users.requester';
 import { FormKeys, User } from '@/presentation/users/min/modules/users.types';
 import { useCallback, useEffect, useRef, useState } from 'react';

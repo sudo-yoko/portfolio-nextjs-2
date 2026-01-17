@@ -3,8 +3,8 @@
 //
 'use client';
 
-import { getViolationsMap } from '@/presentation/(system)/validation/validation.helpers';
-import { FormData, Violations, ViolationsMap } from '@/presentation/(system)/validation/validation.types';
+import { getViolationsMap } from '@/presentation/_system/validation/validation.helpers';
+import { FormData, Violations, ViolationsMap } from '@/presentation/_system/validation/validation.types';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 import React, { Reducer } from 'react';
 

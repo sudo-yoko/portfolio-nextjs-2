@@ -1,12 +1,12 @@
 import { printf } from '@/__tests__/test-logger';
-import { getViolationsMap } from '@/presentation/(system)/validation/validation.helpers';
+import { getViolationsMap } from '@/presentation/_system/validation/validation.helpers';
 import {
     FormData,
     FormValidator,
     Violations,
     Validator,
     Violation,
-} from '@/presentation/(system)/validation/validation.types';
+} from '@/presentation/_system/validation/validation.types';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 
 const print = printf({ logPrefix: '>>> [validation.types.test.ts]', stdout: true });

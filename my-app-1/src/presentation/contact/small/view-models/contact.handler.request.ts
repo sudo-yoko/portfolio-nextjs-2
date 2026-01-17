@@ -3,8 +3,8 @@
 //
 import 'server-only';
 
-import logger from '@/presentation/(system)/logging/logger.s';
-import { getQueryParams, SearchParams } from '@/presentation/(system)/types/search-params';
+import logger from '@/presentation/_system/logging/logger.s';
+import { getQueryParams, SearchParams } from '@/presentation/_system/types/search-params';
 import { ContactParams } from '@/presentation/contact/small/models/contact.types';
 
 const logPrefix = '/contact/small/view-models/request-handler.ts: ';

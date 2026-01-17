@@ -1,9 +1,9 @@
 import { printf } from '@/__tests__/test-logger';
-import { stringify } from '@/presentation/(system)/error/error.helper.stringify';
-import { isInvalid } from '@/presentation/(system)/result/result.core.helpers';
-import { Invalid, Tag } from '@/presentation/(system)/result/result.core.types';
-import { hasError } from '@/presentation/(system)/validation/validation.helpers';
-import { Violations } from '@/presentation/(system)/validation/validation.types';
+import { stringify } from '@/presentation/_system/error/error.helper.stringify';
+import { isInvalid } from '@/presentation/_system/result/result.core.helpers';
+import { Invalid, Tag } from '@/presentation/_system/result/result.core.types';
+import { hasError } from '@/presentation/_system/validation/validation.helpers';
+import { Violations } from '@/presentation/_system/validation/validation.types';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 
 const print = printf({ logPrefix: '>>> [validation.types.test.ts]', stdout: true });

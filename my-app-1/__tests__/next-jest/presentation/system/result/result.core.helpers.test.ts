@@ -1,8 +1,8 @@
 import { printf } from '@/__tests__/test-logger';
-import { invalid } from '@/presentation/(system)/result/result.core.factories';
-import { isInvalid } from '@/presentation/(system)/result/result.core.helpers';
-import { Invalid } from '@/presentation/(system)/result/result.core.types';
-import { Violations } from '@/presentation/(system)/validation/validation.types';
+import { invalid } from '@/presentation/_system/result/result.core.factories';
+import { isInvalid } from '@/presentation/_system/result/result.core.helpers';
+import { Invalid } from '@/presentation/_system/result/result.core.types';
+import { Violations } from '@/presentation/_system/validation/validation.types';
 import { FormKeys } from '@/presentation/users/min/modules/users.types';
 
 const print = printf({ logPrefix: '>>> [result.core.helpers.test.ts]', stdout: true });

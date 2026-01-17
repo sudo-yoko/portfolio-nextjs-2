@@ -1,7 +1,7 @@
 import { printf } from '@/__tests__/test-logger';
-import { clientImpl } from '@/presentation/(system)/client/client.impl.fetch';
-import { Method } from '@/presentation/(system)/client/client.types';
-import { stringify } from '@/presentation/(system)/error/error.helper.stringify';
+import { clientImpl } from '@/presentation/_system/client/client.impl.fetch';
+import { Method } from '@/presentation/_system/client/client.types';
+import { stringify } from '@/presentation/_system/error/error.helper.stringify';
 import { jest } from '@jest/globals';
 
 const print = printf({ logPrefix: '>>> [client.impl.fetch.test.ts]', stdout: true });

@@ -1,11 +1,11 @@
 import 'client-only';
 
-import client from '@/presentation/(system)/client/client.c';
-import { CONTENT_TYPE_APPLICATION_JSON_UTF8 } from '@/presentation/(system)/client/client.constants';
-import { Method } from '@/presentation/(system)/client/client.types';
-import { FetchData, FetchPage } from '@/presentation/(system)/pagination/min/modules/pagination.requester';
-import { PaginationResult } from '@/presentation/(system)/pagination/min/modules/pagination.types';
-import { parseResult } from '@/presentation/(system)/result/result.core.helpers';
+import client from '@/presentation/_system/client/client.c';
+import { CONTENT_TYPE_APPLICATION_JSON_UTF8 } from '@/presentation/_system/client/client.constants';
+import { Method } from '@/presentation/_system/client/client.types';
+import { FetchData, FetchPage } from '@/presentation/_system/pagination/min/modules/pagination.requester';
+import { PaginationResult } from '@/presentation/_system/pagination/min/modules/pagination.types';
+import { parseResult } from '@/presentation/_system/result/result.core.helpers';
 import { action } from '@/presentation/users/min/modules/users.action';
 import { FormKeys, User } from '@/presentation/users/min/modules/users.types';
 

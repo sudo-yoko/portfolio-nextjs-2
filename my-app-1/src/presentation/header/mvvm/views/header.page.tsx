@@ -1,5 +1,5 @@
-import { Button } from '@/presentation/(system)/components/button.decorator.simple';
-import Header from '@/presentation/(system)/header/mvvm/views/header';
+import { Button } from '@/presentation/_system/components/button.decorator.simple';
+import Header from '@/presentation/_system/header/mvvm/views/header';
 import { Bars3Icon } from '@heroicons/react/16/solid';
 
 export default function Page() {

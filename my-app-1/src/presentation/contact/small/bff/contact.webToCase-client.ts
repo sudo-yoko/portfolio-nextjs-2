@@ -4,12 +4,12 @@
 import 'server-only';
 
 //import client from '@/modules/(system)/clients/proxy-client';
-import { CONTENT_TYPE_APPLICATION_FORM } from '@/presentation/(system)/client/client.constants';
-import client from '@/presentation/(system)/client/client.s';
-import { Method } from '@/presentation/(system)/client/client.types';
-import { env } from '@/presentation/(system)/env/env.helper.validated';
-import { retryableError } from '@/presentation/(system)/error/error.factories';
-import logger from '@/presentation/(system)/logging/logger.s';
+import { CONTENT_TYPE_APPLICATION_FORM } from '@/presentation/_system/client/client.constants';
+import client from '@/presentation/_system/client/client.s';
+import { Method } from '@/presentation/_system/client/client.types';
+import { env } from '@/presentation/_system/env/env.helper.validated';
+import { retryableError } from '@/presentation/_system/error/error.factories';
+import logger from '@/presentation/_system/logging/logger.s';
 import { ContactBody } from '@/presentation/contact/small/models/contact.types';
 
 const logPrefix = 'contact.webToCase-client.ts: ';
