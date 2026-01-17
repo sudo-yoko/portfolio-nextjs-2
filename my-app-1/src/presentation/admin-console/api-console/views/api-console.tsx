@@ -6,6 +6,7 @@ import { useApiConsole } from '@/presentation/admin-console/api-console/view-mod
 import ListPanel from '@/presentation/admin-console/api-console/views/api-console.list';
 import ApiResult from '@/presentation/admin-console/api-console/views/api-console.result';
 import InputPanel from '@/presentation/admin-console/api-console/views/api-console.input';
+import { InputFormFactory } from '../models/api-console.types';
 
 /**
  * APIコンソール
@@ -26,22 +27,20 @@ export default function Console() {
                         <AdminConsoleHeader />
                         <div className="flex flex-row gap-5">
                             <div className="w-1/3">
-                                <ListPanel
-                                    state={state}
-                                    dispatch={dispatch}
-                                    className="h-full rounded-3xl border border-white/10 bg-white/5 p-5 text-white"
-                                />
+                                <ListPanel state={state} dispatch={dispatch} />
                             </div>
                             <div className="flex w-2/3 flex-col gap-5">
                                 <div className="flex-1">
-                                    <InputPanel
-                                        state={state}
-                                        dispatch={dispatch}
-                                        className="h-full rounded-3xl bg-slate-950 p-5"
-                                    />
+                                    <InputPanel state={state} dispatch={dispatch}>
+                                        {state.selectedItem && (
+                                            <InputForm
+                                                inputFormFactory={state.selectedItem?.inputFormFactory}
+                                            />
+                                        )}
+                                    </InputPanel>
                                 </div>
                                 <div className="flex-1">
-                                    <ApiResult className="h-full rounded-3xl bg-slate-900 p-5 text-indigo-100" />
+                                    <ApiResult />
                                 </div>
                             </div>
                         </div>
@@ -50,4 +49,9 @@ export default function Console() {
             </div>
         </Fade>
     );
+}
+
+function InputForm({ inputFormFactory }: { inputFormFactory: InputFormFactory }) {
+    // コンポーネントを生成
+    return inputFormFactory();
 }

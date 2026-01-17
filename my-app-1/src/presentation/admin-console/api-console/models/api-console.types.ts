@@ -6,7 +6,7 @@ export type Item = {
     method: string;
     path: string;
     description: string;
-    inputFormFactory: () => JSX.Element;
+    inputFormFactory: InputFormFactory;
 };
 
 export type ApiResponse = {
@@ -15,3 +15,5 @@ export type ApiResponse = {
 };
 
 export type ApiResult = OkData<ApiResponse> | Aborted;
+
+export type InputFormFactory = () => JSX.Element;

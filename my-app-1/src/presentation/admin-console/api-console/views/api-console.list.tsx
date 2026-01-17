@@ -11,14 +11,12 @@ import { handleItemSelect } from '@/presentation/admin-console/api-console/view-
 export default function ListPanel({
     state,
     dispatch,
-    className,
 }: {
     state: State;
     dispatch: React.Dispatch<Action>;
-    className: string;
 }) {
     return (
-        <div className={className}>
+        <div className="h-full rounded-3xl border border-white/10 bg-white/5 p-5 text-white">
             <div className="flex h-full flex-col space-y-4">
                 <div className="px-2">
                     <h2 className="text-sm font-bold tracking-widest text-indigo-300/40 uppercase">

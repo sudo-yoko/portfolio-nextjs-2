@@ -3,11 +3,12 @@
 import {
     SectionField,
     SectionLabelPathParameter,
-} from '@/presentation/admin-console/api-console/_individual/_shared/api-console.input.shared';
+} from '@/presentation/admin-console/api-console/_individual/_shared/views/api-console.input.shared';
+import { InputFormFactory } from '@/presentation/admin-console/api-console/models/api-console.types';
 
-export function customersInputFormFactory() {
+export const customersInputFormFactory: InputFormFactory = () => {
     return <CustomersInputForm />;
-}
+};
 
 function CustomersInputForm() {
     return (

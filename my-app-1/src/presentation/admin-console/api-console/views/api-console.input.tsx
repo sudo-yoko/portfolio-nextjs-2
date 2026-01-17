@@ -3,7 +3,6 @@
 import { Fade } from '@/presentation/(system)/components/fade';
 import { Action, State } from '@/presentation/admin-console/api-console/view-models/api-console.reducer';
 import { handleItemClear } from '@/presentation/admin-console/api-console/view-models/api-console.reducer.hooks';
-import { JSX } from 'react';
 
 /**
  * API実行パネル
@@ -11,14 +10,14 @@ import { JSX } from 'react';
 export default function InputPanel({
     state,
     dispatch,
-    className,
+    children,
 }: {
     state: State;
     dispatch: React.Dispatch<Action>;
-    className: string;
+    children: React.ReactNode;
 }) {
     return (
-        <div className={className}>
+        <div className="h-full rounded-3xl bg-slate-950 p-5">
             <div className="flex h-full flex-col">
                 {/* ヘッダー部分 */}
                 <div className="flex items-center pb-4">
@@ -29,7 +28,7 @@ export default function InputPanel({
 
                 {!state.selectedItem ? (
                     <div className="flex h-full flex-col items-center justify-center gap-3 opacity-40">
-                        <div className="h-12 w-12 rounded-full border-2 border-dashed border-slate-500" />
+                        <div className="size-12 rounded-full border-2 border-dashed border-slate-500" />
                         <p className="text-sm text-slate-200 italic">APIを選択してください</p>
                     </div>
                 ) : (
@@ -52,7 +51,7 @@ export default function InputPanel({
                             </div>
 
                             {/* パラメーター入力フォーム */}
-                            <InputForm inputFormFactory={state.selectedItem.inputFormFactory} />
+                            {children}
 
                             {/* アクションボタン */}
                             <div className="flex gap-3 border-t border-white/5 pt-4">
@@ -88,8 +87,4 @@ function MethodBadgeS({ method }: { method: string }) {
             {method}
         </span>
     );
-}
-
-function InputForm({ inputFormFactory }: { inputFormFactory: () => JSX.Element }) {
-    return inputFormFactory();
 }

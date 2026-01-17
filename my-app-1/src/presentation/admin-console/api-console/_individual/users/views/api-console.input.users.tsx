@@ -3,11 +3,12 @@
 import {
     SectionField,
     SectionLabelQueryParameter,
-} from '@/presentation/admin-console/api-console/_individual/_shared/api-console.input.shared';
+} from '@/presentation/admin-console/api-console/_individual/_shared/views/api-console.input.shared';
+import { InputFormFactory } from '@/presentation/admin-console/api-console/models/api-console.types';
 
-export function usersInputFormFactory() {
+export const usersInputFormFactory: InputFormFactory = () => {
     return <UsersInputForm />;
-}
+};
 
 function UsersInputForm() {
     return (
