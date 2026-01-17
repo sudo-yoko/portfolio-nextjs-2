@@ -1,10 +1,15 @@
 'use client';
 
 import { Fade } from '@/presentation/_system/components/fade';
+import { ProcessingModalB } from '@/presentation/_system/components/processing.modal.b';
 import { AdminConsoleHeader } from '@/presentation/admin-console/_shared/views/admin-console.header';
-import { InputFormFactory } from '@/presentation/admin-console/api-console/models/api-console.types';
-import { Action } from '@/presentation/admin-console/api-console/view-models/api-console.reducer';
-import { useApiConsole } from '@/presentation/admin-console/api-console/view-models/api-console.reducer.hooks';
+import { IndividualFormFactory } from '@/presentation/admin-console/api-console/models/api-console.types';
+import {
+    Action,
+    State,
+    Step,
+} from '@/presentation/admin-console/api-console/view-models/api-console.reducer';
+import { useConsole } from '@/presentation/admin-console/api-console/view-models/api-console.reducer.hooks';
 import InputPanel from '@/presentation/admin-console/api-console/views/api-console.input';
 import ListPanel from '@/presentation/admin-console/api-console/views/api-console.list';
 import ApiResult from '@/presentation/admin-console/api-console/views/api-console.result';
@@ -13,7 +18,7 @@ import ApiResult from '@/presentation/admin-console/api-console/views/api-consol
  * APIコンソール
  */
 export default function Console() {
-    const { state, dispatch } = useApiConsole();
+    const { state, dispatch } = useConsole();
 
     return (
         <Fade
@@ -22,6 +27,7 @@ export default function Console() {
                 return;
             }}
         >
+            {state.step === Step.Processing && <ProcessingModalB />}
             <div className="flex justify-center">
                 <div className="w-full max-w-4xl">
                     <div className="flex flex-col gap-5">
@@ -34,9 +40,12 @@ export default function Console() {
                                 <div className="flex-1">
                                     <InputPanel state={state}>
                                         {state.selectedItem && (
-                                            <InputForm
+                                            <IndividualForm
+                                                state={state}
                                                 dispatch={dispatch}
-                                                inputFormFactory={state.selectedItem.inputFormFactory}
+                                                individualFormFactory={
+                                                    state.selectedItem.individualFormFactory
+                                                }
                                             />
                                         )}
                                     </InputPanel>
@@ -53,13 +62,16 @@ export default function Console() {
     );
 }
 
-function InputForm({
+function IndividualForm({
+    state,
     dispatch,
-    inputFormFactory,
+    individualFormFactory,
 }: {
+    state: State;
     dispatch: React.Dispatch<Action>;
-    inputFormFactory: InputFormFactory;
+    individualFormFactory: IndividualFormFactory;
 }) {
     // コンポーネントを生成
-    return inputFormFactory(dispatch);
+    const individualForm = individualFormFactory(state, dispatch);
+    return individualForm;
 }

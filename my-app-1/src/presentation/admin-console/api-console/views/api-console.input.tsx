@@ -45,19 +45,6 @@ export default function InputPanel({ state, children }: { state: State; children
 
                             {/* パラメーター入力フォーム */}
                             {children}
-
-                            {/* アクションボタン 
-                            <div className="flex gap-3 border-t border-white/40 pt-4">
-                                <button className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl bg-amber-400 px-4 py-3 text-sm font-bold text-slate-950 transition-all hover:bg-amber-300 active:scale-95">
-                                    RUN REQUEST
-                                </button>
-                                <button
-                                    onClick={() => handleItemClear(dispatch)}
-                                    className="flex cursor-pointer items-center justify-center rounded-xl bg-white/5 px-4 py-3 text-sm font-bold text-slate-400 transition-all hover:bg-white/10 hover:text-rose-400 active:scale-95"
-                                >
-                                    CLEAR
-                                </button>
-                            </div>*/}
                         </div>
                     </Fade>
                 )}

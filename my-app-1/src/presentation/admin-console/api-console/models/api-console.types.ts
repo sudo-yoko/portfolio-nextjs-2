@@ -1,5 +1,5 @@
 import { Aborted, OkData } from '@/presentation/_system/result/result.core.types';
-import { Action } from '@/presentation/admin-console/api-console/view-models/api-console.reducer';
+import { Action, State } from '@/presentation/admin-console/api-console/view-models/api-console.reducer';
 import { JSX } from 'react';
 
 export type Item = {
@@ -7,8 +7,10 @@ export type Item = {
     method: string;
     path: string;
     description: string;
-    inputFormFactory: InputFormFactory;
+    individualFormFactory: IndividualFormFactory;
 };
+
+export type IndividualFormFactory = (state: State, dispatch: React.Dispatch<Action>) => JSX.Element;
 
 export type ApiResponse = {
     status: string;
@@ -16,5 +18,3 @@ export type ApiResponse = {
 };
 
 export type ApiResult = OkData<ApiResponse> | Aborted;
-
-export type InputFormFactory = (dispatch: React.Dispatch<Action>) => JSX.Element;

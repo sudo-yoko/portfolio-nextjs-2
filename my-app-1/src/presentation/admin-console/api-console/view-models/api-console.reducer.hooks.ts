@@ -10,7 +10,7 @@ import {
 } from '@/presentation/admin-console/api-console/view-models/api-console.reducer';
 import React, { useReducer } from 'react';
 
-export function useApiConsole() {
+export function useConsole() {
     const [state, dispatch] = useReducer(reducer, initialState);
     return { state, dispatch };
 }

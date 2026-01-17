@@ -1,5 +1,6 @@
 'use client';
 
+import { isOkData } from '@/presentation/_system/result/result.core.helpers';
 import { hasError } from '@/presentation/_system/validation/validation.helpers';
 import {
     ActionButton,
@@ -8,17 +9,40 @@ import {
 } from '@/presentation/admin-console/api-console/_individual/_shared/views/api-console.input.parts';
 import { FormKeys } from '@/presentation/admin-console/api-console/_individual/customers/models/api-console.customers.types';
 import { validate } from '@/presentation/admin-console/api-console/_individual/customers/models/api-console.customers.validator';
+import { sendRequest } from '@/presentation/admin-console/api-console/_individual/customers/models/api-console.requester.customers';
 import {
     initialState,
     reducer,
     setValue,
     setViolations,
 } from '@/presentation/admin-console/api-console/_individual/customers/view-models/api-console.customers.reducer';
-import { Action as ParentAction } from '@/presentation/admin-console/api-console/view-models/api-console.reducer';
-import { useReducer } from 'react';
+import {
+    Action as ParentAction,
+    State as ParentState,
+    Step as ParentStep,
+    startProcess,
+    toIdle,
+} from '@/presentation/admin-console/api-console/view-models/api-console.reducer';
+import { useEffect, useReducer } from 'react';
 
-export function CustomersInputForm({ parentDispatch }: { parentDispatch: React.Dispatch<ParentAction> }) {
+export function CustomersIndividualForm({
+    parentState,
+    parentDispatch,
+}: {
+    parentState: ParentState;
+    parentDispatch: React.Dispatch<ParentAction>;
+}) {
     const [state, dispatch] = useReducer(reducer, initialState);
+
+    useEffect(() => {
+        if (parentState.step === ParentStep.Processing) {
+            void sendRequest(state.formData).then((result) => {
+                if (isOkData(result)) {
+                    toIdle(parentDispatch);
+                }
+            });
+        }
+    }, [parentDispatch, parentState.step, state.formData]);
 
     function handleRun() {
         const violations = validate(state.formData);
@@ -27,6 +51,7 @@ export function CustomersInputForm({ parentDispatch }: { parentDispatch: React.D
             return;
         }
         setViolations(dispatch, []);
+        startProcess(parentDispatch);
     }
 
     return (
@@ -34,7 +59,7 @@ export function CustomersInputForm({ parentDispatch }: { parentDispatch: React.D
             <div className="space-y-3">
                 <SectionLabelPathParameter />
                 <SectionField
-                    field="customerId"
+                    field={FormKeys.customerId}
                     value={state.formData.customerId}
                     onChange={(value) => setValue(dispatch, FormKeys.customerId, value)}
                 />

@@ -61,7 +61,7 @@ function ApiListButton({ onClick, item, state }: { onClick: () => void; item: It
 
             {/* 選択時のみ表示されるインジケーター（右端のポッチ） */}
             <div
-                className={`${item.id === state.selectedItem?.id ? '' : 'invisible'} ml-auto h-1.5 w-1.5 animate-pulse rounded-full bg-amber-400`}
+                className={`${item.id === state.selectedItem?.id ? '' : 'invisible'} ml-auto size-1.5 animate-pulse rounded-full bg-amber-400`}
             />
         </button>
     );

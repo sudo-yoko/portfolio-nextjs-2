@@ -10,9 +10,9 @@ export default function ApiResult() {
             {/* ヘッダー部分は共通の骨組みを維持（レイアウトがガタつかないため） */}
             <div className="mb-4 flex items-center justify-between border-b border-white/5 pb-3">
                 <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold tracking-widest text-indigo-300/40 uppercase">
+                    <h2 className="text-sm font-bold tracking-widest text-indigo-300/40 uppercase">
                         Response Output
-                    </span>
+                    </h2>
                 </div>
             </div>
 

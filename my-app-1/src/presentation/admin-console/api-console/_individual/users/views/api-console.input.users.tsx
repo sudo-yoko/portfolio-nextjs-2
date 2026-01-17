@@ -4,9 +4,15 @@ import {
     SectionField,
     SectionLabelQueryParameter,
 } from '@/presentation/admin-console/api-console/_individual/_shared/views/api-console.input.parts';
-import { Action as ParentAction } from '../../../view-models/api-console.reducer';
+import { Action as ParentAction, State } from '../../../view-models/api-console.reducer';
 
-export function UsersInputForm({ parentDispatch }: { parentDispatch: React.Dispatch<ParentAction> }) {
+export function UsersIndividualForm({
+    parentState,
+    parentDispatch,
+}: {
+    parentState: State;
+    parentDispatch: React.Dispatch<ParentAction>;
+}) {
     return (
         <div className="flex-1 space-y-6">
             <div className="space-y-3">
