@@ -2,7 +2,7 @@ import { printf } from '@/__tests__/test-logger';
 import { stringify } from '@/presentation/_system/error/error.helper.stringify';
 import { isInvalid } from '@/presentation/_system/result/result.core.helpers';
 import { Invalid, Tag } from '@/presentation/_system/result/result.core.types';
-import { hasError } from '@/presentation/_system/validation/validation.helpers';
+import { hasError, initialFormDataCore } from '@/presentation/_system/validation/validation.helpers';
 import { Violations } from '@/presentation/_system/validation/validation.types';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 
@@ -140,6 +140,20 @@ test('test1-9', () => {
         const isError = hasError(result.violations);
         expect(isError).toBe(false);
     }
+});
+
+// ==============================
+// 3. initialFormData
+// ==============================
+// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/validation/validation.helper.test.ts -t 'test3-1'
+test('test3-1', () => {
+    const formKeys = {
+        test1: 'test1',
+        test2: 'test2',
+        test3: 'test3',
+    } as const;
+    const result = initialFormDataCore(formKeys);
+    print(JSON.stringify(result));
 });
 
 // ==============================

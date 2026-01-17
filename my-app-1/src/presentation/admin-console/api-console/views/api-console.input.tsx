@@ -30,7 +30,7 @@ export default function InputPanel({
                 {!state.selectedItem ? (
                     <div className="flex h-full flex-col items-center justify-center gap-3 opacity-40">
                         {/*<div className="size-12 rounded-full border-2 border-dashed border-slate-500" />*/}
-                        <CommandLineIcon className="h-12 w-12 text-indigo-300/50" />
+                        <CommandLineIcon className="size-12 text-indigo-300/50" />
                         <p className="text-sm text-slate-200 italic">APIを選択してください</p>
                     </div>
                 ) : (
@@ -56,13 +56,13 @@ export default function InputPanel({
                             {children}
 
                             {/* アクションボタン */}
-                            <div className="flex gap-3 border-t border-white/5 pt-4">
-                                <button className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-amber-400 px-4 py-3 text-sm font-bold text-slate-950 shadow-[0_0_20px_rgba(251,191,36,0.2)] transition-all hover:bg-amber-300 active:scale-95">
+                            <div className="flex gap-3 border-t border-white/40 pt-4">
+                                <button className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl bg-amber-400 px-4 py-3 text-sm font-bold text-slate-950 transition-all hover:bg-amber-300 active:scale-95">
                                     RUN REQUEST
                                 </button>
                                 <button
                                     onClick={() => handleItemClear(dispatch)}
-                                    className="flex items-center justify-center gap-2 rounded-xl bg-white/5 px-4 py-3 text-sm font-bold text-slate-400 transition-all hover:bg-white/10 hover:text-rose-400"
+                                    className="flex cursor-pointer items-center justify-center rounded-xl bg-white/5 px-4 py-3 text-sm font-bold text-slate-400 transition-all hover:bg-white/10 hover:text-rose-400 active:scale-95"
                                 >
                                     CLEAR
                                 </button>

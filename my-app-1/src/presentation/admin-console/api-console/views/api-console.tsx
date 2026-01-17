@@ -34,7 +34,7 @@ export default function Console() {
                                     <InputPanel state={state} dispatch={dispatch}>
                                         {state.selectedItem && (
                                             <InputForm
-                                                inputFormFactory={state.selectedItem?.inputFormFactory}
+                                                inputFormFactory={state.selectedItem.inputFormFactory}
                                             />
                                         )}
                                     </InputPanel>

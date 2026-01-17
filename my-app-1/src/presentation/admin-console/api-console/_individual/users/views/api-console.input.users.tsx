@@ -3,7 +3,7 @@
 import {
     SectionField,
     SectionLabelQueryParameter,
-} from '@/presentation/admin-console/api-console/_individual/_shared/views/api-console.input.shared';
+} from '@/presentation/admin-console/api-console/_individual/_shared/views/api-console.input.parts';
 
 export function UsersInputForm() {
     return (

@@ -3,12 +3,22 @@
 //
 'use client';
 
-export function SectionField({ field }: { field: string }) {
+export function SectionField({
+    field,
+    value,
+    onChange,
+}: {
+    field: string;
+    value: string;
+    onChange: (value: string) => void;
+}) {
     return (
         <div className="space-y-1.5">
             <label className="ml-1 text-xs tracking-widest text-indigo-200/60">{field}</label>
             <input
                 type="text"
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
                 placeholder={`Enter ${field}...`}
                 className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white transition-all outline-none placeholder:text-slate-600 focus:border-amber-400/50 focus:ring-2 focus:ring-amber-400/20"
             />

@@ -1,7 +1,7 @@
 //
 // バリデーションのヘルパー関数
 //
-import { Violations, ViolationsMap } from '@/presentation/_system/validation/validation.types';
+import { FormData, Violations, ViolationsMap } from '@/presentation/_system/validation/validation.types';
 
 /**
  * バリデーションエラーの有無を調べる
@@ -24,6 +24,16 @@ export function getViolationsMap<FIELD extends string>(input: Violations<FIELD>)
         out[v.field] = v.violation;
     }
     return out;
+}
+
+/**
+ * 
+ */
+export function initialFormDataCore<FIELD extends string>(
+    keyObj: Readonly<Record<string, FIELD>>,
+): FormData<FIELD> {
+    const result = Object.fromEntries(Object.values(keyObj).map((key) => [key, ''])) as FormData<FIELD>;
+    return result;
 }
 
 /**
