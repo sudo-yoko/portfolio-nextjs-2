@@ -3,6 +3,7 @@
 import { Fade } from '@/presentation/(system)/components/fade';
 import { Action, State } from '@/presentation/admin-console/api-console/view-models/api-console.reducer';
 import { handleItemClear } from '@/presentation/admin-console/api-console/view-models/api-console.reducer.hooks';
+import { CommandLineIcon } from '@heroicons/react/24/outline';
 
 /**
  * API実行パネル
@@ -28,7 +29,8 @@ export default function InputPanel({
 
                 {!state.selectedItem ? (
                     <div className="flex h-full flex-col items-center justify-center gap-3 opacity-40">
-                        <div className="size-12 rounded-full border-2 border-dashed border-slate-500" />
+                        {/*<div className="size-12 rounded-full border-2 border-dashed border-slate-500" />*/}
+                        <CommandLineIcon className="h-12 w-12 text-indigo-300/50" />
                         <p className="text-sm text-slate-200 italic">APIを選択してください</p>
                     </div>
                 ) : (

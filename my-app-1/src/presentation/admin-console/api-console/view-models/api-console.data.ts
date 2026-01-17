@@ -1,9 +1,12 @@
-import { customersInputFormFactory } from '@/presentation/admin-console/api-console/_individual/customers/views/api-console.input.customers';
-import { usersInputFormFactory } from '@/presentation/admin-console/api-console/_individual/users/views/api-console.input.users';
+'use client';
+
 import { Item } from '@/presentation/admin-console/api-console/models/api-console.types';
+import {
+    customersInputFormFactory,
+    usersInputFormFactory,
+} from '@/presentation/admin-console/api-console/view-models/api-console.input.factories';
 
 const _empty: Item[] = [];
-
 
 const _item1: Item[] = [
     {
@@ -13,7 +16,7 @@ const _item1: Item[] = [
         description: '顧客情報取得API',
         inputFormFactory: () => customersInputFormFactory(),
     },
-]
+];
 
 const items: Item[] = [
     {

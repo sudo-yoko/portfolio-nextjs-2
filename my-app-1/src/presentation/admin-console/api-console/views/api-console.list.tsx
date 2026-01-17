@@ -1,20 +1,14 @@
 'use client';
 
-import { apiList } from '@/presentation/admin-console/api-console/models/api-console.data';
 import { Item } from '@/presentation/admin-console/api-console/models/api-console.types';
+import { apiList } from '@/presentation/admin-console/api-console/view-models/api-console.data';
 import { Action, State } from '@/presentation/admin-console/api-console/view-models/api-console.reducer';
 import { handleItemSelect } from '@/presentation/admin-console/api-console/view-models/api-console.reducer.hooks';
 
 /**
  * API選択パネル
  */
-export default function ListPanel({
-    state,
-    dispatch,
-}: {
-    state: State;
-    dispatch: React.Dispatch<Action>;
-}) {
+export default function ListPanel({ state, dispatch }: { state: State; dispatch: React.Dispatch<Action> }) {
     return (
         <div className="h-full rounded-3xl border border-white/10 bg-white/5 p-5 text-white">
             <div className="flex h-full flex-col space-y-4">
