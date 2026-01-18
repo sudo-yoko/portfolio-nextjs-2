@@ -2,7 +2,7 @@
 
 import { BoltIcon } from '@heroicons/react/24/outline';
 
-export default function ApiResult() {
+export default function ResultPanel() {
     return (
         <div
             className={`flex flex-col rounded-3xl border border-white/5 bg-slate-900/80 p-6 text-indigo-100 shadow-2xl backdrop-blur-md`}

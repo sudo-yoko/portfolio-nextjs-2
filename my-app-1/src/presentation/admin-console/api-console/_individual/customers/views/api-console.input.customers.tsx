@@ -36,6 +36,7 @@ export function CustomersIndividualForm({
 
     useEffect(() => {
         if (parentState.step === ParentStep.Processing) {
+            // TODO; エラーハンドリング
             void sendRequest(state.formData).then((result) => {
                 if (isOkData(result)) {
                     toIdle(parentDispatch);

@@ -1,7 +1,7 @@
 'use client';
 
 import ListPanel from '@/presentation/admin-console/api-console/views/api-console.list';
-import ApiResult from '@/presentation/admin-console/api-console/views/api-console.result';
+import ResultPanel from '@/presentation/admin-console/api-console/views/api-console.result';
 import InputPanel from '@/presentation/admin-console/api-console/views/api-console.input';
 
 export default function Console() {
@@ -38,7 +38,7 @@ export default function Console() {
 
                             {/* API Result Panel */}
                             <div className="group flex-1 overflow-hidden">
-                                <ApiResult className="h-full rounded-[2rem] border border-white/5 bg-slate-900/90 p-8 text-indigo-100 shadow-2xl backdrop-blur-md" />
+                                <ResultPanel className="h-full rounded-[2rem] border border-white/5 bg-slate-900/90 p-8 text-indigo-100 shadow-2xl backdrop-blur-md" />
                             </div>
                         </div>
                     </div>

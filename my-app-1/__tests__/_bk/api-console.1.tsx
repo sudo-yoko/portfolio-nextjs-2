@@ -1,7 +1,7 @@
 'use client';
 
 import ListPanel from '@/presentation/admin-console/api-console/views/api-console.list';
-import ApiResult from '@/presentation/admin-console/api-console/views/api-console.result';
+import ResultPanel from '@/presentation/admin-console/api-console/views/api-console.result';
 import InputPanel from '@/presentation/admin-console/api-console/views/api-console.input';
 
 export default function Console() {
@@ -19,7 +19,7 @@ export default function Console() {
                                 <InputPanel className="h-full rounded-3xl bg-white p-5" />
                             </div>
                             <div className="flex-1">
-                                <ApiResult className="h-full rounded-3xl bg-white p-5" />
+                                <ResultPanel className="h-full rounded-3xl bg-white p-5" />
                             </div>
                         </div>
                     </div>
