@@ -9,16 +9,27 @@ type SendRequest = {
     (formData: FormData<FormKeys>): Promise<ApiResult>;
 };
 
+interface ResBody {
+    customerId: string;
+    customerName: string;
+}
+
 const mock: SendRequest = async () => {
     await new Promise<void>((resolve) => {
         setTimeout(() => {
             resolve();
         }, 5000);
     });
+    const body: ResBody = {
+        customerId: '1234567890',
+        customerName: 'Gemini',
+    };
     const result: ApiResult = {
         tag: Tag.OkData,
         data: {
+            responseTime: '142',
             status: '200',
+            body: JSON.stringify(body),
         },
     };
     return result;

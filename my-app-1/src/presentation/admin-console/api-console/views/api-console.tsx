@@ -49,7 +49,7 @@ export default function Console() {
                                     </InputPanel>
                                 </div>
                                 <div className="flex-1">
-                                    <ResultPanel state={state} dispatch={dispatch} />
+                                    <ResultPanel state={state} />
                                 </div>
                             </div>
                         </div>

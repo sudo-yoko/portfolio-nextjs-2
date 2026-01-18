@@ -13,6 +13,7 @@ export type Item = {
 };
 
 export type ApiResponse = {
+    responseTime: string;
     status: string;
     body?: string;
 };

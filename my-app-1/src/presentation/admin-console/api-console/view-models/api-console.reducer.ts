@@ -54,7 +54,7 @@ export const reducer: Reducer<State, Action> = (state: State, action: Action): S
     switch (action.type) {
         case ActionType.ItemSelected:
             return {
-                ...state,
+                ...initialState,
                 selectedItem: action.item,
             };
         case ActionType.ItemCleared:

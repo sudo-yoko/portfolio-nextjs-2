@@ -51,6 +51,13 @@ export function SectionLabelBodyData() {
     return <SectionLabel label="Body Data" />;
 }
 
+/**
+ * セクションラベル：REQUEST HEADER
+ */
+export function SectionLabelRequestHeader() {
+    return <SectionLabel label="Request Header" />;
+}
+
 function SectionLabel({ label }: { label: string }) {
     return (
         <div className="flex items-center gap-2">
