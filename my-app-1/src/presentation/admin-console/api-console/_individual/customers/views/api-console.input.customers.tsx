@@ -39,7 +39,7 @@ export function CustomersIndividualForm({
             // TODO; エラーハンドリング
             void sendRequest(state.formData).then((result) => {
                 if (isOkData(result)) {
-                    toIdle(parentDispatch);
+                    toIdle(parentDispatch, result.data);
                 }
             });
         }

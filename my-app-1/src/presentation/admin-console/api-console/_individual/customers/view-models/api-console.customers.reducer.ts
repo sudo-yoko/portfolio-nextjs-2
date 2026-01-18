@@ -29,6 +29,7 @@ export const initialState: State = {
 
 export function initialFormData() {
     const initial = initialFormDataCore(FormKeys);
+    initial.customerId = '1234567890';
     return initial;
 }
 

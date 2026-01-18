@@ -1,6 +1,6 @@
 'use client';
 
-import { Item } from '@/presentation/admin-console/api-console/models/api-console.types';
+import { ApiResponse, Item } from '@/presentation/admin-console/api-console/models/api-console.types';
 import React, { Reducer } from 'react';
 
 export const Step = {
@@ -13,6 +13,7 @@ export type Step = (typeof Step)[keyof typeof Step];
 export type State = {
     step: Step;
     selectedItem?: Item;
+    apiResult?: ApiResponse;
 };
 
 export const initialState: State = {
@@ -31,7 +32,7 @@ export type Action =
     | { type: typeof ActionType.ItemSelected; item: Item }
     | { type: typeof ActionType.ItemCleared }
     | { type: typeof ActionType.ProcessStarted }
-    | { type: typeof ActionType.IdleEntered };
+    | { type: typeof ActionType.IdleEntered; apiResponse: ApiResponse };
 
 export function itemSelect(dispatch: React.Dispatch<Action>, item: Item): void {
     dispatch({ type: ActionType.ItemSelected, item });
@@ -45,8 +46,8 @@ export function startProcess(dispatch: React.Dispatch<Action>): void {
     dispatch({ type: ActionType.ProcessStarted });
 }
 
-export function toIdle(dispatch: React.Dispatch<Action>): void {
-    dispatch({ type: ActionType.IdleEntered });
+export function toIdle(dispatch: React.Dispatch<Action>, apiResponse: ApiResponse): void {
+    dispatch({ type: ActionType.IdleEntered, apiResponse });
 }
 
 export const reducer: Reducer<State, Action> = (state: State, action: Action): State => {
@@ -67,6 +68,7 @@ export const reducer: Reducer<State, Action> = (state: State, action: Action): S
             return {
                 ...state,
                 step: Step.Idle,
+                apiResult: action.apiResponse,
             };
         default:
             return state;
