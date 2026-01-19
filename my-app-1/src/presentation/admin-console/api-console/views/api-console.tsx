@@ -19,7 +19,6 @@ import ResultPanel from '@/presentation/admin-console/api-console/views/api-cons
  */
 export default function Console() {
     const { state, dispatch } = useConsole();
-
     return (
         <Fade
             open={true}

@@ -15,6 +15,7 @@ interface ResBody {
 }
 
 const mock: SendRequest = async () => {
+    const start: number = performance.now();
     await new Promise<void>((resolve) => {
         setTimeout(() => {
             resolve();
@@ -24,10 +25,12 @@ const mock: SendRequest = async () => {
         customerId: '1234567890',
         customerName: 'Gemini',
     };
+    const end: number = performance.now();
+    const duration: number = Math.floor(end - start);
     const result: ApiResult = {
         tag: Tag.OkData,
         data: {
-            responseTime: '142',
+            responseTime: duration,
             status: '200',
             body: JSON.stringify(body),
         },

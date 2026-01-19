@@ -1,9 +1,9 @@
 'use client';
 
+import { DummyIndividualForm } from '@/presentation/admin-console/api-console/_individual/_shared/views/api-console.input.dummy';
+import { CustomersIndividualForm } from '@/presentation/admin-console/api-console/_individual/customers/views/api-console.input.customers';
+import { UsersIndividualForm } from '@/presentation/admin-console/api-console/_individual/users/views/api-console.input.users';
 import { Item } from '@/presentation/admin-console/api-console/models/api-console.types';
-import { CustomersIndividualForm } from '../_individual/customers/views/api-console.input.customers';
-import { UsersIndividualForm } from '../_individual/users/views/api-console.input.users';
-import { DummyIndividualForm } from '../_individual/_shared/views/api-console.input.dummy';
 
 const _empty: Item[] = [];
 

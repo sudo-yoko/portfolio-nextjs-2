@@ -17,6 +17,7 @@ const logPrefix = 'aop.feature.bff.route.ts: ';
  */
 export async function executeAsync(thunk: () => Promise<RESULT>): Promise<Response> {
     const ctx: Ctx = { logger, logPrefix, process: 'bff route process' };
+    // TODO: performance.now()で処理時間を取得
     return await withLoggingAsync(ctx, () =>
         withResultParsingAsync(() => withErrorHandlingAsync(() => withAuthAsync(thunk))),
     );

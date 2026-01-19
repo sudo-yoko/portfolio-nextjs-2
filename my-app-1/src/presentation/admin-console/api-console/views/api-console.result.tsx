@@ -1,7 +1,7 @@
 'use client';
 
+import { State } from '@/presentation/admin-console/api-console/view-models/api-console.reducer';
 import { BoltIcon } from '@heroicons/react/24/outline';
-import { State } from '../view-models/api-console.reducer';
 
 export default function ResultPanel({ state }: { state: State }) {
     return (
@@ -43,7 +43,7 @@ export default function ResultPanel({ state }: { state: State }) {
                         {/* レスポンス情報バッジ */}
                         <div className="flex items-center gap-3">
                             <span className="font-mono text-[10px] text-slate-500">
-                                {state.apiResult.responseTime}ms
+                                {state.apiResult.responseTime.toLocaleString()} ms
                             </span>
                             <span
                                 className={`rounded-full px-3 py-0.5 text-[10px] font-bold ${
