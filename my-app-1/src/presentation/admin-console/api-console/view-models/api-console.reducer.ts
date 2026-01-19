@@ -63,6 +63,7 @@ export const reducer: Reducer<State, Action> = (state: State, action: Action): S
             return {
                 ...state,
                 step: Step.Processing,
+                apiResult: undefined,
             };
         case ActionType.IdleEntered:
             return {

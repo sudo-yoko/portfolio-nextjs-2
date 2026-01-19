@@ -1,20 +1,16 @@
 import 'client-only';
 
 import { Tag } from '@/presentation/_system/result/result.core.types';
-import { FormData } from '@/presentation/_system/validation/validation.types';
+import { SendRequest } from '@/presentation/admin-console/api-console/_individual/_shared/models/api-console.individual.requester';
 import { FormKeys } from '@/presentation/admin-console/api-console/_individual/customers/models/api-console.customers.types';
 import { ApiResult } from '@/presentation/admin-console/api-console/models/api-console.types';
-
-type SendRequest = {
-    (formData: FormData<FormKeys>): Promise<ApiResult>;
-};
 
 interface ResBody {
     customerId: string;
     customerName: string;
 }
 
-const mock: SendRequest = async () => {
+const mock: SendRequest<FormKeys> = async () => {
     const start: number = performance.now();
     await new Promise<void>((resolve) => {
         setTimeout(() => {
@@ -38,4 +34,4 @@ const mock: SendRequest = async () => {
     return result;
 };
 
-export const sendRequest: SendRequest = mock;
+export const sendRequest: SendRequest<FormKeys> = mock;

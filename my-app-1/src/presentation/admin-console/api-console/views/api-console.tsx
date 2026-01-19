@@ -2,7 +2,7 @@
 
 import { Fade } from '@/presentation/_system/components/fade';
 import { ProcessingModalB } from '@/presentation/_system/components/processing.modal.b';
-import { AdminConsoleHeader } from '@/presentation/admin-console/_shared/views/admin-console.header';
+import { AdminConsoleHeader } from '@/presentation/admin-console/_shared/views/admin-console.parts';
 import { IndividualFormComponent } from '@/presentation/admin-console/api-console/models/api-console.types';
 import {
     Action,

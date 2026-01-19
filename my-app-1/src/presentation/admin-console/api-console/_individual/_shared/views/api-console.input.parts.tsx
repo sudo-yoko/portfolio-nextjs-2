@@ -1,6 +1,8 @@
 //
 // API実行パネル 共通コンポーネント
 //
+
+// TODO: ファイル名に、individualかsharedをつける？
 'use client';
 
 import { Action as ParentAction } from '@/presentation/admin-console/api-console/view-models/api-console.reducer';
@@ -91,6 +93,14 @@ export function ActionButton({
             >
                 CLEAR
             </button>
+        </div>
+    );
+}
+
+export function ValidationError({ children }: { children: React.ReactNode }) {
+    return (
+        <div>
+            <p className="text-sm text-red-500">{children}</p>
         </div>
     );
 }

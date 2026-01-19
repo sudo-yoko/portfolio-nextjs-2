@@ -3,6 +3,11 @@
 import { isOkData } from '@/presentation/_system/result/result.core.helpers';
 import { hasError } from '@/presentation/_system/validation/validation.helpers';
 import {
+    reducer,
+    setValue,
+    setViolations,
+} from '@/presentation/admin-console/api-console/_individual/_shared/view-models/api-console.individual.reducer';
+import {
     ActionButton,
     SectionField,
     SectionLabelPathParameter,
@@ -10,12 +15,7 @@ import {
 import { FormKeys } from '@/presentation/admin-console/api-console/_individual/customers/models/api-console.customers.types';
 import { validate } from '@/presentation/admin-console/api-console/_individual/customers/models/api-console.customers.validator';
 import { sendRequest } from '@/presentation/admin-console/api-console/_individual/customers/models/api-console.requester.customers';
-import {
-    initialState,
-    reducer,
-    setValue,
-    setViolations,
-} from '@/presentation/admin-console/api-console/_individual/customers/view-models/api-console.customers.reducer';
+import { initialState } from '@/presentation/admin-console/api-console/_individual/customers/view-models/api-console.customers.reducer';
 import {
     Action as ParentAction,
     State as ParentState,
@@ -32,7 +32,7 @@ export function CustomersIndividualForm({
     parentState: ParentState;
     parentDispatch: React.Dispatch<ParentAction>;
 }) {
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const [state, dispatch] = useReducer(reducer<FormKeys>, initialState);
 
     useEffect(() => {
         if (parentState.step === ParentStep.Processing) {

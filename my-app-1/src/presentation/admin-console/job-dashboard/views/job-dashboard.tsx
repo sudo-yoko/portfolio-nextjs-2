@@ -1,7 +1,7 @@
 'use client';
 
 import { Fade } from '@/presentation/_system/components/fade';
-import { AdminConsoleHeader } from '@/presentation/admin-console/_shared/views/admin-console.header';
+import { AdminConsoleHeader } from '@/presentation/admin-console/_shared/views/admin-console.parts';
 
 export default function Dashboard() {
     return (

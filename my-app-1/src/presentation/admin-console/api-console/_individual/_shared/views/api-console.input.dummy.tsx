@@ -16,7 +16,7 @@ export function DummyIndividualForm({
     return (
         <div className="flex h-full flex-col items-center justify-center gap-3 opacity-40">
             <RocketLaunchIcon className="size-10 text-indigo-300/50" />
-            <p className="text-sm text-slate-400">Coming Soon・・・</p>
+            <p className="text-sm text-slate-400">準備中・・・</p>
         </div>
     );
 }

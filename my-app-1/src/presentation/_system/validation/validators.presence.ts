@@ -14,6 +14,12 @@ export const required: Validator = (value, label) => {
     return errors;
 };
 
+// TODO: インターフェース型を検討
+export const requiredAny = (values: string[], labels: string[]): string[] => {
+    const errors: string[] = [];
+    return errors;
+};
+
 /**
  * 入力禁止
  */
@@ -22,5 +28,10 @@ export const forbidden: Validator = (value, label) => {
     if (value) {
         errors.push(`${label}は入力できません。`);
     }
+    return errors;
+};
+
+export const forbiddenAll = (values: string[], labels: string[]): string[] => {
+    const errors: string[] = [];
     return errors;
 };
