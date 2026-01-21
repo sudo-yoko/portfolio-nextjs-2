@@ -15,7 +15,7 @@ import {
 } from '@/presentation/admin-console/api-console/_individual/_shared/views/api-console.input.parts';
 import { FormKeys } from '@/presentation/admin-console/api-console/_individual/customers/models/api-console.customers.types';
 import { validate } from '@/presentation/admin-console/api-console/_individual/customers/models/api-console.customers.validator';
-import { sendRequest } from '@/presentation/admin-console/api-console/_individual/customers/models/api-console.requester.customers';
+import { sendRequest } from '@/presentation/admin-console/api-console/_individual/customers/models/api-console.customers.requester';
 import { initialState } from '@/presentation/admin-console/api-console/_individual/customers/view-models/api-console.customers.reducer';
 import {
     Action as ParentAction,

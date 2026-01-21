@@ -13,7 +13,7 @@ import {
     SectionLabelQueryParameter,
     ValidationError,
 } from '@/presentation/admin-console/api-console/_individual/_shared/views/api-console.input.parts';
-import { sendRequest } from '@/presentation/admin-console/api-console/_individual/users/models/api-console.requester.users';
+import { sendRequest } from '@/presentation/admin-console/api-console/_individual/users/models/api-console.users.requester';
 import { FormKeys } from '@/presentation/admin-console/api-console/_individual/users/models/api-console.users.types';
 import { validate } from '@/presentation/admin-console/api-console/_individual/users/models/api-console.users.validator';
 import { initialState } from '@/presentation/admin-console/api-console/_individual/users/view-models/api-console.users.reducer';
