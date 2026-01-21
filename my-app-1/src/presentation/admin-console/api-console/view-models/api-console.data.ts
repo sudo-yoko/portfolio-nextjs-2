@@ -35,22 +35,22 @@ const items: Item[] = [
     {
         id: '3',
         method: 'POST',
-        path: '/customers/{customerId}',
-        description: '顧客情報取得API',
+        path: '/servlet/servlet.WebToCase',
+        description: '問い合わせ送信API',
         individualForm: DummyIndividualForm,
     },
     {
         id: '4',
         method: 'DELETE',
         path: '/customers/{customerId}',
-        description: '顧客情報取得API',
+        description: '顧客情報削除API',
         individualForm: DummyIndividualForm,
     },
     {
         id: '5',
         method: 'PUT',
         path: '/customers/{customerId}',
-        description: '顧客情報取得API',
+        description: '顧客情報登録更新API',
         individualForm: DummyIndividualForm,
     },
 ];

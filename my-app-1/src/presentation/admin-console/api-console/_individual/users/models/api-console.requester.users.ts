@@ -25,12 +25,15 @@ const mock: SendRequest<FormKeys> = async (formData) => {
 
     const total = 10;
     const users: User[] = [];
-    for (let i = 0; i < total; i++) {
+    for (let i = 1; i <= total; i++) {
         const userId = String(i).padStart(5, '0');
         const userName = `テスト 太郎 ${i}`;
         users.push({ userId, userName });
     }
-    const segment = users.slice(Number(formData.offset), Number(formData.offset) + Number(formData.limit));
+    const segment = users.slice(
+        Number(formData.offset) - 1,
+        Number(formData.offset) + Number(formData.limit),
+    );
 
     const status = '200';
     const body: Body = {

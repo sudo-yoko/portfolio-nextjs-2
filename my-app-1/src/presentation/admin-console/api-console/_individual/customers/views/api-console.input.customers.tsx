@@ -11,6 +11,7 @@ import {
     ActionButton,
     SectionField,
     SectionLabelPathParameter,
+    ValidationError,
 } from '@/presentation/admin-console/api-console/_individual/_shared/views/api-console.input.parts';
 import { FormKeys } from '@/presentation/admin-console/api-console/_individual/customers/models/api-console.customers.types';
 import { validate } from '@/presentation/admin-console/api-console/_individual/customers/models/api-console.customers.validator';
@@ -65,9 +66,7 @@ export function CustomersIndividualForm({
                     onChange={(value) => setValue(dispatch, FormKeys.customerId, value)}
                 />
                 {state.violationsMap.customerId?.map((err, index) => (
-                    <div key={index}>
-                        <p className="text-sm text-red-500">{err}</p>
-                    </div>
+                    <ValidationError key={index}>{err}</ValidationError>
                 ))}
             </div>
             <ActionButton onRun={handleRun} parentDispatch={parentDispatch} />

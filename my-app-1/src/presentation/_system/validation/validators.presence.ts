@@ -17,6 +17,10 @@ export const required: Validator = (value, label) => {
 // TODO: インターフェース型を検討
 export const requiredAny = (values: string[], labels: string[]): string[] => {
     const errors: string[] = [];
+    const result = values.some((value) => value && value.trim() !== '');
+    if(!result){
+        errors.push(`${labels.join(",")}のどれかを入力してください。`)
+    }
     return errors;
 };
 

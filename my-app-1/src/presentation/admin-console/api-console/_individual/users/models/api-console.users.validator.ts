@@ -12,25 +12,31 @@ export const validate: FormValidator<FormKeys> = (formData) => {
         field: FormKeys.limit,
         violation: validateLimit(formData.limit),
     });
-    // TODO: 相関チェック検討
+    // TODO: 相関チェック実装検討
+    const correlation = validateQuery(formData.userId, formData.userName);
     errors.push({
         field: FormKeys.userId,
-        violation: validateQuery(formData.userId, formData.userName),
+        violation: correlation,
     });
     errors.push({
         field: FormKeys.userName,
-        violation: validateQuery(formData.userId, formData.userName),
+        violation: correlation,
     });
     return errors;
 };
 
 function validateOffset(offset: string) {
     let errors: string[] = [];
+
     errors = requiredNumber(offset, 'offset');
+    if (errors.length > 0) {
+        return errors;
+    }
 
     const num = Number(offset);
     if (num <= 0 || num > 100) {
         errors.push(`offsetは1から100を入力してください。`);
+        return errors;
     }
     return errors;
 }
@@ -43,7 +49,7 @@ function validateLimit(limit: string) {
 
 function validateQuery(userId: string, userName: string) {
     let errors: string[] = [];
-    errors = requiredAny([userId, userName], ['ユーザーID', 'ユーザー名']);
+    errors = requiredAny([userId, userName], [FormKeys.userId, FormKeys.userName]);
     return errors;
 }
 

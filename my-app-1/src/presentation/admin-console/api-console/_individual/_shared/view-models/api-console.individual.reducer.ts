@@ -45,9 +45,11 @@ export function reducer<FIELD extends string>(state: State<FIELD>, action: Actio
         case ActionType.ValueChanged:
             return {
                 ...state,
-                violations: [],
-                violationsMap: {},
                 formData: { ...state.formData, [action.key]: action.value },
+                // TODO: 変更されたフィールドのエラーだけをクリアする
+                violations: [...state.violations, { field: action.key, violation: [] }],
+                // violationsMap: { ...state.violationsMap, [action.key]: '' }, // TODO: これがコンパイルエラーにならないのはどうしてか
+                violationsMap: { ...state.violationsMap, [action.key]: [] },
             };
         case ActionType.ViolationsChanged:
             return {

@@ -4,4 +4,4 @@ export const FormKeys = {
     userId: 'userId',
     userName: 'userName',
 } as const;
-export type FormKeys = (typeof FormKeys)[keyof typeof FormKeys];
+export type FormKeys = (typeof FormKeys)[keyof typeof FormKeys];    // NOTE: オブジェクトの値を型として抽出
