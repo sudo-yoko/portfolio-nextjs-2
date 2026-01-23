@@ -1,4 +1,4 @@
-import { Aborted, OkData } from '@/presentation/_system/result/result.core.types';
+import { Aborted, Invalid, OkData } from '@/presentation/_system/result/result.core.types';
 import { Action, State } from '@/presentation/admin-console/api-console/view-models/api-console.reducer';
 
 export type IndividualFormProps = { parentState: State; parentDispatch: React.Dispatch<Action> };
@@ -14,8 +14,8 @@ export type Item = {
 
 export type ApiResponse = {
     responseTime: number;
-    status: string;
+    status: number;
     body?: string;
 };
 
-export type ApiResult = OkData<ApiResponse> | Aborted;
+export type ApiResult<FIELD extends string> = OkData<ApiResponse> | Invalid<FIELD> | Aborted;

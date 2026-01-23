@@ -1,12 +1,12 @@
 import { printf } from '@/__tests__/test-logger';
-import { Client, Method, Req, Result } from '@/presentation/_system/client/client.types';
+import { Client, Method, RequestConfig, Result } from '@/presentation/_system/client/client.types';
 // import { Method } from '@/presentation/(system)/client/client.types';
 
 const print = printf({ logPrefix: '>>> [client.types.test.ts]', stdout: true });
 
 // npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __tests__/next-jest/presentation/system/client/client.types.test.ts -t 'test1-1'
 test('test1-1', async () => {
-  const req: Req = {
+  const req: RequestConfig = {
     method: Method.GET,
     url: 'http://localhost:3000',
   };
@@ -41,7 +41,7 @@ test('test1-2', async () => {
     userId: '12345',
     userName: 'taro',
   };
-  const req: Req<ReqBody> = {
+  const req: RequestConfig<ReqBody> = {
     method: Method.GET,
     url: 'http://localhost:3000',
     body: reqBody,

@@ -7,7 +7,7 @@ export type Client = {
     /**
      * リクエストを送信する
      */
-    send<BODY = never, PARAMS = never>(req: Req<BODY, PARAMS>): Promise<Result>;
+    send<BODY = never, PARAMS = never>(req: RequestConfig<BODY, PARAMS>): Promise<Result>;
 };
 
 /**
@@ -22,11 +22,12 @@ export type Method = (typeof Method)[keyof typeof Method];
 /**
  * リクエスト
  */
-export type Req<BODY = never, PARAMS = never> = {
+export type RequestConfig<BODY = never, PARAMS = never> = {
     method: Method;
     url: string;
     body?: BODY;
-    params?: PARAMS;
+    query?: PARAMS;
+    // path?: string; // TODO: BFFではパスパラメータを使用しない方針
     headers?: Record<string, string>;
 
     /**

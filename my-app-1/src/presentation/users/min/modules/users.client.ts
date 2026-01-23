@@ -20,7 +20,7 @@ export async function send(offset: number, limit: number, query: UsersQuery): Pr
     const res = await client.send({
         method: Method.GET,
         url,
-        params: { offset, limit, ...query },
+        query: { offset, limit, ...query },
     });
 
     const result: Users = JSON.parse(res.rawBody);

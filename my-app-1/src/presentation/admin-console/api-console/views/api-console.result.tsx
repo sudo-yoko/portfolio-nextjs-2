@@ -47,7 +47,7 @@ export default function ResultPanel({ state }: { state: State }) {
                             </span>
                             <span
                                 className={`rounded-full px-3 py-0.5 text-[10px] font-bold ${
-                                    state.apiResult.status === '200'
+                                    state.apiResult.status === 200
                                         ? 'bg-emerald-500/20 text-emerald-400'
                                         : 'bg-rose-500/20 text-rose-400'
                                 }`}

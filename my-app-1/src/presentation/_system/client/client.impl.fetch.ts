@@ -4,7 +4,7 @@
 //
 import 'client-only';
 
-import { Client, Req, Result } from '@/presentation/_system/client/client.types';
+import { Client, RequestConfig, Result } from '@/presentation/_system/client/client.types';
 import { httpRequestError, httpResponseError } from '@/presentation/_system/error/error.factories';
 import { stringify } from '@/presentation/_system/error/error.helper.stringify';
 import logger from '@/presentation/_system/logging/logger.c';
@@ -12,27 +12,37 @@ import logger from '@/presentation/_system/logging/logger.c';
 const logPrefix = 'client.impl.fetch.ts: ';
 
 export const clientImpl: Client = {
-    send: async <BODY = never, PARAMS = never>(req: Req<BODY, PARAMS>) => {
+    send: async <BODY = never, PARAMS = never>(config: RequestConfig<BODY, PARAMS>) => {
+        logger.info(logPrefix + `config=${JSON.stringify(config)}`);
         // クライアントサイド -> BFF(APIルート)間リクエストでは、ステータスコード200のみとする。
         // エラーの場合はレスポンスボディにエラー情報を設定する
         // 200以外が返ってきたら例外をスローする
-        const validateStatus = req.validateStatus ?? ((status: number) => status === 200);
+        const validateStatus = config.validateStatus ?? ((status: number) => status === 200);
 
         let res;
         try {
-            res = await fetch(req.url, {
-                method: req.method,
-                headers: req.headers,
+            let url: string = '';
+            if (config.query) {
+                const query = new URLSearchParams(config.query);
+                url = config.url + `?${query}`;
+            } else {
+                url = config.url;
+            }
+            logger.info(logPrefix + `url=${url}`);
+
+            res = await fetch(url, {
+                method: config.method,
+                headers: config.headers,
                 // TODO: GETリクエストではボディは送らない
-                body: JSON.stringify(req.body), // オブジェクトをJSON.stringifyして渡す
+                body: JSON.stringify(config.body), // オブジェクトをJSON.stringifyして渡す
             });
         } catch (e) {
             logger.error(logPrefix + stringify(e).message);
             if (e instanceof TypeError) {
                 // ブラウザ環境では通信エラー（クライント側エラー）はTypeErrorになる？
-                throw httpRequestError({ cause: e, detail: `request=${JSON.stringify(req)}` });
+                throw httpRequestError({ cause: e, detail: `request=${JSON.stringify(config)}` });
             }
-            throw httpRequestError({ cause: e, detail: `request=${JSON.stringify(req)}` });
+            throw httpRequestError({ cause: e, detail: `request=${JSON.stringify(config)}` });
         }
 
         // ステータスコードの検証
@@ -50,7 +60,7 @@ export const clientImpl: Client = {
             status: res.status,
             rawBody,
         };
-        logger.info(logPrefix + `Request -> ${JSON.stringify(req)}, Result -> ${JSON.stringify(result)}`);
+        logger.info(logPrefix + `Request -> ${JSON.stringify(config)}, Result -> ${JSON.stringify(result)}`);
         return result;
     },
 };

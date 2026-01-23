@@ -25,7 +25,7 @@ export const CONTENT_TYPE_APPLICATION_FORM = {
  */
 export const CONTENT_TYPE_TEXT_EVENT_STREAM_UTF8 = {
     [CONTENT_TYPE]: `${TEXT_EVENT_STREAM}; ${CHARSET_UTF8}`,
-};
+} as const satisfies HeadersInit;
 
 /**
  * 'Accept': 'application/json'

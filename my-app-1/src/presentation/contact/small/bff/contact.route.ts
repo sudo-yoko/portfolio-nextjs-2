@@ -15,6 +15,7 @@ export async function POST(req: Request): Promise<Response> {
         const contactBody: ContactBody = await req.json();
         logger.info(logPrefix + `contactBody=${JSON.stringify(contactBody)}`);
 
+        // TODO: jsonを簡単にFormData<FormKeys>に変換できないか
         const formData: FormData<FormKeys> = {
             name: contactBody.name,
             email: contactBody.email,

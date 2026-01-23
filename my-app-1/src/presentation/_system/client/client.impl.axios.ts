@@ -5,24 +5,24 @@
 import 'server-only';
 
 import { client } from '@/presentation/_system/client/client.core.axios';
-import { Client, Req, Result } from '@/presentation/_system/client/client.types';
+import { Client, RequestConfig, Result } from '@/presentation/_system/client/client.types';
 import logger from '@/presentation/_system/logging/logger.s';
 
 const logPrefix = 'client.impl.axios.ts: ';
 
 export const clientImpl: Client = {
-    send: async <BODY = never, PARAMS = never>(req: Req<BODY, PARAMS>) => {
+    send: async <BODY = never, PARAMS = never>(config: RequestConfig<BODY, PARAMS>) => {
         // デフォルトは、500 以上のステータスコードの場合はエラーをスローする
-        const validateStatus = req.validateStatus ?? ((status: number) => status < 500);
+        const validateStatus = config.validateStatus ?? ((status: number) => status < 500);
 
-        logger.info(logPrefix + req.url);
-        logger.info(logPrefix + req.body);
+        logger.info(logPrefix + config.url);
+        logger.info(logPrefix + config.body);
         const res = await client.request({
-            method: req.method,
-            url: req.url,
-            params: req.params,
+            method: config.method,
+            url: config.url,
+            params: config.query,
+            data: config.body,
             validateStatus,
-            // TODO: リクエストボディ
         });
 
         // ステータスコードの検証
@@ -36,7 +36,7 @@ export const clientImpl: Client = {
             status: res.status,
             rawBody: toStringSafe(res.data),
         };
-        logger.info(logPrefix + `Request -> ${JSON.stringify(req)}, Result -> ${JSON.stringify(result)}`);
+        logger.info(logPrefix + `Request -> ${JSON.stringify(config)}, Result -> ${JSON.stringify(result)}`);
         return result;
     },
 };
@@ -48,5 +48,6 @@ function toStringSafe(value: unknown): string {
     if (value != null && typeof value === 'object') {
         return JSON.stringify(value);
     }
+    // TODO: カスタムエラー
     throw Error();
 }

@@ -35,14 +35,14 @@ const mock: SendRequest<FormKeys> = async (formData) => {
         Number(formData.offset) + Number(formData.limit),
     );
 
-    const status = '200';
+    const status = 200;
     const body: Body = {
         total: String(total),
         users: segment,
     };
     const end = performance.now();
     const duration = Math.floor(end - start);
-    const result: ApiResult = {
+    const result: ApiResult<FormKeys> = {
         tag: Tag.OkData,
         data: {
             status,
