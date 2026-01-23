@@ -34,7 +34,7 @@ const _viaAction: Send = async (formData) => {
  * バックエンド呼び出しの実装：RouteHandlers経由バックエンド呼び出し
  */
 const viaRoute: Send = async (formData) => {
-    const url = '/api/contact/mvvm';
+    const url = '/api/bff/contact/mvvm';
     // const { name, email, body } = formData;
 
     const res = await client.send({
