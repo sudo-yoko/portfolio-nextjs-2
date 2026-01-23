@@ -17,6 +17,7 @@ interface PathParams {
 interface ResBody {
   customerId: string;
   customerName: string;
+  customerEmail: string;
 }
 
 // Expressアプリケーションのインスタンスを作成
@@ -47,6 +48,7 @@ app.get(path, async (req: Request<PathParams, ResBody>, res: Response<ResBody>) 
   const resBody: ResBody = {
     customerId: '12345',
     customerName: 'sudo yoko',
+    customerEmail: 'yoko@sudo.com'
   };
   res.status(status).json(resBody);
 });

@@ -12,7 +12,7 @@ import logger from '@/presentation/_system/logging/logger.c';
 const logPrefix = 'client.impl.fetch.ts: ';
 
 export const clientImpl: Client = {
-    send: async <BODY = never, PARAMS = never>(config: RequestConfig<BODY, PARAMS>) => {
+    send: async <BODY = never, QUERY = never>(config: RequestConfig<BODY, QUERY>) => {
         logger.info(logPrefix + `config=${JSON.stringify(config)}`);
         // クライアントサイド -> BFF(APIルート)間リクエストでは、ステータスコード200のみとする。
         // エラーの場合はレスポンスボディにエラー情報を設定する

@@ -6,8 +6,8 @@ export const FormKeys = {
 } as const;
 export type FormKeys = (typeof FormKeys)[keyof typeof FormKeys];
 
-export type PartialRequestConfig<BODY, PARAM> = Pick<
-    RequestConfig<BODY, PARAM>,
+export type PartialRequestConfig<BODY, QUERY> = Pick<
+    RequestConfig<BODY, QUERY>,
     'method' | 'headers' // TODO: 型にできるか
 >;
 

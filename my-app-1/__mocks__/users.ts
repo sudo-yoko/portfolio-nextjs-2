@@ -15,6 +15,12 @@ interface ReqQuery {
     userName?: string;
 }
 
+interface ReqBody {
+    offset: string;
+    limit: string;
+    userId?: string;
+}
+
 interface ResBody {
     total: string;
     users: User[];
@@ -35,6 +41,14 @@ app.use(delay(1000)); // 1秒待機して、処理待ち時間をシミュレー
 app.use(logging()); // リクエスト情報をログに出力
 
 /**
+ * POST /users
+ */
+app.post(path, async (req: Request<never, ResBody, ReqBody, never>, res: Response<ResBody>) => {
+    const body = req.body;
+    func(body, res);
+});
+
+/**
  * GET /users
  */
 app.get(path, async (req: Request<never, ResBody, never, ReqQuery>, res: Response<ResBody>) => {
@@ -43,7 +57,11 @@ app.get(path, async (req: Request<never, ResBody, never, ReqQuery>, res: Respons
     const { offset, limit } = query;
     //   console.log(method, url);
     //   console.log(`query=${JSON.stringify(query)}`);
+    func(query, res);
+});
 
+function func(criteria: ReqBody, res: Response<ResBody>) {
+    const { offset, limit } = criteria;
     // テストデータを作成
     const total = 10;
     const users: User[] = [];
@@ -63,7 +81,7 @@ app.get(path, async (req: Request<never, ResBody, never, ReqQuery>, res: Respons
         users: segment,
     };
     res.status(status).json(resBody);
-});
+}
 
 app.listen(port, () => {
     console.log(logPrefix + `Mock service running on http://localhost:${port} (users-mock)`);

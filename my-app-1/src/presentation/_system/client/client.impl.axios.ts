@@ -11,7 +11,7 @@ import logger from '@/presentation/_system/logging/logger.s';
 const logPrefix = 'client.impl.axios.ts: ';
 
 export const clientImpl: Client = {
-    send: async <BODY = never, PARAMS = never>(config: RequestConfig<BODY, PARAMS>) => {
+    send: async <BODY = never, QUERY = never>(config: RequestConfig<BODY, QUERY>) => {
         // デフォルトは、500 以上のステータスコードの場合はエラーをスローする
         const validateStatus = config.validateStatus ?? ((status: number) => status < 500);
 

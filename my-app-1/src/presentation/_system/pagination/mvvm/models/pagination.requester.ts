@@ -18,6 +18,7 @@ export interface FetchPage<ITEMS, FIELD extends string> {
     (
         offset: number,
         limit: number,
+        // TODO: 検索条件がFormDataなのでフォーム以外のオプションの条件を入れられない
         query: FormData<FIELD>,
     ): Promise<PaginationResult<FetchData<ITEMS>, FIELD>>;
 }
