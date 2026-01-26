@@ -10,15 +10,15 @@ import { FormKeys, User } from '@/presentation/users/mvvm/models/users.types';
 import { validate } from '@/presentation/users/mvvm/models/users.validator';
 
 export async function execute(
-    offset: number,
-    limit: number,
-    query: FormData<FormKeys>,
+    offset: string,
+    limit: string,
+    formData: FormData<FormKeys>,
     // TODO: REASON型を指定しないのにコンパイルエラーにならない
 ): Promise<PaginationResult<FetchData<User[]>, FormKeys>> {
     //
     // バリデーション
     //
-    const violations = validate(query);
+    const violations = validate(formData);
     if (hasError(violations)) {
         // return reject(REJECTION_LABELS.VIOLATION, violations);
         return invalid(violations);
@@ -30,7 +30,7 @@ export async function execute(
     //
     // データ取得
     //
-    const { total, users } = await send(offset, limit, query);
+    const { total, users } = await send(offset, limit, formData);
     // if (total === 0) {
     // return reject(REJECTION_LABELS.NO_DATA);
     // }

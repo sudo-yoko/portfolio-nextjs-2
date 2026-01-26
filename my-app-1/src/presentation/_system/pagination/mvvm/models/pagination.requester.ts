@@ -8,18 +8,13 @@ import { FormData } from '@/presentation/_system/validation/validation.types';
 
 /**
  * データ取得のインターフェース型
- *
- * @typeParam TItems - 返却データの型（ページのデータ）
- * @typeParam TQuery - 検索条件を格納するオブジェクトの型
- * @returns
- * BoundaryResult型。正常時の返却データがFetchPageResult<TItems>型、Rejectなし。
  */
 export interface FetchPage<ITEMS, FIELD extends string> {
     (
         offset: number,
         limit: number,
         // TODO: 検索条件がFormDataなのでフォーム以外のオプションの条件を入れられない
-        query: FormData<FIELD>,
+        formData: FormData<FIELD>,
     ): Promise<PaginationResult<FetchData<ITEMS>, FIELD>>;
 }
 

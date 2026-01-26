@@ -3,18 +3,19 @@
  * 検索条件のユーザー名、
  */
 export const FormKeys = {
-    userName: 'userName',
+    keyword: 'keyword',
 } as const;
 export type FormKeys = (typeof FormKeys)[keyof typeof FormKeys]; // 値から型を作る
 // export type FormKeys = keyof typeof FormKeys  // キーから型を作る
 // export type FormKeys = 'userName' | 'count';
 
 /**
- * 検索条件
+ * クエリ文字列のオブジェクト型
  */
+// TODO: バックエンド呼び出しで使うためstringとする。（viewではnumberで扱う）
 export type UsersQuery = {
-    userId?: string;
-    userName?: string;
+    offset: string;
+    limit: string;
 };
 
 /**

@@ -53,7 +53,7 @@ export function usePagination() {
         })();
         async function func() {
             if (state.step === Step.Search) {
-                pager.current = createPager(fetchCallback, { initialPage, perPage, query: state.query });
+                pager.current = createPager(fetchCallback, { initialPage, perPage, formData: state.formData });
                 const page = await pager.current.current();
                 await handleResult(page, dispatch);
             }
@@ -72,7 +72,7 @@ export function usePagination() {
                 await handleResult(page, dispatch);
             }
         }
-    }, [fetchCallback, state.query, state.step]);
+    }, [fetchCallback, state.formData, state.step]);
 
     return { state, dispatch };
 }
@@ -103,7 +103,7 @@ export async function handleSearch(
     state: State<User[], FormKeys>,
     dispatch: React.ActionDispatch<[action: Action<User[], FormKeys>]>,
 ) {
-    const query: FormData<FormKeys> = { userName: state.query.userName };
+    const query: FormData<FormKeys> = { keyword: state.formData.keyword };
     const violations = validate(query);
     if (hasError(violations)) {
         setViolations(dispatch, violations);

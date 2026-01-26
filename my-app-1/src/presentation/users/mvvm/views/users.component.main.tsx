@@ -5,7 +5,7 @@ import { ProcessingModalB } from '@/presentation/_system/components/processing.m
 import { ErrorModal } from '@/presentation/_system/error/views/component.error-modal.feature.close';
 import {
     setError,
-    setQuery,
+    setKeyword,
     Step,
 } from '@/presentation/_system/pagination/mvvm/view-models/pagination.reducer.2';
 import {
@@ -31,15 +31,15 @@ export function Main() {
                 <div className="flex flex-row items-center gap-1">
                     <input
                         type="text"
-                        value={state.query.userName}
-                        onChange={(e) => setQuery(dispatch, 'userName', e.target.value)}
+                        value={state.formData.keyword}
+                        onChange={(e) => setKeyword(dispatch, 'keyword', e.target.value)}
                         placeholder="ID, ユーザー名"
                         className="w-80 border-2 border-gray-400 placeholder:italic focus:placeholder:text-transparent"
                     />
                     <Button onClick={() => handleSearch(state, dispatch)}>検索</Button>
                     <Button onClick={() => handleReset(dispatch)}>リセット</Button>
                 </div>
-                {state.violationsMap.userName?.map((err, index) => (
+                {state.violationsMap.keyword?.map((err, index) => (
                     <div key={index} className="text-red-500">
                         {err}
                     </div>
@@ -49,7 +49,7 @@ export function Main() {
                         <div>{JSON.stringify(state.step)}</div>
                         {state.items.length > 0 && (
                             <div className="flex flex-col gap-1">
-                                <div>検索条件：{JSON.stringify(state.query)}</div>
+                                <div>検索条件：{JSON.stringify(state.formData)}</div>
                                 <PageController
                                     onPrev={() => handlePrev(dispatch)}
                                     onNext={() => handleNext(dispatch)}

@@ -8,8 +8,8 @@ import { FormKeys } from '@/presentation/users/mvvm/models/users.types';
 export const validate: FormValidator<FormKeys> = (formData) => {
     const errors: Violations<FormKeys> = [];
     errors.push({
-        field: FormKeys.userName,
-        violation: validateUserName(formData.userName),
+        field: FormKeys.keyword,
+        violation: validateUserName(formData[FormKeys.keyword]),
     });
     return errors;
 };

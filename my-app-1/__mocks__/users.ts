@@ -8,6 +8,11 @@ const logPrefix = '>>> ';
 const port = 3003;
 const path = '/users';
 
+interface QueryParam {
+    offset: string;
+    limit: string;
+}
+
 interface ReqQuery {
     offset: string;
     limit: string;
@@ -16,9 +21,9 @@ interface ReqQuery {
 }
 
 interface ReqBody {
-    offset: string;
-    limit: string;
+    keyword: string;
     userId?: string;
+    userName?: string;
 }
 
 interface ResBody {
@@ -43,25 +48,37 @@ app.use(logging()); // リクエスト情報をログに出力
 /**
  * POST /users
  */
-app.post(path, async (req: Request<never, ResBody, ReqBody, never>, res: Response<ResBody>) => {
-    const body = req.body;
-    func(body, res);
+app.post(path, async (req: Request<never, ResBody, ReqBody, QueryParam>, res: Response<ResBody>) => {
+    const { offset, limit } = req.query;
+    const { keyword, userId, userName } = req.body;
+    func(res, offset, limit, keyword, userId, userName);
 });
 
 /**
  * GET /users
  */
+// TODO: users/minのエンドポイントもPOSTにする
 app.get(path, async (req: Request<never, ResBody, never, ReqQuery>, res: Response<ResBody>) => {
     //   const { method, url, query } = req;
     const { query } = req;
     const { offset, limit } = query;
     //   console.log(method, url);
     //   console.log(`query=${JSON.stringify(query)}`);
-    func(query, res);
+    func(res, offset, limit, '');
 });
 
-function func(criteria: ReqBody, res: Response<ResBody>) {
-    const { offset, limit } = criteria;
+function func(
+    res: Response<ResBody>,
+    offset: string,
+    limit: string,
+    keyword: string,
+    userId?: string,
+    userName?: string,
+) {
+    console.log(
+        `offset=${offset}, limit=${limit}, keyword=${keyword} userId=${userId}, userName=${userName}`,
+    );
+
     // テストデータを作成
     const total = 10;
     const users: User[] = [];

@@ -9,7 +9,7 @@ export const perPage = 4;
 
 export const initialState: State<User[], FormKeys> = {
     step: Step.Idle,
-    query: initialFormData(),
+    formData: initialFormData(),
     items: [],
     page: 0,
     violations: [],

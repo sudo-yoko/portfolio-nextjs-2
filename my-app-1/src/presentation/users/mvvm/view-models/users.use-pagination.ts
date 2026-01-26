@@ -68,7 +68,7 @@ export function usePagination({
             if (state.step !== Step.Search) {
                 return;
             }
-            pager.current = createPager(fetchCallback, { initialPage, perPage, query: state.query });
+            pager.current = createPager(fetchCallback, { initialPage, perPage, formData: state.formData });
             const page = await pager.current.current();
             // if (page.tag === 'ok') {
             if (isOkData(page)) {
@@ -78,7 +78,7 @@ export function usePagination({
                 setViolations(dispatch, page.violations);
             }
         }
-    }, [fetchCallback, initialPage, perPage, state.query, state.step]);
+    }, [fetchCallback, initialPage, perPage, state.formData, state.step]);
 
     /**
      * 検索結果の反映
@@ -114,7 +114,7 @@ export function handleSearch(
     state: State<User[], FormKeys>,
     dispatch: React.ActionDispatch<[action: Action<User[], FormKeys>]>,
 ) {
-    const query: FormData<FormKeys> = { userName: state.query.userName };
+    const query: FormData<FormKeys> = { keyword: state.formData.keyword };
     const violations = validate(query);
     if (hasError(violations)) {
         setViolations(dispatch, violations);

@@ -25,9 +25,9 @@ import { FormData } from '@/presentation/_system/validation/validation.types';
  */
 export function createPager<ITEMS, FIELD extends string>(
     fetchPage: FetchPage<ITEMS, FIELD>,
-    params: { initialPage?: number; perPage: number; query: FormData<FIELD> },
+    params: { initialPage?: number; perPage: number; formData: FormData<FIELD> },
 ): Pager<ITEMS, FIELD> {
-    const { perPage, query } = params;
+    const { perPage, formData } = params;
     const initPage = params.initialPage ?? 1;
     const limit = perPage;
     let { offset } = pageToOffset(perPage, initPage);
@@ -43,7 +43,7 @@ export function createPager<ITEMS, FIELD extends string>(
         //
         // データ取得
         //
-        let result = await fetchPage(offset, limit, query);
+        let result = await fetchPage(offset, limit, formData);
         if (isAborted(result)) {
             // throw backendError(result);
             return abort(result);
@@ -78,7 +78,7 @@ export function createPager<ITEMS, FIELD extends string>(
         //
         if (offset > total) {
             offset = offsetOfLastPage(total, limit); // 最終ページの先頭の1件目
-            result = await fetchPage(offset, limit, query);
+            result = await fetchPage(offset, limit, formData);
             if (isAborted(result)) {
                 // throw backendError(result);
                 return abort(result);

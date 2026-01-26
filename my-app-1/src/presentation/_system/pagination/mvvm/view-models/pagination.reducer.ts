@@ -21,7 +21,7 @@ export type Step = (typeof Step)[keyof typeof Step];
  */
 export type State<ITEMS, FIELD extends string> = {
     step: Step;
-    query: FormData<FIELD>;
+    formData: FormData<FIELD>;
     items: ITEMS;
     page: number;
     violations: Violations<FIELD>;
@@ -100,7 +100,7 @@ export function reducer<ITEMS, FIELD extends string>(
                 ...state,
                 violations: [],
                 violationsMap: {},
-                query: { ...state.query, [action.key]: action.value },
+                formData: { ...state.formData, [action.key]: action.value },
             };
         case ActionType.ToSearch:
             const search = { ...state, step: Step.Search, query: action.query };

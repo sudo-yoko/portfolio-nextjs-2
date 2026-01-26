@@ -20,7 +20,7 @@ export const Method = {
 export type Method = (typeof Method)[keyof typeof Method];
 
 /**
- * リクエスト
+ * リクエスト設定オブジェクト
  */
 export type RequestConfig<BODY = never, QUERY = never> = {
     method: Method;

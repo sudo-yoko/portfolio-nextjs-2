@@ -16,7 +16,7 @@ export type Step = (typeof Step)[keyof typeof Step];
 
 export type State<ITEMS, FIELD extends string> = {
     step: Step;
-    query: FormData<FIELD>;
+    formData: FormData<FIELD>;
     items: ITEMS;
     page: number;
     violations: Violations<FIELD>;
@@ -26,7 +26,7 @@ export type State<ITEMS, FIELD extends string> = {
 
 export const ActionType = {
     ToIdle: 'toIdle',
-    SetQuery: 'setQuery',
+    SetFormData: 'setFormData',
     SetViolations: 'setViolations',
     ToSearch: 'toSearch',
     ToNext: 'toNext',
@@ -39,7 +39,7 @@ export type ActionType = (typeof ActionType)[keyof typeof ActionType];
 
 export type Action<ITEMS, FIELD extends string> =
     | { type: typeof ActionType.ToIdle; items: ITEMS; page: number }
-    | { type: typeof ActionType.SetQuery; key: FIELD; value: string }
+    | { type: typeof ActionType.SetFormData; key: FIELD; value: string }
     | {
           type: typeof ActionType.SetViolations;
           violations: Violations<FIELD>;
@@ -61,12 +61,12 @@ export function toIdle<ITEMS, FIELD extends string>(
     dispatch(action);
 }
 
-export function setQuery<ITEMS, FIELD extends string>(
+export function setKeyword<ITEMS, FIELD extends string>(
     dispatch: React.ActionDispatch<[action: Action<ITEMS, FIELD>]>,
     key: FIELD,
     value: string,
 ): void {
-    const action: Action<ITEMS, FIELD> = { type: ActionType.SetQuery, key, value };
+    const action: Action<ITEMS, FIELD> = { type: ActionType.SetFormData, key, value };
     dispatch(action);
 }
 
@@ -149,12 +149,12 @@ export function reducer<ITEMS, FIELD extends string>(
     switch (action.type) {
         case ActionType.ToIdle:
             return { ...state, step: Step.Idle, items: action.items, page: action.page };
-        case ActionType.SetQuery:
+        case ActionType.SetFormData:
             return {
                 ...state,
                 violations: [],
                 violationsMap: {},
-                query: { ...state.query, [action.key]: action.value },
+                formData: { ...state.formData, [action.key]: action.value },
             };
         case ActionType.SetViolations:
             return {
@@ -166,7 +166,7 @@ export function reducer<ITEMS, FIELD extends string>(
             return {
                 ...state,
                 step: Step.Search,
-                query: action.query,
+                formData: action.query,
             };
         case ActionType.ToNext:
             return {

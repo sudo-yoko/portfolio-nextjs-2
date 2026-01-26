@@ -1,8 +1,9 @@
-POST http://localhost:3003/users
+POST http://localhost:3003/users?offset=1&limit=10
 Content-Type: application/json; charset=UTF-8
 Accept: application/json; charset=UTF-8
 
 {
-    "offset": "1",
-    "limit": "10"
+    "keyword": "abcde",
+    "userId": "12345",
+    "userName" : "ABCDE"
 }
