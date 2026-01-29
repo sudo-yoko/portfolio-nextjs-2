@@ -48,6 +48,7 @@ app.use(logging()); // リクエスト情報をログに出力
 /**
  * POST /users
  */
+// TODO: 検索条件をボディにしてPOSTを使うなら、URLは 「POST /users/search」とか
 app.post(path, async (req: Request<never, ResBody, ReqBody, QueryParam>, res: Response<ResBody>) => {
     const { offset, limit } = req.query;
     const { keyword, userId, userName } = req.body;
