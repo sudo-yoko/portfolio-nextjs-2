@@ -3,7 +3,7 @@
 //
 'use client';
 
-import { getViolationsMap } from '@/presentation/_system/validation/validation.helpers';
+import { getViolationsMap, initialFormDataCore } from '@/presentation/_system/validation/validation.helpers';
 import { FormData, Violations, ViolationsMap } from '@/presentation/_system/validation/validation.types';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 import React, { Reducer } from 'react';
@@ -53,9 +53,8 @@ export const initialState: State = {
 /**
  * フォームの初期値
  */
-// TODO: 共通化できるか
 function initialFormData(): FormData<FormKeys> {
-    const initial = Object.fromEntries(Object.values(FormKeys).map((key) => [key, ''])) as FormData<FormKeys>;
+    const initial = initialFormDataCore(FormKeys);
     initial.email = 'test@mail.com';
     return initial;
 }

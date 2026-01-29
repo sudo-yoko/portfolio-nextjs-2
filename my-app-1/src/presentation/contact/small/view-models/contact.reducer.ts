@@ -43,10 +43,8 @@ export const initialState: State = {
     retryableCount: 0,
 };
 
-// TODO: 共通化できるか
 function initialFormData(): FormData<FormKeys> {
     const initial = initialFormDataCore(FormKeys);
-    // const initial = Object.fromEntries(Object.values(FormKeys).map((key) => [key, ''])) as FormData<FormKeys>;
     initial.email = 'test@mail.com';
     return initial;
 }

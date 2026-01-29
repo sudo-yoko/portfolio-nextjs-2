@@ -1,6 +1,7 @@
 import 'client-only';
 
 import { State, Step } from '@/presentation/_system/pagination/mvvm/view-models/pagination.reducer.2';
+import { initialFormDataCore } from '@/presentation/_system/validation/validation.helpers';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 import { FormKeys, User } from '@/presentation/users/mvvm/models/users.types';
 
@@ -18,6 +19,6 @@ export const initialState: State<User[], FormKeys> = {
 };
 
 function initialFormData(): FormData<FormKeys> {
-    const initial = Object.fromEntries(Object.values(FormKeys).map((key) => [key, ''])) as FormData<FormKeys>;
+    const initial = initialFormDataCore(FormKeys);
     return initial;
 }
