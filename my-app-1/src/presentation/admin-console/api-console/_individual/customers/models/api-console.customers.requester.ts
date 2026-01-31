@@ -1,31 +1,28 @@
 import 'client-only';
 
 import client from '@/presentation/_system/client/client.c';
-import { RequestConfig } from '@/presentation/_system/client/client.types';
-import logger from '@/presentation/_system/logging/logger.c';
+import { ACCEPT_APPLICATION_JSON } from '@/presentation/_system/client/client.constants';
+import { Method } from '@/presentation/_system/client/client.types';
 import { parseResult } from '@/presentation/_system/result/result.core.helpers';
 import { Tag } from '@/presentation/_system/result/result.core.types';
-import { FormData } from '@/presentation/_system/validation/validation.types';
 import { SendRequest } from '@/presentation/admin-console/api-console/_individual/_shared/models/api-console.individual.requester';
-import {
-    FormKeys,
-    requestConfig,
-} from '@/presentation/admin-console/api-console/_individual/customers/models/api-console.customers.types';
+import { FormKeys } from '@/presentation/admin-console/api-console/_individual/customers/models/api-console.customers.types';
 import { ApiResult } from '@/presentation/admin-console/api-console/models/api-console.types';
 
-const logPrefix = 'api-console.customers.requester.ts: ';
+// const logPrefix = 'api-console.customers.requester.ts: ';
 
 /**
  * Route Handlers 経由バックエンド呼び出し
  */
 const viaRoute: SendRequest<FormKeys> = async (formData) => {
-    const config: RequestConfig<never, FormData<FormKeys>> = {
+    const res = await client.send({
         url: '/api/bff/admin-console/api-console/customers',
+        method: Method.GET,
+        headers: {
+            ...ACCEPT_APPLICATION_JSON,
+        },
         query: formData,
-        ...requestConfig(),
-    };
-    logger.info(logPrefix + `config=${JSON.stringify(config)}`);
-    const res = await client.send(config);
+    });
     const result = parseResult(res.rawBody);
     return result as ApiResult<FormKeys>;
 };

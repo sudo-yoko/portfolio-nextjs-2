@@ -1,15 +1,39 @@
 import 'server-only';
 
+import {
+    ACCEPT_APPLICATION_JSON,
+    CONTENT_TYPE_APPLICATION_JSON_UTF8,
+} from '@/presentation/_system/client/client.constants';
 import client from '@/presentation/_system/client/client.s';
+import { Method } from '@/presentation/_system/client/client.types';
 import { env } from '@/presentation/_system/env/env.helper.validated';
 import { FormData } from '@/presentation/_system/validation/validation.types';
-import { requestConfig } from '@/presentation/users/mvvm/models/users.config';
-import { FormKeys, Users, UsersQuery } from '@/presentation/users/mvvm/models/users.types';
+import { FormKeys, Users } from '@/presentation/users/mvvm/models/users.types';
 
-export async function send(offset: string, limit: string, formData: FormData<FormKeys>): Promise<Users> {
+/**
+ * バックエンドのアドレス
+ */
+const url = (): string => {
     const url = env('USERS_API');
-    const query: UsersQuery = { offset, limit };
-    const res = await client.send({ url, ...requestConfig(query, formData) });
+    return url;
+};
+
+/**
+ * バックエンド呼び出し
+ */
+export async function send(offset: string, limit: string, formData: FormData<FormKeys>): Promise<Users> {
+    // const query: UsersQuery = { offset, limit };
+
+    const res = await client.send({
+        url: url(),
+        method: Method.POST,
+        headers: {
+            ...CONTENT_TYPE_APPLICATION_JSON_UTF8,
+            ...ACCEPT_APPLICATION_JSON,
+        },
+        query: { offset, limit },
+        body: formData,
+    });
     const result: Users = JSON.parse(res.rawBody);
     return result;
 }

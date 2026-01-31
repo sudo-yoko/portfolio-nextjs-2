@@ -14,16 +14,22 @@ import { ContactBody } from '@/presentation/contact/mvvm/models/contact.types';
 
 const logPrefix = 'contact.webToCase-client.ts: ';
 
-export async function send(model: ContactBody): Promise<void> {
+const url = (): string => {
     const url = env('WEB_TO_CASE_URL');
+    return url;
+};
+
+export async function send(model: ContactBody): Promise<void> {
     const body = new URLSearchParams(model).toString();
-    logger.info(logPrefix + `Request(Outbound) -> url=${url}, body:${body}`);
+    // logger.info(logPrefix + `Request(Outbound) -> url=${url}, body:${body}`);
 
     const result = await client.send({
+        url: url(),
         method: Method.POST,
-        url,
         body,
-        headers: { ...CONTENT_TYPE_APPLICATION_FORM },
+        headers: {
+            ...CONTENT_TYPE_APPLICATION_FORM,
+        },
         // ステータスコード200,408(タイムアウト)以外はエラーをスローする
         validateStatus: (status) => status === 200 || status === 408,
     });

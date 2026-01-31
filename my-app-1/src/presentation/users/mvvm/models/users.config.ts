@@ -6,11 +6,13 @@ import { Method, RequestConfig } from '@/presentation/_system/client/client.type
 import { FormData } from '@/presentation/_system/validation/validation.types';
 import { FormKeys, UsersQuery } from '@/presentation/users/mvvm/models/users.types';
 
+// TODO: 後で削除
 export type PartialRequestConfig<BODY, QUERY> = Pick<
     RequestConfig<BODY, QUERY>,
     'method' | 'headers' | 'body' | 'query'
 >;
 
+// TODO: 後で削除
 export function requestConfig(
     query: UsersQuery,
     formData: FormData<FormKeys>,

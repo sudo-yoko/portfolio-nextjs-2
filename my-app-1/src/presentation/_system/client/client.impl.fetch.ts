@@ -13,6 +13,7 @@ const logPrefix = 'client.impl.fetch.ts: ';
 
 export const clientImpl: Client = {
     send: async <BODY = never, QUERY = never>(config: RequestConfig<BODY, QUERY>) => {
+        // TODO: ログ出力を抑止する機能
         logger.info(logPrefix + `config=${JSON.stringify(config)}`);
         // クライアントサイド -> BFF(APIルート)間リクエストでは、ステータスコード200のみとする。
         // エラーの場合はレスポンスボディにエラー情報を設定する

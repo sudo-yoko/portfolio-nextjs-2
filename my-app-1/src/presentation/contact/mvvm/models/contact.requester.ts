@@ -13,16 +13,13 @@ import { ContactResult, FormKeys } from '@/presentation/contact/mvvm/models/cont
 
 /**
  * バックエンド呼び出しのインターフェース型
- *
- * @param formData - 問い合わせフォームの入力値
- * @returns 正常終了の場合はvoid、差し戻しの場合はバリデーションエラーをBffResultにラップして返す
  */
 type Send = {
     (formData: FormData<FormKeys>): Promise<ContactResult<FormKeys>>;
 };
 
 /**
- * バックエンド呼び出しの実装：ServerActions経由バックエンド呼び出し
+ * ServerActions経由バックエンド呼び出し
  */
 const _viaAction: Send = async (formData) => {
     const result = await post(formData);
@@ -31,14 +28,12 @@ const _viaAction: Send = async (formData) => {
 };
 
 /**
- * バックエンド呼び出しの実装：RouteHandlers経由バックエンド呼び出し
+ * RouteHandlers経由バックエンド呼び出し
  */
 const viaRoute: Send = async (formData) => {
-    const url = '/api/bff/contact/mvvm';
     // const { name, email, body } = formData;
-
     const res = await client.send({
-        url,
+        url: '/api/bff/contact/mvvm',
         method: Method.POST,
         headers: {
             ...CONTENT_TYPE_APPLICATION_JSON_UTF8,
