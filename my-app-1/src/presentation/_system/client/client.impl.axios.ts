@@ -27,6 +27,8 @@ export const clientImpl: Client = {
             validateStatus,
         });
 
+        // TODO: axiosの場合の通信エラー（クライアント側エラーは？）
+
         // ステータスコードの検証
         // if (!validateStatus(res.status)) {
         // const err = backendApiError(`Request -> ${JSON.stringify(req)}, Response -> status=${res.status}`);

@@ -20,7 +20,7 @@ export const clientImpl: Client = {
         // 200以外が返ってきたら例外をスローする
         const validateStatus = config.validateStatus ?? ((status: number) => status === 200);
 
-        let res;
+        let res: Response;
         try {
             let url: string = '';
             if (config.query) {
