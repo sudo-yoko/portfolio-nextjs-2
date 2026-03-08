@@ -1,9 +1,9 @@
+import { delay, loggingReq, loggingRes } from '@/__mocks__/utils/express-middlewares';
 import cors from 'cors';
 import type { Request, Response } from 'express';
 import express from 'express';
-import { delay, logging } from './utils';
 
-const logPrefix = '>>> ';
+const logPrefix = 'users-mock';
 
 const port = 3003;
 const path = '/users';
@@ -43,7 +43,8 @@ app.use(cors());
 
 // 独自ミドルウェア
 app.use(delay(1000)); // 1秒待機して、処理待ち時間をシミュレートする
-app.use(logging()); // リクエスト情報をログに出力
+app.use(loggingReq(logPrefix)); // リクエスト情報をログに出力
+app.use(loggingRes(logPrefix)); // レスポンス情報をログに出力
 
 /**
  * POST /users
@@ -52,7 +53,7 @@ app.use(logging()); // リクエスト情報をログに出力
 app.post(path, async (req: Request<never, ResBody, ReqBody, QueryParam>, res: Response<ResBody>) => {
     const { offset, limit } = req.query;
     const { keyword, userId, userName } = req.body;
-    func(res, offset, limit, keyword, userId, userName);
+    handleRequest(res, offset, limit, keyword, userId, userName);
 });
 
 /**
@@ -65,21 +66,17 @@ app.get(path, async (req: Request<never, ResBody, never, ReqQuery>, res: Respons
     const { offset, limit } = query;
     //   console.log(method, url);
     //   console.log(`query=${JSON.stringify(query)}`);
-    func(res, offset, limit, '');
+    handleRequest(res, offset, limit, '');
 });
 
-function func(
+function handleRequest(
     res: Response<ResBody>,
     offset: string,
     limit: string,
-    keyword: string,
-    userId?: string,
-    userName?: string,
+    _keyword: string,
+    _userId?: string,
+    _userName?: string,
 ) {
-    console.log(
-        `offset=${offset}, limit=${limit}, keyword=${keyword} userId=${userId}, userName=${userName}`,
-    );
-
     // テストデータを作成
     const total = 10;
     const users: User[] = [];
@@ -91,7 +88,7 @@ function func(
 
     //
     const segment = users.slice(Number(offset), Number(offset) + Number(limit));
-    console.log(`users=${JSON.stringify(segment, null, 2)}`);
+    // console.log(`>>> users=${JSON.stringify(segment, null, 2)}`);
 
     const status = 200;
     const resBody: ResBody = {
@@ -102,5 +99,5 @@ function func(
 }
 
 app.listen(port, () => {
-    console.log(logPrefix + `Mock service running on http://localhost:${port} (users-mock)`);
+    console.log(`>>> Mock service running on http://localhost:${port} (users-mock)`);
 });
