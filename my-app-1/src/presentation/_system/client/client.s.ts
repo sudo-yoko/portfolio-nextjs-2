@@ -3,7 +3,7 @@
 //
 import 'server-only';
 
-import { clientImpl } from '@/presentation/_system/client/client.impl.axios';
+import { clientImpl } from '@/presentation/_system/client/client.adapter.axios';
 import { Client } from '@/presentation/_system/client/client.types';
 
 const client: Client = clientImpl;
