@@ -1,17 +1,15 @@
 //
-// API クライアントの実装 ( Fetch API )
-// クライアントサイド -> BFF(APIルート)のリクエストで使用する
+// Fetch API を Client インターフェースに適合させるアダプター
 //
-import 'client-only';
-
 import { Client, RequestConfig, Result } from '@/presentation/_system/client/client.types';
 import { httpRequestError, httpResponseError } from '@/presentation/_system/error/error.factories';
 import { stringify } from '@/presentation/_system/error/error.helper.stringify';
-import logger from '@/presentation/_system/logging/logger.c';
+import { Logger } from '@/presentation/_system/logging/logging.types';
 
-const logPrefix = 'client.impl.fetch.ts: ';
+const logPrefix = 'client.adapter.fetch.ts: ';
 
-export const clientImpl: Client = {
+//export const fetchAdapter: Client = {
+export const createFetchClient = (logger: Logger): Client => ({
     send: async <BODY = never, QUERY = never>(config: RequestConfig<BODY, QUERY>) => {
         // TODO: ログ出力を抑止する機能
         logger.info(logPrefix + `config=${JSON.stringify(config)}`);
@@ -64,4 +62,5 @@ export const clientImpl: Client = {
         logger.info(logPrefix + `Request -> ${JSON.stringify(config)}, Result -> ${JSON.stringify(result)}`);
         return result;
     },
-};
+    //};
+});

@@ -1,11 +1,9 @@
-//
-// プロキシ設定付きRESTクライアント（Axiosインスタンス）
-//
 import 'server-only';
 
-import { env, envNumber, envProtocol } from '@/presentation/_system/env/env.helper.validated';
 import type { AxiosInstance } from 'axios';
 import axios from 'axios';
+
+import { env, envNumber, envProtocol } from '@/presentation/_system/env/env.helper.validated';
 
 function create(): AxiosInstance {
     const protocol = envProtocol('PROXY_PROTOCOL');
@@ -18,4 +16,7 @@ function create(): AxiosInstance {
     });
 }
 
-export const client: AxiosInstance = create();
+/**
+ * プロキシ設定付き Axios インスタンス
+ */
+export const axiosInstance: AxiosInstance = create();

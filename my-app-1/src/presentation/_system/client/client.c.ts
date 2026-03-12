@@ -3,9 +3,10 @@
 //
 import 'client-only';
 
-import { clientImpl } from '@/presentation/_system/client/client.adapter.fetch';
+import { createFetchClient } from '@/presentation/_system/client/client.adapter.fetch';
 import { Client } from '@/presentation/_system/client/client.types';
+import logger from '@/presentation/_system/logging/logger.c';
 
-const client: Client = clientImpl;
+const client: Client = createFetchClient(logger);
 
 export default client;

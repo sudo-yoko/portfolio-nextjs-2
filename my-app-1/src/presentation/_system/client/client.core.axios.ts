@@ -1,8 +1,6 @@
-import 'server-only';
-
 import axios from 'axios';
 
 /**
- * Axiosインスタンス
+ * Axios インスタンス
  */
-export const client = axios.create({ timeout: 10000 });
+export const axiosInstance = axios.create({ timeout: 10000 });
