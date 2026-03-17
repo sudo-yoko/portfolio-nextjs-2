@@ -22,7 +22,7 @@ type Send = {
 };
 
 /**
- * バックエンド呼び出しの実装：ServerActions経由バックエンド呼び出し
+ * ServerActions 経由バックエンド呼び出し
  */
 const _viaAction: Send = async (formData) => {
     const result = await post(formData);
@@ -31,7 +31,7 @@ const _viaAction: Send = async (formData) => {
 };
 
 /**
- * バックエンド呼び出しの実装：RouteHandlers経由バックエンド呼び出し
+ * RouteHandlers 経由バックエンド呼び出し
  */
 const viaRoute: Send = async (formData) => {
     const res = await client.send({

@@ -1,7 +1,7 @@
 //
 // Fetch API を Client インターフェースに適合させるアダプター
 //
-import { Client, RequestConfig, Result } from '@/presentation/_system/client/client.types';
+import { Client, RequestConfig, Result, ValidateStatus } from '@/presentation/_system/client/client.types';
 import { httpRequestError, httpResponseError } from '@/presentation/_system/error/error.factories';
 import { stringify } from '@/presentation/_system/error/error.helper.stringify';
 import { Logger } from '@/presentation/_system/logging/logging.types';
@@ -9,15 +9,14 @@ import { Logger } from '@/presentation/_system/logging/logging.types';
 const logPrefix = 'client.adapter.fetch.ts: ';
 
 //export const fetchAdapter: Client = {
-export const createFetchClient = (logger: Logger): Client => ({
+export const createFetchClient = (logger: Logger, defaultValidateStatus: ValidateStatus): Client => ({
     send: async <BODY = never, QUERY = never>(config: RequestConfig<BODY, QUERY>) => {
         // TODO: ログ出力を抑止する機能
         logger.info(logPrefix + `config=${JSON.stringify(config)}`);
-        // クライアントサイド -> BFF(APIルート)間リクエストでは、ステータスコード200のみとする。
-        // エラーの場合はレスポンスボディにエラー情報を設定する
-        // 200以外が返ってきたら例外をスローする
-        const validateStatus = config.validateStatus ?? ((status: number) => status === 200);
-
+        const validateStatus = config.validateStatus ?? defaultValidateStatus;
+        //
+        // リクエスト
+        //
         let res: Response;
         try {
             let url: string = '';
@@ -43,22 +42,23 @@ export const createFetchClient = (logger: Logger): Client => ({
             }
             throw httpRequestError({ cause: e, detail: `request=${JSON.stringify(config)}` });
         }
-
+        //
+        // レスポンス
+        //
+        const rawBody = await res.text(); // bodyがjsonとは限らないのでtextで取得する。エラーの場合はhtmlが返ってくることもある
+        const result: Result = {
+            status: res.status,
+            rawBody,
+        };
         // ステータスコードの検証
-        if (!validateStatus(res.status)) {
-            const err = httpResponseError({ status: res.status, body: await res.text() }); // TODO: ボディは100文字くらいでカットする
+        if (!validateStatus(result.status)) {
+            const err = httpResponseError({ status: result.status, body: result.rawBody }); // TODO: ボディは100文字くらいでカットする
             // const err = backendApiError(
             // `Request -> ${JSON.stringify(req)}, Response -> status=${res.status}`,
             // );
             logger.error(logPrefix + err.message);
             throw err;
         }
-
-        const rawBody = await res.text(); // bodyがjsonとは限らないのでtextで取得する。エラーの場合はhtmlが返ってくることもある
-        const result: Result = {
-            status: res.status,
-            rawBody,
-        };
         logger.info(logPrefix + `Request -> ${JSON.stringify(config)}, Result -> ${JSON.stringify(result)}`);
         return result;
     },

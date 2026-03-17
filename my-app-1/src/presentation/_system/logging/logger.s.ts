@@ -1,20 +1,11 @@
-//
-// サーバーサイド用ロガー
-//
 import 'server-only';
 
+import { loggerImpl } from '@/presentation/_system/logging/logging.impl.winston';
 import type { Logger } from '@/presentation/_system/logging/logging.types';
 
 /**
- * ロガーの実装を読み込む
+ * サーバーサイド専用ロガー
  */
-const load = async (): Promise<Logger> => {
-    return (await import('@/presentation/_system/logging/logging.impl.winston')).loggerImpl;
-};
-
-/**
- * サーバーサイドロガー
- */
-const logger: Logger = await load();
+const logger: Logger = loggerImpl;
 
 export default logger;

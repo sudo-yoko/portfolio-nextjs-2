@@ -1,5 +1,3 @@
-// REST API クライントのライブラリ非依存のインターフェース型
-
 /**
  * REST API クライアントのインターフェース型
  */
@@ -29,12 +27,17 @@ export type RequestConfig<BODY = never, QUERY = never> = {
     query?: QUERY;
     // path?: string; // TODO: BFFではパスパラメータを使用しない方針
     headers?: Record<string, string>;
-
     /**
      * どのステータスをエラーとするか指定可能
      */
-    validateStatus?: (status: number) => boolean;
+    validateStatus?: ValidateStatus;
 };
+
+/**
+ * HTTPステータスの検証関数。
+ * 正常な応答とみなすステータスコードを判定する
+ */
+export type ValidateStatus = (status: number) => boolean;
 
 /**
  * 返却オブジェクト
