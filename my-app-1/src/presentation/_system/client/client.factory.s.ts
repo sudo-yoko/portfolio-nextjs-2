@@ -1,7 +1,7 @@
 import 'server-only';
 
 // import { axiosInstance } from '@/presentation/_system/client/client.core.axios';
-import { createAxiosClient } from '@/presentation/_system/client/client.core.axios';
+import { createAxiosClient } from '@/presentation/_system/client/internal/client.core.axios';
 import { Client, ValidateStatus } from '@/presentation/_system/client/client.types';
 import logger from '@/presentation/_system/logging/logger.s';
 
@@ -20,12 +20,12 @@ export const createClient = async (type: 'fetch' | 'axios' | 'axios-proxy'): Pro
         case 'axios-proxy': {
             // NOTE: case に {} をつけると case 専用のブロックスコープを作成できる
             const { createAxiosProxyClient } = await import(
-                '@/presentation/_system/client/client.core.axios.proxy'
+                '@/presentation/_system/client/internal/client.core.axios.proxy'
             );
             return createAxiosProxyClient(logger, defaultValidateStatus);
         }
         case 'fetch': {
-            const { createFetchClient } = await import('@/presentation/_system/client/client.adapter.fetch');
+            const { createFetchClient } = await import('@/presentation/_system/client/internal/client.adapter.fetch');
             return createFetchClient(logger, defaultValidateStatus);
         }
         case 'axios':

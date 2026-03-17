@@ -3,7 +3,7 @@ import 'server-only';
 import type { AxiosInstance } from 'axios';
 import axios from 'axios';
 
-import * as adapter from '@/presentation/_system/client/client.adapter.axios';
+import * as adapter from '@/presentation/_system/client/internal/client.adapter.axios';
 import { Client, ValidateStatus } from '@/presentation/_system/client/client.types';
 import { env, envNumber, envProtocol } from '@/presentation/_system/env/env.helper.validated';
 import { Logger } from '@/presentation/_system/logging/logging.types';

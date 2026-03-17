@@ -5,102 +5,143 @@ import tsdocPlugin from 'eslint-plugin-tsdoc';
 import { defineConfig, globalIgnores } from 'eslint/config';
 
 const eslintConfig = defineConfig([
-  /**
-   * ユーザー体験・パフォーマンスに関するルール（Next.js 推奨の使い方）
-   */
-  ...nextVitals,
+    /**
+     * ユーザー体験・パフォーマンスに関するルール（Next.js 推奨の使い方）
+     */
+    ...nextVitals,
 
-  /**
-   * TypeScript関連のルール（Next.js 推奨の使い方）
-   */
-  ...nextTs,
+    /**
+     * TypeScript関連のルール（Next.js 推奨の使い方）
+     */
+    ...nextTs,
 
-  /**
-   * lint 対象外フォルダ/ファイル
-   */
-  globalIgnores([
-    '.next/**',
-    'out/**',
-    'build/**',
-    'next-env.d.ts',
-    'coverage/**',
-    'eslint.config.mjs',
-    '.prettierrc.cjs',
-    'postcss.config.mjs',
-  ]),
+    /**
+     * lint 対象外フォルダ/ファイル
+     */
+    globalIgnores([
+        '.next/**',
+        'out/**',
+        'build/**',
+        'next-env.d.ts',
+        'coverage/**',
+        'eslint.config.mjs',
+        '.prettierrc.cjs',
+        'postcss.config.mjs',
+    ]),
 
-  /**
-   * 未使用の変数のチェック
-   */
-  {
-    rules: {
-      '@typescript-eslint/no-unused-vars': [
-        'warn', // 未使用の変数は警告とする
-        {
-          vars: 'all', // すべての変数をチェックする。（let、const、function、class、import の変数 など）
-          args: 'after-used', // 関数引数のチェック方法
-          ignoreRestSiblings: true, // オブジェクト分割代入で 残りの変数をスキップする場合の警告を無視する。
-          argsIgnorePattern: '^_', // 関数の引数（args）が _ で始まる場合は使用しなくても OK
-          varsIgnorePattern: '^_', // 変数名が _ で始まるとチェックしない
-          caughtErrorsIgnorePattern: '^_', // try/catch の catch 引数が _ で始まる場合は未使用 OK
+    /**
+     * 未使用の変数のチェック
+     */
+    {
+        rules: {
+            '@typescript-eslint/no-unused-vars': [
+                'warn', // 未使用の変数は警告とする
+                {
+                    vars: 'all', // すべての変数をチェックする。（let、const、function、class、import の変数 など）
+                    args: 'after-used', // 関数引数のチェック方法
+                    ignoreRestSiblings: true, // オブジェクト分割代入で 残りの変数をスキップする場合の警告を無視する。
+                    argsIgnorePattern: '^_', // 関数の引数（args）が _ で始まる場合は使用しなくても OK
+                    varsIgnorePattern: '^_', // 変数名が _ で始まるとチェックしない
+                    caughtErrorsIgnorePattern: '^_', // try/catch の catch 引数が _ で始まる場合は未使用 OK
+                },
+            ],
         },
-      ],
     },
-  },
 
-  /**
-   * TODO: コメントに警告に表示する
-   */
-  {
-    rules: {
-      'no-warning-comments': [
-        'warn',
-        {
-          terms: ['todo', 'fixme', 'hack'],
-          location: 'start', // TODO: の位置は行頭
+    /**
+     * TODO: コメントに警告に表示する
+     */
+    {
+        rules: {
+            'no-warning-comments': [
+                'warn',
+                {
+                    terms: ['todo', 'fixme', 'hack'],
+                    location: 'start', // TODO: の位置は行頭
+                },
+            ],
         },
-      ],
     },
-  },
 
-  /**
-   * TSDoc の書き方チェック
-   */
-  {
-    files: ['**/*.{ts,tsx}'],
-    plugins: {
-      tsdoc: tsdocPlugin,
+    /**
+     * TSDoc の書き方チェック
+     */
+    {
+        files: ['**/*.{ts,tsx}'],
+        plugins: {
+            tsdoc: tsdocPlugin,
+        },
+        rules: {
+            'tsdoc/syntax': 'warn',
+        },
     },
-    rules: {
-      'tsdoc/syntax': 'warn',
+    {
+        // js では TsDoc 無効
+        files: ['**/*.{js,mjs}'],
+        rules: {
+            'tsdoc/syntax': 'off',
+        },
     },
-  },
-  {
-    // js では TsDoc 無効
-    files: ['**/*.{js,mjs}'],
-    rules: {
-      'tsdoc/syntax': 'off',
-    },
-  },
 
-  /**
-   * await の要/不要のチェック
-   */
-  {
-    files: ['**/*.{ts,tsx}'],
-    languageOptions: {
-      parserOptions: {
-        projectService: true,
-      },
+    /**
+     * await の要/不要のチェック
+     */
+    {
+        files: ['**/*.{ts,tsx}'],
+        languageOptions: {
+            parserOptions: {
+                projectService: true,
+            },
+        },
+        rules: {
+            '@typescript-eslint/no-floating-promises': 'warn', // 非同期関数にawaitつけ忘れ検知
+            '@typescript-eslint/await-thenable': 'error', // awaitできないものにawaitがついているものを検知
+        },
     },
-    rules: {
-      '@typescript-eslint/no-floating-promises': 'warn', // 非同期関数にawaitつけ忘れ検知
-      '@typescript-eslint/await-thenable': 'error', // awaitできないものにawaitがついているものを検知
-    },
-  },
 
-  // Prettierと競合するESLintの整形系ルールを無効化する。
-  eslintConfigPrettier,
+    /**
+     * 共通モジュールの internal フォルダは直接利用不可
+     */
+    {
+        rules: {
+            'no-restricted-imports': [
+                'error',
+                {
+                    patterns: [
+                        {
+                            group: ['**/_system/**/internal/**'],
+                            message:
+                                'internal配下のモジュールは、その親ディレクトリの公開用ファイル以外からインポートしないでください。',
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+    // テストコードは internal を触ってOKにする
+    {
+        files: ['**/__tests__/**/*.ts'],
+        rules: {
+            'no-restricted-imports': 'off',
+        },
+    },
+    // clientフォルダ内のファイルだけは、client/internal を触ってOKにする
+    {
+        files: ['**/presentation/_system/client/**/*.ts'],
+        rules: {
+            'no-restricted-imports': 'off',
+        },
+    },
+    // loggingフォルダ内のファイルだけは、logging/_internal を触ってOKにする
+    {
+        files: ['**/presentation/_system/logging/*.ts'],
+        rules: {
+            'no-restricted-imports': 'off',
+        },
+    },
+
+    // Prettierと競合するESLintの整形系ルールを無効化する。
+    eslintConfigPrettier,
 ]);
 
 export default eslintConfig;

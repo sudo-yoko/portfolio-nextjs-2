@@ -3,7 +3,7 @@
 //
 import 'client-only';
 
-import { createFetchClient } from '@/presentation/_system/client/client.adapter.fetch';
+import { createFetchClient } from '@/presentation/_system/client/internal/client.adapter.fetch';
 import { Client, ValidateStatus } from '@/presentation/_system/client/client.types';
 import logger from '@/presentation/_system/logging/logger.c';
 
