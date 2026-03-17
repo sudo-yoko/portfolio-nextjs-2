@@ -6,8 +6,8 @@ import 'client-only';
 import {
     withErrorHandling,
     withErrorHandlingAsync,
-} from '@/presentation/_system/aop/aop.core.exception.client';
-import { Ctx, withLogging, withLoggingAsync } from '@/presentation/_system/aop/aop.core.logging';
+} from '@/presentation/_system/aop/internal/aop.core.exception.client';
+import { Ctx, withLogging, withLoggingAsync } from '@/presentation/_system/aop/internal/aop.core.logging';
 import logger from '@/presentation/_system/logging/logger.c';
 
 const logPrefix = 'aop.feature.client.ts: ';

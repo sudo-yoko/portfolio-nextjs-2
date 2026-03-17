@@ -1,6 +1,6 @@
 'use client';
 
-import { withErrorHandlingAsync } from '@/presentation/_system/aop/aop.core.exception.client';
+import { executeAsync } from '@/presentation/_system/aop/aop.feature.client';
 import { Button } from '@/presentation/_system/components/button.decorator.simple';
 import { ErrorRedirect } from '@/presentation/_system/error/views/component.error-redirect';
 import { createPager } from '@/presentation/_system/pagination/min/modules/pagination.pager';
@@ -36,7 +36,7 @@ export default function UserList() {
 
     useEffect(() => {
         void (async () => {
-            await withErrorHandlingAsync(
+            await executeAsync(
                 () => func(),
                 () => setError(true),
             );

@@ -1,7 +1,7 @@
 import 'server-only';
 
-import debug from '@/presentation/_system/logging/logging.core.debug';
-import winston from '@/presentation/_system/logging/logging.core.winston';
+import debug from '@/presentation/_system/logging/internal/logging.core.debug';
+import winston from '@/presentation/_system/logging/internal/logging.core.winston';
 import type { Logger } from '@/presentation/_system/logging/logging.types';
 
 /**

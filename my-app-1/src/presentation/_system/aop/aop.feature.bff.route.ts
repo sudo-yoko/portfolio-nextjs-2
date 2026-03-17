@@ -3,10 +3,10 @@
 //
 import 'server-only';
 
-import { withAuthAsync } from '@/presentation/_system/aop/aop.core.auth';
-import { withErrorHandlingAsync } from '@/presentation/_system/aop/aop.core.exception.bff';
-import { Ctx, withLoggingAsync } from '@/presentation/_system/aop/aop.core.logging';
-import { withResultParsingAsync } from '@/presentation/_system/aop/aop.core.result.bff.route';
+import { withAuthAsync } from '@/presentation/_system/aop/internal/aop.core.auth';
+import { withErrorHandlingAsync } from '@/presentation/_system/aop/internal/aop.core.exception.bff';
+import { Ctx, withLoggingAsync } from '@/presentation/_system/aop/internal/aop.core.logging';
+import { withResultParsingAsync } from '@/presentation/_system/aop/internal/aop.core.result.bff.route';
 import logger from '@/presentation/_system/logging/logger.s';
 import { RESULT } from '@/presentation/_system/result/result.core.types';
 

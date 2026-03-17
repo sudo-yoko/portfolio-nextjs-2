@@ -132,9 +132,16 @@ const eslintConfig = defineConfig([
             'no-restricted-imports': 'off',
         },
     },
-    // loggingフォルダ内のファイルだけは、logging/_internal を触ってOKにする
+    // loggingフォルダ内のファイルだけは、logging/internal を触ってOKにする
     {
-        files: ['**/presentation/_system/logging/*.ts'],
+        files: ['**/presentation/_system/logging/**/*.ts'],
+        rules: {
+            'no-restricted-imports': 'off',
+        },
+    },
+    // aopフォルダ内のファイルだけは、aop/internal を触ってOKにする
+    {
+        files: ['**/presentation/_system/aop/**/*.ts'],
         rules: {
             'no-restricted-imports': 'off',
         },

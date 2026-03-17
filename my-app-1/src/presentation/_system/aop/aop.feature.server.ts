@@ -3,12 +3,12 @@
 //
 import 'server-only';
 
-import { withAuth, withAuthAsync } from '@/presentation/_system/aop/aop.core.auth';
+import { withAuth, withAuthAsync } from '@/presentation/_system/aop/internal/aop.core.auth';
 import {
     withErrorHandling,
     withErrorHandlingAsync,
-} from '@/presentation/_system/aop/aop.core.exception.server';
-import { Ctx, withLogging, withLoggingAsync } from '@/presentation/_system/aop/aop.core.logging';
+} from '@/presentation/_system/aop/internal/aop.core.exception.server';
+import { Ctx, withLogging, withLoggingAsync } from '@/presentation/_system/aop/internal/aop.core.logging';
 import logger from '@/presentation/_system/logging/logger.s';
 
 const logPrefix = 'aop.feature.server.ts: ';

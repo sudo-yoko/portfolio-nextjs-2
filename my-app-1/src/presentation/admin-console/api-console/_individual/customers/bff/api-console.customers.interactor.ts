@@ -1,6 +1,6 @@
 import 'server-only';
 
-import logger from '@/presentation/_system/logging/logging.core.winston';
+import logger from '@/presentation/_system/logging/logger.s';
 import { invalid, okData } from '@/presentation/_system/result/result.core.factories';
 import { hasError } from '@/presentation/_system/validation/validation.helpers';
 import { FormData } from '@/presentation/_system/validation/validation.types';

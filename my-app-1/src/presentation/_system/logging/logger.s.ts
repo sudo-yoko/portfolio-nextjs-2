@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { loggerImpl } from '@/presentation/_system/logging/logging.impl.winston';
+import { loggerImpl } from '@/presentation/_system/logging/internal/logging.impl.winston';
 import type { Logger } from '@/presentation/_system/logging/logging.types';
 
 /**

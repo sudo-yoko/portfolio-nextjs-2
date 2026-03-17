@@ -1,4 +1,4 @@
-import debug from '@/presentation/_system/logging/logging.core.debug';
+import debug from '@/presentation/_system/logging/internal/logging.core.debug';
 import type { Logger } from '@/presentation/_system/logging/logging.types';
 
 /**

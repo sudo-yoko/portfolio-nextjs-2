@@ -1,6 +1,6 @@
 'use client';
 
-import { withErrorHandlingAsync } from '@/presentation/_system/aop/aop.core.exception.client';
+import { executeAsync } from '@/presentation/_system/aop/aop.feature.client';
 import { fetchHeader } from '@/presentation/_system/header/mvvm/models/header.requester';
 import {
     Action,
@@ -29,7 +29,7 @@ export function useHeader() {
     useEffect(() => {
         if (state.step === Step.Processing) {
             void (async () => {
-                await withErrorHandlingAsync(
+                await executeAsync(
                     () => func(),
                     () => processAbort(dispatch),
                 );
