@@ -2,7 +2,7 @@ import 'server-only';
 
 import { NextRequest } from 'next/server';
 
-import { executeAsync } from '@/presentation/_system/aop/aop.feature.bff.route';
+import { executeAsync } from '@/presentation/_system/aop/aop.bff.route';
 import logger from '@/presentation/_system/logging/logger.s';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 import { execute } from '@/presentation/admin-console/api-console/_individual/customers/bff/api-console.customers.interactor';

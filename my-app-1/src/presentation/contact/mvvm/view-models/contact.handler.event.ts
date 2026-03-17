@@ -3,7 +3,7 @@
 //
 'use client';
 
-import { executeAsync } from '@/presentation/_system/aop/aop.feature.client';
+import { executeAsync } from '@/presentation/_system/aop/aop.client';
 import { backendError, malformedResultError } from '@/presentation/_system/error/error.factories';
 import {
     isAborted,
