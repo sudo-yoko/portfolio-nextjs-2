@@ -6,7 +6,7 @@ import 'client-only';
 
 import { envByStaticKey as env } from '@/presentation/_system/env/env';
 import debug from '@/presentation/_system/logging/internal/logging.core.debug';
-import { logDebug, logError, logInfo } from '@/presentation/_system/logging/internal/logging.feature.action';
+import { logDebug, logError, logInfo } from '@/presentation/_system/logging/internal/logging.action';
 import type { Logger } from '@/presentation/_system/logging/logging.types';
 
 /**
