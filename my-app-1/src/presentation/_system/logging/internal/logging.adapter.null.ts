@@ -4,7 +4,7 @@ import type { Logger } from '@/presentation/_system/logging/logging.types';
  * NullLogger
  * ログ出力を抑止したい場合に使用する
  */
-export const loggerImpl: Logger = {
+export const nullLogger: Logger = {
     log: () => {},
     info: () => {},
     warn: () => {},

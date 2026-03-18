@@ -4,7 +4,7 @@ import type { Logger } from '@/presentation/_system/logging/logging.types';
 /**
  * コンソールによるロガー実装
  */
-export const loggerImpl: Logger = {
+export const consoleLogger: Logger = {
     log: (_level, message, _extras) => {
         console.log(message);
     },

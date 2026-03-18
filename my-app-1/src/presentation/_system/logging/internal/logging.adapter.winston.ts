@@ -1,28 +1,28 @@
 import 'server-only';
 
 import debug from '@/presentation/_system/logging/internal/logging.core.debug';
-import winston from '@/presentation/_system/logging/internal/logging.core.winston';
+import logger from '@/presentation/_system/logging/internal/logging.core.winston';
 import type { Logger } from '@/presentation/_system/logging/logging.types';
 
 /**
  * winston によるロガー実装
  */
-export const loggerImpl: Logger = {
+export const winstonLogger: Logger = {
     log: (level, message, extras) => {
-        winston.log(level, message, { ...extras });
+        logger.log(level, message, { ...extras });
     },
     info: (message, extras) => {
-        winston.info(message, { ...extras });
+        logger.info(message, { ...extras });
     },
     warn: (message, extras) => {
-        winston.warn(message, { ...extras });
+        logger.warn(message, { ...extras });
     },
     error: (message, extras) => {
-        winston.error(message, { ...extras });
+        logger.error(message, { ...extras });
     },
     debug: (message, _extras) => {
         debug(message);
-        //winston.debug(message, { ...extras });
+        //logger.debug(message, { ...extras });
     },
     logAsync: async () => {}, // Not implemented
     infoAsync: async () => {}, // Not implemented

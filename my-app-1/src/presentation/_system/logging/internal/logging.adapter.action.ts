@@ -6,13 +6,13 @@ import 'client-only';
 
 import { envByStaticKey as env } from '@/presentation/_system/env/env';
 import debug from '@/presentation/_system/logging/internal/logging.core.debug';
-import { logDebug, logError, logInfo } from '@/presentation/_system/logging/internal/logging.action';
+import { logDebug, logError, logInfo } from '@/presentation/_system/logging/internal/logging.action.winston';
 import type { Logger } from '@/presentation/_system/logging/logging.types';
 
 /**
  * ServerActions によるロガー実装
  */
-export const loggerImpl: Logger = {
+export const actionLogger: Logger = {
     info: async (message, _extras) => {
         await logInfo(message);
     },
