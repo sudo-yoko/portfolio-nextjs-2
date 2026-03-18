@@ -4,6 +4,7 @@
 // production の場合は空実装を適用し、ログ出力を無効化する。
 // 開発中はデバッグログを出力し、本番環境ではログ出力を防ぎます。
 //
+// TODO: 予備スロットに対応
 import { envByStaticKey as env } from '@/presentation/_system/env/env';
 
 /**

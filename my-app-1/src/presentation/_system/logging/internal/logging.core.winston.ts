@@ -23,7 +23,7 @@ if (!fs.existsSync(logDir)) {
 
 // ログフォーマットの指定
 const logFormat = format.printf(({ level, message, timestamp, ...meta }) => {
-    const { extra1 = '', extra2 = '', extra3 = '', extra4 = '', extra5 = '' } = meta; // 拡張項目
+    const { extra1 = '', extra2 = '', extra3 = '', extra4 = '', extra5 = '' } = meta; // 予備スロット
     return `[${timestamp}] [${level}] [${appName}] [${extra1}] [${extra2}] [${extra3}] [${extra4}] [${extra5}] [[${message}]]`;
 });
 

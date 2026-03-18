@@ -1,7 +1,8 @@
 import 'server-only';
 
 import debug from '@/presentation/_system/logging/internal/logging.core.debug';
-import logger from '@/presentation/_system/logging/internal/logging.core.winston';
+// NOTE: デフォルトエクスポートは好きな名前でimportできる
+import winston from '@/presentation/_system/logging/internal/logging.core.winston';
 import type { Logger } from '@/presentation/_system/logging/logging.types';
 
 /**
@@ -9,16 +10,16 @@ import type { Logger } from '@/presentation/_system/logging/logging.types';
  */
 export const winstonLogger: Logger = {
     log: (level, message, extras) => {
-        logger.log(level, message, { ...extras });
+        winston.log(level, message, { ...extras });
     },
     info: (message, extras) => {
-        logger.info(message, { ...extras });
+        winston.info(message, { ...extras });
     },
     warn: (message, extras) => {
-        logger.warn(message, { ...extras });
+        winston.warn(message, { ...extras });
     },
     error: (message, extras) => {
-        logger.error(message, { ...extras });
+        winston.error(message, { ...extras });
     },
     debug: (message, _extras) => {
         debug(message);
