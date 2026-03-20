@@ -1,11 +1,12 @@
 import 'server-only';
 
-import { envByStaticKey as env } from '@/presentation/_system/env/env.s';
 import fs from 'fs';
 import path from 'path';
 import winston, { createLogger, format, transports } from 'winston';
 import 'winston-daily-rotate-file';
 import DailyRotateFile from 'winston-daily-rotate-file';
+
+import { envByStaticKey as env } from '@/presentation/_system/env/env.s';
 
 // アプリケーション名
 const appName = 'portfolio-application';
@@ -62,6 +63,8 @@ logger.add(transport);
 if (env.NODE_ENV != 'production') {
     logger.add(new transports.Console());
 }
+// デバッグログON。productionで出力しないはadapterで制御する
+logger.level = 'debug';
 
 // ロガーの設定完了メッセージ
 console.log(

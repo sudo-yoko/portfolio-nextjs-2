@@ -8,8 +8,8 @@ export const consoleLogger: Logger = {
     log: (_level, message, _extras) => {
         console.log(message);
     },
-    info: (message, _extras) => {
-        console.info(message);
+    info: (message, extras) => {
+        console.info(message, extras);
     },
     warn: (message, _extras) => {
         console.warn(message);

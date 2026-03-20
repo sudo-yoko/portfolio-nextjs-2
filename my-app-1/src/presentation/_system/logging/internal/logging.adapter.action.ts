@@ -4,40 +4,27 @@
 //
 import 'client-only';
 
-import { envByStaticKey as env } from '@/presentation/_system/env/env';
-import debug from '@/presentation/_system/logging/internal/logging.core.debug';
 import { logDebug, logError, logInfo } from '@/presentation/_system/logging/internal/logging.action.winston';
 import type { Logger } from '@/presentation/_system/logging/logging.types';
 
 /**
  * ServerActions によるロガー実装
  */
-export const actionLogger: Logger = {
-    info: async (message, _extras) => {
-        await logInfo(message);
-    },
-    error: async (message, _extras) => {
-        await logError(message);
-    },
-    debug: (message, _extras) => {
-        // デバッグログをコンソールに出力
-        debug(message);
-        // デバッグログをファイルにも出力したい場合
-        if (env.NEXT_PUBLIC_DEBUG_LOGGER) {
-            void logDebug(message);
-        }
-    },
-    infoAsync: async (message, _extras) => {
-        void logInfo(message);
-    },
-    errorAsync: async (message, _extras) => {
-        void logError(message);
-    },
-    debugAsync: async (message, _extras) => {
-        debug(message);
-    },
+export const actionAdapter: Logger = {
     log: () => {}, // Not implemented
+    info: () => {}, // Not implemented
     warn: () => {}, // Not implemented
+    error: () => {}, // Not implemented
+    debug: () => {}, // Not implemented
     logAsync: async () => {}, // Not implemented
+    infoAsync: async (message, extras) => {
+        void logInfo(message, extras);
+    },
     warnAsync: async () => {}, // Not implemented
+    errorAsync: async (message, extras) => {
+        void logError(message, extras);
+    },
+    debugAsync: async (message, extras) => {
+        void logDebug(message, extras);
+    },
 };

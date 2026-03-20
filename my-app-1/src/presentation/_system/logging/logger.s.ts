@@ -1,11 +1,11 @@
 import 'server-only';
 
-import { winstonLogger } from '@/presentation/_system/logging/internal/logging.adapter.winston';
+import { winstonAdapter } from '@/presentation/_system/logging/internal/logging.adapter.winston';
 import type { Logger } from '@/presentation/_system/logging/logging.types';
 
 /**
  * サーバーサイド専用ロガー
  */
-const logger: Logger = winstonLogger;
+const logger: Logger = winstonAdapter;
 
 export default logger;

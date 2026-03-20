@@ -1,14 +1,14 @@
 import 'server-only';
 
-import debug from '@/presentation/_system/logging/internal/logging.core.debug';
 // NOTE: デフォルトエクスポートは好きな名前でimportできる
 import winston from '@/presentation/_system/logging/internal/logging.core.winston';
-import type { Logger } from '@/presentation/_system/logging/logging.types';
+import type { Logger } from '@/presentation/_system/logging/logging.types'
+import { envByStaticKey as env } from '@/presentation/_system/env/env';
 
 /**
  * winston によるロガー実装
  */
-export const winstonLogger: Logger = {
+export const winstonAdapter: Logger = {
     log: (level, message, extras) => {
         winston.log(level, message, { ...extras });
     },
@@ -21,9 +21,13 @@ export const winstonLogger: Logger = {
     error: (message, extras) => {
         winston.error(message, { ...extras });
     },
-    debug: (message, _extras) => {
-        debug(message);
-        //logger.debug(message, { ...extras });
+    debug: (message, extras) => {
+        if (env.NODE_ENV === 'production') {
+            if (!env.NEXT_PUBLIC_DEBUG_LOGGER) {
+                return;
+            }
+        }
+        winston.debug(message, { ...extras });
     },
     logAsync: async () => {}, // Not implemented
     infoAsync: async () => {}, // Not implemented
