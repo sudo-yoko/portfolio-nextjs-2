@@ -4,7 +4,7 @@
 //
 import 'client-only';
 
-import { logDebug, logError, logInfo } from '@/presentation/_system/logging/internal/logging.action.winston';
+import { logDebug, logError, logInfo } from '@/presentation/_system/logging/internal/logging.winston.action';
 import type { Logger } from '@/presentation/_system/logging/logging.types';
 
 /**

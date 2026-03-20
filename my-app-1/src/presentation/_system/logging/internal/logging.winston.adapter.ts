@@ -1,7 +1,7 @@
 import 'server-only';
 
 // NOTE: デフォルトエクスポートは好きな名前でimportできる
-import winston from '@/presentation/_system/logging/internal/logging.core.winston';
+import winston from '@/presentation/_system/logging/internal/logging.winston.core';
 import type { Logger } from '@/presentation/_system/logging/logging.types'
 import { envByStaticKey as env } from '@/presentation/_system/env/env';
 

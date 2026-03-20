@@ -1,1 +1,1 @@
-export { default } from '@/presentation/_system/logging/internal/logging.core.debug';
+export { default } from '@/presentation/_system/logging/internal/logging.debug.core';

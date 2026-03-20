@@ -1,6 +1,6 @@
 import 'client-only';
 
-import { actionAdapter } from '@/presentation/_system/logging/internal/logging.adapter.action';
+import { actionAdapter } from '@/presentation/_system/logging/internal/logging.winston.action.adapter';
 import type { Logger } from '@/presentation/_system/logging/logging.types';
 
 /**

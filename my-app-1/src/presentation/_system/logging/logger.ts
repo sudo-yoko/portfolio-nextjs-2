@@ -7,11 +7,11 @@ export async function loadIsomorphicLogger(type: 'console' | 'null'): Promise<Lo
     switch (type) {
         // コンソールロガー
         case 'console':
-            return (await import('@/presentation/_system/logging/internal/logging.adapter.console')).consoleLogger;
+            return (await import('@/presentation/_system/logging/internal/logging.console.adapter')).consoleLogger;
 
         // 何もしないNullロガー
         case 'null':
         default:
-            return (await import('@/presentation/_system/logging/internal/logging.adapter.null')).nullLogger;
+            return (await import('@/presentation/_system/logging/internal/logging.null.adapter')).nullLogger;
     }
 }
