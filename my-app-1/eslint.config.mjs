@@ -100,7 +100,8 @@ const eslintConfig = defineConfig([
     },
 
     /**
-     * 共通モジュールの internal フォルダは直接利用不可
+     * systemのinternalフォルダは直接利用不可
+     * ※動的インポートには効果なし
      */
     {
         rules: {
@@ -110,8 +111,7 @@ const eslintConfig = defineConfig([
                     patterns: [
                         {
                             group: ['**/_system/**/internal/**'],
-                            message:
-                                'internal配下のモジュールは、その親ディレクトリの公開用ファイル以外からインポートしないでください。',
+                            message: 'internalモジュールは、systemフォルダ内でのみ参照可能です。',
                         },
                     ],
                 },
@@ -125,23 +125,9 @@ const eslintConfig = defineConfig([
             'no-restricted-imports': 'off',
         },
     },
-    // clientフォルダ内のファイルだけは、client/internal を触ってOKにする
+    // system フォルダ内のファイルだけは、internal を触ってOKにする
     {
-        files: ['**/presentation/_system/client/**/*.ts'],
-        rules: {
-            'no-restricted-imports': 'off',
-        },
-    },
-    // loggingフォルダ内のファイルだけは、logging/internal を触ってOKにする
-    {
-        files: ['**/presentation/_system/logging/**/*.ts'],
-        rules: {
-            'no-restricted-imports': 'off',
-        },
-    },
-    // aopフォルダ内のファイルだけは、aop/internal を触ってOKにする
-    {
-        files: ['**/presentation/_system/aop/**/*.ts'],
+        files: ['**/presentation/_system/**/*.ts'],
         rules: {
             'no-restricted-imports': 'off',
         },

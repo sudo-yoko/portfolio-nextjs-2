@@ -1,5 +1,6 @@
 import { printf } from '@/__tests__/test-logger';
 import { jest } from '@jest/globals';
+//import logger from '@/presentation/_system/logging/internal/logging.winston.core';
 
 const print = printf({ logPrefix: '>>> [logging.core.winston.test.ts]', stdout: true });
 
