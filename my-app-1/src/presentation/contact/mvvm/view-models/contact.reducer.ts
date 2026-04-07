@@ -18,21 +18,21 @@ import React, { Reducer } from 'react';
 /**
  * ステップ定義
  */
-export const Step = {
+export const Status = {
     input: 'input',
     confirm: 'confirm',
     sending: 'sending',
     complete: 'complete',
     abort: 'abort', // TODO: Invalidの状態をつくるか
 } as const;
-export type Step = (typeof Step)[keyof typeof Step];
+export type Status = (typeof Status)[keyof typeof Status];
 
 /**
  * 状態定義
  * ステップ、フォームデータ、バリデーションエラー
  */
 export type State = {
-    step: Step;
+    status: Status;
     formData: FormData<FormKeys>;
     violations: Violations<FormKeys>;
     violationsMap: ViolationsMap<FormKeys>;
@@ -43,7 +43,7 @@ export type State = {
  * 初期状態
  */
 export const initialState: State = {
-    step: Step.input,
+    status: Status.input,
     formData: initialFormData(),
     violations: [],
     violationsMap: {},
@@ -67,7 +67,7 @@ export const ActionType = {
     toConfirm: 'toConfirm',
     toSending: 'toSending',
     toComplete: 'toComplete',
-    toAbort: 'toAbort',
+    FAILED: 'FAILED',
     setValue: 'setValue',
     setViolations: 'setViolations',
     setRetryable: 'setRetryable',
@@ -83,7 +83,7 @@ export type Action =
     | { type: typeof ActionType.toConfirm }
     | { type: typeof ActionType.toSending }
     | { type: typeof ActionType.toComplete }
-    | { type: typeof ActionType.toAbort }
+    | { type: typeof ActionType.FAILED }
     | { type: typeof ActionType.setValue; key: FormKeys; value: string }
     | {
           type: typeof ActionType.setViolations;
@@ -135,8 +135,8 @@ export function toComplete(dispatch: React.ActionDispatch<[action: Action]>): vo
 /**
  * 状態の更新：続行不可能なエラー
  */
-export function toAbort(dispatch: React.ActionDispatch<[action: Action]>): void {
-    dispatch({ type: ActionType.toAbort });
+export function failed(dispatch: React.ActionDispatch<[action: Action]>): void {
+    dispatch({ type: ActionType.FAILED });
 }
 
 /**
@@ -176,15 +176,15 @@ export const reducer: Reducer<State, Action> = (state: State, action: Action): S
         case ActionType.setValue:
             return setValueState(state, action);
         case ActionType.toInput:
-            return { ...state, step: Step.input };
+            return { ...state, status: Status.input };
         case ActionType.toConfirm:
-            return { ...state, step: Step.confirm, violations: [], violationsMap: {} };
+            return { ...state, status: Status.confirm, violations: [], violationsMap: {} };
         case ActionType.toSending:
-            return { ...state, step: Step.sending };
+            return { ...state, status: Status.sending };
         case ActionType.toComplete:
             return toCompleteState(state);
-        case ActionType.toAbort:
-            return { ...state, step: Step.abort };
+        case ActionType.FAILED:
+            return { ...state, status: Status.abort };
         case ActionType.setViolations:
             return { ...state, violations: action.violations, violationsMap: action.violationsMap };
         case ActionType.setRetryable:
@@ -209,7 +209,7 @@ const setValueState = (
 const toCompleteState = (state: State): State => {
     return {
         ...state,
-        step: Step.complete,
+        status: Status.complete,
         violations: [],
     };
 };

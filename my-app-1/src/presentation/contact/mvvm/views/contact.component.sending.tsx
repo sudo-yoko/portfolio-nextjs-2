@@ -2,7 +2,7 @@
 
 import { Processing } from '@/presentation/_system/components/processing';
 import { submit } from '@/presentation/contact/mvvm/view-models/contact.handler.event';
-import { Action, State, toAbort } from '@/presentation/contact/mvvm/view-models/contact.reducer';
+import { Action, State, failed } from '@/presentation/contact/mvvm/view-models/contact.reducer';
 import React, { useEffect } from 'react';
 
 /**
@@ -18,7 +18,7 @@ export default function Sending({
     useEffect(() => {
         // 書き方その１
         void (async () => {
-            await submit(state, dispatch, () => toAbort(dispatch));
+            await submit(state, dispatch, () => failed(dispatch));
         })();
 
         // 書き方その２
