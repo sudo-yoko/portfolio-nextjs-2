@@ -3,9 +3,9 @@ import 'server-only';
 import type { AxiosInstance } from 'axios';
 import axios from 'axios';
 
-import * as adapter from '@/presentation/_system/client/internal/client.adapter.axios';
 import { Client, ValidateStatus } from '@/presentation/_system/client/client.types';
-import { env, envNumber, envProtocol } from '@/presentation/_system/env/env.helper.validated';
+import * as adapter from '@/presentation/_system/client/internal/client.adapter.axios';
+import { envProxy } from '@/presentation/_system/env/env.s.helper';
 import { Logger } from '@/presentation/_system/logging/logging.types';
 
 /**
@@ -14,9 +14,7 @@ import { Logger } from '@/presentation/_system/logging/logging.types';
 // function create(): AxiosInstance {
 // NOTE: 即時実行関数 (() => { ... })();
 const axiosInstance: AxiosInstance = (() => {
-    const protocol = envProtocol('PROXY_PROTOCOL');
-    const host = env('PROXY_HOST');
-    const port = envNumber('PROXY_PORT');
+    const { protocol, host, port } = envProxy;
     return axios.create({
         proxy: { protocol, host, port },
         timeout: 10000,

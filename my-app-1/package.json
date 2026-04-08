@@ -13,7 +13,8 @@
     "mock3": "tsx watch __mocks__/openai-mock.ts",
     "mock4": "tsx watch __mocks__/proxy-server.ts",
     "mock5": "tsx watch __mocks__/web-to-case.ts",
-    "dev:mock": "npm-run-all --parallel dev mock1 mock2 mock3 mock4 mock5",
+    "mock6": "tsx watch __mocks__/healthcheck.ts",
+    "dev:mock": "npm-run-all --parallel dev mock1 mock2 mock3 mock4 mock5 mock6",
     "start:mock": "npm-run-all --parallel start mock1 mock2 mock3 mock4 mock5"
   },
   "dependencies": {
@@ -22,6 +23,7 @@
     "next": "16.0.3",
     "react": "19.2.0",
     "react-dom": "19.2.0",
+    "undici": "^8.0.2",
     "winston": "^3.18.3",
     "winston-daily-rotate-file": "^5.0.0",
     "zod": "^4.1.12"

@@ -1,17 +1,22 @@
 //
-// Fetch API を Client インターフェースに適合させるアダプター
-// Node.js の global fetch を使用
-// APIクライアント（global fetch版）
+// APIクライアント（undici-fetch／プロキシ設定あり）
+// ※サーバーサイド(node.js)でのみ利用可、クライアントサイド（ブラウザ）利用不可
 //
+import 'server-only';
+
 import { Client, RequestConfig, Result, ValidateStatus } from '@/presentation/_system/client/client.types';
 import { httpRequestError, httpResponseError } from '@/presentation/_system/error/error.factories';
 import { stringify } from '@/presentation/_system/error/error.helper.stringify';
 import { Logger } from '@/presentation/_system/logging/logging.types';
+import { fetch, ProxyAgent, Response } from 'undici';
 
-const logPrefix = 'client.adapter.fetch.ts: ';
+const logPrefix = 'client.adapter.undici.ts: ';
 
-//export const fetchAdapter: Client = {
-export const createFetchClient = (logger: Logger, defaultValidateStatus: ValidateStatus): Client => ({
+export const createUndiciClient = (
+    logger: Logger,
+    defaultValidateStatus: ValidateStatus,
+    proxyUrl?: string,
+): Client => ({
     send: async <BODY = never, QUERY = never>(config: RequestConfig<BODY, QUERY>) => {
         // TODO: ログ出力を抑止する機能
         logger.info(logPrefix + `config=${JSON.stringify(config)}`);
@@ -30,7 +35,11 @@ export const createFetchClient = (logger: Logger, defaultValidateStatus: Validat
             }
             logger.info(logPrefix + `url=${url}`);
 
+            logger.info(logPrefix + `proxyUrl=${proxyUrl}`);
+            const dispatcher = proxyUrl ? new ProxyAgent(proxyUrl) : undefined;
+
             res = await fetch(url, {
+                dispatcher,
                 method: config.method,
                 headers: config.headers,
                 // TODO: GETリクエストではボディは送らない

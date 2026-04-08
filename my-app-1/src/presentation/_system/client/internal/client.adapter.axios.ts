@@ -46,6 +46,9 @@ export const createAxiosClient = (
     // };
 });
 
+/**
+ * 型不明なオブジェクトを安全にstringにする
+ */
 function toStringSafe(value: unknown): string {
     if (typeof value === 'string') {
         return value;
