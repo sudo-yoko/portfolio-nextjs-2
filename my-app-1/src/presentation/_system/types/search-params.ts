@@ -14,7 +14,7 @@ export type SearchParams = Promise<{ [key: string]: SearchParam }>;
  * @param keys - 取得するパラメータ名をstring配列で指定する。
  * @param searchParams -
  */
-export async function getQueryParams<K extends string>(
+export async function getSearchParams<K extends string>(
     searchParams?: SearchParams,
     ...keys: readonly K[] // readonlyにすることで、呼び元でas constを付けた場合にリテラル型推論が効く。
 ): Promise<{ [P in K]: SearchParam }> {
