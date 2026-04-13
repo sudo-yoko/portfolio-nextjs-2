@@ -1,12 +1,34 @@
 import 'server-only';
 
-import { Method } from '@/presentation/_system/client/client.types';
-import logger from '@/presentation/_system/logging/logger.s';
 import { fetch, ProxyAgent, Response } from 'undici';
+
+import { createClient } from '@/presentation/_system/client/client.factory.s';
+import { Method, QueryParam } from '@/presentation/_system/client/client.types';
+import logger from '@/presentation/_system/logging/logger.s';
 
 const logPrefix = 'healthcheck.handler.request.ts: ';
 
-export async function handleRequest(): Promise<void> {
+export async function handleRequest(): Promise<string> {
+    return await handleRequestNode2();
+}
+
+async function handleRequestNode2(): Promise<string> {
+    const url = 'http://localhost:1111/healthcheck';
+    //const url = 'http://localhost:3003/users?offset=3&limit=2';
+    const proxyUrl = 'http://localhost:9998';
+    logger.info(logPrefix + `proxyUrl=${proxyUrl}, url=${url}`);
+
+    const query: QueryParam = [
+        { key: 'offset', value: '4' },
+        { key: 'limit', value: '10' },
+    ];
+
+    const client = await createClient('node');
+    const result = await client.send({ url, method: Method.GET, query, timeout: 1000 });
+    return result.rawBody;
+}
+
+async function _handleRequestUndici(): Promise<void> {
     const proxyUrl = 'http://localhost:9998';
     const address = 'http://localhost:3006/healthcheck';
     logger.info(logPrefix + `proxyUrl=${proxyUrl}, url=${address}`);
