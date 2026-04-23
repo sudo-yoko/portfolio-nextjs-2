@@ -1,3 +1,5 @@
+import { ValidateStatus } from '@/presentation/_system/client/client.types';
+
 // headers
 const CONTENT_TYPE = 'Content-Type';
 const ACCEPT = 'Accept';
@@ -21,3 +23,15 @@ export const CONTENT_TYPE_TEXT_EVENT_STREAM_UTF8 = {
 export const ACCEPT_APPLICATION_JSON = {
     [ACCEPT]: APPLICATION_JSON,
 } as const satisfies HeadersInit;
+
+/**
+ * レスポンスステータスの検証。
+ * サーバーサイド（BFF ー＞ バックエンドサービス呼び出し時）は、ステータス500以上をエラー扱いとする
+ */
+export const defaultValidateStatusServer: ValidateStatus = (status) => status < 500;
+
+/**
+ * レスポンスステータスの検証。
+ * クライアントサイド（クライアントサイド　ー＞　BFF呼び出し時）は、ステータス200以外をエラー扱いとする。エラーがあればリクエストボディに返すこと。
+ */
+export const defaultValidateStatusClient: ValidateStatus = (status) => status === 200;
