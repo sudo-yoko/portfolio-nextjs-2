@@ -3,12 +3,11 @@
 //
 import 'client-only';
 
+import { defaultValidateStatusClient } from '@/presentation/_system/client/client.constants';
+import { Client } from '@/presentation/_system/client/client.types';
 import { createFetchClient } from '@/presentation/_system/client/internal/client.adapter.fetch';
-import { Client, ValidateStatus } from '@/presentation/_system/client/client.types';
 import logger from '@/presentation/_system/logging/logger.c';
 
-const defaultValidateStatus: ValidateStatus = (status: number) => status === 200;
-
-const client: Client = createFetchClient(logger, defaultValidateStatus);
+const client: Client = createFetchClient(logger, defaultValidateStatusClient);
 
 export default client;
