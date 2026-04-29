@@ -51,7 +51,7 @@ export function parseResult(text: string): RESULT {
         }
         throw parseResultError(text);
     } catch (e) {
-        throw parseResultError(text, stringify(e).message);
+        throw parseResultError(text, stringify({ error: e }).message);
     }
 }
 

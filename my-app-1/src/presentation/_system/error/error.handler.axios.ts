@@ -9,6 +9,7 @@ const logPrefix = 'axios-error.ts: ';
 /**
  * Axios 固有のエラーを処理する
  */
+// TODO: 削除予定
 export function handleAxiosError(error: unknown): void {
     // axiosのエラーの場合
     // ステータスが200以外の場合は、axiosが例外をスローする
@@ -21,6 +22,6 @@ export function handleAxiosError(error: unknown): void {
                 `Response(Inbound) -> status=${error.response.status}, data=${error.response.data}`,
             );
         }
-        logger.error(logPrefix + stringify(error, description.join(': ')).all);
+        logger.error(logPrefix + stringify({ error, description: description.join(': ') }).all);
     }
 }
