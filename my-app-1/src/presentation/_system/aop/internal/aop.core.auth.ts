@@ -22,7 +22,7 @@ export function withAuth<T>(thunk: () => T): T {
         if (isAuthError(e)) {
             // 認証エラーのみ補足する。ここではエラーメッセージだけ出して、
             // スタックトレースは外側のwithErrorHandlingでまとめて出すようにする
-            logger.error(`${logPrefix}${fname}${stringify(e).message}`);
+            logger.error(`${logPrefix}${fname}${stringify({ error: e }).message}`);
         }
         // 認証エラー以外は外側のwithErrorHandlingで処理させる
         throw e;
@@ -39,7 +39,7 @@ export async function withAuthAsync<T>(thunk: () => Promise<T>): Promise<T> {
         return await thunk();
     } catch (e) {
         if (isAuthError(e)) {
-            logger.error(`${logPrefix}${fname}${stringify(e).message}`);
+            logger.error(`${logPrefix}${fname}${stringify({ error: e }).message}`);
         }
         throw e;
     }

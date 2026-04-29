@@ -35,7 +35,7 @@ export async function withErrorHandlingAsync(thunk: () => Promise<RESULT>): Prom
 }
 
 function handleError(fname: string, e: unknown): RESULT {
-    const { message, all } = stringify(e);
+    const { message, all } = stringify({ error: e });
     logger.error(logPrefix + fname + all);
     //
     // 再試行可能エラー

@@ -17,7 +17,7 @@ export function withErrorHandling<T>(thunk: () => T, onAbort: () => void): T | v
     } catch (e) {
         // TODO: クライアントサイドでBffRESULTのパースエラーチェック
         // NOTE: 非同期関数を呼ぶときにvoidを付けると、awaitしないことを明示的に示せる
-        void logger.errorAsync(logPrefix + fname + stringify(e).all);
+        void logger.errorAsync(logPrefix + fname + stringify({ error: e }).all);
         // setHasError(true);
         onAbort();
     }
@@ -35,7 +35,7 @@ export async function withErrorHandlingAsync<T>(
         return await thunk();
     } catch (e) {
         // エラーログをサーバーに送信
-        void logger.errorAsync(logPrefix + fname + stringify(e).all);
+        void logger.errorAsync(logPrefix + fname + stringify({ error: e }).all);
         onAbort();
     }
 }

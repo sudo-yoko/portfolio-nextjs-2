@@ -14,6 +14,6 @@ const axiosInstance = axios.create({ timeout: 10000 });
 /**
  * Axios の Client オブジェクトを作成する
  */
-export const createAxiosClient = (logger: Logger, defaultValidateStatus: ValidateStatus): Client => {
-    return adapter.createAxiosClient(axiosInstance, logger, defaultValidateStatus);
-};
+// export const createAxiosClient = (logger: Logger, defaultValidateStatus: ValidateStatus): Client => {
+//     return adapter.createAxiosClient(axiosInstance, logger, defaultValidateStatus);
+// };

@@ -26,6 +26,6 @@ const axiosInstance: AxiosInstance = (() => {
 /**
  * プロキシ設定付き Axios の Client オブジェクトを作成する
  */
-export const createAxiosProxyClient = (logger: Logger, defaultValidateStatus: ValidateStatus): Client => {
-    return adapter.createAxiosClient(axiosInstance, logger, defaultValidateStatus);
-};
+// export const createAxiosProxyClient = (logger: Logger, defaultValidateStatus: ValidateStatus): Client => {
+//     return adapter.createAxiosClient(axiosInstance, logger, defaultValidateStatus);
+// };
