@@ -5,7 +5,7 @@
 // プロキシも利用可なのでserver-only。クライアントサイド不可
 import 'server-only';
 
-import axios, { AxiosProxyConfig, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosProxyConfig, AxiosRequestConfig } from 'axios';
 
 import { defaultValidateStatusServer } from '@/presentation/_system/client/client.constants';
 import { Client, Result } from '@/presentation/_system/client/client.types';
@@ -16,24 +16,18 @@ import logger from '@/presentation/_system/logging/logger.s';
 const logPrefix = 'client.adapter.axios.ts: ';
 
 // Axios インスタンスはアプリケーション内で一意
-// TODO: モジュールスコープはproductionビルドで実行されてしまう？
+// NOTE: 即時実行関数 (() => { ... })();
 const axiosInstance = (() => {
     logger.info(logPrefix + 'Initializing axios instance...');
     return axios.create();
 })();
 
-// NOTE: const func = (arg) => ({ ... }) （オブジェクトの暗黙的返却）
+// NOTE: オブジェクトの暗黙的返却 const func = (arg) => ({ ... });
 export const createAxiosClient = (proxy?: AxiosProxyConfig): Client => ({
     send: async (config) => {
-        logger.info(logPrefix + `config=${JSON.stringify(config)}}, proxy=${JSON.stringify(proxy)}`);
-        //
-        // Axiosインスタンス作成
-        //
-        // TODO: これだとインスタンスが毎回作成される。共用のインスタンスを検討
-        // const axiosInstance = axios.create({
-        //     proxy,
-        //     // timeout: config.timeout,
-        // });
+        logger.info(
+            logPrefix + `Request -> config=${JSON.stringify(config)}}, proxy=${JSON.stringify(proxy)}`,
+        );
         //
         // リクエスト設定
         //
@@ -52,16 +46,13 @@ export const createAxiosClient = (proxy?: AxiosProxyConfig): Client => ({
         //
         // リクエスト実行
         //
-        let res: AxiosResponse;
         try {
-            res = await axiosInstance.request(axiosConfig);
+            const res = await axiosInstance.request(axiosConfig);
             const result: Result = {
                 status: res.status,
                 rawBody: toStringSafe(res.data),
             };
-            logger.info(
-                logPrefix + `Request -> ${JSON.stringify(config)}, Result -> ${JSON.stringify(result)}`,
-            );
+            logger.info(logPrefix + `Response -> ${JSON.stringify(result)}`);
             return result;
         } catch (error) {
             // クライアント側エラーもサーバー側エラーもここに来る

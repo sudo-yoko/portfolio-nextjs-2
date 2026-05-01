@@ -13,11 +13,15 @@ const PORT = 9999;
 const proxy = httpProxy.createProxyServer({});
 
 const server = http.createServer((req: IncomingMessage, res: ServerResponse) => {
-  console.log(logPrefix + `Proxying -> method=${req.method}, url=${req.url}`);
-  // リクエストをプロキシ転送する
-  proxy.web(req, res, { target: req.url });
+    if (req.url) {
+        const port = new URL(req.url).port;
+        const target = `http://localhost:${port}`;
+        console.log(logPrefix + `Proxying -> method=${req.method}, url=${req.url} target=${target}`);
+        // リクエストをプロキシ転送する
+        proxy.web(req, res, { target });
+    }
 });
 
 server.listen(PORT, () => {
-  console.log(logPrefix + `Mock service running on http://localhost:${PORT} (proxy-service-mock)`);
+    console.log(logPrefix + `Mock service running on http://localhost:${PORT} (proxy-service-mock)`);
 });

@@ -23,7 +23,7 @@ async function handleRequestNode2(): Promise<string> {
         { key: 'limit', value: '10' },
     ];
 
-    const client = await createClient('axios');
+    const client = await createClient('axios-proxy');
     const result = await client.send({ url, method: Method.GET, query, timeout: 5000 });
     return result.rawBody;
 }
