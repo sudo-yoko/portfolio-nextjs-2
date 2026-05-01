@@ -2,6 +2,7 @@ import 'client-only';
 
 import client from '@/presentation/_system/client/client.c';
 import { ACCEPT_APPLICATION_JSON } from '@/presentation/_system/client/client.constants';
+import { queryParam } from '@/presentation/_system/client/client.helpers';
 import { Method } from '@/presentation/_system/client/client.types';
 import { parseResult } from '@/presentation/_system/result/result.core.helpers';
 import { Tag } from '@/presentation/_system/result/result.core.types';
@@ -21,7 +22,8 @@ const viaRoute: SendRequest<FormKeys> = async (formData) => {
         headers: {
             ...ACCEPT_APPLICATION_JSON,
         },
-        query: formData,
+        //TODO: コンパイルエラー
+        query: queryParam(formData),
     });
     const result = parseResult(res.rawBody);
     return result as ApiResult<FormKeys>;

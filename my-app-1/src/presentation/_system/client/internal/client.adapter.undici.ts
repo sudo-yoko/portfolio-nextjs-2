@@ -4,23 +4,21 @@
 //
 import 'server-only';
 
-import { Client, RequestConfig, Result, ValidateStatus } from '@/presentation/_system/client/client.types';
-import { httpRequestError, httpResponseError } from '@/presentation/_system/error/error.factories';
-import { stringify } from '@/presentation/_system/error/error.helper.stringify';
-import { Logger } from '@/presentation/_system/logging/logging.types';
 import { fetch, ProxyAgent, Response } from 'undici';
+
+import { defaultValidateStatusServer } from '@/presentation/_system/client/client.constants';
+import { Client, RequestConfig, Result } from '@/presentation/_system/client/client.types';
+import { apiError } from '@/presentation/_system/error/error.factories';
+import { stringify } from '@/presentation/_system/error/error.helper.stringify';
+import logger from '@/presentation/_system/logging/logger.s';
 
 const logPrefix = 'client.adapter.undici.ts: ';
 
-export const createUndiciClient = (
-    logger: Logger,
-    defaultValidateStatus: ValidateStatus,
-    proxyUrl?: string,
-): Client => ({
-    send: async <BODY = never, QUERY = never>(config: RequestConfig<BODY, QUERY>) => {
+export const createUndiciClient = (proxyUrl?: string): Client => ({
+    send: async (config) => {
         // TODO: ログ出力を抑止する機能
         logger.info(logPrefix + `config=${JSON.stringify(config)}`);
-        const validateStatus = config.validateStatus ?? defaultValidateStatus;
+        const validateStatus = config.validateStatus ?? defaultValidateStatusServer;
         //
         // リクエスト
         //
@@ -28,14 +26,15 @@ export const createUndiciClient = (
         try {
             let url: string = '';
             if (config.query) {
-                const query = new URLSearchParams(config.query);
-                url = config.url + `?${query}`;
+                // const query = new URLSearchParams(config.query);
+                // url = config.url + `?${query}`;
             } else {
                 url = config.url;
             }
             logger.info(logPrefix + `url=${url}`);
 
             logger.info(logPrefix + `proxyUrl=${proxyUrl}`);
+            // TODO: ProxyAgentが上手くいかない
             const dispatcher = proxyUrl ? new ProxyAgent(proxyUrl) : undefined;
 
             res = await fetch(url, {
@@ -46,12 +45,12 @@ export const createUndiciClient = (
                 body: JSON.stringify(config.body), // オブジェクトをJSON.stringifyして渡す
             });
         } catch (e) {
-            logger.error(logPrefix + stringify(e).message);
+            // logger.error(logPrefix + stringify(e).message);
             if (e instanceof TypeError) {
                 // ブラウザ環境では通信エラー（クライント側エラー）はTypeErrorになる？
-                throw httpRequestError({ cause: e, detail: `request=${JSON.stringify(config)}` });
+                throw apiError({ cause: e, detail: `request=${JSON.stringify(config)}` });
             }
-            throw httpRequestError({ cause: e, detail: `request=${JSON.stringify(config)}` });
+            throw apiError({ cause: e, detail: `request=${JSON.stringify(config)}` });
         }
         //
         // レスポンス
@@ -63,12 +62,12 @@ export const createUndiciClient = (
         };
         // ステータスコードの検証
         if (!validateStatus(result.status)) {
-            const err = httpResponseError({ status: result.status, body: result.rawBody }); // TODO: ボディは100文字くらいでカットする
+            // const err = httpResponseError({ status: result.status, body: result.rawBody }); // TODO: ボディは100文字くらいでカットする
             // const err = backendApiError(
             // `Request -> ${JSON.stringify(req)}, Response -> status=${res.status}`,
             // );
-            logger.error(logPrefix + err.message);
-            throw err;
+            //logger.error(logPrefix + err.message);
+            //throw err;
         }
         logger.info(logPrefix + `Request -> ${JSON.stringify(config)}, Result -> ${JSON.stringify(result)}`);
         return result;

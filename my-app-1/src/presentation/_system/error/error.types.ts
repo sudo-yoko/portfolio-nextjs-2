@@ -28,14 +28,15 @@ export const ErrType = {
     MalformedResultError: 'MalformedResultError',
 
     /**
-     * HTTPリクエストの失敗
+     * バックエンドAPI呼び出しにおける予期しないエラー
      */
-    HttpRequestError: 'HttpRequestError',
+    ApiError: 'ApiError',
 
     /**
      * ステータスコードによるエラー
      */
-    HttpResponseError: 'HttpResponseError',
+    InvalidStatusError: 'InvalidStatusError'
+    // HttpResponseError: 'HttpResponseError',
     // ValidationError: 'ValidationError',
     // BackendApiError: 'BackendApiError',
 } as const; // 定数オブジェクト

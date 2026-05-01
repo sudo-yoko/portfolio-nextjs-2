@@ -5,7 +5,7 @@ export type Client = {
     /**
      * リクエストを送信する
      */
-    send<BODY = never, QUERY = never>(req: RequestConfig<BODY, QUERY>): Promise<Result>;
+    send<BODY = never>(req: RequestConfig<BODY>): Promise<Result>;
 };
 
 /**
@@ -20,13 +20,14 @@ export type Method = (typeof Method)[keyof typeof Method];
 /**
  * リクエスト設定オブジェクト
  */
-export type RequestConfig<BODY = never, QUERY = never> = {
+export type RequestConfig<BODY = never> = {
     method: Method;
     url: string;
     body?: BODY;
-    query?: QUERY;
+    query?: QueryParam;
     // path?: string; // TODO: BFFではパスパラメータを使用しない方針
     headers?: Record<string, string>;
+    timeout?: number;
     /**
      * どのステータスをエラーとするか指定可能
      */
@@ -46,3 +47,9 @@ export type Result = {
     status: number;
     rawBody: string;
 };
+
+/**
+ * 送信用クエリパラメーター型
+ */
+// export type QueryParam<K extends string> = Partial<Record<K, string | string[]>>;
+export type QueryParam = { key: string; value: string }[];

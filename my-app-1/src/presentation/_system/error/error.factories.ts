@@ -98,29 +98,54 @@ export function malformedResultError(result: RESULT, msg?: string): CustomError<
     return customError({ type: ErrType.MalformedResultError, message: cause.join(', ') });
 }
 
-export function httpRequestError({
-    cause,
-    detail,
-}: {
-    cause?: unknown;
-    detail: string;
-}): CustomError<ErrType> {
+export function apiError({ cause, detail }: { cause?: unknown; detail?: string }): CustomError<ErrType> {
     const message: string[] = [];
-    message.push('HTTPリクエストが失敗しました。');
+    message.push('Backend API call failed.');
     if (detail) {
         message.push(detail);
     }
-    return customError({ type: ErrType.HttpRequestError, message: message.join(', '), cause });
+    return customError({ type: ErrType.ApiError, message: message.join(', '), cause });
 }
 
-export function httpResponseError({ status, body }: { status: number; body?: string }): CustomError<ErrType> {
-    const cause: string[] = [];
-    cause.push(`status=${status}`);
-    if (body) {
-        cause.push(`body=${body}`);
+export function invalidStatusError({
+    status,
+    body,
+}: {
+    status?: number;
+    body?: string;
+}): CustomError<ErrType> {
+    const message: string[] = [];
+    message.push('Response status error.');
+    if (status) {
+        message.push(`status=${status}`);
     }
-    return customError({ type: ErrType.HttpResponseError, message: cause.join(', ') });
+    if (body) {
+        message.push(`body=${body}`);
+    }
+    return customError({ type: ErrType.InvalidStatusError, message: message.join(', ') });
 }
+
+// export function httpResponseError({
+//     status,
+//     body,
+//     description,
+//     cause,
+// }: {
+//     status?: number;
+//     body?: string;
+//     description?: string;
+//     cause?: unknown;
+// }): CustomError<ErrType> {
+//     const message: string[] = [];
+//     message.push(`status=${status}`);
+//     if (body) {
+//         message.push(`body=${body}`);
+//     }
+//     if (description) {
+//         message.push(`description=${description}`);
+//     }
+//     return customError({ type: ErrType.HttpResponseError, message: message.join(', '), cause });
+// }
 
 // export function bffError(bffResult: BffResult, message?: string): BffError {
 // const err = new Error(message) as BffError;

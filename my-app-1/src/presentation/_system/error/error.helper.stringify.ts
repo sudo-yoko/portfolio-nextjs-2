@@ -22,7 +22,10 @@ export function stringify({
     message: string;
     all: string;
 } {
-    if (typeof error === 'string') {
+    if (!error) {
+        const message = '';
+        return { message, all: joinAll({ message, description, details }) };
+    } else if (typeof error === 'string') {
         const message = error;
         return { message, all: joinAll({ message, description, details }) };
         // } else if (axios.isAxiosError(error)) {
@@ -112,6 +115,8 @@ export function getAxiosErrorProperties(err: unknown): string {
     const description: Record<string, unknown> = {};
     if (axios.isAxiosError(err)) {
         description['code'] = err.code;
+        description['status'] = err.response?.status ?? 'undefined';
+        description['message'] = err.message;
         return JSON.stringify(description, null, 2);
     }
     return JSON.stringify(description, null, 2);

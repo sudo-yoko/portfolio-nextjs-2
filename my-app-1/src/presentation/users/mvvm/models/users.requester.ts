@@ -5,12 +5,13 @@ import {
     ACCEPT_APPLICATION_JSON,
     CONTENT_TYPE_APPLICATION_JSON_UTF8,
 } from '@/presentation/_system/client/client.constants';
+import { queryParam } from '@/presentation/_system/client/client.helpers';
 import { Method } from '@/presentation/_system/client/client.types';
 import { FetchData, FetchPage } from '@/presentation/_system/pagination/mvvm/models/pagination.requester';
 import { PaginationResult } from '@/presentation/_system/pagination/mvvm/models/pagination.types';
 import { parseResult } from '@/presentation/_system/result/result.core.helpers';
 import { action } from '@/presentation/users/mvvm/bff/users.action';
-import { FormKeys, User, UsersQuery } from '@/presentation/users/mvvm/models/users.types';
+import { FormKeys, User } from '@/presentation/users/mvvm/models/users.types';
 
 /**
  * ServerActions経由バックエンド呼び出し
@@ -25,7 +26,7 @@ const _viaAction: FetchPage<User[], FormKeys> = async (offset, limit, formData) 
  * RouteHandlers経由バックエンド呼び出し
  */
 const viaRoute: FetchPage<User[], FormKeys> = async (offset, limit, formData) => {
-    const query: UsersQuery = { offset: String(offset), limit: String(limit) };
+    // const query: UsersQuery = { offset: String(offset), limit: String(limit) };
 
     const res = await client.send({
         url: '/api/bff/users/mvvm',
@@ -34,7 +35,8 @@ const viaRoute: FetchPage<User[], FormKeys> = async (offset, limit, formData) =>
             ...CONTENT_TYPE_APPLICATION_JSON_UTF8,
             ...ACCEPT_APPLICATION_JSON,
         },
-        query,
+        // TODO: コンパイルエラー
+        query: queryParam({ offset: String(offset), limit: String(limit) }),
         body: formData,
     });
     // const url = '/api/bff/users/mvvm';

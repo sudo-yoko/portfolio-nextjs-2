@@ -1,5 +1,6 @@
 import 'server-only';
 
+import { queryParam } from '@/presentation/_system/client/client.helpers';
 import client from '@/presentation/_system/client/client.s';
 import { Method } from '@/presentation/_system/client/client.types';
 import { env } from '@/presentation/_system/env/env.helper.validated';
@@ -20,7 +21,8 @@ export async function send(offset: number, limit: number, query: UsersQuery): Pr
     const res = await client.send({
         method: Method.GET,
         url,
-        query: { offset, limit, ...query },
+        // TODO: コンパイルエラー
+        query: queryParam({ offset: String(offset), limit: String(limit), ...query }),
     });
 
     const result: Users = JSON.parse(res.rawBody);

@@ -7,8 +7,8 @@ export const FormKeys = {
 export type FormKeys = (typeof FormKeys)[keyof typeof FormKeys];
 
 // TODO: 後で削除
-export type PartialRequestConfig<BODY, QUERY> = Pick<
-    RequestConfig<BODY, QUERY>,
+export type PartialRequestConfig<BODY> = Pick<
+    RequestConfig<BODY>,
     'method' | 'headers' // TODO: 型にできるか
 >;
 
@@ -20,7 +20,7 @@ export type PartialRequestConfig<BODY, QUERY> = Pick<
 // }
 
 // TODO: 後で削除
-export const requestConfig: PartialRequestConfig<never, never> = {
+export const requestConfig: PartialRequestConfig<never> = {
     method: Method.GET,
     headers: { ...ACCEPT_APPLICATION_JSON },
 };

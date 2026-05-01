@@ -4,6 +4,7 @@ import {
     ACCEPT_APPLICATION_JSON,
     CONTENT_TYPE_APPLICATION_JSON_UTF8,
 } from '@/presentation/_system/client/client.constants';
+import { queryParam } from '@/presentation/_system/client/client.helpers';
 import client from '@/presentation/_system/client/client.s';
 import { Method } from '@/presentation/_system/client/client.types';
 import { env } from '@/presentation/_system/env/env.helper.validated';
@@ -31,7 +32,8 @@ export async function send(offset: string, limit: string, formData: FormData<For
             ...CONTENT_TYPE_APPLICATION_JSON_UTF8,
             ...ACCEPT_APPLICATION_JSON,
         },
-        query: { offset, limit },
+        // TODO: コンパイルエラー
+        query: queryParam({ offset, limit }),
         body: formData,
     });
     const result: Users = JSON.parse(res.rawBody);

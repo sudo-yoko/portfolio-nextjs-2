@@ -1,7 +1,8 @@
-import { delay, loggingReq, loggingRes } from '@/__mocks__/utils/express-middlewares';
 import cors from 'cors';
 import type { Request, Response } from 'express';
 import express from 'express';
+
+import { delay, loggingReq, loggingRes } from '@/__mocks__/utils/express-middlewares';
 
 const logPrefix = 'users-mock';
 
@@ -42,7 +43,7 @@ app.use(express.json());
 app.use(cors());
 
 // 独自ミドルウェア
-app.use(delay(1000)); // 1秒待機して、処理待ち時間をシミュレートする
+app.use(delay(3000)); // 1秒待機して、処理待ち時間をシミュレートする
 app.use(loggingReq(logPrefix)); // リクエスト情報をログに出力
 app.use(loggingRes(logPrefix)); // レスポンス情報をログに出力
 
@@ -96,6 +97,7 @@ function handleRequest(
         users: segment,
     };
     res.status(status).json(resBody);
+    // res.sendStatus(500);
 }
 
 app.listen(port, () => {
