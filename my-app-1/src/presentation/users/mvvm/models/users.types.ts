@@ -10,16 +10,6 @@ export type FormKeys = (typeof FormKeys)[keyof typeof FormKeys]; // 値から型
 // export type FormKeys = 'userName' | 'count';
 
 /**
- * クエリ文字列のオブジェクト型
- */
-// TODO: バックエンド呼び出しで使うためstringとする。（viewではnumberで扱う）
-// TODO; 後で削除
-export type UsersQuery = {
-    offset: string;
-    limit: string;
-};
-
-/**
  * ユーザー情報
  */
 export type User = {
