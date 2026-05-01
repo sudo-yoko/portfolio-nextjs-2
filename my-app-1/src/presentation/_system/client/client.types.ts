@@ -6,6 +6,8 @@ export type Client = {
      * リクエストを送信する
      */
     send<BODY = never>(req: RequestConfig<BODY>): Promise<Result>;
+
+    // TODO: AbortControllerを使ったリクエストキャンセルの機能
 };
 
 /**

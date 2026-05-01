@@ -21,7 +21,6 @@ export async function send(offset: number, limit: number, query: UsersQuery): Pr
     const res = await client.send({
         method: Method.GET,
         url,
-        // TODO: コンパイルエラー
         query: queryParam({ offset: String(offset), limit: String(limit), ...query }),
     });
 

@@ -32,7 +32,6 @@ export async function send(offset: string, limit: string, formData: FormData<For
             ...CONTENT_TYPE_APPLICATION_JSON_UTF8,
             ...ACCEPT_APPLICATION_JSON,
         },
-        // TODO: コンパイルエラー
         query: queryParam({ offset, limit }),
         body: formData,
     });

@@ -11,23 +11,29 @@ import { defaultValidateStatusServer } from '@/presentation/_system/client/clien
 import { Client, Result } from '@/presentation/_system/client/client.types';
 import { apiError } from '@/presentation/_system/error/error.factories';
 import { getAxiosErrorProperties, stringify } from '@/presentation/_system/error/error.helper.stringify';
-import { Logger } from '@/presentation/_system/logging/logging.types';
+import logger from '@/presentation/_system/logging/logger.s';
 
 const logPrefix = 'client.adapter.axios.ts: ';
 
+// Axios インスタンスはアプリケーション内で一意
+// TODO: モジュールスコープはproductionビルドで実行されてしまう？
+const axiosInstance = (() => {
+    logger.info(logPrefix + 'Initializing axios instance...');
+    return axios.create();
+})();
+
 // NOTE: const func = (arg) => ({ ... }) （オブジェクトの暗黙的返却）
-export const createAxiosClient = (logger: Logger, proxy?: AxiosProxyConfig): Client => ({
+export const createAxiosClient = (proxy?: AxiosProxyConfig): Client => ({
     send: async (config) => {
-        logger.info(logPrefix + `config=${JSON.stringify(config)}}`);
-        logger.info(logPrefix + `proxy=${JSON.stringify(proxy)}`);
+        logger.info(logPrefix + `config=${JSON.stringify(config)}}, proxy=${JSON.stringify(proxy)}`);
         //
         // Axiosインスタンス作成
         //
         // TODO: これだとインスタンスが毎回作成される。共用のインスタンスを検討
-        const axiosInstance = axios.create({
-            proxy,
-            timeout: config.timeout,
-        });
+        // const axiosInstance = axios.create({
+        //     proxy,
+        //     // timeout: config.timeout,
+        // });
         //
         // リクエスト設定
         //
@@ -41,6 +47,8 @@ export const createAxiosClient = (logger: Logger, proxy?: AxiosProxyConfig): Cli
         }
         axiosConfig.validateStatus = config.validateStatus ?? defaultValidateStatusServer;
         axiosConfig.data = config.body;
+        axiosConfig.timeout = config.timeout;
+        axiosConfig.proxy = proxy;
         //
         // リクエスト実行
         //

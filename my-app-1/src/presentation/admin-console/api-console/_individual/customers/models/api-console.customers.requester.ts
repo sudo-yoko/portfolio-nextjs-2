@@ -22,7 +22,6 @@ const viaRoute: SendRequest<FormKeys> = async (formData) => {
         headers: {
             ...ACCEPT_APPLICATION_JSON,
         },
-        //TODO: コンパイルエラー
         query: queryParam(formData),
     });
     const result = parseResult(res.rawBody);

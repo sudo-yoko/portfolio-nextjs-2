@@ -35,7 +35,6 @@ const viaRoute: FetchPage<User[], FormKeys> = async (offset, limit, formData) =>
             ...CONTENT_TYPE_APPLICATION_JSON_UTF8,
             ...ACCEPT_APPLICATION_JSON,
         },
-        // TODO: コンパイルエラー
         query: queryParam({ offset: String(offset), limit: String(limit) }),
         body: formData,
     });

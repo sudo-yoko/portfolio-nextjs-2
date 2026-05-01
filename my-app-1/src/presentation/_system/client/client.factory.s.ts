@@ -25,7 +25,7 @@ export const createClient = async (
             //     '@/presentation/_system/client/internal/client.core.axios.proxy '
             // );
             // TODO: proxy時のクエリパラメータがおかしくなる
-            return createAxiosClient(logger, envProxy);
+            return createAxiosClient(envProxy);
         }
         case 'fetch': {
             const { createFetchClient } = await import(
@@ -47,7 +47,7 @@ export const createClient = async (
         }
         case 'axios':
         default: {
-            return createAxiosClient(logger);
+            return createAxiosClient();
         }
     }
 };
