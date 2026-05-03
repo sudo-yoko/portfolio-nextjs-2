@@ -1,5 +1,8 @@
 import axios from 'axios';
 
+import { isCustomError } from '@/presentation/_system/error/error.helpers';
+import { CUSTOM_ERROR_TAG } from '@/presentation/_system/error/error.types';
+
 /**
  * Errorオブジェクトの文字列表現を作成する
  *
@@ -24,10 +27,10 @@ export function stringify({
 } {
     if (!error) {
         const message = '';
-        return { message, all: joinAll({ message, description, details }) };
+        return { message, all: joinAll({ description, message, details }) };
     } else if (typeof error === 'string') {
         const message = error;
-        return { message, all: joinAll({ message, description, details }) };
+        return { message, all: joinAll({ description, message, details }) };
         // } else if (axios.isAxiosError(error)) {
         //     //TODO; axios固有のエラーはclient.adapterで処理できないか
         //     const { message } = error;
@@ -38,12 +41,12 @@ export function stringify({
         //     }
         //     return { message, all: joinAll(all) };
     } else if (error instanceof Error) {
-        const { message } = error;
+        const { name, message } = error;
         const stacks = getStackTrace(error);
-        return { message, all: joinAll({ message, description, details, stacks }) };
+        return { message, all: joinAll({ description, name, message, details, stacks }) };
     } else {
         const message = 'unknown type error.';
-        return { message, all: joinAll({ message, description, details }) };
+        return { message, all: joinAll({ description, message, details }) };
     }
 }
 
@@ -80,18 +83,23 @@ function getStackTrace(error: Error): string[] {
  */
 function joinAll({
     description,
+    name,
     message,
     details,
     stacks,
 }: {
     description?: string;
+    name?: string;
     message?: string;
     details?: string;
     stacks?: string[];
 }): string {
     const errMessage: string[] = [];
     if (description) {
-        errMessage.push(`\ndescription: ${description}`);
+        errMessage.push(description);
+    }
+    if (name) {
+        errMessage.push(`\nname: ${name}`);
     }
     if (message) {
         errMessage.push(`\nmessage: ${message}`);
@@ -109,7 +117,7 @@ function joinAll({
 type All = Parameters<typeof joinAll>[0];
 
 /**
- * Errorオブジェクトの中からaxios固有のエラーを取得する
+ * Errorオブジェクトの中からaxios固有のプロパティを取得する
  */
 export function getAxiosErrorProperties(err: unknown): string {
     const description: Record<string, unknown> = {};
@@ -123,12 +131,23 @@ export function getAxiosErrorProperties(err: unknown): string {
 }
 
 /**
- * Errorオブジェクトの中からnode:http固有のエラーを取得する
+ * Errorオブジェクトの中からnode:http固有のプロパティを取得する
  */
 export function getNodeErrorProperties(err: Error): string {
     const description: Record<string, unknown> = {};
     if ('code' in err) {
         description['code'] = err.code;
+    }
+    return JSON.stringify(description, null, 2);
+}
+
+/**
+ * Errorオブジェクトの中からカスタムエラー固有のプロパティを取得する
+ */
+export function getCustomErrorProperties(err: unknown): string {
+    const description: Record<string, unknown> = {};
+    if (isCustomError(err)) {
+        description['CUSTOM_ERROR_TAG'] = err[CUSTOM_ERROR_TAG];
     }
     return JSON.stringify(description, null, 2);
 }

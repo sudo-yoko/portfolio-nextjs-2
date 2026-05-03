@@ -50,14 +50,14 @@ export const createAxiosClient = (proxy?: AxiosProxyConfig): Client => ({
             const res = await axiosInstance.request(axiosConfig);
             const result: Result = {
                 status: res.status,
-                rawBody: toStringSafe(res.data),
+                rawBody: toStringSafe(res.data), // bodyがjsonとは限らないのでtextで取得する。エラーの場合はhtmlが返ってくることもある
             };
             logger.info(logPrefix + `Response -> ${JSON.stringify(result)}`);
             return result;
         } catch (error) {
             // クライアント側エラーもサーバー側エラーもここに来る
             const details = getAxiosErrorProperties(error); // Axios固有のエラープロパティを取得
-            logger.info(logPrefix + stringify({ error, details }).all);
+            logger.error(logPrefix + stringify({ error, details }).all);
             throw apiError({ cause: error });
         }
     },

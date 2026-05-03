@@ -23,9 +23,11 @@ function customError<T extends ErrType>({
     cause?: unknown;
 }): CustomError<T> {
     // Errorインスタンスを作成
-    const base = new Error(`${type}: ${message ?? ''}`, { cause });
+    // const base = new Error(`${type}: ${message ?? ''}`, { cause });
+    const base = new Error(message ?? '', { cause });
     // Errorインスタンスにプロパティを足す（マージする）
     const error = Object.assign(base, {
+        name: type,
         [CUSTOM_ERROR_TAG]: type,
     }); // satisfies CustomError<T>;
     return error;
@@ -115,7 +117,7 @@ export function invalidStatusError({
     body?: string;
 }): CustomError<ErrType> {
     const message: string[] = [];
-    message.push('Response status error.');
+    message.push('Response status error');
     if (status) {
         message.push(`status=${status}`);
     }
