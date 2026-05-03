@@ -7,7 +7,7 @@ import logger from '@/presentation/_system/logging/logger.s';
 import { getSearchParams, SearchParams } from '@/presentation/_system/types/search-params';
 import { ContactParams } from '@/presentation/contact/small/models/contact.types';
 
-const logPrefix = '/contact/small/view-models/request-handler.ts: ';
+const logPrefix = 'contact.handler.request.ts: ';
 
 export async function handleRequest(props: { searchParams?: SearchParams }): Promise<ContactParams> {
     // クエリパラメータを取得する
