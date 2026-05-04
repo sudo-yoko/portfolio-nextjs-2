@@ -23,7 +23,7 @@ const axiosInstance = (() => {
 })();
 
 // NOTE: オブジェクトの暗黙的返却 const func = (arg) => ({ ... });
-export const createAxiosClient = (proxy?: AxiosProxyConfig): Client => ({
+export const axiosClient = (proxy?: AxiosProxyConfig): Client => ({
     send: async (config) => {
         logger.info(
             logPrefix + `Request -> config=${JSON.stringify(config)}}, proxy=${JSON.stringify(proxy)}`,

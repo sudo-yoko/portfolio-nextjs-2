@@ -1,20 +1,21 @@
 //
 // Fetch API を Client インターフェースに適合させるアダプター
-// Node.js の global fetch を使用
-// APIクライアント（global fetch版）
 //
-import { Client, Result, ValidateStatus } from '@/presentation/_system/client/client.types';
+import 'client-only';
+
+import { defaultValidateStatusClient } from '@/presentation/_system/client/client.constants';
+import { Client, Result } from '@/presentation/_system/client/client.types';
 import { apiError, invalidStatusError } from '@/presentation/_system/error/error.factories';
 import { getCustomErrorProperties, stringify } from '@/presentation/_system/error/error.helper.stringify';
-import { Logger } from '@/presentation/_system/logging/logging.types';
+import logger from '@/presentation/_system/logging/logger.c';
 
 const logPrefix = 'client.adapter.fetch.ts: ';
 
-export const createFetchClient = (logger: Logger, defaultValidateStatus: ValidateStatus): Client => ({
+export const fetchClient = (): Client => ({
     send: async (config) => {
         // TODO: ログ出力を抑止する機能
         logger.info(logPrefix + `Request -> config=${JSON.stringify(config)}`);
-        const validateStatus = config.validateStatus ?? defaultValidateStatus;
+        const validateStatus = config.validateStatus ?? defaultValidateStatusClient;
         try {
             //
             // リクエスト設定
@@ -32,7 +33,7 @@ export const createFetchClient = (logger: Logger, defaultValidateStatus: Validat
             // const url = new URL(config.url);
             const url = URL.canParse(config.url)
                 ? new URL(config.url)
-                : new URL(config.url, window.location.origin); // TODO: window.はnode環境だと動かないので、fetchはCL/SV共用しない方が良い
+                : new URL(config.url, window.location.origin); // TODO: window.はnode環境だと動かないので、fetchはCL/SV共用しない
             config.query?.forEach(({ key, value }) => url.searchParams.append(key, value));
             //
             // リクエスト実行

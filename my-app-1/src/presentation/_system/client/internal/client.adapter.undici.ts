@@ -14,7 +14,7 @@ import logger from '@/presentation/_system/logging/logger.s';
 
 const logPrefix = 'client.adapter.undici.ts: ';
 
-export const createUndiciClient = (proxyUrl?: string): Client => ({
+export const undiciClient = (proxyUrl?: string): Client => ({
     send: async (config) => {
         // TODO: ログ出力を抑止する機能
         logger.info(logPrefix + `config=${JSON.stringify(config)}`);

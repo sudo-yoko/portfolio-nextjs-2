@@ -10,7 +10,7 @@ import logger from '@/presentation/_system/logging/logger.s';
 
 const logPrefix = 'client.adapter.node.ts: ';
 
-export const createNodeClient = (): Client => ({
+export const nodeClient = (): Client => ({
     send: async (config) => {
         logger.info(logPrefix + `config=${JSON.stringify(config)}`);
 
