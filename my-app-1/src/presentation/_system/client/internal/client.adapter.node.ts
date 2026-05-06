@@ -3,7 +3,7 @@ import 'server-only';
 import http from 'node:http';
 
 import { defaultValidateStatusServer } from '@/presentation/_system/client/client.constants';
-import { Client, Result } from '@/presentation/_system/client/client.types';
+import { Client, RawResponse } from '@/presentation/_system/client/client.types';
 import { apiError } from '@/presentation/_system/error/error.factories';
 import { getNodeErrorProperties, stringify } from '@/presentation/_system/error/error.helper.stringify';
 import logger from '@/presentation/_system/logging/logger.s';
@@ -76,7 +76,7 @@ export const nodeClient = (): Client => ({
                 });
                 res.on('end', () => {
                     logger.info(logPrefix + '### Response data end' + rawBody);
-                    const result: Result = { status: statusCode, rawBody };
+                    const result: RawResponse = { status: statusCode, rawBody };
                     resolve(result);
                 });
                 // TODO; 中断は未実装

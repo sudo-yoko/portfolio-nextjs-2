@@ -45,7 +45,7 @@ const viaRoute: Send = async (formData) => {
     });
     // return parseFromText<FormKeys>(res.rawBody);
     const result = parseResult(res.rawBody);
-    // TODO: withErrorHandlingでエラーを返す場合があるためasでアサーション不可
+    // TODO: withErrorHandlingでエラーを返す場合があるためasでアサーション不可。RESULTを返すようにする
     return result as ContactResult<FormKeys>;
 };
 

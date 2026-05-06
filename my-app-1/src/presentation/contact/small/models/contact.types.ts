@@ -33,4 +33,5 @@ export type ContactBody = {
 /**
  * お問い合わせフォームのRESULT型
  */
+// TODO: AbortedはwithErrorHandlingで作成するRESULTのため、アプリ側では付けない
 export type ContactResult<FIELD extends string = never> = OkEmpty | Invalid<FIELD> | Retryable | Aborted;

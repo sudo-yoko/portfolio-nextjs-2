@@ -13,6 +13,7 @@ export type CustomError<T extends ErrType> = Error & { [CUSTOM_ERROR_TAG]: T }; 
 export const CUSTOM_ERROR_TAG = Symbol.for('MyApp.CustomErrorTag');
 export const RESULT_TYPE = Symbol.for('MyApp.ResultType');
 
+// TODO: BFFのエラー（クライアントの動作を制御する用）とそうでない汎用のエラーの整理
 /**
  * カスタムエラーの種類
  */

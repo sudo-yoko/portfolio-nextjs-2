@@ -7,7 +7,7 @@ import 'server-only';
 import { fetch, ProxyAgent, Response } from 'undici';
 
 import { defaultValidateStatusServer } from '@/presentation/_system/client/client.constants';
-import { Client, RequestConfig, Result } from '@/presentation/_system/client/client.types';
+import { Client, RequestConfig, RawResponse } from '@/presentation/_system/client/client.types';
 import { apiError } from '@/presentation/_system/error/error.factories';
 import { stringify } from '@/presentation/_system/error/error.helper.stringify';
 import logger from '@/presentation/_system/logging/logger.s';
@@ -56,7 +56,7 @@ export const undiciClient = (proxyUrl?: string): Client => ({
         // レスポンス
         //
         const rawBody = await res.text(); // bodyがjsonとは限らないのでtextで取得する。エラーの場合はhtmlが返ってくることもある
-        const result: Result = {
+        const result: RawResponse = {
             status: res.status,
             rawBody,
         };

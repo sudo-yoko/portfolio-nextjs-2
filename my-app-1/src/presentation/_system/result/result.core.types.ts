@@ -66,6 +66,8 @@ export type Retryable = RESULT & {
 /**
  * 異常終了を表す型
  */
+// TODO: RetryableはErrTypeにするか。それ以外のエラー用にエラーコードを付けるか。
+// TODO: CutomErrorやError情報をラップするか
 export type Aborted = RESULT & { tag: typeof Tag.Aborted; errType?: ErrType; message?: string };
 // TODO: messageはいらないかも。
 // RESULT型にセットするメッセージはクライアントに表示するもの（システムメッセージではない）

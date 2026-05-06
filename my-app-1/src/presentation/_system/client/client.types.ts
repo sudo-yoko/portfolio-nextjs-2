@@ -5,7 +5,7 @@ export type Client = {
     /**
      * リクエストを送信する
      */
-    send<BODY = never>(req: RequestConfig<BODY>): Promise<Result>;
+    send<BODY = never>(req: RequestConfig<BODY>): Promise<RawResponse>;
 
     // TODO: AbortControllerを使ったリクエストキャンセルの機能
 };
@@ -45,8 +45,8 @@ export type ValidateStatus = (status: number) => boolean;
 /**
  * 返却オブジェクト
  */
-// TODO: RESULT型と型名が似ているため、ClientResultなどにする
-export type Result = {
+// TODO: RESULT型と型名が似ているため、ClientResult、RawResponseなどにする
+export type RawResponse = {
     status: number;
     rawBody: string;
 };

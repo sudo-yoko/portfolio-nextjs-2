@@ -8,7 +8,7 @@ import 'server-only';
 import axios, { AxiosProxyConfig, AxiosRequestConfig } from 'axios';
 
 import { defaultValidateStatusServer } from '@/presentation/_system/client/client.constants';
-import { Client, Result } from '@/presentation/_system/client/client.types';
+import { Client, RawResponse } from '@/presentation/_system/client/client.types';
 import { apiError } from '@/presentation/_system/error/error.factories';
 import { getAxiosErrorProperties, stringify } from '@/presentation/_system/error/error.helper.stringify';
 import logger from '@/presentation/_system/logging/logger.s';
@@ -48,7 +48,7 @@ export const axiosClient = (proxy?: AxiosProxyConfig): Client => ({
         //
         try {
             const res = await axiosInstance.request(axiosConfig);
-            const result: Result = {
+            const result: RawResponse = {
                 status: res.status,
                 rawBody: toStringSafe(res.data), // bodyがjsonとは限らないのでtextで取得する。エラーの場合はhtmlが返ってくることもある
             };

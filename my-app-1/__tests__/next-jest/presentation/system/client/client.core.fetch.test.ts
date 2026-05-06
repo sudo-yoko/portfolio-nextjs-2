@@ -1,6 +1,6 @@
 import { printf } from '@/__tests__/test-logger';
 import { clientImpl } from '@/presentation/_system/client/internal/client.adapter.fetch';
-import { Method, Result } from '@/presentation/_system/client/client.types';
+import { Method, RawResponse } from '@/presentation/_system/client/client.types';
 import { jest } from '@jest/globals';
 
 // import { Method } from '@/presentation/(system)/client/client.types';
@@ -69,7 +69,7 @@ test('test1-3', async () => {
 
   print('result=' + JSON.stringify(result));
   if (result.rawBody) {
-    const body: Result = JSON.parse(result.rawBody);
+    const body: RawResponse = JSON.parse(result.rawBody);
     print('body=' + JSON.stringify(body));
   }
 });
@@ -93,7 +93,7 @@ test('test1-4', async () => {
 
   if (result.status === 200) {
     if (result.rawBody) {
-      const body: Result = JSON.parse(result.rawBody);
+      const body: RawResponse = JSON.parse(result.rawBody);
       print('body=' + JSON.stringify(body));
     }
   }

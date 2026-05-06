@@ -1,5 +1,5 @@
 import { printf } from '@/__tests__/test-logger';
-import { Client, Method, RequestConfig, Result } from '@/presentation/_system/client/client.types';
+import { Client, Method, RequestConfig, RawResponse } from '@/presentation/_system/client/client.types';
 // import { Method } from '@/presentation/(system)/client/client.types';
 
 const print = printf({ logPrefix: '>>> [client.types.test.ts]', stdout: true });
@@ -11,7 +11,7 @@ test('test1-1', async () => {
     url: 'http://localhost:3000',
   };
 
-  const res: Result = {
+  const res: RawResponse = {
     status: 200,
     rawBody: '',
   };
@@ -47,7 +47,7 @@ test('test1-2', async () => {
     body: reqBody,
   };
 
-  const res: Result = {
+  const res: RawResponse = {
     status: 200,
     rawBody: '',
   };

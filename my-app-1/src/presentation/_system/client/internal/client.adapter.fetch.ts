@@ -4,7 +4,7 @@
 import 'client-only';
 
 import { defaultValidateStatusClient } from '@/presentation/_system/client/client.constants';
-import { Client, Result } from '@/presentation/_system/client/client.types';
+import { Client, RawResponse } from '@/presentation/_system/client/client.types';
 import { apiError, invalidStatusError } from '@/presentation/_system/error/error.factories';
 import { getCustomErrorProperties, stringify } from '@/presentation/_system/error/error.helper.stringify';
 import logger from '@/presentation/_system/logging/logger.c';
@@ -43,7 +43,7 @@ export const fetchClient = (): Client => ({
             // レスポンス
             //
             const rawBody = await res.text(); // bodyがjsonとは限らないのでtextで取得する。エラーの場合はhtmlが返ってくることもある
-            const result: Result = {
+            const result: RawResponse = {
                 status: res.status,
                 rawBody,
             };
