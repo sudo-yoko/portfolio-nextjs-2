@@ -13,3 +13,8 @@ tsconfig の paths
 Jest の moduleNameMapper
     テスト実行時に「そのパスは実際はこっち」と教える.Jest.unstable_mockModuleでのパス指定
     主に “テスト実行時（ランタイム）の世界”
+
+RESULT型
+・Client型はステータスと生のボディ(string)を返す
+・ルートハンドラーはレスポンスボディにRESULT型を返す。ステータスコードは必ず200を返す
+・ServerActionはRESULT型を返す

@@ -10,10 +10,10 @@ import { envProxy, proxyUrl } from '@/presentation/_system/env/env.s.helper';
 /**
  * サーバーサイド専用 Client を読み込む
  */
-export const createClient = async (
+export const loadClient = async (
     type: 'axios' | 'axios-proxy' | 'undici' | 'undici-proxy' | 'node' | 'dummy',
 ): Promise<Client> => {
-    // TODO: キャッシュを検討
+    // TODO: 動的インポートとキャッシュを検討
     switch (type) {
         case 'axios-proxy': {
             // NOTE: case に {} をつけると case 専用のブロックスコープを作成できる

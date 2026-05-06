@@ -1,7 +1,7 @@
 import 'server-only';
 
 import { CONTENT_TYPE_APPLICATION_FORM } from '@/presentation/_system/client/client.constants';
-import { createClient } from '@/presentation/_system/client/client.factory.s';
+import { loadClient } from '@/presentation/_system/client/client.factory.s';
 // import client from '@/presentation/_system/client/client.s';
 import { Method } from '@/presentation/_system/client/client.types';
 import { env } from '@/presentation/_system/env/env.helper.validated';
@@ -10,7 +10,7 @@ import logger from '@/presentation/_system/logging/logger.s';
 import { ContactBody } from '@/presentation/contact/small/models/contact.types';
 
 const logPrefix = 'contact.webToCase-client.ts: ';
-const client = await createClient('axios-proxy');
+const client = await loadClient('axios-proxy');
 
 export async function send(model: ContactBody): Promise<void> {
     const url = env('WEB_TO_CASE_URL');

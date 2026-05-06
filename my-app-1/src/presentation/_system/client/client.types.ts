@@ -45,6 +45,7 @@ export type ValidateStatus = (status: number) => boolean;
 /**
  * 返却オブジェクト
  */
+// TODO: RESULT型と型名が似ているため、ClientResultなどにする
 export type Result = {
     status: number;
     rawBody: string;

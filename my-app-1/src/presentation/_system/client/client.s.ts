@@ -3,9 +3,9 @@
 //
 import 'server-only';
 
-import { createClient } from '@/presentation/_system/client/client.factory.s';
+import { loadClient } from '@/presentation/_system/client/client.factory.s';
 import { Client } from '@/presentation/_system/client/client.types';
 
-const client: Client = await createClient('axios');
+const client: Client = await loadClient('axios');
 
 export default client;

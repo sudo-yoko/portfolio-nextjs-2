@@ -2,7 +2,7 @@ import 'server-only';
 
 import { fetch, ProxyAgent, Response } from 'undici';
 
-import { createClient } from '@/presentation/_system/client/client.factory.s';
+import { loadClient } from '@/presentation/_system/client/client.factory.s';
 import { Method, QueryParam } from '@/presentation/_system/client/client.types';
 import logger from '@/presentation/_system/logging/logger.s';
 
@@ -23,7 +23,7 @@ async function handleRequestNode2(): Promise<string> {
         { key: 'limit', value: '10' },
     ];
 
-    const client = await createClient('axios-proxy');
+    const client = await loadClient('axios-proxy');
     const result = await client.send({ url, method: Method.GET, query, timeout: 5000 });
     return result.rawBody;
 }

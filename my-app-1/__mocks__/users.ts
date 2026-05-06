@@ -51,27 +51,33 @@ app.use(loggingRes(logPrefix)); // レスポンス情報をログに出力
  * POST /users
  */
 // TODO: 検索条件をボディにしてPOSTを使うなら、URLは 「POST /users/search」とか
-app.post(path, async (req: Request<never, ResBody, ReqBody, QueryParam>, res: Response<ResBody>) => {
-    const { offset, limit } = req.query;
-    const { keyword, userId, userName } = req.body;
-    handleRequest(res, offset, limit, keyword, userId, userName);
-});
+app.post(
+    path,
+    async (req: Request<never, ResBody | string, ReqBody, QueryParam>, res: Response<ResBody | string>) => {
+        const { offset, limit } = req.query;
+        const { keyword, userId, userName } = req.body;
+        handleRequest(res, offset, limit, keyword, userId, userName);
+    },
+);
 
 /**
  * GET /users
  */
 // TODO: users/minのエンドポイントもPOSTにする
-app.get(path, async (req: Request<never, ResBody, never, ReqQuery>, res: Response<ResBody>) => {
-    //   const { method, url, query } = req;
-    const { query } = req;
-    const { offset, limit } = query;
-    //   console.log(method, url);
-    //   console.log(`query=${JSON.stringify(query)}`);
-    handleRequest(res, offset, limit, '');
-});
+app.get(
+    path,
+    async (req: Request<never, ResBody | string, never, ReqQuery>, res: Response<ResBody | string>) => {
+        //   const { method, url, query } = req;
+        const { query } = req;
+        const { offset, limit } = query;
+        //   console.log(method, url);
+        //   console.log(`query=${JSON.stringify(query)}`);
+        handleRequest(res, offset, limit, '');
+    },
+);
 
 function handleRequest(
-    res: Response<ResBody>,
+    res: Response<ResBody | string>,
     offset: string,
     limit: string,
     _keyword: string,
@@ -98,6 +104,7 @@ function handleRequest(
     };
     res.status(status).json(resBody);
     // res.sendStatus(500);
+    // res.status(404).send('<HTML>Not Found</HTML>');
 }
 
 app.listen(port, () => {
