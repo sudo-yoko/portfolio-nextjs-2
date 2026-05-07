@@ -2,9 +2,9 @@ import axios from 'axios';
 
 import { isBackendError, isCodedError, isCustomError } from '@/presentation/_system/error/error.helpers';
 import {
-    CUSTOM_ERROR_TAG,
     CustomErrorProperties,
     ERR_CODE,
+    ERR_TYPE,
     RESULT_TYPE,
 } from '@/presentation/_system/error/error.types';
 
@@ -152,7 +152,7 @@ export function getNodeErrorProperties(err: Error): string {
 export function getCustomErrorProperties(err: unknown): { text: string; obj: CustomErrorProperties } {
     const obj: CustomErrorProperties = {};
     if (isCustomError(err)) {
-        obj[CUSTOM_ERROR_TAG] = err[CUSTOM_ERROR_TAG];
+        obj[ERR_TYPE] = err[ERR_TYPE];
         if (isCodedError(err)) {
             obj[ERR_CODE] = err[ERR_CODE];
         }

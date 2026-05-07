@@ -2,7 +2,7 @@
 import 'server-only';
 
 import { getCustomErrorProperties, stringify } from '@/presentation/_system/error/error.helper.stringify';
-import { CUSTOM_ERROR_TAG, ERR_CODE } from '@/presentation/_system/error/error.types';
+import { ERR_CODE, ERR_TYPE } from '@/presentation/_system/error/error.types';
 import logger from '@/presentation/_system/logging/logger.s';
 import { abort } from '@/presentation/_system/result/result.core.factories';
 import { RESULT } from '@/presentation/_system/result/result.core.types';
@@ -46,7 +46,7 @@ function handleError(fname: string, e: unknown): RESULT {
     const props: Parameters<typeof abort>[0] = {
         message,
     };
-    props.errType = obj[CUSTOM_ERROR_TAG];
+    props.type = obj[ERR_TYPE];
     props.code = obj[ERR_CODE];
     return abort(props);
 }

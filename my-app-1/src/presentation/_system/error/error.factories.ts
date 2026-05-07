@@ -4,9 +4,9 @@
 import {
     BackendError,
     CodedError,
-    CUSTOM_ERROR_TAG,
     CustomError,
     ERR_CODE,
+    ERR_TYPE,
     ErrType,
     RESULT_TYPE,
 } from '@/presentation/_system/error/error.types';
@@ -32,7 +32,7 @@ function customError<T extends ErrType>({
     // Errorインスタンスにプロパティを足す（マージする）
     const error = Object.assign(base, {
         name: type,
-        [CUSTOM_ERROR_TAG]: type,
+        [ERR_TYPE]: type,
         [ERR_CODE]: code,
     }); // satisfies CustomError<T>;
     return error;
@@ -87,7 +87,7 @@ export function backendError(result: RESULT, msg?: string): BackendError {
 
     const base = new Error(`${ErrType.BackendError}: ${message.join(', ')}`);
     const error = Object.assign(base, {
-        [CUSTOM_ERROR_TAG]: ErrType.BackendError,
+        [ERR_TYPE]: ErrType.BackendError,
         [RESULT_TYPE]: result,
     });
     return error;
@@ -101,7 +101,7 @@ export function codedError(code: string, message?: string): CodedError {
     const base = new Error(message);
     const error = Object.assign(base, {
         name: ErrType.CodedError,
-        [CUSTOM_ERROR_TAG]: ErrType.CodedError,
+        [ERR_TYPE]: ErrType.CodedError,
         [ERR_CODE]: code,
     });
     return error;
