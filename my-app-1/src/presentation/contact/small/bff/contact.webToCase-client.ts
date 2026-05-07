@@ -5,7 +5,7 @@ import { loadClient } from '@/presentation/_system/client/client.factory.s';
 // import client from '@/presentation/_system/client/client.s';
 import { Method } from '@/presentation/_system/client/client.types';
 import { env } from '@/presentation/_system/env/env.helper.validated';
-import { retryableError } from '@/presentation/_system/error/error.factories';
+import { codedError, retryableError } from '@/presentation/_system/error/error.factories';
 import logger from '@/presentation/_system/logging/logger.s';
 import { ContactBody } from '@/presentation/contact/small/models/contact.types';
 
@@ -22,11 +22,13 @@ export async function send(model: ContactBody): Promise<void> {
         url,
         body,
         headers: { ...CONTENT_TYPE_APPLICATION_FORM },
-        validateStatus: (status: number) => status === 200,
+        // validateStatus: (status: number) => status === 200,
     });
 
     logger.info(logPrefix + `Response(Inbound) -> status=${result.status}`);
     if (result.status !== 200) {
         throw retryableError(`web-to-case response status=${result.status}`);
+        // throw codedError("ERR0001", "何かのエラー");
+        // throw Error('何かのエラー');
     }
 }

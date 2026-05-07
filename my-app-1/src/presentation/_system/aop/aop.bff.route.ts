@@ -1,6 +1,7 @@
 //
 // BFF(Route Handlers)共通処理
 //
+// TODO: 名前。route-boundary, action-boundary, server-boundary
 import 'server-only';
 
 import { withAuthAsync } from '@/presentation/_system/aop/internal/aop.core.auth';

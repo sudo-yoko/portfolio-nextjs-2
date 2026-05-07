@@ -1,7 +1,15 @@
 //
 // カスタムエラー ヘルパー関数
 //
-import { CUSTOM_ERROR_TAG, CustomError, ErrType } from '@/presentation/_system/error/error.types';
+import {
+    BackendError,
+    CodedError,
+    CUSTOM_ERROR_TAG,
+    CustomError,
+    ERR_CODE,
+    ErrType,
+    RESULT_TYPE,
+} from '@/presentation/_system/error/error.types';
 
 /**
  * カスタムエラー判定
@@ -9,6 +17,24 @@ import { CUSTOM_ERROR_TAG, CustomError, ErrType } from '@/presentation/_system/e
 export function isCustomError(e: unknown): e is CustomError<ErrType> {
     if (e instanceof Error) {
         if (CUSTOM_ERROR_TAG in e) {
+            return true;
+        }
+    }
+    return false;
+}
+
+export function isBackendError(e: CustomError<ErrType>): e is BackendError {
+    if (isCustomError(e)) {
+        if (RESULT_TYPE in e) {
+            return true;
+        }
+    }
+    return false;
+}
+
+export function isCodedError(e: CustomError<ErrType>): e is CodedError {
+    if (isCustomError(e)) {
+        if (ERR_CODE in e) {
             return true;
         }
     }

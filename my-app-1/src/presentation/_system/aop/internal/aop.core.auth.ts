@@ -38,6 +38,7 @@ export async function withAuthAsync<T>(thunk: () => Promise<T>): Promise<T> {
         authenticate();
         return await thunk();
     } catch (e) {
+        // TODO: 認証エラーページに遷移。サーバーサイドとクラインとサイド
         if (isAuthError(e)) {
             logger.error(`${logPrefix}${fname}${stringify({ error: e }).message}`);
         }

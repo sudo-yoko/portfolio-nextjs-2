@@ -1,7 +1,12 @@
 import axios from 'axios';
 
-import { isCustomError } from '@/presentation/_system/error/error.helpers';
-import { CUSTOM_ERROR_TAG } from '@/presentation/_system/error/error.types';
+import { isBackendError, isCodedError, isCustomError } from '@/presentation/_system/error/error.helpers';
+import {
+    CUSTOM_ERROR_TAG,
+    CustomErrorProperties,
+    ERR_CODE,
+    RESULT_TYPE,
+} from '@/presentation/_system/error/error.types';
 
 /**
  * Errorオブジェクトの文字列表現を作成する
@@ -113,7 +118,7 @@ function joinAll({
     return errMessage.join('');
 }
 
-// 引数の型
+// NOTE: 引数の型を取得
 type All = Parameters<typeof joinAll>[0];
 
 /**
@@ -144,10 +149,17 @@ export function getNodeErrorProperties(err: Error): string {
 /**
  * Errorオブジェクトの中からカスタムエラー固有のプロパティを取得する
  */
-export function getCustomErrorProperties(err: unknown): string {
-    const description: Record<string, unknown> = {};
+export function getCustomErrorProperties(err: unknown): { text: string; obj: CustomErrorProperties } {
+    const obj: CustomErrorProperties = {};
     if (isCustomError(err)) {
-        description['CUSTOM_ERROR_TAG'] = err[CUSTOM_ERROR_TAG];
+        obj[CUSTOM_ERROR_TAG] = err[CUSTOM_ERROR_TAG];
+        if (isCodedError(err)) {
+            obj[ERR_CODE] = err[ERR_CODE];
+        }
+        if (isBackendError(err)) {
+            obj[RESULT_TYPE] = err[RESULT_TYPE];
+        }
     }
-    return JSON.stringify(description, null, 2);
+    const text = JSON.stringify(obj, null, 2);
+    return { text, obj };
 }

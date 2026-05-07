@@ -30,7 +30,7 @@ app.use(loggingRes(logPrefix)); // レスポンス情報をログに出力
 
 app.post(path, async (_req: Request<undefined, undefined, FormData>, res: Response<void>) => {
     const status = 200;
-    // const status = 408;
+    // const status = 408;  // タイムアウト
     // const status = 500;
     // console.log(logPrefix + `Response(Outbound) -> status=${status}`);
     res.sendStatus(status);

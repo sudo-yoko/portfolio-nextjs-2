@@ -15,6 +15,7 @@ export function withErrorHandling<T>(thunk: () => T, onAbort: () => void): T | v
         // 引数に渡されたサンクを実行
         return thunk();
     } catch (e) {
+        // TODO: クライアントサイドにも認証エラーチェックつけるか
         // TODO: クライアントサイドでBffRESULTのパースエラーチェック
         // NOTE: 非同期関数を呼ぶときにvoidを付けると、awaitしないことを明示的に示せる
         void logger.errorAsync(logPrefix + fname + stringify({ error: e }).all);

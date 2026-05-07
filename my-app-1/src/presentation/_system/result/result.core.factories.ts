@@ -51,6 +51,14 @@ export function retry(retryMsg?: string[]): Retryable {
  * @param cause - 失敗の原因
  * @returns
  */
-export function abort({ errType, message }: { errType?: ErrType; message?: string }): Aborted {
-    return { tag: Tag.Aborted, errType, message };
+export function abort({
+    errType,
+    code,
+    message,
+}: {
+    errType?: ErrType;
+    code?: string;
+    message?: string;
+}): Aborted {
+    return { tag: Tag.Aborted, errType, code, message };
 }
