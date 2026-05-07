@@ -3,7 +3,7 @@
 //
 import 'client-only';
 
-import { executeAsync } from '@/presentation/_system/aop/aop.client';
+import { executeAsync } from '@/presentation/_system/aop/aop.client-boundary';
 import { backendError, malformedResultError } from '@/presentation/_system/error/error.factories';
 import { createPager } from '@/presentation/_system/pagination/mvvm/models/pagination.pager';
 import { PaginationResult } from '@/presentation/_system/pagination/mvvm/models/pagination.types';

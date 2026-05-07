@@ -1,6 +1,6 @@
 'use server';
 
-import { executeAsync } from '@/presentation/_system/aop/aop.bff.action';
+import { executeAsync } from '@/presentation/_system/aop/aop.action-boundary';
 import { RESULT } from '@/presentation/_system/result/result.core.types';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 import { execute } from '@/presentation/users/mvvm/bff/users.interactor';

@@ -3,7 +3,7 @@
 //
 'use server';
 
-import { executeAsync } from '@/presentation/_system/aop/aop.bff.action';
+import { executeAsync } from '@/presentation/_system/aop/aop.action-boundary';
 import logger from '@/presentation/_system/logging/logger.s';
 import { RESULT } from '@/presentation/_system/result/result.core.types';
 import { FormData } from '@/presentation/_system/validation/validation.types';

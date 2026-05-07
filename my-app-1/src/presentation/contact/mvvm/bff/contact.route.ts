@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { executeAsync } from '@/presentation/_system/aop/aop.bff.route';
+import { executeAsync } from '@/presentation/_system/aop/aop.route-boundary';
 import logger from '@/presentation/_system/logging/logger.s';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 import { execute } from '@/presentation/contact/mvvm/bff/contact.interactor';
