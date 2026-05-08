@@ -1,10 +1,12 @@
 // エラーハンドリングAOP部品
 import 'server-only';
 
+import { AopResult } from '@/presentation/_system/aop/aop.types';
 import { getCustomErrorProperties, stringify } from '@/presentation/_system/error/error.helper.stringify';
+import { isCustomError, isRetryableError } from '@/presentation/_system/error/error.helpers';
 import { ERR_CODE, ERR_TYPE } from '@/presentation/_system/error/error.types';
 import logger from '@/presentation/_system/logging/logger.s';
-import { abort } from '@/presentation/_system/result/result.core.factories';
+import { abort, retry } from '@/presentation/_system/result/result.core.factories';
 import { RESULT } from '@/presentation/_system/result/result.core.types';
 
 const logPrefix = 'aop.core.exception.bff.ts: ';
@@ -33,22 +35,29 @@ export async function withErrorHandlingAsync(thunk: () => Promise<RESULT>): Prom
     }
 }
 
-function handleError(fname: string, e: unknown): RESULT {
-    // カスタムエラー固有のプロパティを取得する
-    // TODO: getCustomErrorPropertiesを使用
-    const { obj, text } = getCustomErrorProperties(e);
+function handleError(fname: string, e: unknown): AopResult {
+    const stringifyProps: Parameters<typeof stringify>[0] = {};
+    const abortProps: Parameters<typeof abort>[0] = {};
+
+    if (isCustomError(e)) {
+        // カスタムエラー固有のプロパティを取得する
+        const { obj, text } = getCustomErrorProperties(e);
+        stringifyProps.details = text;
+        abortProps.type = obj[ERR_TYPE];
+        abortProps.code = obj[ERR_CODE];
+    }
 
     // ログ出力
-    const { message, all } = stringify({ error: e, details: text });
+    stringifyProps.error = e;
+    const { message, all } = stringify(stringifyProps);
     logger.error(logPrefix + fname + all);
 
     // RESULT型
-    const props: Parameters<typeof abort>[0] = {
-        message,
-    };
-    props.type = obj[ERR_TYPE];
-    props.code = obj[ERR_CODE];
-    return abort(props);
+    if (isRetryableError(e)) {
+        return retry();
+    }
+    abortProps.message = message;
+    return abort(abortProps);
 }
 
 // function handleError(fname: string, e: unknown): RESULT {

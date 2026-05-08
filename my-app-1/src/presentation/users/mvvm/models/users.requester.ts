@@ -10,6 +10,7 @@ import { Method } from '@/presentation/_system/client/client.types';
 import { FetchData, FetchPage } from '@/presentation/_system/pagination/mvvm/models/pagination.requester';
 import { PaginationResult } from '@/presentation/_system/pagination/mvvm/models/pagination.types';
 import { parseResult } from '@/presentation/_system/result/result.core.helpers';
+import { BffResult } from '@/presentation/_system/result/result.core.types';
 import { action } from '@/presentation/users/mvvm/bff/users.action';
 import { FormKeys, User } from '@/presentation/users/mvvm/models/users.types';
 
@@ -19,7 +20,7 @@ import { FormKeys, User } from '@/presentation/users/mvvm/models/users.types';
 const _viaAction: FetchPage<User[], FormKeys> = async (offset, limit, formData) => {
     const result = await action(String(offset), String(limit), formData);
     // return parseFromResult<FetchData<User[]>, FormKeys>(result);
-    return result as PaginationResult<FetchData<User[]>, FormKeys>;
+    return result as BffResult<PaginationResult<FetchData<User[]>, FormKeys>>;
 };
 
 /**
@@ -47,7 +48,7 @@ const viaRoute: FetchPage<User[], FormKeys> = async (offset, limit, formData) =>
     // });
     // return parseFromText<FetchData<User[]>, FormKeys>(res.rawBody);
     const result = parseResult(res.rawBody);
-    return result as PaginationResult<FetchData<User[]>, FormKeys>;
+    return result as BffResult<PaginationResult<FetchData<User[]>, FormKeys>>;
 
     // const res = await window.fetch(url, {
     // method: POST,

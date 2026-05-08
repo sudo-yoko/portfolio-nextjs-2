@@ -1,17 +1,16 @@
 //
-// BFF(Route Handlers)共通処理
+// Route Handlers 境界レイヤー
 //
-// TODO: 名前。route-boundary, action-boundary, server-boundary
 import 'server-only';
 
 import { withAuthAsync } from '@/presentation/_system/aop/internal/aop.core.auth';
 import { withErrorHandlingAsync } from '@/presentation/_system/aop/internal/aop.core.exception.bff';
 import { Ctx, withLoggingAsync } from '@/presentation/_system/aop/internal/aop.core.logging';
-import { withResultParsingAsync } from '@/presentation/_system/aop/internal/aop.core.result.bff.route';
+import { withResponseAsync } from '@/presentation/_system/aop/internal/aop.core.result.bff.route';
 import logger from '@/presentation/_system/logging/logger.s';
 import { RESULT } from '@/presentation/_system/result/result.core.types';
 
-const logPrefix = 'aop.feature.bff.route.ts: ';
+const logPrefix = 'aop.route-boundary.ts: ';
 
 /**
  * 引数に渡されたサンクに共通処理を追加して実行する。
@@ -20,6 +19,6 @@ export async function executeAsync(thunk: () => Promise<RESULT>): Promise<Respon
     const ctx: Ctx = { logger, logPrefix, process: 'bff route process' };
     // TODO: performance.now()で処理時間を取得
     return await withLoggingAsync(ctx, () =>
-        withResultParsingAsync(() => withErrorHandlingAsync(() => withAuthAsync(thunk))),
+        withResponseAsync(() => withErrorHandlingAsync(() => withAuthAsync(thunk))),
     );
 }

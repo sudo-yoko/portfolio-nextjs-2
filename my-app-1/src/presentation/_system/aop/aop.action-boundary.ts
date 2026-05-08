@@ -1,5 +1,5 @@
 //
-// BFF(Server Actions)共通処理
+// ServerActions 境界レイヤー
 //
 import 'server-only';
 
@@ -16,7 +16,7 @@ import {
 import logger from '@/presentation/_system/logging/logger.s';
 import { RESULT } from '@/presentation/_system/result/result.core.types';
 
-const logPrefix = 'aop.feature.bff.ts';
+const logPrefix = 'aop.action-boundary.ts';
 
 /**
  * 引数に渡されたサンクに共通処理を追加して実行する。

@@ -120,6 +120,7 @@ export function malformedResultError(result: RESULT, msg?: string): CustomError<
     return customError({ type: ErrType.MalformedResultError, message: cause.join(', ') });
 }
 
+// TODO: サーバーサイドで使用するエラー
 export function apiError({ cause, detail }: { cause?: unknown; detail?: string }): CustomError<ErrType> {
     const message: string[] = [];
     message.push('Backend API call failed.');

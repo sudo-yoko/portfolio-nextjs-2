@@ -7,6 +7,7 @@ import client from '@/presentation/_system/client/client.c';
 import { CONTENT_TYPE_APPLICATION_JSON_UTF8 } from '@/presentation/_system/client/client.constants';
 import { Method } from '@/presentation/_system/client/client.types';
 import { parseResult } from '@/presentation/_system/result/result.core.helpers';
+import { BffResult } from '@/presentation/_system/result/result.core.types';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 import { post } from '@/presentation/contact/small/bff/contact.action';
 import { ContactResult, FormKeys } from '@/presentation/contact/small/models/contact.types';
@@ -18,7 +19,7 @@ import { ContactResult, FormKeys } from '@/presentation/contact/small/models/con
  * @returns 正常終了の場合はvoid、差し戻しの場合はバリデーションエラーをBffResultにラップして返す
  */
 type Send = {
-    (formData: FormData<FormKeys>): Promise<ContactResult<FormKeys>>;
+    (formData: FormData<FormKeys>): Promise<BffResult<ContactResult<FormKeys>>>;
 };
 
 /**
@@ -27,7 +28,8 @@ type Send = {
 const _viaAction: Send = async (formData) => {
     const result = await post(formData);
     // return parseFromResult<FormKeys>(result);
-    return result as ContactResult<FormKeys>;
+    // return result as ContactResult<FormKeys>;
+    return result as BffResult<ContactResult<FormKeys>>;
 };
 
 /**
@@ -46,7 +48,8 @@ const viaRoute: Send = async (formData) => {
     // return parseFromText<FormKeys>(res.rawBody);
     const result = parseResult(res.rawBody);
     // TODO: withErrorHandlingでエラーを返す場合があるためasでアサーション不可。RESULTを返すようにする
-    return result as ContactResult<FormKeys>;
+    // return result as ContactResult<FormKeys>;
+    return result as BffResult<ContactResult<FormKeys>>;
 };
 
 /**

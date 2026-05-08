@@ -1,5 +1,8 @@
+// TODO: view-modelに移動
+
 import 'client-only';
 
+import { backendError } from '@/presentation/_system/error/error.factories';
 import {
     calcPagination,
     offsetOfLastPage,
@@ -9,8 +12,8 @@ import {
 import { FetchPage } from '@/presentation/_system/pagination/mvvm/models/pagination.requester';
 import { PaginationResult } from '@/presentation/_system/pagination/mvvm/models/pagination.types';
 import { PageData, Pager } from '@/presentation/_system/pagination/mvvm/models/pagination.types.c';
-import { abort, invalid, okData } from '@/presentation/_system/result/result.core.factories';
-import { isAborted, isInvalid } from '@/presentation/_system/result/result.core.helpers';
+import { invalid, okData } from '@/presentation/_system/result/result.core.factories';
+import { isInvalid, isOkData } from '@/presentation/_system/result/result.core.helpers';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 
 /**
@@ -44,12 +47,15 @@ export function createPager<ITEMS, FIELD extends string>(
         // データ取得
         //
         let result = await fetchPage(offset, limit, formData);
-        if (isAborted(result)) {
-            // throw backendError(result);
-            return abort(result);
-        }
+        // if (isAborted(result)) {
+        //     // throw backendError(result);
+        //     return abort(result);
+        // }
         if (isInvalid(result)) {
             return invalid(result.violations);
+        }
+        if (!isOkData(result)) {
+            throw backendError(result);
         }
         let { total, items } = result.data;
         //
@@ -79,12 +85,15 @@ export function createPager<ITEMS, FIELD extends string>(
         if (offset > total) {
             offset = offsetOfLastPage(total, limit); // 最終ページの先頭の1件目
             result = await fetchPage(offset, limit, formData);
-            if (isAborted(result)) {
-                // throw backendError(result);
-                return abort(result);
-            }
+            // if (isAborted(result)) {
+            //     // throw backendError(result);
+            //     return abort(result);
+            // }
             if (isInvalid(result)) {
                 return invalid(result.violations);
+            }
+            if (!isOkData(result)) {
+                throw backendError(result);
             }
             ({ total, items } = result.data);
         }

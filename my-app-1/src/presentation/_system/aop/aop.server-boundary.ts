@@ -1,5 +1,5 @@
 //
-// サーバーサイド共通処理
+// サーバーサイド 境界レイヤー
 //
 import 'server-only';
 
@@ -11,7 +11,7 @@ import {
 import { Ctx, withLogging, withLoggingAsync } from '@/presentation/_system/aop/internal/aop.core.logging';
 import logger from '@/presentation/_system/logging/logger.s';
 
-const logPrefix = 'aop.feature.server.ts: ';
+const logPrefix = 'aop.server-boundary.ts: ';
 
 /**
  * 引数に渡されたサンクに共通処理を追加して実行する。

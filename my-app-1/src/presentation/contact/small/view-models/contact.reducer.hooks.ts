@@ -4,13 +4,8 @@
 'use client';
 
 import { executeAsync } from '@/presentation/_system/aop/aop.client-boundary';
-import { backendError, malformedResultError } from '@/presentation/_system/error/error.factories';
-import {
-    isAborted,
-    isInvalid,
-    isOkEmpty,
-    isRetryable,
-} from '@/presentation/_system/result/result.core.helpers';
+import { backendError } from '@/presentation/_system/error/error.factories';
+import { isInvalid, isOkEmpty, isRetryable } from '@/presentation/_system/result/result.core.helpers';
 import { hasError } from '@/presentation/_system/validation/validation.helpers';
 import { Violations } from '@/presentation/_system/validation/validation.types';
 import { send } from '@/presentation/contact/small/models/contact.requester';
@@ -84,10 +79,6 @@ export async function submit(
     async function func() {
         // バックエンド呼び出し
         const result = await send(state.formData);
-        // 異常
-        if (isAborted(result)) {
-            throw backendError(result);
-        }
         // 正常
         if (isOkEmpty(result)) {
             toComplete(dispatch);
@@ -112,8 +103,10 @@ export async function submit(
             // toInput(dispatch);
             return;
         }
+        // 異常
+        throw backendError(result);
         // RESULTの形式が不正
-        throw malformedResultError(result);
+        // throw malformedResultError(reult);
     }
 }
 

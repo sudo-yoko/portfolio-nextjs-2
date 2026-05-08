@@ -4,6 +4,7 @@
 import 'client-only';
 
 import { PaginationResult } from '@/presentation/_system/pagination/mvvm/models/pagination.types';
+import { BffResult } from '@/presentation/_system/result/result.core.types';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 
 /**
@@ -15,7 +16,7 @@ export interface FetchPage<ITEMS, FIELD extends string> {
         limit: number,
         // TODO: 検索条件がFormDataなのでフォーム以外のオプションの条件を入れられない
         formData: FormData<FIELD>,
-    ): Promise<PaginationResult<FetchData<ITEMS>, FIELD>>;
+    ): Promise<BffResult<PaginationResult<FetchData<ITEMS>, FIELD>>>;
 }
 
 /**

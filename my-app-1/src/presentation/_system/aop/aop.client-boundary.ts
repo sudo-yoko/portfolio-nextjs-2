@@ -1,5 +1,5 @@
 //
-// クライアントサイド共通処理
+// クライアントサイド 境界レイヤー
 //
 import 'client-only';
 
@@ -10,7 +10,7 @@ import {
 import { Ctx, withLogging, withLoggingAsync } from '@/presentation/_system/aop/internal/aop.core.logging';
 import logger from '@/presentation/_system/logging/logger.c';
 
-const logPrefix = 'aop.feature.client.ts: ';
+const logPrefix = 'aop.client-boundary.ts: ';
 
 /**
  * 引数に渡されたサンクに共通処理を追加して実行する。
