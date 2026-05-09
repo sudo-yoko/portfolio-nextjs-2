@@ -2,7 +2,7 @@
 import 'server-only';
 
 import { authenticate } from '@/presentation/_system/auth/authentication';
-import { stringify } from '@/presentation/_system/error/error.helper.stringify';
+import { formatError } from '@/presentation/_system/error/error.helper.stringify';
 import { isAuthError } from '@/presentation/_system/error/error.helpers';
 import logger from '@/presentation/_system/logging/logger.s';
 
@@ -18,14 +18,14 @@ export function withAuth<T>(thunk: () => T): T {
         authenticate();
         // 引数のサンクを実行
         return thunk();
-    } catch (e) {
-        if (isAuthError(e)) {
+    } catch (error) {
+        if (isAuthError(error)) {
             // 認証エラーのみ補足する。ここではエラーメッセージだけ出して、
             // スタックトレースは外側のwithErrorHandlingでまとめて出すようにする
-            logger.error(`${logPrefix}${fname}${stringify({ error: e }).message}`);
+            logger.error(`${logPrefix}${fname}${formatError({ error }).message}`);
         }
         // 認証エラー以外は外側のwithErrorHandlingで処理させる
-        throw e;
+        throw error;
     }
 }
 
@@ -37,11 +37,11 @@ export async function withAuthAsync<T>(thunk: () => Promise<T>): Promise<T> {
     try {
         authenticate();
         return await thunk();
-    } catch (e) {
+    } catch (error) {
         // TODO: 認証エラーページに遷移。サーバーサイドとクラインとサイド
-        if (isAuthError(e)) {
-            logger.error(`${logPrefix}${fname}${stringify({ error: e }).message}`);
+        if (isAuthError(error)) {
+            logger.error(`${logPrefix}${fname}${formatError({ error }).message}`);
         }
-        throw e;
+        throw error;
     }
 }

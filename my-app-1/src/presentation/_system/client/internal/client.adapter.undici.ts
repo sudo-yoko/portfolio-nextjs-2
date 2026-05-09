@@ -9,7 +9,7 @@ import { fetch, ProxyAgent, Response } from 'undici';
 import { defaultValidateStatusServer } from '@/presentation/_system/client/client.constants';
 import { Client, RequestConfig, RawResponse } from '@/presentation/_system/client/client.types';
 import { apiError } from '@/presentation/_system/error/error.factories';
-import { stringify } from '@/presentation/_system/error/error.helper.stringify';
+import { formatError } from '@/presentation/_system/error/error.helper.stringify';
 import logger from '@/presentation/_system/logging/logger.s';
 
 const logPrefix = 'client.adapter.undici.ts: ';

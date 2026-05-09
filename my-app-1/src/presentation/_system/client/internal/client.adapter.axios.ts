@@ -10,7 +10,7 @@ import axios, { AxiosProxyConfig, AxiosRequestConfig } from 'axios';
 import { defaultValidateStatusServer } from '@/presentation/_system/client/client.constants';
 import { Client, RawResponse } from '@/presentation/_system/client/client.types';
 import { apiError } from '@/presentation/_system/error/error.factories';
-import { getAxiosErrorProperties, stringify } from '@/presentation/_system/error/error.helper.stringify';
+import { formatError, getAxiosErrorProperties } from '@/presentation/_system/error/error.helper.stringify';
 import logger from '@/presentation/_system/logging/logger.s';
 
 const logPrefix = 'client.adapter.axios.ts: ';
@@ -57,7 +57,7 @@ export const axiosClient = (proxy?: AxiosProxyConfig): Client => ({
         } catch (error) {
             // クライアント側エラーもサーバー側エラーもここに来る
             const details = getAxiosErrorProperties(error); // Axios固有のエラープロパティを取得
-            logger.error(logPrefix + stringify({ error, details }).all);
+            logger.error(logPrefix + formatError({ error, details }).all);
             throw apiError({ cause: error });
         }
     },

@@ -18,7 +18,7 @@ import {
  * - `message`: エラーメッセージのみ（スタックトレースを含まない）
  * - `all`: スタックトレースを含むすべてのメッセージ
  */
-export function stringify({
+export function formatError({
     error,
     description,
     details,
@@ -36,15 +36,6 @@ export function stringify({
     } else if (typeof error === 'string') {
         const message = error;
         return { message, all: joinAll({ description, message, details }) };
-        // } else if (axios.isAxiosError(error)) {
-        //     //TODO; axios固有のエラーはclient.adapterで処理できないか
-        //     const { message } = error;
-        //     const stacks = getStackTrace(error);
-        //     const all: All = { message, stacks };
-        //     if (error.response) {
-        //         all.details = `Axios Error: Response(Inbound) -> status=${error.response.status}, data=${error.response.data}`;
-        //     }
-        //     return { message, all: joinAll(all) };
     } else if (error instanceof Error) {
         const { name, message } = error;
         const stacks = getStackTrace(error);

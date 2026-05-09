@@ -1,7 +1,7 @@
 // エラーハンドリングAOP部品
 import 'client-only';
 
-import { stringify } from '@/presentation/_system/error/error.helper.stringify';
+import { formatError } from '@/presentation/_system/error/error.helper.stringify';
 import logger from '@/presentation/_system/logging/logger.c';
 
 const logPrefix = 'aop.core.exception.client.ts: ';
@@ -14,11 +14,11 @@ export function withErrorHandling<T>(thunk: () => T, onAbort: () => void): T | v
     try {
         // 引数に渡されたサンクを実行
         return thunk();
-    } catch (e) {
+    } catch (error) {
         // TODO: クライアントサイドにも認証エラーチェックつけるか
         // TODO: クライアントサイドでBffRESULTのパースエラーチェック
         // NOTE: 非同期関数を呼ぶときにvoidを付けると、awaitしないことを明示的に示せる
-        void logger.errorAsync(logPrefix + fname + stringify({ error: e }).all);
+        void logger.errorAsync(logPrefix + fname + formatError({ error }).all);
         // setHasError(true);
         onAbort();
     }
@@ -34,9 +34,9 @@ export async function withErrorHandlingAsync<T>(
     const fname = 'withErrorHandlingAsync: ';
     try {
         return await thunk();
-    } catch (e) {
+    } catch (error) {
         // エラーログをサーバーに送信
-        void logger.errorAsync(logPrefix + fname + stringify({ error: e }).all);
+        void logger.errorAsync(logPrefix + fname + formatError({ error }).all);
         onAbort();
     }
 }

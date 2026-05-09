@@ -5,7 +5,7 @@ import http from 'node:http';
 import { defaultValidateStatusServer } from '@/presentation/_system/client/client.constants';
 import { Client, RawResponse } from '@/presentation/_system/client/client.types';
 import { apiError } from '@/presentation/_system/error/error.factories';
-import { getNodeErrorProperties, stringify } from '@/presentation/_system/error/error.helper.stringify';
+import { formatError, getNodeErrorProperties } from '@/presentation/_system/error/error.helper.stringify';
 import logger from '@/presentation/_system/logging/logger.s';
 
 const logPrefix = 'client.adapter.node.ts: ';
@@ -68,7 +68,7 @@ export const nodeClient = (): Client => ({
                 res.on('error', (error) => {
                     logger.info(logPrefix + '### Response error');
                     const details = getNodeErrorProperties(error);
-                    logger.info(logPrefix + stringify({ error, details }).all);
+                    logger.info(logPrefix + formatError({ error, details }).all);
                     reject(apiError({ cause: error }));
                 });
                 res.on('close', () => {
@@ -92,7 +92,7 @@ export const nodeClient = (): Client => ({
             req.on('error', (error) => {
                 // Errorオブジェクトの拡張プロパティを取得する。node:http固有のエラーが含まれているため。
                 const details = getNodeErrorProperties(error);
-                logger.info(logPrefix + '### Request error' + stringify({ error, details }).all);
+                logger.info(logPrefix + '### Request error' + formatError({ error, details }).all);
                 // TODO: unknown type errorが出ている
                 reject(apiError({ cause: error }));
             });

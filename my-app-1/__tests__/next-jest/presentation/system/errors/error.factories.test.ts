@@ -6,7 +6,7 @@ import {
   routeError,
   validationError,
 } from '@/presentation/_system/error/error.factories';
-import { stringify } from '@/presentation/_system/error/error.helper.stringify';
+import { formatError } from '@/presentation/_system/error/error.helper.stringify';
 import { CUSTOM_ERROR_TAG } from '@/presentation/_system/error/error.types';
 import { ActionResult } from '@/presentation/_system/types/action-result';
 import { Violations } from '@/presentation/_system/validation/validation.types';
@@ -41,7 +41,7 @@ test('test2-1', () => {
   print(`error.cause=${e.cause}`);
   print(`error.stack=${e.stack}`);
 
-  const { message, all } = stringify(e);
+  const { message, all } = formatError(e);
   print(`message=${message}`);
   print(`all=${all}`);
 });

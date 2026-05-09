@@ -1,7 +1,7 @@
 import { printf } from '@/__tests__/test-logger';
 import { clientImpl } from '@/presentation/_system/client/internal/client.adapter.fetch';
 import { Method } from '@/presentation/_system/client/client.types';
-import { stringify } from '@/presentation/_system/error/error.helper.stringify';
+import { formatError } from '@/presentation/_system/error/error.helper.stringify';
 import { jest } from '@jest/globals';
 
 const print = printf({ logPrefix: '>>> [client.impl.fetch.test.ts]', stdout: true });
@@ -20,7 +20,7 @@ test('test1-1', async () => {
       url: 'http://xxxxxxxx',
     });
   } catch (e) {
-    const { all, message } = stringify(e);
+    const { all, message } = formatError(e);
     print(`message=${message}`);
     print(`all=${all}`);
   }

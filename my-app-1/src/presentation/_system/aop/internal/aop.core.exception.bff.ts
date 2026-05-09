@@ -2,7 +2,7 @@
 import 'server-only';
 
 import { AopResult } from '@/presentation/_system/aop/aop.types';
-import { getCustomErrorProperties, stringify } from '@/presentation/_system/error/error.helper.stringify';
+import { formatError, getCustomErrorProperties } from '@/presentation/_system/error/error.helper.stringify';
 import { isCustomError, isRetryableError } from '@/presentation/_system/error/error.helpers';
 import { ERR_CODE, ERR_TYPE } from '@/presentation/_system/error/error.types';
 import logger from '@/presentation/_system/logging/logger.s';
@@ -36,20 +36,20 @@ export async function withErrorHandlingAsync(thunk: () => Promise<RESULT>): Prom
 }
 
 function handleError(fname: string, e: unknown): AopResult {
-    const stringifyProps: Parameters<typeof stringify>[0] = {};
+    const errProps: Parameters<typeof formatError>[0] = {};
     const abortProps: Parameters<typeof abort>[0] = {};
 
     if (isCustomError(e)) {
         // カスタムエラー固有のプロパティを取得する
         const { obj, text } = getCustomErrorProperties(e);
-        stringifyProps.details = text;
+        errProps.details = text;
         abortProps.type = obj[ERR_TYPE];
         abortProps.code = obj[ERR_CODE];
     }
 
     // ログ出力
-    stringifyProps.error = e;
-    const { message, all } = stringify(stringifyProps);
+    errProps.error = e;
+    const { message, all } = formatError(errProps);
     logger.error(logPrefix + fname + all);
 
     // RESULT型

@@ -1,5 +1,5 @@
 import { printf } from '@/__tests__/test-logger';
-import { stringify } from '@/presentation/_system/error/error.helper.stringify';
+import { formatError } from '@/presentation/_system/error/error.helper.stringify';
 import { isInvalid } from '@/presentation/_system/result/result.core.helpers';
 import { Invalid, Tag } from '@/presentation/_system/result/result.core.types';
 import { hasError, initialFormDataCore } from '@/presentation/_system/validation/validation.helpers';
@@ -123,7 +123,7 @@ test('test1-8', () => {
         try {
             hasError(result.violations);
         } catch (e) {
-            print(stringify(e).all);
+            print(formatError(e).all);
         }
     }
 });

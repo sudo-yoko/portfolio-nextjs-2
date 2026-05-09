@@ -1,7 +1,7 @@
 // エラーハンドリングAOP部品
 import 'server-only';
 
-import { stringify } from '@/presentation/_system/error/error.helper.stringify';
+import { formatError } from '@/presentation/_system/error/error.helper.stringify';
 import { isCustomError, isRetryableError } from '@/presentation/_system/error/error.helpers';
 import { CUSTOM_ERROR_TAG } from '@/presentation/_system/error/error.types';
 import logger from '@/presentation/_system/logging/logger.s';
@@ -18,7 +18,7 @@ export async function _withErrorHandlingAsync(thunk: () => Promise<RESULT>): Pro
   try {
     return await thunk();
   } catch (e) {
-    const { message, all } = stringify(e);
+    const { message, all } = formatError(e);
     logger.error(logPrefix + fname + all);
     //
     // 再試行可能エラー
@@ -48,7 +48,7 @@ export function _withErrorHandling(thunk: () => RESULT): RESULT {
   try {
     return thunk();
   } catch (e) {
-    const { message, all } = stringify(e);
+    const { message, all } = formatError(e);
     logger.error(logPrefix + fname + all);
 
     const aborted = abort({ message });

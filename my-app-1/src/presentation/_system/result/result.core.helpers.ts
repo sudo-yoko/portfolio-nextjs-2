@@ -2,7 +2,7 @@
 // RESULT型 ヘルパー関数
 //
 import { parseResultError } from '@/presentation/_system/error/error.factories';
-import { stringify } from '@/presentation/_system/error/error.helper.stringify';
+import { formatError } from '@/presentation/_system/error/error.helper.stringify';
 import {
     Aborted,
     Invalid,
@@ -50,8 +50,8 @@ export function parseResult(text: string): RESULT {
             return parsed;
         }
         throw parseResultError(text);
-    } catch (e) {
-        throw parseResultError(text, stringify({ error: e }).message);
+    } catch (error) {
+        throw parseResultError(text, formatError({ error }).message);
     }
 }
 

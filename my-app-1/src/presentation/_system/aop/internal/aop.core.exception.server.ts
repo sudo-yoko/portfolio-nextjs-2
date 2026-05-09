@@ -1,7 +1,7 @@
 // エラーハンドリングAOP部品
 import 'server-only';
 
-import { stringify } from '@/presentation/_system/error/error.helper.stringify';
+import { formatError } from '@/presentation/_system/error/error.helper.stringify';
 import logger from '@/presentation/_system/logging/logger.s';
 
 const logPrefix = 'aop.core.exception.server.ts: ';
@@ -15,7 +15,7 @@ export function withErrorHandling<T>(thunk: () => T): T {
         // 引数に渡されたサンクを実行
         return thunk();
     } catch (error) {
-        logger.error(logPrefix + fname + stringify({ error }).all);
+        logger.error(logPrefix + fname + formatError({ error }).all);
         // 再スローすることで、Next.jsが未処理の例外としてキャッチしerror.tsxをレンダリングする。
         throw error;
     }
@@ -29,7 +29,7 @@ export async function withErrorHandlingAsync<T>(thunk: () => Promise<T>): Promis
     try {
         return await thunk();
     } catch (error) {
-        logger.error(logPrefix + fname + stringify({ error }).all);
+        logger.error(logPrefix + fname + formatError({ error }).all);
         throw error;
     }
 }

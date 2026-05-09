@@ -2,7 +2,7 @@
 // BFF結果オブジェクト ファクトリー
 //
 import { parseResultError } from '@/presentation/_system/error/error.factories';
-import { stringify } from '@/presentation/_system/error/error.helper.stringify';
+import { formatError } from '@/presentation/_system/error/error.helper.stringify';
 
 import { okData, okEmpty } from '@/presentation/_system/result/result.core.factories';
 import { parseResult } from '@/presentation/_system/result/result.core.helpers';
@@ -16,7 +16,7 @@ export function _bffResult<DATA, FIELD extends string>(text: string): _BffResult
     return result as _BffResult<DATA, FIELD>;
   } catch (e) {
     // TODO: BffResult型にパースできませんでした。
-    throw parseResultError(text, stringify(e).message);
+    throw parseResultError(text, formatError(e).message);
   }
 }
 

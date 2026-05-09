@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { stringify } from '@/presentation/_system/error/error.helper.stringify';
+import { formatError } from '@/presentation/_system/error/error.helper.stringify';
 import logger from '@/presentation/_system/logging/logger.s';
 import axios from 'axios';
 
@@ -22,6 +22,6 @@ export function handleAxiosError(error: unknown): void {
                 `Response(Inbound) -> status=${error.response.status}, data=${error.response.data}`,
             );
         }
-        logger.error(logPrefix + stringify({ error, description: description.join(': ') }).all);
+        logger.error(logPrefix + formatError({ error, description: description.join(': ') }).all);
     }
 }

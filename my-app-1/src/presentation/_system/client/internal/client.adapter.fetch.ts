@@ -6,7 +6,7 @@ import 'client-only';
 import { defaultValidateStatusClient } from '@/presentation/_system/client/client.constants';
 import { Client, RawResponse } from '@/presentation/_system/client/client.types';
 import { apiError, invalidStatusError } from '@/presentation/_system/error/error.factories';
-import { getCustomErrorProperties, stringify } from '@/presentation/_system/error/error.helper.stringify';
+import { formatError, getCustomErrorProperties } from '@/presentation/_system/error/error.helper.stringify';
 import logger from '@/presentation/_system/logging/logger.c';
 
 const logPrefix = 'client.adapter.fetch.ts: ';
@@ -55,11 +55,11 @@ export const fetchClient = (): Client => ({
                 throw invalidStatusError({ status: result.status, body: result.rawBody }); // TODO: ボディは100文字くらいでカットする?
             }
             return result;
-        } catch (e) {
+        } catch (error) {
             // NOTE: クライント側エラーはTypeErrorになる
-            const details = getCustomErrorProperties(e).text;
-            logger.error(logPrefix + stringify({ error: e, details }).all);
-            throw apiError({ cause: e });
+            const details = getCustomErrorProperties(error).text;
+            logger.error(logPrefix + formatError({ error, details }).all);
+            throw apiError({ cause: error });
         }
     },
 });
