@@ -9,7 +9,7 @@ import axios, { AxiosProxyConfig, AxiosRequestConfig } from 'axios';
 
 import { defaultValidateStatusServer } from '@/presentation/_system/client/client.constants';
 import { Client, RawResponse } from '@/presentation/_system/client/client.types';
-import { apiError } from '@/presentation/_system/error/error.factories';
+import { apiError } from '@/presentation/_system/error/error.factories.s';
 import { formatError, getAxiosErrorProperties } from '@/presentation/_system/error/error.helper.stringify';
 import logger from '@/presentation/_system/logging/logger.s';
 

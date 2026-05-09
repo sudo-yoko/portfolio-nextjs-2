@@ -5,7 +5,8 @@ import 'client-only';
 
 import { defaultValidateStatusClient } from '@/presentation/_system/client/client.constants';
 import { Client, RawResponse } from '@/presentation/_system/client/client.types';
-import { apiError, invalidStatusError } from '@/presentation/_system/error/error.factories';
+import { invalidStatusError } from '@/presentation/_system/error/error.factories';
+import { bffError } from '@/presentation/_system/error/error.factories.c';
 import { formatError, getCustomErrorProperties } from '@/presentation/_system/error/error.helper.stringify';
 import logger from '@/presentation/_system/logging/logger.c';
 
@@ -59,7 +60,7 @@ export const fetchClient = (): Client => ({
             // NOTE: クライント側エラーはTypeErrorになる
             const details = getCustomErrorProperties(error).text;
             logger.error(logPrefix + formatError({ error, details }).all);
-            throw apiError({ cause: error });
+            throw bffError({ cause: error });
         }
     },
 });

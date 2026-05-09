@@ -2,20 +2,19 @@
 // カスタムエラーファクトリー
 //
 import {
-    BackendError,
     CodedError,
     CustomError,
     ERR_CODE,
     ERR_TYPE,
     ErrType,
-    RESULT_TYPE,
 } from '@/presentation/_system/error/error.types';
 import { RESULT } from '@/presentation/_system/result/result.core.types';
 
 /**
  * カスタムエラーを生成する
  */
-function customError<T extends ErrType>({
+// TODO; _internalに移動して直接利用不可にする
+export function customError<T extends ErrType>({
     type,
     message,
     cause,
@@ -74,29 +73,8 @@ export function parseResultError(text: string, message?: string): CustomError<Er
 }
 
 /**
- * BackendError を生成する
- */
-// TODO: クライアント側で使用するエラー
-export function backendError(result: RESULT, msg?: string): BackendError {
-    const message: string[] = [];
-    message.push('バックエンドエラー');
-    if (msg) {
-        message.push(msg);
-    }
-    message.push(`RESULT=${JSON.stringify(result)}`);
-
-    const base = new Error(`${ErrType.BackendError}: ${message.join(', ')}`);
-    const error = Object.assign(base, {
-        [ERR_TYPE]: ErrType.BackendError,
-        [RESULT_TYPE]: result,
-    });
-    return error;
-}
-
-/**
  * 汎用コードエラーを生成する
  */
-// TODO: クライアント側で使用するエラー
 export function codedError(code: string, message?: string): CodedError {
     const base = new Error(message);
     const error = Object.assign(base, {
@@ -118,16 +96,6 @@ export function malformedResultError(result: RESULT, msg?: string): CustomError<
     }
     cause.push(`RESULT=${JSON.stringify(result)}`);
     return customError({ type: ErrType.MalformedResultError, message: cause.join(', ') });
-}
-
-// TODO: サーバーサイドで使用するエラー
-export function apiError({ cause, detail }: { cause?: unknown; detail?: string }): CustomError<ErrType> {
-    const message: string[] = [];
-    message.push('Backend API call failed.');
-    if (detail) {
-        message.push(detail);
-    }
-    return customError({ type: ErrType.ApiError, message: message.join(', '), cause });
 }
 
 export function invalidStatusError({

@@ -4,7 +4,8 @@
 import 'client-only';
 
 import { executeAsync } from '@/presentation/_system/aop/aop.client-boundary';
-import { backendError, malformedResultError } from '@/presentation/_system/error/error.factories';
+import { malformedResultError } from '@/presentation/_system/error/error.factories';
+import { backendError } from '@/presentation/_system/error/error.factories.c';
 import { createPager } from '@/presentation/_system/pagination/mvvm/models/pagination.pager';
 import { PaginationResult } from '@/presentation/_system/pagination/mvvm/models/pagination.types';
 import { PageData, Pager } from '@/presentation/_system/pagination/mvvm/models/pagination.types.c';
@@ -53,7 +54,11 @@ export function usePagination() {
         })();
         async function func() {
             if (state.step === Step.Search) {
-                pager.current = createPager(fetchCallback, { initialPage, perPage, formData: state.formData });
+                pager.current = createPager(fetchCallback, {
+                    initialPage,
+                    perPage,
+                    formData: state.formData,
+                });
                 const page = await pager.current.current();
                 await handleResult(page, dispatch);
             }

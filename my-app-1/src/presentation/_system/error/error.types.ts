@@ -35,6 +35,11 @@ export const ErrType = {
     ApiError: 'ApiError',
 
     /**
+     * BFF(Route Handler)呼び出しにおける予期しないエラー
+     */
+    BffError: 'BffError',
+
+    /**
      * ステータスコードによるエラー
      */
     InvalidStatusError: 'InvalidStatusError',

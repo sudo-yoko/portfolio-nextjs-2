@@ -2,7 +2,7 @@
 
 import 'client-only';
 
-import { backendError } from '@/presentation/_system/error/error.factories';
+import { backendError } from '@/presentation/_system/error/error.factories.c';
 import {
     calcPagination,
     offsetOfLastPage,
