@@ -3,6 +3,7 @@ import 'server-only';
 import { NextRequest } from 'next/server';
 
 import { executeAsync } from '@/presentation/_system/aop/aop.route-boundary';
+import { applicationError } from '@/presentation/_system/error/error.factories';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 import { execute } from '@/presentation/users/mvvm/bff/users.interactor';
 import { FormKeys } from '@/presentation/users/mvvm/models/users.types';
@@ -12,6 +13,8 @@ export async function POST(req: NextRequest): Promise<Response> {
     return await executeAsync(() => func());
 
     async function func() {
+        const location = 'users.route.ts#func';
+
         // クエリ文字列を取得
         const params = req.nextUrl.searchParams;
 
@@ -19,22 +22,21 @@ export async function POST(req: NextRequest): Promise<Response> {
         // const { offset, limit } = query;
         const offset = params.get('offset');
         if (!offset) {
-            throw Error();
+            throw applicationError({ location, message: 'クエリパラメータがありません。[offset]' });
         }
         const limit = params.get('limit');
         if (!limit) {
-            throw Error();
+            throw applicationError({ location, message: 'クエリパラメータがありません。[limit]' });
         }
 
         // リクエストボディを取得
         const body: FormData<FormKeys> = await req.json();
         if (!body) {
-            throw Error();
+            throw applicationError({ location, message: 'リクエストボディがありません。' });
         }
         if (!body.keyword) {
-            throw Error();
+            throw applicationError({ location, message: 'リクエストボディがありません。[keyword]' });
         }
-
         //
         return await execute(offset, limit, body);
     }

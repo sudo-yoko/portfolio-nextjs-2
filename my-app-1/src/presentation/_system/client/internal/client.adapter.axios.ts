@@ -9,7 +9,7 @@ import axios, { AxiosProxyConfig, AxiosRequestConfig } from 'axios';
 
 import { defaultValidateStatusServer } from '@/presentation/_system/client/client.constants';
 import { Client, RawResponse } from '@/presentation/_system/client/client.types';
-import { apiError } from '@/presentation/_system/error/error.factories.s';
+import { applicationError } from '@/presentation/_system/error/error.factories';
 import { formatError, getAxiosErrorProperties } from '@/presentation/_system/error/error.helper.stringify';
 import logger from '@/presentation/_system/logging/logger.s';
 
@@ -25,6 +25,8 @@ const axiosInstance = (() => {
 // NOTE: オブジェクトの暗黙的返却 const func = (arg) => ({ ... });
 export const axiosClient = (proxy?: AxiosProxyConfig): Client => ({
     send: async (config) => {
+        const location = 'client.adapter.axios.ts#send';
+
         logger.info(
             logPrefix + `Request -> config=${JSON.stringify(config)}}, proxy=${JSON.stringify(proxy)}`,
         );
@@ -57,8 +59,11 @@ export const axiosClient = (proxy?: AxiosProxyConfig): Client => ({
         } catch (error) {
             // クライアント側エラーもサーバー側エラーもここに来る
             const details = getAxiosErrorProperties(error); // Axios固有のエラープロパティを取得
-            logger.error(logPrefix + formatError({ error, details }).all);
-            throw apiError({ cause: error });
+            const { all, message } = formatError({ error, details });
+            logger.error(logPrefix + all);
+            // throw apiError({ cause: error });
+            throw applicationError({ location, message, cause: error });
+            // throw error;
         }
     },
 });

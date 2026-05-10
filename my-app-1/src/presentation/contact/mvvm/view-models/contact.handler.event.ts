@@ -69,7 +69,7 @@ export async function submit(
         const result = await send(state.formData);
         // 異常
         if (isAborted(result)) {
-            throw backendError(result);
+            throw backendError({ result });
         }
         // 正常
         if (isOkEmpty(result)) {

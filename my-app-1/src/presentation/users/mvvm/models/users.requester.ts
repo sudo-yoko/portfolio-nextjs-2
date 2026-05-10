@@ -37,7 +37,8 @@ const viaRoute: FetchPage<User[], FormKeys> = async (offset, limit, formData) =>
             ...ACCEPT_APPLICATION_JSON,
         },
         query: queryParam({ offset: String(offset), limit: String(limit) }),
-        body: formData,
+        // body: formData,
+        body: {}
     });
     // const url = '/api/bff/users/mvvm';
     // const res = await client.send({

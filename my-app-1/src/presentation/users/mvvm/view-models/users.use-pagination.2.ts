@@ -98,7 +98,7 @@ async function handleResult(
     }
     // 異常
     if (isAborted(result)) {
-        throw backendError(result);
+        throw backendError({ result });
     }
     // RESULTの形式が不正
     throw malformedResultError(result);

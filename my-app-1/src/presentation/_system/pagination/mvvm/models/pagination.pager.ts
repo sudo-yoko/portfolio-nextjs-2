@@ -2,7 +2,7 @@
 
 import 'client-only';
 
-import { backendError } from '@/presentation/_system/error/error.factories.c';
+import { resultError } from '@/presentation/_system/error/error.factories';
 import {
     calcPagination,
     offsetOfLastPage,
@@ -39,6 +39,7 @@ export function createPager<ITEMS, FIELD extends string>(
      * データ取得関数を使ってページデータを取得する関数
      */
     const fetchData = async (): Promise<PaginationResult<PageData<ITEMS>, FIELD>> => {
+        const location = 'pagination.pager.ts#fetchData';
         //
         // 実効オフセットに補正（下限値）
         //
@@ -55,7 +56,7 @@ export function createPager<ITEMS, FIELD extends string>(
             return invalid(result.violations);
         }
         if (!isOkData(result)) {
-            throw backendError(result);
+            throw resultError({ location, result });
         }
         let { total, items } = result.data;
         //
@@ -93,7 +94,7 @@ export function createPager<ITEMS, FIELD extends string>(
                 return invalid(result.violations);
             }
             if (!isOkData(result)) {
-                throw backendError(result);
+                throw resultError({ location, result });
             }
             ({ total, items } = result.data);
         }

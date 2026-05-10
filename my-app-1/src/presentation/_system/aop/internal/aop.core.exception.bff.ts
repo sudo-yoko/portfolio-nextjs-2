@@ -4,7 +4,6 @@ import 'server-only';
 import { AopResult } from '@/presentation/_system/aop/aop.types';
 import { formatError, getCustomErrorProperties } from '@/presentation/_system/error/error.helper.stringify';
 import { isCustomError, isRetryableError } from '@/presentation/_system/error/error.helpers';
-import { ERR_CODE, ERR_TYPE } from '@/presentation/_system/error/error.types';
 import logger from '@/presentation/_system/logging/logger.s';
 import { abort, retry } from '@/presentation/_system/result/result.core.factories';
 import { RESULT } from '@/presentation/_system/result/result.core.types';
@@ -43,8 +42,8 @@ function handleError(fname: string, e: unknown): AopResult {
         // カスタムエラー固有のプロパティを取得する
         const { obj, text } = getCustomErrorProperties(e);
         errProps.details = text;
-        abortProps.type = obj[ERR_TYPE];
-        abortProps.code = obj[ERR_CODE];
+        abortProps.type = obj.errType;
+        abortProps.code = obj.code;
     }
 
     // ログ出力

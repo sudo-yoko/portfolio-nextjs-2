@@ -5,6 +5,7 @@ import {
     CustomErrorProperties,
     ERR_CODE,
     ERR_TYPE,
+    LOCATION,
     RESULT_TYPE,
 } from '@/presentation/_system/error/error.types';
 
@@ -140,17 +141,27 @@ export function getNodeErrorProperties(err: Error): string {
 /**
  * Errorオブジェクトの中からカスタムエラー固有のプロパティを取得する
  */
-export function getCustomErrorProperties(err: unknown): { text: string; obj: CustomErrorProperties } {
+export function getCustomErrorProperties(err: unknown): {
+    text: string | undefined;
+    obj: CustomErrorProperties;
+} {
     const obj: CustomErrorProperties = {};
     if (isCustomError(err)) {
-        obj[ERR_TYPE] = err[ERR_TYPE];
+        // obj.errType = err[ERR_TYPE]; // TODO: ログにERR_TYPE出さない方がよいかもしれない
+        obj.location = err[LOCATION];
         if (isCodedError(err)) {
-            obj[ERR_CODE] = err[ERR_CODE];
+            obj.code = err[ERR_CODE];
         }
         if (isBackendError(err)) {
-            obj[RESULT_TYPE] = err[RESULT_TYPE];
+            obj.result = err[RESULT_TYPE];
         }
     }
-    const text = JSON.stringify(obj, null, 2);
+    // NOTE: シンボル（ERR_TYPE]、[ERR_CODE]、[RESULT_TYPE]）はJSON.stringifyでシリアライズできない（無視される）
+    const text = isEmpty(obj) ? undefined : JSON.stringify(obj, null, 2);
     return { text, obj };
+}
+
+function isEmpty(obj: Record<string, unknown>): boolean {
+    const values = Object.values(obj);
+    return values.length === 0 || values.every((v) => v === undefined);
 }

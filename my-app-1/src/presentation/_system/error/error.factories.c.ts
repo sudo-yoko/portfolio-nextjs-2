@@ -3,11 +3,10 @@ import 'client-only';
 import { customError } from '@/presentation/_system/error/error.factories';
 import {
     BackendError,
-    CodedError,
     CustomError,
-    ERR_CODE,
     ERR_TYPE,
     ErrType,
+    LOCATION,
     RESULT_TYPE,
 } from '@/presentation/_system/error/error.types';
 import { RESULT } from '@/presentation/_system/result/result.core.types';
@@ -26,7 +25,15 @@ export function bffError({ cause, detail }: { cause?: unknown; detail?: string }
  * BackendError を生成する
  */
 // TODO: クライアント側で使用するエラー
-export function backendError(result: RESULT, msg?: string): BackendError {
+export function backendError({
+    result,
+    location,
+    msg,
+}: {
+    result: RESULT;
+    location?: string;
+    msg?: string;
+}): BackendError {
     const message: string[] = [];
     message.push('バックエンドエラー');
     if (msg) {
@@ -38,8 +45,7 @@ export function backendError(result: RESULT, msg?: string): BackendError {
     const error = Object.assign(base, {
         [ERR_TYPE]: ErrType.BackendError,
         [RESULT_TYPE]: result,
+        [LOCATION]: location,
     });
     return error;
 }
-
-

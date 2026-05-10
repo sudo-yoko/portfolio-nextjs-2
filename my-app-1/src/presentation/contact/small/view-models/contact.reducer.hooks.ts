@@ -4,7 +4,7 @@
 'use client';
 
 import { executeAsync } from '@/presentation/_system/aop/aop.client-boundary';
-import { backendError } from '@/presentation/_system/error/error.factories.c';
+import { resultError } from '@/presentation/_system/error/error.factories';
 import { isInvalid, isOkEmpty, isRetryable } from '@/presentation/_system/result/result.core.helpers';
 import { hasError } from '@/presentation/_system/validation/validation.helpers';
 import { Violations } from '@/presentation/_system/validation/validation.types';
@@ -77,6 +77,8 @@ export async function submit(
     await executeAsync(() => func(), onAbort);
 
     async function func() {
+        const location = 'contact.reducer.hooks.ts#func';
+
         // バックエンド呼び出し
         const result = await send(state.formData);
         // 正常
@@ -104,7 +106,7 @@ export async function submit(
             return;
         }
         // 異常
-        throw backendError(result);
+        throw resultError({ result, location });
         // RESULTの形式が不正
         // throw malformedResultError(reult);
     }
