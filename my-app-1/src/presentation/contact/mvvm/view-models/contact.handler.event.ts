@@ -4,14 +4,8 @@
 'use client';
 
 import { executeAsync } from '@/presentation/_system/aop/aop.client-boundary';
-import { malformedResultError } from '@/presentation/_system/error/error.factories';
-import { backendError } from '@/presentation/_system/error/error.factories.c';
-import {
-    isAborted,
-    isInvalid,
-    isOkEmpty,
-    isRetryable,
-} from '@/presentation/_system/result/result.core.helpers';
+import { resultError } from '@/presentation/_system/error/error.factories';
+import { isInvalid, isOkEmpty, isRetryable } from '@/presentation/_system/result/result.core.helpers';
 import { hasError } from '@/presentation/_system/validation/validation.helpers';
 import { Violations } from '@/presentation/_system/validation/validation.types';
 import { send } from '@/presentation/contact/mvvm/models/contact.requester';
@@ -65,12 +59,10 @@ export async function submit(
     await executeAsync(() => func(), onAbort);
 
     async function func() {
+        const location = 'contact.handler.event.ts#func';
+
         // バックエンド呼び出し
         const result = await send(state.formData);
-        // 異常
-        if (isAborted(result)) {
-            throw backendError({ result });
-        }
         // 正常
         if (isOkEmpty(result)) {
             toComplete(dispatch);
@@ -92,8 +84,7 @@ export async function submit(
             toInput(dispatch);
             return;
         }
-        // RESULTの形式が不正
-        throw malformedResultError(result);
+        throw resultError({ result, location });
     }
 }
 

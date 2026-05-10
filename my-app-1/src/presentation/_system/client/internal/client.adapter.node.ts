@@ -4,7 +4,7 @@ import http from 'node:http';
 
 import { defaultValidateStatusServer } from '@/presentation/_system/client/client.constants';
 import { Client, RawResponse } from '@/presentation/_system/client/client.types';
-import { apiError } from '@/presentation/_system/error/error.factories.s';
+import { applicationError } from '@/presentation/_system/error/error.factories';
 import { formatError, getNodeErrorProperties } from '@/presentation/_system/error/error.helper.stringify';
 import logger from '@/presentation/_system/logging/logger.s';
 
@@ -40,8 +40,8 @@ export const nodeClient = (): Client => ({
                     // throw new Error();
                     res.resume();
                     return reject(
-                        apiError({
-                            detail: 'ステータスコードがundefined',
+                        applicationError({
+                            message: 'ステータスコードがundefined',
                         }),
                     );
                 }
@@ -51,8 +51,8 @@ export const nodeClient = (): Client => ({
                     // throw new Error();
                     res.resume();
                     return reject(
-                        apiError({
-                            detail: `エラーステータスが返りました。${statusCode}`,
+                        applicationError({
+                            message: `エラーステータスが返りました。${statusCode}`,
                         }),
                     );
                 }
@@ -69,7 +69,7 @@ export const nodeClient = (): Client => ({
                     logger.info(logPrefix + '### Response error');
                     const details = getNodeErrorProperties(error);
                     logger.info(logPrefix + formatError({ error, details }).all);
-                    reject(apiError({ cause: error }));
+                    reject(applicationError({ cause: error }));
                 });
                 res.on('close', () => {
                     logger.info(logPrefix + '### Connection closed');
@@ -94,7 +94,7 @@ export const nodeClient = (): Client => ({
                 const details = getNodeErrorProperties(error);
                 logger.info(logPrefix + '### Request error' + formatError({ error, details }).all);
                 // TODO: unknown type errorが出ている
-                reject(apiError({ cause: error }));
+                reject(applicationError({ cause: error }));
             });
             // 無応答・無通信状態の継続時間(アイドルタイムアウト)
             req.on('timeout', () => {

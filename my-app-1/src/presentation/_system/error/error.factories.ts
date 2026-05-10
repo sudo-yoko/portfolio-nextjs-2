@@ -94,19 +94,6 @@ export function codedError(code: string, message?: string): CodedError {
     return error;
 }
 
-/**
- * MalformedResultError を生成する
- */
-export function malformedResultError(result: RESULT, msg?: string): CustomError<ErrType> {
-    const cause: string[] = [];
-    cause.push('RESULTの形式が不正です。');
-    if (msg) {
-        cause.push(msg);
-    }
-    cause.push(`RESULT=${JSON.stringify(result)}`);
-    return customError({ type: ErrType.MalformedResultError, message: cause.join(', ') });
-}
-
 export function invalidStatusError({
     status,
     body,
@@ -193,12 +180,6 @@ export function resultError({
 //     return customError({ type: ErrType.HttpResponseError, message: message.join(', '), cause });
 // }
 
-// export function bffError(bffResult: BffResult, message?: string): BffError {
-// const err = new Error(message) as BffError;
-// err.name = ErrType.BffError;
-// err[BFF_RESULT] = bffResult;
-// return err;
-// }
 /**
  *
  * ValidationError を生成する
@@ -208,10 +189,6 @@ export function resultError({
 // message.push('検証エラー');
 // message.push(`violations=${JSON.stringify(violations)}`);
 // return customError({ type: ErrType.ValidationError, message: message.join(', ') });
-// }
-
-// export function backendApiError(message: string): CustomError<ErrType> {
-// return customError({ type: ErrType.BackendApiError, message });
 // }
 
 /**

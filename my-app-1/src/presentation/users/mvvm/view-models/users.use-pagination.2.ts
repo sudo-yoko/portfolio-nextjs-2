@@ -4,8 +4,7 @@
 import 'client-only';
 
 import { executeAsync } from '@/presentation/_system/aop/aop.client-boundary';
-import { malformedResultError } from '@/presentation/_system/error/error.factories';
-import { backendError } from '@/presentation/_system/error/error.factories.c';
+import { resultError } from '@/presentation/_system/error/error.factories';
 import { createPager } from '@/presentation/_system/pagination/mvvm/models/pagination.pager';
 import { PaginationResult } from '@/presentation/_system/pagination/mvvm/models/pagination.types';
 import { PageData, Pager } from '@/presentation/_system/pagination/mvvm/models/pagination.types.c';
@@ -23,7 +22,7 @@ import {
     toPrev,
     toSearch,
 } from '@/presentation/_system/pagination/mvvm/view-models/pagination.reducer.2';
-import { isAborted, isInvalid, isOkData } from '@/presentation/_system/result/result.core.helpers';
+import { isInvalid, isOkData } from '@/presentation/_system/result/result.core.helpers';
 import { hasError } from '@/presentation/_system/validation/validation.helpers';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 import { fetchPage } from '@/presentation/users/mvvm/models/users.requester';
@@ -86,6 +85,8 @@ async function handleResult(
     result: PaginationResult<PageData<User[]>, FormKeys>,
     dispatch: React.ActionDispatch<[action: Action<User[], FormKeys>]>,
 ) {
+    const location = 'users.use-pagination.2.ts#handleResult';
+
     if (isOkData(result)) {
         toIdle(dispatch, result.data.items, result.data.currentPage);
         return;
@@ -96,12 +97,7 @@ async function handleResult(
             return;
         }
     }
-    // 異常
-    if (isAborted(result)) {
-        throw backendError({ result });
-    }
-    // RESULTの形式が不正
-    throw malformedResultError(result);
+    throw resultError({ result, location });
 }
 
 export async function handleSearch(

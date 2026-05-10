@@ -11,16 +11,6 @@ import {
 } from '@/presentation/_system/error/error.types';
 import { RESULT } from '@/presentation/_system/result/result.core.types';
 
-// TODO: BffErrorとApiErrorの違い整理
-export function bffError({ cause, detail }: { cause?: unknown; detail?: string }): CustomError<ErrType> {
-    const message: string[] = [];
-    message.push('RouteHandler call failed.');
-    if (detail) {
-        message.push(detail);
-    }
-    return customError({ type: ErrType.BffError, message: message.join(', '), cause });
-}
-
 /**
  * BackendError を生成する
  */

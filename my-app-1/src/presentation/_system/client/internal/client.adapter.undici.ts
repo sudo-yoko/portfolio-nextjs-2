@@ -8,9 +8,9 @@ import { fetch, ProxyAgent, Response } from 'undici';
 
 import { defaultValidateStatusServer } from '@/presentation/_system/client/client.constants';
 import { Client, RequestConfig, RawResponse } from '@/presentation/_system/client/client.types';
-import { apiError } from '@/presentation/_system/error/error.factories.s';
 import { formatError } from '@/presentation/_system/error/error.helper.stringify';
 import logger from '@/presentation/_system/logging/logger.s';
+import { applicationError } from '../../error/error.factories';
 
 const logPrefix = 'client.adapter.undici.ts: ';
 
@@ -48,9 +48,9 @@ export const undiciClient = (proxyUrl?: string): Client => ({
             // logger.error(logPrefix + stringify(e).message);
             if (e instanceof TypeError) {
                 // ブラウザ環境では通信エラー（クライント側エラー）はTypeErrorになる？
-                throw apiError({ cause: e, detail: `request=${JSON.stringify(config)}` });
+                throw applicationError({ cause: e, message: `request=${JSON.stringify(config)}` });
             }
-            throw apiError({ cause: e, detail: `request=${JSON.stringify(config)}` });
+            throw applicationError({ cause: e, message: `request=${JSON.stringify(config)}` });
         }
         //
         // レスポンス
@@ -63,7 +63,6 @@ export const undiciClient = (proxyUrl?: string): Client => ({
         // ステータスコードの検証
         if (!validateStatus(result.status)) {
             // const err = httpResponseError({ status: result.status, body: result.rawBody }); // TODO: ボディは100文字くらいでカットする
-            // const err = backendApiError(
             // `Request -> ${JSON.stringify(req)}, Response -> status=${res.status}`,
             // );
             //logger.error(logPrefix + err.message);

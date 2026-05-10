@@ -107,8 +107,6 @@ export async function submit(
         }
         // 異常
         throw resultError({ result, location });
-        // RESULTの形式が不正
-        // throw malformedResultError(reult);
     }
 }
 

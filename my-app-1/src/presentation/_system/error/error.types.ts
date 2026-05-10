@@ -12,7 +12,7 @@ export type CustomError<T extends ErrType> = Error & { [ERR_TYPE]: T; [LOCATION]
 // カスタムエラー固有のプロパティ名をシンボルで定義
 export const ERR_TYPE = Symbol.for('MyApp.ErrType');
 export const ERR_CODE = Symbol.for('MyApp.ErrCode');
-// TODO: RESULT_TYPEではなく、RESULTとかRESULT_INFOとかにする
+// TODO: RESULT_TYPEではなく、RESULTとかRESULT_INFOとかにする？
 export const RESULT_TYPE = Symbol.for('MyApp.ResultType');
 export const LOCATION = Symbol.for('MyApp.Location'); // エラー箇所
 
@@ -29,27 +29,11 @@ export const ErrType = {
     RetryableError: 'RetryableError',
 
     /**
-     * RESULTの形式が不正
-     */
-    MalformedResultError: 'MalformedResultError',
-
-    /**
-     * バックエンドAPI呼び出しにおける予期しないエラー
-     */
-    ApiError: 'ApiError',
-
-    /**
-     * BFF(Route Handler)呼び出しにおける予期しないエラー
-     */
-    BffError: 'BffError',
-
-    /**
      * ステータスコードによるエラー
      */
     InvalidStatusError: 'InvalidStatusError',
     // HttpResponseError: 'HttpResponseError',
     // ValidationError: 'ValidationError',
-    // BackendApiError: 'BackendApiError',
 
     /**
      * 任意のコードを付与することで、エラーの識別とハンドリングを容易にする汎用エラー型
