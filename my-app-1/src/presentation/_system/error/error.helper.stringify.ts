@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { isBackendError, isCodedError, isCustomError } from '@/presentation/_system/error/error.helpers';
+import { isCustomError } from '@/presentation/_system/error/error.helpers';
 import {
     CustomErrorProperties,
     ERR_CODE,
@@ -147,12 +147,12 @@ export function getCustomErrorProperties(err: unknown): {
 } {
     const obj: CustomErrorProperties = {};
     if (isCustomError(err)) {
-        // obj.errType = err[ERR_TYPE]; // TODO: ログにERR_TYPE出さない方がよいかもしれない
+        obj.errType = err[ERR_TYPE]; // TODO: ログにERR_TYPE出さない方がよいかもしれない
         obj.location = err[LOCATION];
-        if (isCodedError(err)) {
+        if (ERR_CODE in err) {
             obj.code = err[ERR_CODE];
         }
-        if (isBackendError(err)) {
+        if (RESULT_TYPE in err) {
             obj.result = err[RESULT_TYPE];
         }
     }

@@ -36,6 +36,6 @@ export async function send(model: ContactBody): Promise<void> {
 
     logger.info(logPrefix + `Response(Inbound) -> status=${result.status}`);
     if (result.status === 408) {
-        throw retryableError(`web-to-case response status=${result.status}`);
+        throw retryableError({ message: `web-to-case response status=${result.status}` });
     }
 }

@@ -6,8 +6,10 @@ import logger from '@/presentation/_system/logging/logger.s';
 const logPrefix = 'authentication.ts: ';
 
 export function authenticate(): void {
+    const location = 'authentication.ts#authenticate';
+
     if (process.env['AUTH_ERROR']) {
-        throw authError();
+        throw authError({ location });
     }
     logger.info(logPrefix + 'auth ok');
 }

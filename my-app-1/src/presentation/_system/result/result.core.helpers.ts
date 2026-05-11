@@ -1,7 +1,7 @@
 //
 // RESULT型 ヘルパー関数
 //
-import { parseResultError } from '@/presentation/_system/error/error.factories';
+import { applicationError } from '@/presentation/_system/error/error.factories';
 import { formatError } from '@/presentation/_system/error/error.helper.stringify';
 import {
     Aborted,
@@ -49,9 +49,12 @@ export function parseResult(text: string): RESULT {
         if (isResult(parsed)) {
             return parsed;
         }
-        throw parseResultError(text);
+        // throw parseResultError(text);
+        throw applicationError({ message: text });
     } catch (error) {
-        throw parseResultError(text, formatError({ error }).message);
+        const message = `text=${text} error=${formatError({ error }).message}`;
+        // throw parseResultError(text, formatError({ error }).message);
+        throw applicationError({ message });
     }
 }
 
