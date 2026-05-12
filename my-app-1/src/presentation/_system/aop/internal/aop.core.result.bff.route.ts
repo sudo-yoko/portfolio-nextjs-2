@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { RESULT } from '@/presentation/_system/result/result.core.types';
+import { RESULT } from '@/presentation/_system/result/result.types';
 
 /**
  * 返却値のRESULT型オブジェクトをJSON文字列に変換してレスポンスボディにセットして返す

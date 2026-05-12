@@ -3,7 +3,7 @@
 //
 import 'server-only';
 
-import { RESULT } from '@/presentation/_system/result/result.core.types';
+import { RESULT } from '@/presentation/_system/result/result.types';
 
 export function _bffResponse(result: RESULT): Response {
   // BFFのAPIルートでは、ステータスコードは必ず200を返す。エラーがあればボディに設定する。

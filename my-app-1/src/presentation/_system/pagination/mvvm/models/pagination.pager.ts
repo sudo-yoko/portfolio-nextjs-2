@@ -12,8 +12,8 @@ import {
 import { FetchPage } from '@/presentation/_system/pagination/mvvm/models/pagination.requester';
 import { PaginationResult } from '@/presentation/_system/pagination/mvvm/models/pagination.types';
 import { PageData, Pager } from '@/presentation/_system/pagination/mvvm/models/pagination.types.c';
-import { invalid, okData } from '@/presentation/_system/result/result.core.factories';
-import { isInvalid, isOkData } from '@/presentation/_system/result/result.core.helpers';
+import { invalid, okData } from '@/presentation/_system/result/result.factories';
+import { isInvalid, isOkData } from '@/presentation/_system/result/result.helpers';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 
 /**

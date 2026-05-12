@@ -4,7 +4,7 @@
 import 'client-only';
 
 import { PaginationResult } from '@/presentation/_system/pagination/mvvm/models/pagination.types';
-import { BffResult } from '@/presentation/_system/result/result.core.types';
+import { BffResult } from '@/presentation/_system/result/result.types';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 
 /**

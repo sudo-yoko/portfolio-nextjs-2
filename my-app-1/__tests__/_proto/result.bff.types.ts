@@ -7,7 +7,7 @@ import {
   OkData,
   OkEmpty,
   Retryable,
-} from '@/presentation/_system/result/result.core.types';
+} from '@/presentation/_system/result/result.types';
 
 /**
  * 正常終了を表す型

@@ -5,7 +5,7 @@
 
 import { executeAsync } from '@/presentation/_system/aop/aop.action-boundary';
 import logger from '@/presentation/_system/logging/logger.s';
-import { RESULT } from '@/presentation/_system/result/result.core.types';
+import { RESULT } from '@/presentation/_system/result/result.types';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 import { execute } from '@/presentation/contact/small/bff/contact.interactor';
 import { FormKeys } from '@/presentation/contact/small/models/contact.types';

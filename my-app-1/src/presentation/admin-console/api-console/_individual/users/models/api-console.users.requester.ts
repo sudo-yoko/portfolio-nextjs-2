@@ -1,6 +1,6 @@
 import 'client-only';
 
-import { Tag } from '@/presentation/_system/result/result.core.types';
+import { Tag } from '@/presentation/_system/result/result.types';
 import { SendRequest } from '@/presentation/admin-console/api-console/_individual/_shared/models/api-console.individual.requester';
 import { FormKeys } from '@/presentation/admin-console/api-console/_individual/users/models/api-console.users.types';
 import { ApiResult } from '@/presentation/admin-console/api-console/models//api-console.types';

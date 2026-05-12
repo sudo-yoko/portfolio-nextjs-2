@@ -16,7 +16,7 @@ import {
     State,
     Step,
 } from '@/presentation/_system/header/mvvm/view-models/header.reducer';
-import { isAborted, isOkData, isRetryable } from '@/presentation/_system/result/result.core.helpers';
+import { isAborted, isOkData, isRetryable } from '@/presentation/_system/result/result.helpers';
 import React, { useEffect, useReducer } from 'react';
 
 export function useHeader() {

@@ -2,7 +2,7 @@ import 'server-only';
 
 import { FetchData } from '@/presentation/_system/pagination/mvvm/models/pagination.requester';
 import { PaginationResult } from '@/presentation/_system/pagination/mvvm/models/pagination.types';
-import { invalid, okData } from '@/presentation/_system/result/result.core.factories';
+import { invalid, okData } from '@/presentation/_system/result/result.factories';
 import { hasError } from '@/presentation/_system/validation/validation.helpers';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 import { send } from '@/presentation/users/mvvm/bff/users.client';

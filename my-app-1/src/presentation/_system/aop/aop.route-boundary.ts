@@ -8,7 +8,7 @@ import { withErrorHandlingAsync } from '@/presentation/_system/aop/internal/aop.
 import { Ctx, withLoggingAsync } from '@/presentation/_system/aop/internal/aop.core.logging';
 import { withResponseAsync } from '@/presentation/_system/aop/internal/aop.core.result.bff.route';
 import logger from '@/presentation/_system/logging/logger.s';
-import { RESULT } from '@/presentation/_system/result/result.core.types';
+import { RESULT } from '@/presentation/_system/result/result.types';
 
 const logPrefix = 'aop.route-boundary.ts: ';
 

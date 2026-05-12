@@ -5,7 +5,7 @@
 
 import { executeAsync } from '@/presentation/_system/aop/aop.client-boundary';
 import { resultError } from '@/presentation/_system/error/error.factories';
-import { isInvalid, isOkEmpty, isRetryable } from '@/presentation/_system/result/result.core.helpers';
+import { isInvalid, isOkEmpty, isRetryable } from '@/presentation/_system/result/result.helpers';
 import { hasError } from '@/presentation/_system/validation/validation.helpers';
 import { Violations } from '@/presentation/_system/validation/validation.types';
 import { send } from '@/presentation/contact/small/models/contact.requester';

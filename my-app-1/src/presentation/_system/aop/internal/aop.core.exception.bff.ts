@@ -5,8 +5,8 @@ import { AopResult } from '@/presentation/_system/aop/aop.types';
 import { formatError, getCustomErrorProperties } from '@/presentation/_system/error/error.helper.stringify';
 import { isCustomError, isRetryableError } from '@/presentation/_system/error/error.helpers';
 import logger from '@/presentation/_system/logging/logger.s';
-import { abort, retry } from '@/presentation/_system/result/result.core.factories';
-import { RESULT } from '@/presentation/_system/result/result.core.types';
+import { abort, retry } from '@/presentation/_system/result/result.factories';
+import { RESULT } from '@/presentation/_system/result/result.types';
 
 const logPrefix = 'aop.core.exception.bff.ts: ';
 

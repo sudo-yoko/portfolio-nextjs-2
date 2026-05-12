@@ -5,8 +5,8 @@ import { formatError } from '@/presentation/_system/error/error.helper.stringify
 import { isCustomError } from '@/presentation/_system/error/error.helpers';
 import { ERR_TYPE } from '@/presentation/_system/error/error.types';
 import logger from '@/presentation/_system/logging/logger.s';
-import { abort } from '@/presentation/_system/result/result.core.factories';
-import { RESULT } from '@/presentation/_system/result/result.core.types';
+import { abort } from '@/presentation/_system/result/result.factories';
+import { RESULT } from '@/presentation/_system/result/result.types';
 
 const logPrefix = 'aop.core.exception.bff.action.ts: ';
 

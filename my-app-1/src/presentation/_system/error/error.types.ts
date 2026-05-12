@@ -1,7 +1,7 @@
 //
 // カスタムエラー型
 //
-import { RESULT } from '@/presentation/_system/result/result.core.types';
+import { RESULT } from '@/presentation/_system/result/result.types';
 
 // カスタムエラー固有のプロパティ名をシンボルで定義
 export const ERR_TYPE = Symbol.for('MyApp.ErrType');

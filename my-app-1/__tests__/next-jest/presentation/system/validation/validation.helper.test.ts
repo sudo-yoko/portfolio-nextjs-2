@@ -1,7 +1,7 @@
 import { printf } from '@/__tests__/test-logger';
 import { formatError } from '@/presentation/_system/error/error.helper.stringify';
-import { isInvalid } from '@/presentation/_system/result/result.core.helpers';
-import { Invalid, Tag } from '@/presentation/_system/result/result.core.types';
+import { isInvalid } from '@/presentation/_system/result/result.helpers';
+import { Invalid, Tag } from '@/presentation/_system/result/result.types';
 import { hasError, initialFormDataCore } from '@/presentation/_system/validation/validation.helpers';
 import { Violations } from '@/presentation/_system/validation/validation.types';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';

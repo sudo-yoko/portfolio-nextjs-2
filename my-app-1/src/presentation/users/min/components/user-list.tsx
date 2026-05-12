@@ -5,7 +5,7 @@ import { Button } from '@/presentation/_system/components/button.decorator.simpl
 import { ErrorRedirect } from '@/presentation/_system/error/views/component.error-redirect';
 import { createPager } from '@/presentation/_system/pagination/min/modules/pagination.pager';
 import { Pager } from '@/presentation/_system/pagination/min/modules/pagination.types.c';
-import { isInvalid, isOkData } from '@/presentation/_system/result/result.core.helpers';
+import { isInvalid, isOkData } from '@/presentation/_system/result/result.helpers';
 import { getViolationsMap } from '@/presentation/_system/validation/validation.helpers';
 import { FormData, Violations } from '@/presentation/_system/validation/validation.types';
 import { fetchPage } from '@/presentation/users/min/modules/users.requester';

@@ -9,8 +9,8 @@ import {
 import { FetchPage } from '@/presentation/_system/pagination/min/modules/pagination.requester';
 import { PaginationResult } from '@/presentation/_system/pagination/min/modules/pagination.types';
 import { PageData, Pager } from '@/presentation/_system/pagination/min/modules/pagination.types.c';
-import { abort, invalid, okData } from '@/presentation/_system/result/result.core.factories';
-import { isAborted, isInvalid } from '@/presentation/_system/result/result.core.helpers';
+import { abort, invalid, okData } from '@/presentation/_system/result/result.factories';
+import { isAborted, isInvalid } from '@/presentation/_system/result/result.helpers';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 
 /**

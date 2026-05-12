@@ -1,7 +1,7 @@
 import 'client-only';
 
 import { HeaderResult } from '@/presentation/_system/header/mvvm/models/header.types';
-import { Tag } from '@/presentation/_system/result/result.core.types';
+import { Tag } from '@/presentation/_system/result/result.types';
 
 /**
  * バックエンド呼び出しのインターフェース型

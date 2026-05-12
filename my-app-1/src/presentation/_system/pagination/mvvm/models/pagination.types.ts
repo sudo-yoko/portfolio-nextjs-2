@@ -1,4 +1,4 @@
-import { Invalid, OkData } from '@/presentation/_system/result/result.core.types';
+import { Invalid, OkData } from '@/presentation/_system/result/result.types';
 
 /**
  * ページネーションのRESULT型

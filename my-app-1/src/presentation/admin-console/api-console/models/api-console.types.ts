@@ -1,4 +1,4 @@
-import { Aborted, Invalid, OkData } from '@/presentation/_system/result/result.core.types';
+import { Aborted, Invalid, OkData } from '@/presentation/_system/result/result.types';
 import { Action, State } from '@/presentation/admin-console/api-console/view-models/api-console.reducer';
 
 export type IndividualFormProps = { parentState: State; parentDispatch: React.Dispatch<Action> };

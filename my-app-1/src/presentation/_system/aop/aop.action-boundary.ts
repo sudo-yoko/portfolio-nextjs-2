@@ -14,7 +14,7 @@ import {
     withResultParsingAsync,
 } from '@/presentation/_system/aop/internal/aop.core.result.bff.action';
 import logger from '@/presentation/_system/logging/logger.s';
-import { RESULT } from '@/presentation/_system/result/result.core.types';
+import { RESULT } from '@/presentation/_system/result/result.types';
 
 const logPrefix = 'aop.action-boundary.ts';
 

@@ -14,7 +14,7 @@ import {
     ResultError,
     RetryableError,
 } from '@/presentation/_system/error/error.types';
-import { RESULT } from '@/presentation/_system/result/result.core.types';
+import { RESULT } from '@/presentation/_system/result/result.types';
 
 // /**
 //  * カスタムエラーを生成する

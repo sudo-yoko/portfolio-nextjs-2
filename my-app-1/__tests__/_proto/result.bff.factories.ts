@@ -4,9 +4,9 @@
 import { parseResultError } from '@/presentation/_system/error/error.factories';
 import { formatError } from '@/presentation/_system/error/error.helper.stringify';
 
-import { okData, okEmpty } from '@/presentation/_system/result/result.core.factories';
-import { parseResult } from '@/presentation/_system/result/result.core.helpers';
-import { OkData, OkEmpty } from '@/presentation/_system/result/result.core.types';
+import { okData, okEmpty } from '@/presentation/_system/result/result.factories';
+import { parseResult } from '@/presentation/_system/result/result.helpers';
+import { OkData, OkEmpty } from '@/presentation/_system/result/result.types';
 import { _BffResult } from './result.bff.types';
 // import { Ok } from '@/presentation/(system)/pagination/mvvm/view-models/pagination.reducer';
 

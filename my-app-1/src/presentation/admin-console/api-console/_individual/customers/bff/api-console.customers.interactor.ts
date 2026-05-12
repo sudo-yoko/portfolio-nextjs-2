@@ -1,7 +1,7 @@
 import 'server-only';
 
 import logger from '@/presentation/_system/logging/logger.s';
-import { invalid, okData } from '@/presentation/_system/result/result.core.factories';
+import { invalid, okData } from '@/presentation/_system/result/result.factories';
 import { hasError } from '@/presentation/_system/validation/validation.helpers';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 import { send } from '@/presentation/admin-console/api-console/_individual/customers/bff/api-console.customers.client';

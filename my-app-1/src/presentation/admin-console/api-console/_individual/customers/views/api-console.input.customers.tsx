@@ -1,6 +1,6 @@
 'use client';
 
-import { isOkData } from '@/presentation/_system/result/result.core.helpers';
+import { isOkData } from '@/presentation/_system/result/result.helpers';
 import { hasError } from '@/presentation/_system/validation/validation.helpers';
 import {
     reducer,

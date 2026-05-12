@@ -6,7 +6,7 @@ import 'client-only';
 import client from '@/presentation/_system/client/client.c';
 import { CONTENT_TYPE_APPLICATION_JSON_UTF8 } from '@/presentation/_system/client/client.constants';
 import { Method } from '@/presentation/_system/client/client.types';
-import { parseResult } from '@/presentation/_system/result/result.core.helpers';
+import { parseResult } from '@/presentation/_system/result/result.helpers';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 import { post } from '@/presentation/contact/mvvm/bff/contact.action';
 import { ContactResult, FormKeys } from '@/presentation/contact/mvvm/models/contact.types';

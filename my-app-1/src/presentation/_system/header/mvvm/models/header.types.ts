@@ -1,4 +1,4 @@
-import { Aborted, OkData, Retryable } from '@/presentation/_system/result/result.core.types';
+import { Aborted, OkData, Retryable } from '@/presentation/_system/result/result.types';
 
 export type Header = {
     profile: {

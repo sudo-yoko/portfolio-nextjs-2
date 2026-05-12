@@ -11,7 +11,7 @@ import {
     RESULT,
     Retryable,
     Tag,
-} from '@/presentation/_system/result/result.core.types';
+} from '@/presentation/_system/result/result.types';
 
 // function isOk(result: RESULT): result is OkEmpty | OkData<unknown> {
 // return result.tag === Tag.Ok;

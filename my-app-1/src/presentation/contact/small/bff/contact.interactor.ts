@@ -4,7 +4,7 @@
 import 'server-only';
 
 import logger from '@/presentation/_system/logging/logger.s';
-import { invalid, okEmpty } from '@/presentation/_system/result/result.core.factories';
+import { invalid, okEmpty } from '@/presentation/_system/result/result.factories';
 import { hasError } from '@/presentation/_system/validation/validation.helpers';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 import { send } from '@/presentation/contact/small/bff/contact.webToCase-client';

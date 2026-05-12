@@ -1,4 +1,4 @@
-import { Aborted, Invalid, OkEmpty, Retryable } from '@/presentation/_system/result/result.core.types';
+import { Aborted, Invalid, OkEmpty, Retryable } from '@/presentation/_system/result/result.types';
 import { SearchParam } from '@/presentation/_system/types/search-params';
 
 /**

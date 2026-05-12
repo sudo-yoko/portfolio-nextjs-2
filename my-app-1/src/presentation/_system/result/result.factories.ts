@@ -9,7 +9,7 @@ import {
     OkEmpty,
     Retryable,
     Tag,
-} from '@/presentation/_system/result/result.core.types';
+} from '@/presentation/_system/result/result.types';
 import { Violations } from '@/presentation/_system/validation/validation.types';
 
 // export function ok(): OkEmpty;

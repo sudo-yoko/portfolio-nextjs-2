@@ -1,8 +1,8 @@
 // 型推論の検証
 
-import { okData } from '@/presentation/_system/result/result.core.factories';
-import { isAborted, isInvalid } from '@/presentation/_system/result/result.core.helpers';
-import { Aborted, Invalid, OkData, OkEmpty } from '@/presentation/_system/result/result.core.types';
+import { okData } from '@/presentation/_system/result/result.factories';
+import { isAborted, isInvalid } from '@/presentation/_system/result/result.helpers';
+import { Aborted, Invalid, OkData, OkEmpty } from '@/presentation/_system/result/result.types';
 
 type Ok<DATA = void> = [DATA] extends [void] ? OkEmpty : OkData<DATA>;
 type BffResult<DATA = void, FIELD extends string = never> = Ok<DATA> | Invalid<FIELD> | Aborted;
