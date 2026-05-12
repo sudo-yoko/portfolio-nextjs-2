@@ -1,10 +1,18 @@
 //
 // カスタムエラー ヘルパー関数
 //
-import { CustomError, ERR_TYPE, ErrType } from '@/presentation/_system/error/error.types';
+import {
+    ApplicationError,
+    AuthError,
+    CustomError,
+    ERR_TYPE,
+    ErrType,
+    ResultError,
+    RetryableError,
+} from '@/presentation/_system/error/error.types';
 
 /**
- * カスタムエラー判定
+ * カスタムエラー 型ガード関数
  */
 export function isCustomError(e: unknown): e is CustomError {
     if (e instanceof Error) {
@@ -15,57 +23,51 @@ export function isCustomError(e: unknown): e is CustomError {
     return false;
 }
 
-// export function isBackendError(e: CustomError<ErrType>): e is BackendError {
-//     if (isCustomError(e)) {
-//         if (RESULT_TYPE in e) {
-//             return true;
+// 種類別カスタムエラー判定
+/**
+ * 認証エラー 型ガード関数
+ */
+export const isAuthError = (e: unknown): e is AuthError => {
+    return isCustomError(e) && e[ERR_TYPE] === ErrType.AuthError;
+};
+
+/**
+ * リトライ可能エラー 型ガード関数
+ */
+export const isRetryableError = (e: unknown): e is RetryableError => {
+    return isCustomError(e) && e[ERR_TYPE] === ErrType.RetryableError;
+};
+
+/**
+ * アプリケーションエラー 型ガード関数
+ */
+export const isApplicationError = (e: unknown): e is ApplicationError => {
+    return isCustomError(e) && e[ERR_TYPE] === ErrType.ApplicationError;
+};
+
+/**
+ * RESULTエラー 型ガード関数
+ */
+export const isResultError = (e: unknown): e is ResultError => {
+    return isCustomError(e) && e[ERR_TYPE] === ErrType.ResultError;
+};
+
+// /**
+//  * 種類別カスタムエラー判定関数を返す
+//  */
+// function isErrorOf<T extends ErrType>(type: T) {
+//     return (e: unknown): e is T => {
+//         if (isCustomError(e)) {
+//             if (e[ERR_TYPE] === type) {
+//                 return true;
+//             }
 //         }
-//     }
-//     return false;
+//         return false;
+//     };
 // }
 
-// export function isCodedError(e: CustomError<ErrType>): e is CodedError {
-//     if (isCustomError(e)) {
-//         if (ERR_CODE in e) {
-//             return true;
-//         }
-//     }
-//     return false;
-// }
-
-/**
- * 種類別カスタムエラー判定関数を生成する
- */
-function isErrorOf<T extends ErrType>(type: T) {
-    return (e: unknown): e is CustomError => {
-        if (e instanceof Error) {
-            if (ERR_TYPE in e) {
-                // TODO: isCustomError使えるか
-                if ((e as CustomError)[ERR_TYPE] === type) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    };
-}
-
-/**
- * AuthError かどうかを判定する
- */
-export const isAuthError = isErrorOf(ErrType.AuthError);
-export const isRetryableError = isErrorOf(ErrType.RetryableError);
-export const isApplicationError = isErrorOf(ErrType.ApplicationError);
-export const isResultError = isErrorOf(ErrType.ResultError);
-
-/**
- * client-only
- */
-// export function isBffAuthError(bffResult: BffResult): boolean {
-// if (isAbort(bffResult)) {
-// if (ErrType.AuthError === bffResult.type) {
-// return true;
-// }
-// }
-// return false;
-// }
+// // 種類別カスタムエラー判定関数
+// export const isAuthError = isErrorOf(ErrType.AuthError);
+// export const isRetryableError = isErrorOf(ErrType.RetryableError);
+// export const isApplicationError = isErrorOf(ErrType.ApplicationError);
+// export const isResultError = isErrorOf(ErrType.ResultError);

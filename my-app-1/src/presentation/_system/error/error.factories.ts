@@ -4,6 +4,7 @@
 import {
     ApplicationError,
     AuthError,
+    CustomErrorBase,
     ERR_CODE,
     ERR_TYPE,
     ErrType,
@@ -148,31 +149,31 @@ import { RESULT } from '@/presentation/_system/result/result.core.types';
 //     });
 // }
 
-export function authError({
-    cause,
-    location,
-}: {
+function customError<T extends ErrType>(props: {
+    message?: string;
     cause?: unknown;
+    errType: T;
     location?: string;
-} = {}): AuthError {
-    const message = '認証エラー';
+}): CustomErrorBase<T> {
+    const { message, cause, errType, location } = props;
     const base = new Error(message, { cause });
     return Object.assign(base, {
-        name: ErrType.AuthError,
-        [ERR_TYPE]: ErrType.AuthError,
+        [ERR_TYPE]: errType,
         [LOCATION]: location,
     });
 }
 
-export function invalidStatusError({
-    status,
-    body,
-    location,
-}: {
-    status?: number;
-    body?: string;
-    location?: string;
-} = {}): InvalidStatusError {
+// TODO: ファクトリー関数を共通化できないか
+export function authError(props: { cause?: unknown; location?: string } = {}): AuthError {
+    const { cause, location } = props;
+    const message = '認証エラー';
+    return customError({ message, cause, errType: ErrType.AuthError, location });
+}
+
+export function invalidStatusError(
+    props: { status?: number; body?: string; location?: string } = {},
+): InvalidStatusError {
+    const { status, body, location } = props;
     const message: string[] = [];
     message.push('Response status error');
     if (status) {
@@ -181,64 +182,37 @@ export function invalidStatusError({
     if (body) {
         message.push(`body=${body}`);
     }
-    const base = new Error(message.join(', '));
-    return Object.assign(base, {
-        name: ErrType.InvalidStatusError,
-        [ERR_TYPE]: ErrType.InvalidStatusError,
-        [LOCATION]: location,
-    });
+    return customError({ message: message.join(', '), errType: ErrType.InvalidStatusError, location });
 }
 
-export function retryableError({
-    message,
-    location,
-}: { message?: string; location?: string } = {}): RetryableError {
+export function retryableError(props: { message?: string; location?: string } = {}): RetryableError {
+    const { message, location } = props;
     const cause: string[] = [];
     cause.push('再試行可能エラー');
     if (message) {
         cause.push(message);
     }
-    const base = new Error(cause.join(', '));
-    return Object.assign(base, {
-        name: ErrType.RetryableError,
-        [ERR_TYPE]: ErrType.RetryableError,
-        [LOCATION]: location,
-    });
-
-    // return customError({ type: ErrType.RetryableError, message: cause.join(', ') });
+    return customError({ message: cause.join(', '), errType: ErrType.RetryableError, location });
 }
 
-export function applicationError({
-    cause,
-    result,
-    code,
-    location,
-    message,
-}: {
-    cause?: unknown;
-    result?: RESULT;
-    code?: string;
-    location?: string;
-    message?: string;
-}): ApplicationError {
-    const base = new Error(message, { cause });
-    return Object.assign(base, {
-        name: ErrType.ApplicationError,
-        [ERR_TYPE]: ErrType.ApplicationError,
-        [LOCATION]: location,
-        [RESULT_TYPE]: result,
-        [ERR_CODE]: code,
-    });
+export function applicationError(
+    props: {
+        cause?: unknown;
+        result?: RESULT;
+        code?: string;
+        location?: string;
+        message?: string;
+    } = {},
+): ApplicationError {
+    const { cause, result, code, location, message } = props;
+    const base = customError({ message, cause, errType: ErrType.ApplicationError, location });
+    return Object.assign(base, { [RESULT_TYPE]: result, [ERR_CODE]: code });
 }
 
-export function resultError({ result, location }: { result: RESULT; location?: string }): ResultError {
-    const base = new Error();
-    return Object.assign(base, {
-        name: ErrType.ResultError,
-        [ERR_TYPE]: ErrType.ResultError,
-        [LOCATION]: location,
-        [RESULT_TYPE]: result,
-    });
+export function resultError(props: { result: RESULT; location?: string }): ResultError {
+    const { result, location } = props;
+    const base = customError({ errType: ErrType.ResultError, location });
+    return Object.assign(base, { [RESULT_TYPE]: result });
     // // TODO: 戻りをResultErrorにすると、引数resultが必須のためコンパイルエラーになる
     // const message = `RESULT is ${result.tag}.`;
     // return customError({ type: ErrType.ResultError, result, message, location });
