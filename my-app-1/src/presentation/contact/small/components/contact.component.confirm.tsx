@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/presentation/_system/components/button.decorator.simple';
-import { Action, State, toInput, toSend } from '@/presentation/contact/small/view-models/contact.reducer';
+import { Action, State, toInput, toSend } from '@/presentation/contact/small/hooks/contact.reducer';
 
 /**
  * 確認表示コンポーネント

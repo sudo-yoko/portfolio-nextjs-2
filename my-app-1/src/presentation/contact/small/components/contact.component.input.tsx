@@ -2,8 +2,8 @@
 
 import { AutoResizeTextAreaSimple } from '@/presentation/_system/components/autoResizeTextArea.decorator.simple';
 import { Button } from '@/presentation/_system/components/button.decorator.simple';
-import { handleNext } from '@/presentation/contact/small/view-models/contact.reducer.hooks';
-import { Action, setValue, State } from '@/presentation/contact/small/view-models/contact.reducer';
+import { handleNext } from '@/presentation/contact/small/hooks/contact.reducer.hooks';
+import { Action, setValue, State } from '@/presentation/contact/small/hooks/contact.reducer';
 
 /**
  * 入力フォームコンポーネント

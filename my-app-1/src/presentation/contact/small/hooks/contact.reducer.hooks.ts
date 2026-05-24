@@ -23,7 +23,7 @@ import {
     toComplete,
     toConfirm,
     toInput,
-} from '@/presentation/contact/small/view-models/contact.reducer';
+} from '@/presentation/contact/small/hooks/contact.reducer';
 import { useEffect, useReducer } from 'react';
 
 /**

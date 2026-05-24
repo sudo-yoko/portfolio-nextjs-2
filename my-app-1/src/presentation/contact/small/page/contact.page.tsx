@@ -5,8 +5,8 @@ import 'server-only';
 
 import { executeAsync } from '@/presentation/_system/aop/aop.server-boundary';
 import { SearchParams } from '@/presentation/_system/types/search-params';
-import { handleRequest } from '@/presentation/contact/small/view-models/contact.handler.request';
-import Main from '@/presentation/contact/small/views/contact.component.main';
+import { handleRequest } from '@/presentation/contact/small/page/contact.handler.request';
+import Main from '@/presentation/contact/small/components/contact.component.main';
 
 export default async function Page(props: { searchParams?: SearchParams }) {
     return await executeAsync(() => func());
