@@ -5,9 +5,9 @@ import { ToastError } from '@/presentation/_system/components/toast.feature.erro
 import { ErrorModal } from '@/presentation/_system/error/views/component.error-modal.feature.reset';
 import { Mode, reset, Step } from '@/presentation/contact/small/hooks/contact.reducer';
 import { dismissRetryMsg, useContact } from '@/presentation/contact/small/hooks/contact.reducer.hooks';
-import Complete from '@/presentation/contact/small/components/contact.component.complete';
-import Confirm from '@/presentation/contact/small/components/contact.component.confirm';
-import Input from '@/presentation/contact/small/components/contact.component.input';
+import Complete from '@/presentation/contact/small/components/contact.complete';
+import Confirm from '@/presentation/contact/small/components/contact.confirm';
+import Input from '@/presentation/contact/small/components/contact.input';
 
 /**
  * お問い合わせフォーム 親クライアントコンポーネント
