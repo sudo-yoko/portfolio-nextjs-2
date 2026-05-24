@@ -19,18 +19,11 @@ import {
  * - `message`: エラーメッセージのみ（スタックトレースを含まない）
  * - `all`: スタックトレースを含むすべてのメッセージ
  */
-export function formatError({
-    error,
-    description,
-    details,
-}: {
-    error?: unknown;
-    description?: string;
-    details?: string;
-}): {
+export function formatError(props: { error?: unknown; description?: string; details?: string }): {
     message: string;
     all: string;
 } {
+    const { error, description, details } = props;
     if (!error) {
         const message = '';
         return { message, all: joinAll({ description, message, details }) };
@@ -78,19 +71,14 @@ function getStackTrace(error: Error): string[] {
  * @param stack - スタックトレース
  * @returns エラーメッセージ
  */
-function joinAll({
-    description,
-    name,
-    message,
-    details,
-    stacks,
-}: {
+function joinAll(props: {
     description?: string;
     name?: string;
     message?: string;
     details?: string;
     stacks?: string[];
 }): string {
+    const { description, name, message, details, stacks } = props;
     const errMessage: string[] = [];
     if (description) {
         errMessage.push(description);
