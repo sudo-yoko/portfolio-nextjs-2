@@ -1,0 +1,39 @@
+import 'server-only';
+
+import { FetchData } from '@/presentation/_system/pagination/standard/models/pagination.requester';
+import { PaginationResult } from '@/presentation/_system/pagination/standard/models/pagination.types';
+import { invalid, okData } from '@/presentation/_system/result/result.factories';
+import { hasError } from '@/presentation/_system/validation/validation.helpers';
+import { FormData } from '@/presentation/_system/validation/validation.types';
+import { send } from '@/presentation/users/standard/bff/users.client';
+import { FormKeys, User } from '@/presentation/users/standard/models/users.types';
+import { validate } from '@/presentation/users/standard/models/users.validator';
+
+export async function execute(
+    offset: string,
+    limit: string,
+    formData: FormData<FormKeys>,
+    // TODO: REASON型を指定しないのにコンパイルエラーにならない
+): Promise<PaginationResult<FetchData<User[]>, FormKeys>> {
+    //
+    // バリデーション
+    //
+    const violations = validate(formData);
+    if (hasError(violations)) {
+        // return reject(REJECTION_LABELS.VIOLATION, violations);
+        return invalid(violations);
+    }
+
+    // const query: UsersQuery = {
+    // userName: formData.userName,
+    // };
+    //
+    // データ取得
+    //
+    const { total, users } = await send(offset, limit, formData);
+    // if (total === 0) {
+    // return reject(REJECTION_LABELS.NO_DATA);
+    // }
+    const data: FetchData<User[]> = { total, items: users };
+    return okData(data);
+}
