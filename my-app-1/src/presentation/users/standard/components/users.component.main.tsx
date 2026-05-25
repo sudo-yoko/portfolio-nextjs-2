@@ -15,7 +15,7 @@ import {
     handleReset,
     handleSearch,
     usePagination,
-} from '@/presentation/users/standard/hooks/users.use-pagination.2';
+} from '@/presentation/users/standard/hooks/users.reducer.hooks';
 
 export function Main() {
     const { state, dispatch } = usePagination();
