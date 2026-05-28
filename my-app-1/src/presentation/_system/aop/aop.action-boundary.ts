@@ -1,5 +1,5 @@
 //
-// ServerActions 境界レイヤー
+// ServerActions境界で共通の前後処理を行う
 //
 import 'server-only';
 

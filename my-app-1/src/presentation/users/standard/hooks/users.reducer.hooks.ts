@@ -25,7 +25,7 @@ import { PageData, Pager } from '@/presentation/_system/pagination/standard/mode
 import { isInvalid, isOkData } from '@/presentation/_system/result/result.helpers';
 import { hasError } from '@/presentation/_system/validation/validation.helpers';
 import { FormData } from '@/presentation/_system/validation/validation.types';
-import { initialPage, initialState, perPage } from '@/presentation/users/standard/hooks/users.reducer';
+import { initialPage, initialState, perPage } from '@/presentation/users/standard/models/users.constants.c';
 import { fetchPage } from '@/presentation/users/standard/models/users.requester';
 import { FormKeys, User } from '@/presentation/users/standard/models/users.types';
 import { validate } from '@/presentation/users/standard/models/users.validator';

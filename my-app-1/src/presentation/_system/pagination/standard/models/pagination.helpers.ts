@@ -1,6 +1,8 @@
 //
 // ページネーションユーティリティ
 //
+import { State, Step } from '@/presentation/_system/pagination/standard/hooks/pagination.reducer';
+import { FormData } from '@/presentation/_system/validation/validation.types';
 
 /**
  * ページ番号をオフセットに変換
@@ -52,4 +54,22 @@ export function toEffectiveOffset(offset: number, limit: number, total: number):
         effectiveOffset = offsetOfLastPage(total, limit);
     }
     return effectiveOffset;
+}
+
+/**
+ * 状態管理の初期値を取得する
+ */
+export function getInitialState<ITEMS, FIELD extends string>(
+    formData: FormData<FIELD>,
+    items: ITEMS,
+): State<ITEMS, FIELD> {
+    return {
+        step: Step.Idle,
+        formData,
+        items,
+        page: 0,
+        violations: [],
+        violationsMap: {},
+        error: false,
+    };
 }

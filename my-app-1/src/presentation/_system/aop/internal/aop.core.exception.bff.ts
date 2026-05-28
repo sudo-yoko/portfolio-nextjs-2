@@ -1,3 +1,4 @@
+// 共通の前後処理（AOP）：BFFエラーハンドリング
 // エラーハンドリングAOP部品
 import 'server-only';
 

@@ -1,5 +1,3 @@
-// TODO: view-modelに移動
-
 import 'client-only';
 
 import { resultError } from '@/presentation/_system/error/error.factories';

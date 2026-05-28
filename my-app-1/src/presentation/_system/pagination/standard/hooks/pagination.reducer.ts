@@ -1,8 +1,9 @@
 import 'client-only';
 
+import React from 'react';
+
 import { getViolationsMap } from '@/presentation/_system/validation/validation.helpers';
 import { FormData, Violations, ViolationsMap } from '@/presentation/_system/validation/validation.types';
-import React from 'react';
 
 export const Step = {
     Idle: 'idle',

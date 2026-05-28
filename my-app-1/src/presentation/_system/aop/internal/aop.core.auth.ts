@@ -1,3 +1,4 @@
+// 共通の前後処理（AOP）：認証
 // 認証AOP部品
 import 'server-only';
 

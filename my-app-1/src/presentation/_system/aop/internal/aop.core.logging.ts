@@ -1,3 +1,4 @@
+// 共通の前後処理（AOP）：ロギング
 // ロギングAOP部品
 import { Logger } from '@/presentation/_system/logging/logging.types';
 
