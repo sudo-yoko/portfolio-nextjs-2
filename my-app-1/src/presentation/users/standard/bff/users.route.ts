@@ -2,7 +2,7 @@ import 'server-only';
 
 import { NextRequest } from 'next/server';
 
-import { executeAsync } from '@/presentation/_system/aop/aop.route-boundary';
+import { executeAsync } from '@/presentation/_system/aop/aop.route';
 import { applicationError } from '@/presentation/_system/error/error.factories';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 import { execute } from '@/presentation/users/standard/bff/users.interactor';

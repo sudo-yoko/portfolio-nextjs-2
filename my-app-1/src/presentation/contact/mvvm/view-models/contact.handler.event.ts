@@ -3,7 +3,7 @@
 //
 'use client';
 
-import { executeAsync } from '@/presentation/_system/aop/aop.client-boundary';
+import { executeAsync } from '@/presentation/_system/aop/aop.client';
 import { resultError } from '@/presentation/_system/error/error.factories';
 import { isInvalid, isOkEmpty, isRetryable } from '@/presentation/_system/result/result.helpers';
 import { hasError } from '@/presentation/_system/validation/validation.helpers';

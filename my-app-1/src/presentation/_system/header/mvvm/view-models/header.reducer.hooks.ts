@@ -1,6 +1,6 @@
 'use client';
 
-import { executeAsync } from '@/presentation/_system/aop/aop.client-boundary';
+import { executeAsync } from '@/presentation/_system/aop/aop.client';
 import { fetchHeader } from '@/presentation/_system/header/mvvm/models/header.requester';
 import {
     Action,

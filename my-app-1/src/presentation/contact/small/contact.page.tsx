@@ -3,7 +3,7 @@
 //
 import 'server-only';
 
-import { executeAsync } from '@/presentation/_system/aop/aop.server-boundary';
+import { executeAsync } from '@/presentation/_system/aop/aop.server';
 import logger from '@/presentation/_system/logging/logger.s';
 import { getSearchParams, SearchParams } from '@/presentation/_system/types/search-params';
 import Main from '@/presentation/contact/small/components/contact.main';

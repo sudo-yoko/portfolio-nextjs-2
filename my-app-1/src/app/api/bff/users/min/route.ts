@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { executeAsync } from '@/presentation/_system/aop/aop.route-boundary';
+import { executeAsync } from '@/presentation/_system/aop/aop.route';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 import { execute } from '@/presentation/users/min/modules/users.interactor';
 import { FormKeys } from '@/presentation/users/min/modules/users.types';

@@ -3,7 +3,7 @@
 //
 import 'client-only';
 
-import { executeAsync } from '@/presentation/_system/aop/aop.client-boundary';
+import { executeAsync } from '@/presentation/_system/aop/aop.client';
 import { resultError } from '@/presentation/_system/error/error.factories';
 import {
     Action,

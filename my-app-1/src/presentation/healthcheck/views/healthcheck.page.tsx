@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { executeAsync } from '@/presentation/_system/aop/aop.server-boundary';
+import { executeAsync } from '@/presentation/_system/aop/aop.server';
 import { handleRequest } from '@/presentation/healthcheck/view-models/healthcheck.handler.request';
 
 export default async function Page() {
