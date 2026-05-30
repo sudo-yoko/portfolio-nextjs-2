@@ -18,3 +18,6 @@ RESULT型
 ・Client型はステータスと生のボディ(string)を返す
 ・ルートハンドラーはレスポンスボディにRESULT型を返す。ステータスコードは必ず200を返す
 ・ServerActionはRESULT型を返す
+
+
+Feature-Sliced Design（以下FSD）とは、フロントエンドのディレクトリ設計方法の1つ

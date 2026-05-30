@@ -36,6 +36,7 @@ export const axiosClient = (proxy?: AxiosProxyConfig): Client => ({
         const axiosConfig: AxiosRequestConfig = {};
         axiosConfig.url = config.url;
         axiosConfig.method = config.method;
+        // TODO: リクエストヘッダー
         if (config.query) {
             const searchParams = new URLSearchParams();
             config.query.forEach(({ key, value }) => searchParams.append(key, value));

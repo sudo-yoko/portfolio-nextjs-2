@@ -6,11 +6,15 @@ import 'client-only';
 import {
     withErrorHandling,
     withErrorHandlingAsync,
-} from '@/presentation/_system/aop/internal/aop.core.exception.client';
-import { Ctx, withLogging, withLoggingAsync } from '@/presentation/_system/aop/internal/aop.core.logging';
+} from '@/presentation/_system/aop/internal/decorators/resilience.decorator.client';
+import {
+    Ctx,
+    withLogging,
+    withLoggingAsync,
+} from '@/presentation/_system/aop/internal/decorators/logging.decorator';
 import logger from '@/presentation/_system/logging/logger.c';
 
-const logPrefix = 'aop.client-boundary.ts: ';
+const logPrefix = 'aop.client.ts: ';
 
 /**
  * 引数に渡されたサンクに共通処理を追加して実行する。

@@ -3,20 +3,24 @@
 //
 import 'server-only';
 
-import { withAuth, withAuthAsync } from '@/presentation/_system/aop/internal/aop.core.auth';
+import { withAuth, withAuthAsync } from '@/presentation/_system/aop/internal/decorators/auth.decorator';
+import {
+    Ctx,
+    withLogging,
+    withLoggingAsync,
+} from '@/presentation/_system/aop/internal/decorators/logging.decorator';
 import {
     withErrorHandling,
     withErrorHandlingAsync,
-} from '@/presentation/_system/aop/internal/aop.core.exception.bff';
-import { Ctx, withLogging, withLoggingAsync } from '@/presentation/_system/aop/internal/aop.core.logging';
+} from '@/presentation/_system/aop/internal/decorators/resilience.decorator.bff';
 import {
     withResultParsing,
     withResultParsingAsync,
-} from '@/presentation/_system/aop/internal/aop.core.result.bff.action';
+} from '@/presentation/_system/aop/internal/decorators/result.decorator.action';
 import logger from '@/presentation/_system/logging/logger.s';
 import { RESULT } from '@/presentation/_system/result/result.types';
 
-const logPrefix = 'aop.action-boundary.ts';
+const logPrefix = 'aop.action.ts';
 
 /**
  * 引数に渡されたサンクに共通処理を追加して実行する。
