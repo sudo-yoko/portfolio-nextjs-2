@@ -19,7 +19,7 @@ const logPrefix = 'aop.client.ts: ';
 /**
  * 引数に渡されたサンクに共通処理を追加して実行する。
  */
-export function execute<T>(thunk: () => T, onAbort: () => void): T | void {
+export function withAdvice<T>(thunk: () => T, onAbort: () => void): T | void {
     const ctx: Ctx = { logger, logPrefix, process: 'sync client process' };
     return withLogging(ctx, () => withErrorHandling(thunk, onAbort));
 }
@@ -27,7 +27,7 @@ export function execute<T>(thunk: () => T, onAbort: () => void): T | void {
 /**
  * 引数に渡されたサンクに共通処理を追加して実行する。
  */
-export async function executeAsync<T>(thunk: () => Promise<T>, onAbort: () => void): Promise<T | void> {
+export async function withAdviceAsync<T>(thunk: () => Promise<T>, onAbort: () => void): Promise<T | void> {
     const ctx: Ctx = { logger, logPrefix, process: 'async client process' };
     return await withLoggingAsync(ctx, () => withErrorHandlingAsync(thunk, onAbort));
 }

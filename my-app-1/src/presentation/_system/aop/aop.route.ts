@@ -15,7 +15,7 @@ const logPrefix = 'aop.route.ts: ';
 /**
  * 引数に渡されたサンクに共通処理を追加して実行する。
  */
-export async function executeAsync(thunk: () => Promise<RESULT>): Promise<Response> {
+export async function withAdviceAsync(thunk: () => Promise<RESULT>): Promise<Response> {
     const ctx: Ctx = { logger, logPrefix, process: 'bff route process' };
     // TODO: performance.now()で処理時間を取得
     return await withLoggingAsync(ctx, () =>

@@ -3,7 +3,7 @@
 //
 import 'client-only';
 
-import { executeAsync } from '@/presentation/_system/aop/aop.client';
+import { withAdviceAsync } from '@/presentation/_system/aop/aop.client';
 import { createPager } from '@/presentation/_system/pagination/mvvm/models/pagination.pager';
 import { Pager } from '@/presentation/_system/pagination/mvvm/models/pagination.types.c';
 import {
@@ -58,12 +58,12 @@ export function usePagination({
      */
     useEffect(() => {
         void (async () => {
-            await executeAsync(
-                () => func(),
+            await withAdviceAsync(
+                () => _(),
                 () => setError(true),
             );
         })();
-        async function func() {
+        async function _() {
             // if (!search) {
             if (state.step !== Step.Search) {
                 return;
@@ -135,11 +135,11 @@ export async function handlePagination(
     dispatch: React.ActionDispatch<[action: Action<User[], FormKeys>]>,
     setError: React.Dispatch<React.SetStateAction<boolean>>,
 ): Promise<void> {
-    await executeAsync(
-        () => func(),
+    await withAdviceAsync(
+        () => _(),
         () => setError(true),
     );
-    async function func() {
+    async function _() {
         if (pager?.current == null) {
             return;
         }

@@ -3,7 +3,7 @@
 //
 'use client';
 
-import { executeAsync } from '@/presentation/_system/aop/aop.client';
+import { withAdviceAsync } from '@/presentation/_system/aop/aop.client';
 import { resultError } from '@/presentation/_system/error/error.factories';
 import { isInvalid, isOkEmpty, isRetryable } from '@/presentation/_system/result/result.helpers';
 import { hasError } from '@/presentation/_system/validation/validation.helpers';
@@ -55,12 +55,12 @@ export async function submit(
     dispatch: React.ActionDispatch<[action: Action]>,
     onAbort: () => void,
 ) {
+    const location = 'contact.handler.event.ts#submit';
+
     // エラーハンドリングを追加して処理を実行する。
-    await executeAsync(() => func(), onAbort);
+    await withAdviceAsync(() => _(), onAbort);
 
-    async function func() {
-        const location = 'contact.handler.event.ts#func';
-
+    async function _() {
         // バックエンド呼び出し
         const result = await send(state.formData);
         // 正常

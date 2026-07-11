@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { executeAsync } from '@/presentation/_system/aop/aop.route';
+import { withAdviceAsync } from '@/presentation/_system/aop/aop.route';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 import { execute } from '@/presentation/users/min/modules/users.interactor';
 import { FormKeys } from '@/presentation/users/min/modules/users.types';
@@ -14,9 +14,9 @@ interface ReqBody {
 
 export async function POST(req: Request): Promise<Response> {
     // return await withErrorHandlingAsync(() => withAuthAsync(() => func()));
-    return await executeAsync(() => func());
+    return await withAdviceAsync(() => _());
 
-    async function func() {
+    async function _() {
         // const reqBody: ReqBody = await req.json();
         // const { limit, offset, query } = reqBody;
         // const { total, users } = await send(offset, limit, query);

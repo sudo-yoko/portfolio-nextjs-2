@@ -3,15 +3,15 @@
 //
 import 'server-only';
 
-import { executeAsync } from '@/presentation/_system/aop/aop.server';
+import { withAdviceAsync } from '@/presentation/_system/aop/aop.server';
 import { SearchParams } from '@/presentation/_system/types/search-params';
 import { handleRequest } from '@/presentation/contact/mvvm/view-models/contact.handler.request';
 import Main from '@/presentation/contact/mvvm/views/contact.component.main';
 
 export default async function Page(props: { searchParams?: SearchParams }) {
-    return await executeAsync(() => func());
+    return await withAdviceAsync(() => _());
 
-    async function func() {
+    async function _() {
         const _result = handleRequest(props);
         return (
             <>

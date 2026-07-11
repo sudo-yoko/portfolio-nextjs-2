@@ -1,6 +1,6 @@
 'use client';
 
-import { executeAsync } from '@/presentation/_system/aop/aop.client';
+import { withAdviceAsync } from '@/presentation/_system/aop/aop.client';
 import { fetchHeader } from '@/presentation/_system/header/mvvm/models/header.requester';
 import {
     Action,
@@ -29,13 +29,13 @@ export function useHeader() {
     useEffect(() => {
         if (state.step === Step.Processing) {
             void (async () => {
-                await executeAsync(
-                    () => func(),
+                await withAdviceAsync(
+                    () => _(),
                     () => processAbort(dispatch),
                 );
             })();
         }
-        async function func() {
+        async function _() {
             const result = await fetchHeader();
             if (isOkData(result)) {
                 setProfile(dispatch, result.data);

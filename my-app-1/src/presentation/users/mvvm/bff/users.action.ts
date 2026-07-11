@@ -1,15 +1,15 @@
 'use server';
 
-import { executeAsync } from '@/presentation/_system/aop/aop.action';
+import { withAdviceAsync } from '@/presentation/_system/aop/aop.action';
 import { RESULT } from '@/presentation/_system/result/result.types';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 import { execute } from '@/presentation/users/mvvm/bff/users.interactor';
 import { FormKeys } from '@/presentation/users/mvvm/models/users.types';
 
 export async function action(offset: string, limit: string, formData: FormData<FormKeys>): Promise<RESULT> {
-    return await executeAsync(() => func());
+    return await withAdviceAsync(() => _());
 
-    async function func() {
+    async function _() {
         const result = await execute(offset, limit, formData);
         // return JSON.stringify(result);
         return result;

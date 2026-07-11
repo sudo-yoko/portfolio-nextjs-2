@@ -2,19 +2,18 @@ import 'server-only';
 
 import { NextRequest } from 'next/server';
 
-import { executeAsync } from '@/presentation/_system/aop/aop.route';
+import { withAdviceAsync } from '@/presentation/_system/aop/aop.route';
 import { applicationError } from '@/presentation/_system/error/error.factories';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 import { execute } from '@/presentation/users/standard/bff/users.interactor';
 import { FormKeys } from '@/presentation/users/standard/models/users.types';
 
 export async function POST(req: NextRequest): Promise<Response> {
+    const location = 'users.route.ts#POST';
+
     // TODO: 引数がNestResponse、戻りがResponse(NextResponseではない)でも問題ないか
-    return await executeAsync(() => func());
-
-    async function func() {
-        const location = 'users.route.ts#func';
-
+    return await withAdviceAsync(() => _());
+    async function _() {
         // クエリ文字列を取得
         const params = req.nextUrl.searchParams;
 

@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { executeAsync } from '@/presentation/_system/aop/aop.route';
+import { withAdviceAsync } from '@/presentation/_system/aop/aop.route';
 import logger from '@/presentation/_system/logging/logger.s';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 import { execute } from '@/presentation/contact/small/bff/contact.interactor';
@@ -9,9 +9,9 @@ import { FormKeys } from '@/presentation/contact/small/models/contact.types';
 const logPrefix = 'contact.route.ts: ';
 
 export async function POST(req: Request): Promise<Response> {
-    return executeAsync(() => func());
+    return withAdviceAsync(() => _());
 
-    async function func() {
+    async function _() {
         const formData: FormData<FormKeys> = await req.json();
         logger.info(logPrefix + `contactBody=${JSON.stringify(formData)}`);
         const result = await execute(formData);

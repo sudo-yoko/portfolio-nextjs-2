@@ -25,7 +25,7 @@ const logPrefix = 'aop.action.ts';
 /**
  * 引数に渡されたサンクに共通処理を追加して実行する。
  */
-export function execute(thunk: () => RESULT): RESULT {
+export function withAdvice(thunk: () => RESULT): RESULT {
     const ctx: Ctx = { logger, logPrefix, process: 'sync action process' };
     return withLogging(ctx, () => withResultParsing(() => withErrorHandling(() => withAuth(thunk))));
 }
@@ -33,7 +33,7 @@ export function execute(thunk: () => RESULT): RESULT {
 /**
  * 引数に渡されたサンクに共通処理を追加して実行する。
  */
-export async function executeAsync(thunk: () => Promise<RESULT>): Promise<RESULT> {
+export async function withAdviceAsync(thunk: () => Promise<RESULT>): Promise<RESULT> {
     const ctx: Ctx = { logger, logPrefix, process: 'async action process' };
     return await withLoggingAsync(ctx, () =>
         withResultParsingAsync(() => withErrorHandlingAsync(() => withAuthAsync(thunk))),

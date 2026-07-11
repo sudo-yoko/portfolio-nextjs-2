@@ -3,7 +3,7 @@
 //
 import 'client-only';
 
-import { executeAsync } from '@/presentation/_system/aop/aop.client';
+import { withAdviceAsync } from '@/presentation/_system/aop/aop.client';
 import { resultError } from '@/presentation/_system/error/error.factories';
 import {
     Action,
@@ -43,15 +43,15 @@ export function usePagination() {
     );
     useEffect(() => {
         void (async () => {
-            await executeAsync(
-                () => func(),
+            await withAdviceAsync(
+                () => _(),
                 () => {
                     cancel(dispatch);
                     setError(dispatch, true);
                 },
             );
         })();
-        async function func() {
+        async function _() {
             if (state.step === Step.Search) {
                 pager.current = createPager(fetchCallback, {
                     initialPage,

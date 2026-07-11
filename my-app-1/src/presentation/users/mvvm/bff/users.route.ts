@@ -2,7 +2,7 @@ import 'server-only';
 
 import { NextRequest } from 'next/server';
 
-import { executeAsync } from '@/presentation/_system/aop/aop.route';
+import { withAdviceAsync } from '@/presentation/_system/aop/aop.route';
 import { applicationError } from '@/presentation/_system/error/error.factories';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 import { execute } from '@/presentation/users/mvvm/bff/users.interactor';
@@ -10,9 +10,9 @@ import { FormKeys } from '@/presentation/users/mvvm/models/users.types';
 
 export async function POST(req: NextRequest): Promise<Response> {
     // TODO: 引数がNestResponse、戻りがResponse(NextResponseではない)でも問題ないか
-    return await executeAsync(() => func());
+    return await withAdviceAsync(() => _());
 
-    async function func() {
+    async function _() {
         const location = 'users.route.ts#func';
 
         // クエリ文字列を取得
