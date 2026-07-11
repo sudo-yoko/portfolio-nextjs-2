@@ -3,24 +3,24 @@
 //
 import 'server-only';
 
-import { withAuth, withAuthAsync } from '@/presentation/_system/aop/internal/decorators/auth.decorator';
+import { withAuth, withAuthAsync } from '@/presentation/_system/aop/internal/aop.advice.auth';
+import {
+    withErrorHandling,
+    withErrorHandlingAsync,
+} from '@/presentation/_system/aop/internal/aop.advice.error-handling.bff';
 import {
     Ctx,
     withLogging,
     withLoggingAsync,
-} from '@/presentation/_system/aop/internal/decorators/logging.decorator';
-import {
-    withErrorHandling,
-    withErrorHandlingAsync,
-} from '@/presentation/_system/aop/internal/decorators/resilience.decorator.bff';
+} from '@/presentation/_system/aop/internal/aop.advice.logging';
 import {
     withResultParsing,
     withResultParsingAsync,
-} from '@/presentation/_system/aop/internal/decorators/result.decorator.action';
+} from '@/presentation/_system/aop/internal/aop.advice.result.action';
 import logger from '@/presentation/_system/logging/logger.s';
 import { RESULT } from '@/presentation/_system/result/result.types';
 
-const logPrefix = 'aop.action.ts';
+const logPrefix = 'aop.server-action.ts';
 
 /**
  * 引数に渡されたサンクに共通処理を追加して実行する。

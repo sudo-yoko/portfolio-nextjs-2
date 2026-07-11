@@ -3,14 +3,14 @@
 //
 import 'server-only';
 
-import { withAuthAsync } from '@/presentation/_system/aop/internal/decorators/auth.decorator';
-import { Ctx, withLoggingAsync } from '@/presentation/_system/aop/internal/decorators/logging.decorator';
-import { withErrorHandlingAsync } from '@/presentation/_system/aop/internal/decorators/resilience.decorator.bff';
-import { withResponseAsync } from '@/presentation/_system/aop/internal/decorators/result.decorator.route';
+import { withAuthAsync } from '@/presentation/_system/aop/internal/aop.advice.auth';
+import { withErrorHandlingAsync } from '@/presentation/_system/aop/internal/aop.advice.error-handling.bff';
+import { Ctx, withLoggingAsync } from '@/presentation/_system/aop/internal/aop.advice.logging';
+import { withResponseAsync } from '@/presentation/_system/aop/internal/aop.advice.result.route';
 import logger from '@/presentation/_system/logging/logger.s';
 import { RESULT } from '@/presentation/_system/result/result.types';
 
-const logPrefix = 'aop.route.ts: ';
+const logPrefix = 'aop.route-handler.ts: ';
 
 /**
  * 引数に渡されたサンクに共通処理を追加して実行する。

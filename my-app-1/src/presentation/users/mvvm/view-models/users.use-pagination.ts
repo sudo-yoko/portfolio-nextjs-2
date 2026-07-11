@@ -3,7 +3,7 @@
 //
 import 'client-only';
 
-import { withAdviceAsync } from '@/presentation/_system/aop/aop.client';
+import { withAdviceAsync } from '@/presentation/_system/aop/aop.client-side';
 import { createPager } from '@/presentation/_system/pagination/mvvm/models/pagination.pager';
 import { Pager } from '@/presentation/_system/pagination/mvvm/models/pagination.types.c';
 import {

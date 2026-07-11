@@ -3,7 +3,7 @@
 //
 import 'server-only';
 
-import { withAdviceAsync } from '@/presentation/_system/aop/aop.server';
+import { withAdviceAsync } from '@/presentation/_system/aop/aop.server-side';
 import { SearchParams } from '@/presentation/_system/types/search-params';
 import { handleRequest } from '@/presentation/contact/mvvm/view-models/contact.handler.request';
 import Main from '@/presentation/contact/mvvm/views/contact.component.main';

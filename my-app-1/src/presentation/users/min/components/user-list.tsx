@@ -1,6 +1,6 @@
 'use client';
 
-import { withAdviceAsync } from '@/presentation/_system/aop/aop.client';
+import { withAdviceAsync } from '@/presentation/_system/aop/aop.client-side';
 import { Button } from '@/presentation/_system/components/button.decorator.simple';
 import { ErrorRedirect } from '@/presentation/_system/error/views/component.error-redirect';
 import { createPager } from '@/presentation/_system/pagination/min/modules/pagination.pager';

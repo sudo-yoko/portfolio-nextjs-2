@@ -1,6 +1,6 @@
 'use client';
 
-import { withAdviceAsync } from '@/presentation/_system/aop/aop.client';
+import { withAdviceAsync } from '@/presentation/_system/aop/aop.client-side';
 import { fetchHeader } from '@/presentation/_system/header/mvvm/models/header.requester';
 import {
     Action,

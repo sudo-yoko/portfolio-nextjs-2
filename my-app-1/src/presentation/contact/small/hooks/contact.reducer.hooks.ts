@@ -3,14 +3,11 @@
 //
 'use client';
 
-import { withAdviceAsync } from '@/presentation/_system/aop/aop.client';
+import { withAdviceAsync } from '@/presentation/_system/aop/aop.client-side';
 import { resultError } from '@/presentation/_system/error/error.factories';
 import { isInvalid, isOkEmpty, isRetryable } from '@/presentation/_system/result/result.helpers';
 import { hasError } from '@/presentation/_system/validation/validation.helpers';
 import { Violations } from '@/presentation/_system/validation/validation.types';
-import { send } from '@/presentation/contact/small/models/contact.requester';
-import { FormKeys } from '@/presentation/contact/small/models/contact.types';
-import { validate } from '@/presentation/contact/small/models/contact.validator';
 import {
     Action,
     initialState,
@@ -24,6 +21,9 @@ import {
     toConfirm,
     toInput,
 } from '@/presentation/contact/small/hooks/contact.reducer';
+import { send } from '@/presentation/contact/small/models/contact.requester';
+import { FormKeys } from '@/presentation/contact/small/models/contact.types';
+import { validate } from '@/presentation/contact/small/models/contact.validator';
 import { useEffect, useReducer } from 'react';
 
 /**

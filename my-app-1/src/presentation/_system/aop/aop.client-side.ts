@@ -6,15 +6,15 @@ import 'client-only';
 import {
     withErrorHandling,
     withErrorHandlingAsync,
-} from '@/presentation/_system/aop/internal/decorators/resilience.decorator.client';
+} from '@/presentation/_system/aop/internal/aop.advice.error-handling.client';
 import {
     Ctx,
     withLogging,
     withLoggingAsync,
-} from '@/presentation/_system/aop/internal/decorators/logging.decorator';
+} from '@/presentation/_system/aop/internal/aop.advice.logging';
 import logger from '@/presentation/_system/logging/logger.c';
 
-const logPrefix = 'aop.client.ts: ';
+const logPrefix = 'aop.client-side.ts: ';
 
 /**
  * 引数に渡されたサンクに共通処理を追加して実行する。
