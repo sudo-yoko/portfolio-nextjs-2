@@ -1,5 +1,5 @@
 import { printf } from '@/__tests__/test-logger';
-import { clientImpl } from '@/presentation/_system/client/internal/client.adapter.fetch';
+import { clientImpl } from '@/presentation/_system/client/internal/fetch-adapter';
 import { Method } from '@/presentation/_system/client/client.types';
 import { formatError } from '@/presentation/_system/error/error.helper.stringify';
 import { jest } from '@jest/globals';

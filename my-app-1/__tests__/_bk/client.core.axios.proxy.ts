@@ -4,7 +4,7 @@ import type { AxiosInstance } from 'axios';
 import axios from 'axios';
 
 import { Client, ValidateStatus } from '@/presentation/_system/client/client.types';
-import * as adapter from '@/presentation/_system/client/internal/client.adapter.axios';
+import * as adapter from '@/presentation/_system/client/internal/axios-adapter';
 import { envProxy } from '@/presentation/_system/env/env.s.helper';
 import { Logger } from '@/presentation/_system/logging/logging.types';
 

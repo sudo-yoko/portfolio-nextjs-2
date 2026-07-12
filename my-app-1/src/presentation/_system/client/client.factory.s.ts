@@ -1,10 +1,10 @@
 import 'server-only';
 
 import { Client } from '@/presentation/_system/client/client.types';
-import { axiosClient } from '@/presentation/_system/client/internal/client.adapter.axios';
-import { nodeClient } from '@/presentation/_system/client/internal/client.adapter.node';
-import { stubClient } from '@/presentation/_system/client/internal/client.adapter.stub';
-import { undiciClient } from '@/presentation/_system/client/internal/client.adapter.undici';
+import { axiosClient } from '@/presentation/_system/client/internal/axios-adapter';
+import { nodeClient } from '@/presentation/_system/client/internal/node-adapter';
+import { stubClient } from '@/presentation/_system/client/internal/stub-adapter';
+import { undiciClient } from '@/presentation/_system/client/internal/undici-adapter';
 import { envProxy, proxyUrl } from '@/presentation/_system/env/env.s.helper';
 
 /**
