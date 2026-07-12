@@ -7,7 +7,7 @@ import {
     applyViolations,
     dismissRetry,
     handleNext,
-} from '@/presentation/contact/mvvm/view-models/contact.handler.event';
+} from '@/presentation/contact/mvvm/view-models/contact.event-handler';
 import { Action, setValue, State } from '@/presentation/contact/mvvm/view-models/contact.reducer';
 import { useEffect } from 'react';
 
