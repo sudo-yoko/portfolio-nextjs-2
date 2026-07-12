@@ -3,10 +3,10 @@
 //
 import 'server-only';
 
-import { withAuthAsync } from '@/presentation/_system/aop/internal/aop.advice.auth';
-import { withErrorHandlingAsync } from '@/presentation/_system/aop/internal/aop.advice.error-handling.bff';
-import { Ctx, withLoggingAsync } from '@/presentation/_system/aop/internal/aop.advice.logging';
-import { withResponseAsync } from '@/presentation/_system/aop/internal/aop.advice.result.route';
+import { withAuthAsync } from '@/presentation/_system/aspect/internal/aspect.auth';
+import { withErrorHandlingAsync } from '@/presentation/_system/aspect/internal/aspect.error-handling.bff';
+import { Ctx, withLoggingAsync } from '@/presentation/_system/aspect/internal/aspect.logging';
+import { withResponseAsync } from '@/presentation/_system/aspect/internal/aspect.result.route';
 import logger from '@/presentation/_system/logging/logger.s';
 import { RESULT } from '@/presentation/_system/result/result.types';
 

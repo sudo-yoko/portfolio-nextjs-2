@@ -6,12 +6,12 @@ import 'client-only';
 import {
     withErrorHandling,
     withErrorHandlingAsync,
-} from '@/presentation/_system/aop/internal/aop.advice.error-handling.client';
+} from '@/presentation/_system/aspect/internal/aspect.error-handling.client';
 import {
     Ctx,
     withLogging,
     withLoggingAsync,
-} from '@/presentation/_system/aop/internal/aop.advice.logging';
+} from '@/presentation/_system/aspect/internal/aspect.logging';
 import logger from '@/presentation/_system/logging/logger.c';
 
 const logPrefix = 'aop.client-side.ts: ';

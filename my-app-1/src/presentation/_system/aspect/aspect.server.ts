@@ -3,16 +3,16 @@
 //
 import 'server-only';
 
-import { withAuth, withAuthAsync } from '@/presentation/_system/aop/internal/aop.advice.auth';
+import { withAuth, withAuthAsync } from '@/presentation/_system/aspect/internal/aspect.auth';
 import {
     withErrorHandling,
     withErrorHandlingAsync,
-} from '@/presentation/_system/aop/internal/aop.advice.error-handling.server';
+} from '@/presentation/_system/aspect/internal/aspect.error-handling.server';
 import {
     Ctx,
     withLogging,
     withLoggingAsync,
-} from '@/presentation/_system/aop/internal/aop.advice.logging';
+} from '@/presentation/_system/aspect/internal/aspect.logging';
 import logger from '@/presentation/_system/logging/logger.s';
 
 const logPrefix = 'aop.server-side.ts: ';

@@ -2,7 +2,7 @@
 // RESULT型
 // - BFFからクライアントに返す戻り値の型を標準化する
 //
-import { AopResult } from '@/presentation/_system/aop/aop.types';
+import { AopResult } from '@/presentation/_system/aspect/aspect.types';
 import { ErrType } from '@/presentation/_system/error/error.types';
 import { Violations } from '@/presentation/_system/validation/validation.types';
 

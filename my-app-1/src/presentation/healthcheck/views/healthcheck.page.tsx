@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { withAdviceAsync } from '@/presentation/_system/aop/aop.server-side';
+import { withAdviceAsync } from '@/presentation/_system/aspect/aspect.server';
 import { handleRequest } from '@/presentation/healthcheck/view-models/healthcheck.handler.request';
 
 export default async function Page() {

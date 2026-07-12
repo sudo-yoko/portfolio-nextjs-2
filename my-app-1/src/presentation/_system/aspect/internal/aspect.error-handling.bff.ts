@@ -2,7 +2,7 @@
 // エラーハンドリングAOP部品
 import 'server-only';
 
-import { AopResult } from '@/presentation/_system/aop/aop.types';
+import { AopResult } from '@/presentation/_system/aspect/aspect.types';
 import { formatError, getCustomErrorProperties } from '@/presentation/_system/error/error.helper.stringify';
 import { isCustomError, isRetryableError } from '@/presentation/_system/error/error.helpers';
 import logger from '@/presentation/_system/logging/logger.s';

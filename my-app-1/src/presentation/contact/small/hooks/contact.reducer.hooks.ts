@@ -3,7 +3,7 @@
 //
 'use client';
 
-import { withAdviceAsync } from '@/presentation/_system/aop/aop.client-side';
+import { withAdviceAsync } from '@/presentation/_system/aspect/aspect.client';
 import { resultError } from '@/presentation/_system/error/error.factories';
 import { isInvalid, isOkEmpty, isRetryable } from '@/presentation/_system/result/result.helpers';
 import { hasError } from '@/presentation/_system/validation/validation.helpers';

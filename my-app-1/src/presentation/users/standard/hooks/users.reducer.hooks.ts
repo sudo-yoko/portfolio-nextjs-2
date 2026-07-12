@@ -3,7 +3,7 @@
 //
 import 'client-only';
 
-import { withAdviceAsync } from '@/presentation/_system/aop/aop.client-side';
+import { withAdviceAsync } from '@/presentation/_system/aspect/aspect.client';
 import { resultError } from '@/presentation/_system/error/error.factories';
 import {
     Action,
