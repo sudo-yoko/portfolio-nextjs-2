@@ -4,19 +4,22 @@
 'use server';
 
 import { withAdviceAsync } from '@/presentation/_system/aspect/aspect.server-action';
-import logger from '@/presentation/_system/logging/logger.s';
+import { createLogger } from '@/presentation/_system/logging/logger.s';
+// import logger from '@/presentation/_system/logging/logger.s';
 import { RESULT } from '@/presentation/_system/result/result.types';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 import { execute } from '@/presentation/contact/mvvm/bff/contact.interactor';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 
-const logPrefix = 'contact.action.ts: ';
+// const logPrefix = 'contact.action.ts: ';
+const logger = createLogger({ logPrefix: 'contact.action.ts: ' });
 
 export async function post(formData: FormData<FormKeys>): Promise<RESULT> {
     return await withAdviceAsync(() => _());
 
     async function _() {
-        logger.info(logPrefix + `formData=${JSON.stringify(formData)}`);
+        // logger.info(logPrefix + `formData=${JSON.stringify(formData)}`);
+        logger.info(`formData=${JSON.stringify(formData)}`);
         const result = await execute(formData);
         // return JSON.stringify(result);
         return result;
