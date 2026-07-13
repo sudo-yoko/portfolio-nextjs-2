@@ -10,7 +10,9 @@ import { envByStaticKey as env } from '@/presentation/_system/env/env';
  */
 // TODO: プレフィックス付きロガー
 // export const winstonAdapter: Logger = {
-export const createWinstonAdapter: ({ logPrefix }: { logPrefix?: string }) => Logger = ({ logPrefix }) => {
+export const createWinstonAdapter: ({ logPrefix }: { logPrefix?: string }) => Logger = ({
+    logPrefix = '',
+}) => {
     return {
         log: (level, message, extras) => {
             winston.log(level, logPrefix + message, { ...extras });

@@ -14,7 +14,7 @@ import {
 } from '@/presentation/_system/aspect/internal/aspect.logging';
 import logger from '@/presentation/_system/logging/logger.c';
 
-const logPrefix = 'aop.client-side.ts: ';
+const logPrefix = 'aspect.client.ts: ';
 
 /**
  * 引数に渡されたサンクに共通処理を追加して実行する。

@@ -9,7 +9,7 @@ import logger from '@/presentation/_system/logging/logger.s';
 import { abort, retry } from '@/presentation/_system/result/result.factories';
 import { RESULT } from '@/presentation/_system/result/result.types';
 
-const logPrefix = 'aop.core.exception.bff.ts: ';
+const logPrefix = 'aspect.error-handling.bff.ts: ';
 
 /**
  * 引数に渡されたサンクにエラーハンドリングを追加して実行する。

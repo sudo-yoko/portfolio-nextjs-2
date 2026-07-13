@@ -6,7 +6,7 @@ import { formatError, getCustomErrorProperties } from '@/presentation/_system/er
 import { isCustomError } from '@/presentation/_system/error/error.helpers';
 import logger from '@/presentation/_system/logging/logger.s';
 
-const logPrefix = 'aop.core.exception.server.ts: ';
+const logPrefix = 'aspect.error-handling.server.ts: ';
 
 /**
  * 引数に渡されたサンクにエラーハンドリングを追加して実行する。

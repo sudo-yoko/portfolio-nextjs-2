@@ -20,7 +20,7 @@ import {
 import logger from '@/presentation/_system/logging/logger.s';
 import { RESULT } from '@/presentation/_system/result/result.types';
 
-const logPrefix = 'aop.server-action.ts';
+const logPrefix = 'aspect.server-action.ts';
 
 /**
  * 引数に渡されたサンクに共通処理を追加して実行する。

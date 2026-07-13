@@ -10,7 +10,7 @@ import { withResponseAsync } from '@/presentation/_system/aspect/internal/aspect
 import logger from '@/presentation/_system/logging/logger.s';
 import { RESULT } from '@/presentation/_system/result/result.types';
 
-const logPrefix = 'aop.route-handler.ts: ';
+const logPrefix = 'aspect.route-handler.ts: ';
 
 /**
  * 引数に渡されたサンクに共通処理を追加して実行する。

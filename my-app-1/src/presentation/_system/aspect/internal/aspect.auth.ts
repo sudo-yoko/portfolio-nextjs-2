@@ -7,7 +7,7 @@ import { formatError } from '@/presentation/_system/error/error.helper.stringify
 import { isAuthError } from '@/presentation/_system/error/error.helpers';
 import logger from '@/presentation/_system/logging/logger.s';
 
-const logPrefix = 'aop.core.auth.ts: ';
+const logPrefix = 'aspect.auth.ts: ';
 
 /**
  * 引数に渡されたサンクに認証処理を追加して実行する。
