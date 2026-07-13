@@ -10,4 +10,6 @@ const logger: Logger = winstonAdapter;
 
 export const createLogger = createWinstonAdapter;
 
-export default logger;
+// NOTE: オブジェクトを変更不可にする
+// export default logger;
+export default Object.freeze(logger);

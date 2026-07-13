@@ -135,6 +135,8 @@ const eslintConfig = defineConfig([
 
     // Prettierと競合するESLintの整形系ルールを無効化する。
     eslintConfigPrettier,
+
+    // TODO: グローバルオブジェクトやプロトタイプの操作は禁止
 ]);
 
 export default eslintConfig;
