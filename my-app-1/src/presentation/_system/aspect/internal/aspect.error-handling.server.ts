@@ -2,8 +2,10 @@
 // エラーハンドリングAOP部品
 import 'server-only';
 
+import { redirect } from 'next/navigation';
+
 import { formatError, getCustomErrorProperties } from '@/presentation/_system/error/error.helper.stringify';
-import { isCustomError } from '@/presentation/_system/error/error.helpers';
+import { isAuthError, isCustomError } from '@/presentation/_system/error/error.helpers';
 import logger from '@/presentation/_system/logging/logger.s';
 
 const logPrefix = 'aspect.error-handling.server.ts: ';
@@ -49,4 +51,7 @@ function handleError(fname: string, e: unknown): void {
     errProps.error = e;
     const { all } = formatError(errProps);
     logger.error(logPrefix + fname + all);
+    if (isAuthError(e)) {
+        redirect('/auth-error');
+    }
 }
