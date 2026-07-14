@@ -4,7 +4,7 @@
 import 'server-only';
 
 import { withAdviceAsync } from '@/presentation/_system/aspect/aspect.server';
-import { SearchParams } from '@/presentation/_system/types/search-params3';
+import { SearchParams } from '@/presentation/_system/types/search-params';
 import { handleRequest } from '@/presentation/contact/mvvm/view-models/contact.request-handler';
 import Main from '@/presentation/contact/mvvm/views/contact.component.main';
 

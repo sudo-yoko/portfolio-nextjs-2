@@ -1,5 +1,5 @@
 import { Aborted, Invalid, OkEmpty, Retryable } from '@/presentation/_system/result/result.types';
-import { SearchParam } from '@/presentation/_system/types/search-params3';
+import { SearchParam } from '@/presentation/_system/types/search-params';
 
 /**
  * クエリパラメータ

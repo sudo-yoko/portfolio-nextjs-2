@@ -5,7 +5,7 @@ import 'server-only';
 
 // import debug from '@/presentation/_system/logging/debug';
 import logger from '@/presentation/_system/logging/logger.s';
-import { getStringParam, SearchParams } from '@/presentation/_system/types/search-params3';
+import { getStringParam, SearchParams } from '@/presentation/_system/types/search-params';
 import { ContactParams } from '@/presentation/contact/mvvm/models/contact.types';
 
 const logPrefix = '/contact/mvvm/view-models/request-handler.ts: ';
