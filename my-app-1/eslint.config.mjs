@@ -54,7 +54,7 @@ const eslintConfig = defineConfig([
     {
         rules: {
             'no-warning-comments': [
-                'warn',
+                'off',
                 {
                     terms: ['todo', 'fixme', 'hack'],
                     location: 'start', // TODO: の位置は行頭
@@ -94,7 +94,7 @@ const eslintConfig = defineConfig([
             },
         },
         rules: {
-            '@typescript-eslint/no-floating-promises': 'warn', // 非同期関数にawaitつけ忘れ検知
+            '@typescript-eslint/no-floating-promises': 'warn', // 非同期関数にawaitつけ忘れ検知。非同期関数の結果を変数に代入している場合は検知されない
             '@typescript-eslint/await-thenable': 'error', // awaitできないものにawaitがついているものを検知
         },
     },

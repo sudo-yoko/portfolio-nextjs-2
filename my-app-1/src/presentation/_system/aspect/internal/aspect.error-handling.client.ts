@@ -56,4 +56,5 @@ async function handleError(fname: string, e: unknown): Promise<void> {
     errProps.error = e;
     const { all } = formatError(errProps);
     void logger.errorAsync(logPrefix + fname + all);
+    throw e;
 }
