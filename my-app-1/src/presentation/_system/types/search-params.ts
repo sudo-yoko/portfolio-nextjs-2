@@ -9,16 +9,19 @@ export type SearchParam = string | string[] | undefined;
 export type SearchParams = Promise<Record<string, SearchParam>>;
 
 export async function getStringParam(searchParams: SearchParams | undefined, key: string): Promise<string> {
-    if (!searchParams) {
-        return '';
-    }
     const params = await searchParams;
-    const value = params[key];
-    if (!value) {
-        return '';
-    }
-    if (Array.isArray(value)) {
-        return value[0];
-    }
-    return value;
+    const param = params?.[key];
+    const value = Array.isArray(param) ? param[0] : param;
+    return value ? value.trim() : '';
+    // if (!searchParams) {
+    //     return '';
+    // }
+    // NOTE: 空文字もFalsyとなる
+    // if (!param) {
+    //     return '';
+    // }
+    // if (Array.isArray(param)) {
+    //     return param[0];
+    // }
+    // return param.trim();
 }
