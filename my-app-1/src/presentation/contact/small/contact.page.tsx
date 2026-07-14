@@ -5,7 +5,7 @@ import 'server-only';
 
 import { withAdviceAsync } from '@/presentation/_system/aspect/aspect.server';
 import logger from '@/presentation/_system/logging/logger.s';
-import { getSearchParams, SearchParams } from '@/presentation/_system/types/search-params';
+import { getStringParam, SearchParams } from '@/presentation/_system/types/search-params3';
 import Main from '@/presentation/contact/small/components/contact.main';
 import { ContactParams } from '@/presentation/contact/small/models/contact.types';
 
@@ -16,7 +16,10 @@ export default async function Page(props: { searchParams?: SearchParams }) {
 
     async function _() {
         // クエリパラメータを取得する
-        const params: ContactParams = await getSearchParams(props.searchParams, 'category', 'from');
+        // const params: ContactParams = await getSearchParams(props.searchParams, 'category', 'from');
+        const category = await getStringParam(props.searchParams, 'category');
+        const from = await getStringParam(props.searchParams, 'from');
+        const params: ContactParams = { category, from };
         logger.info(logPrefix + `category=${params.category}, from=${params.from}`);
         return (
             <>

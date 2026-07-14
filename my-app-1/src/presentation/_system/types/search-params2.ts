@@ -24,18 +24,3 @@ export async function getSearchParams<K extends string>(
     const result = Object.fromEntries(keys.map((key) => [key, params?.[key]]));
     return result as Record<K, SearchParam>;
 }
-
-export async function getStringParam(searchParams: SearchParams | undefined, key: string): Promise<string> {
-    if (!searchParams) {
-        return '';
-    }
-    const params = await searchParams;
-    const value = params[key];
-    if (!value) {
-        return '';
-    }
-    if (Array.isArray(value)) {
-        return value[0];
-    }
-    return value;
-}
