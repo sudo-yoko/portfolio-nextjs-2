@@ -7,7 +7,7 @@ import { getStringParam, SearchParams } from '@/presentation/_system/types/searc
 import Input from '@/presentation/err-test/views/err-test.component.input';
 
 export default async function Page(props: { searchParams?: SearchParams }) {
-    return withAdviceAsync(() => _());
+    return await withAdviceAsync(() => _());
 
     async function _() {
         const err = await getStringParam(props.searchParams, 'err');

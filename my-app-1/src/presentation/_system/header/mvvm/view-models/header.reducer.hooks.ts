@@ -27,15 +27,18 @@ export function useHeader() {
     }, []);
 
     useEffect(() => {
-        if (state.step === Step.Processing) {
-            void (async () => {
+        // NOTE: withAdviceAsyncをawaitするため、非同期関数でラップする。
+        // （useEffect の第一引数に渡す関数は非同期関数は不可のため非同期関数でラップする）
+        void _();
+        async function _() {
+            if (state.step === Step.Processing) {
                 await withAdviceAsync(
-                    () => _(),
+                    () => __(),
                     () => processAbort(dispatch),
                 );
-            })();
+            }
         }
-        async function _() {
+        async function __() {
             const result = await fetchHeader();
             if (isOkData(result)) {
                 setProfile(dispatch, result.data);

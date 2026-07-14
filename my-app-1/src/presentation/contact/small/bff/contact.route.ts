@@ -9,7 +9,7 @@ import { FormKeys } from '@/presentation/contact/small/models/contact.types';
 const logPrefix = 'contact.route.ts: ';
 
 export async function POST(req: Request): Promise<Response> {
-    return withAdviceAsync(() => _());
+    return await withAdviceAsync(() => _());
 
     async function _() {
         const formData: FormData<FormKeys> = await req.json();

@@ -12,7 +12,7 @@ const logPrefix = 'api-console.customers.route.ts: ';
 
 // TODO: BFFの真髄は、「フロントエンドの都合に合わせてAPIを再定義する」こと。必ずしも呼び出すバックエンドAPIと同じURL構成を踏襲しなくても良いと考える
 export async function GET(req: NextRequest): Promise<Response> {
-    return withAdviceAsync(() => _());
+    return await withAdviceAsync(() => _());
 
     async function _() {
         const params = req.nextUrl.searchParams;

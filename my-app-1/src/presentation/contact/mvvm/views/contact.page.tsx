@@ -12,7 +12,7 @@ export default async function Page(props: { searchParams?: SearchParams }) {
     return await withAdviceAsync(() => _());
 
     async function _() {
-        const _result = handleRequest(props);
+        const _result = await handleRequest(props);
         return (
             <>
                 <div>

@@ -50,6 +50,7 @@ export function handleNext(state: State, dispatch: React.ActionDispatch<[action:
 /**
  * 送信中が表示中の処理
  */
+// TODO: handleSubmitにする
 export async function submit(
     state: State,
     dispatch: React.ActionDispatch<[action: Action]>,

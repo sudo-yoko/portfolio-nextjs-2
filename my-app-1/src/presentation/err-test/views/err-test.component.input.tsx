@@ -22,7 +22,7 @@ export default function Input(props: { err?: string }) {
             }
             setLoading(false);
         }
-    });
+    }, [props.err]);
 
     function handleClick() {
         withAdvice(

@@ -9,7 +9,7 @@ import { ContactBody, FormKeys } from '@/presentation/contact/mvvm/models/contac
 const logPrefix = 'contact.route.ts: ';
 
 export async function POST(req: Request): Promise<Response> {
-    return withAdviceAsync(() => _());
+    return await withAdviceAsync(() => _());
 
     async function _() {
         const contactBody: ContactBody = await req.json();

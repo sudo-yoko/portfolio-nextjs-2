@@ -12,13 +12,19 @@ const logPrefix = 'aspect.auth.ts: ';
 /**
  * 引数に渡されたサンクに認証処理を追加して実行する。
  */
-export function withAuth<T>(thunk: () => T): T {
+// TODO: thunkをsubjectに修正する
+/**
+ * 
+ * @param subject アドバイスを適用する対象の処理
+ * @returns 
+ */
+export function withAuth<T>(subject: () => T): T {
     const fname = 'withAuth: ';
     try {
         // 認証
         authenticate();
         // 引数のサンクを実行
-        return thunk();
+        return subject();
     } catch (error) {
         if (isAuthError(error)) {
             // 認証エラーのみ補足する。ここではエラーメッセージだけ出して、
@@ -33,11 +39,11 @@ export function withAuth<T>(thunk: () => T): T {
 /**
  * 引数に渡されたサンクに認証処理を追加して実行する。
  */
-export async function withAuthAsync<T>(thunk: () => Promise<T>): Promise<T> {
+export async function withAuthAsync<T>(subject: () => Promise<T>): Promise<T> {
     const fname = 'withAuthAsync: ';
     try {
         authenticate();
-        return await thunk();
+        return await subject();
     } catch (error) {
         // TODO: 認証エラーページに遷移。サーバーサイドとクラインとサイド
         if (isAuthError(error)) {
