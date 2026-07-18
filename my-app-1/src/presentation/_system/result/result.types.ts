@@ -85,7 +85,12 @@ export type Tag = (typeof Tag)[keyof typeof Tag];
 //
 // ユニオン型で定義
 //
-export type RESULT = OkEmpty | OkData<unknown> | Invalid<string> | Retryable | Aborted;
+
+// NOTE: ↓RESULTにOkDataの型パラメータを追加してみた
+// export type RESULT = OkEmpty | OkData<unknown> | Invalid<string> | Retryable | Aborted;
+export type RESULT<T = unknown> = OkEmpty | OkData<T> | Invalid<string> | Retryable | Aborted;
+// NOTE: ↑
+
 export type OkEmpty = { tag: typeof Tag.OkEmpty };
 export type OkData<DATA> = { tag: typeof Tag.OkData; data: DATA };
 export type Invalid<FIELD extends string> = { tag: typeof Tag.Invalid; violations: Violations<FIELD> };
