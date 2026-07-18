@@ -17,7 +17,7 @@ export default function Input(props: { err?: string }) {
             () => setError(true),
         );
         function _() {
-            if (props.err === '3') {
+            if (props.err === '21') {
                 throw applicationError({ message: props.err });
             }
             setLoading(false);
@@ -30,7 +30,7 @@ export default function Input(props: { err?: string }) {
             () => setError(true),
         );
         function _() {
-            if (props.err === '4') {
+            if (props.err === '22') {
                 throw applicationError({ message: props.err });
             }
         }
