@@ -6,20 +6,21 @@ import { AopResult } from '@/presentation/_system/aspect/aspect.types';
 import { formatError, getCustomErrorProperties } from '@/presentation/_system/error/error.helper.stringify';
 import { isCustomError, isRetryableError } from '@/presentation/_system/error/error.helpers';
 import logger from '@/presentation/_system/logging/logger.s';
+import { LogPrefix } from '@/presentation/_system/logging/logging.utils';
 import { abort, retry } from '@/presentation/_system/result/result.factories';
 import { RESULT } from '@/presentation/_system/result/result.types';
 
-const logPrefix = 'aspect.error-handling.bff.ts: ';
+const moduleName = 'aspect.error-handling.bff.ts';
 
 /**
  * 引数に渡されたサンクにエラーハンドリングを追加して実行する。
  */
 export function withErrorHandling(thunk: () => RESULT): RESULT {
-    const fname = 'withErrorHandling: ';
+    const logPrefix = LogPrefix.format({ moduleName, functionName: 'withErrorHandling' });
     try {
         return thunk();
     } catch (e) {
-        return handleError(fname, e);
+        return handleError(logPrefix, e);
     }
 }
 
@@ -27,15 +28,15 @@ export function withErrorHandling(thunk: () => RESULT): RESULT {
  * 引数に渡されたサンクにエラーハンドリングを追加して実行する。
  */
 export async function withErrorHandlingAsync(thunk: () => Promise<RESULT>): Promise<RESULT> {
-    const fname = 'withErrorHandlingAsync: ';
+    const logPrefix = LogPrefix.format({ moduleName, functionName: 'withErrorHandlingAsync' });
     try {
         return await thunk();
     } catch (e) {
-        return handleError(fname, e);
+        return handleError(logPrefix, e);
     }
 }
 
-function handleError(fname: string, e: unknown): AopResult {
+function handleError(logPrefix: string, e: unknown): AopResult {
     const errProps: Parameters<typeof formatError>[0] = {};
     const abortProps: Parameters<typeof abort>[0] = {};
 
@@ -50,7 +51,7 @@ function handleError(fname: string, e: unknown): AopResult {
     // ログ出力
     errProps.error = e;
     const { message, all } = formatError(errProps);
-    logger.error(logPrefix + fname + all);
+    logger.error(logPrefix + all);
 
     // RESULT型
     if (isRetryableError(e)) {

@@ -6,20 +6,21 @@ import { authenticate } from '@/presentation/_system/auth/authentication';
 import { formatError } from '@/presentation/_system/error/error.helper.stringify';
 import { isAuthError } from '@/presentation/_system/error/error.helpers';
 import logger from '@/presentation/_system/logging/logger.s';
+import { LogPrefix } from '@/presentation/_system/logging/logging.utils';
 
-const logPrefix = 'aspect.auth.ts: ';
+const moduleName = 'aspect.auth.ts';
 
 /**
  * 引数に渡されたサンクに認証処理を追加して実行する。
  */
 // TODO: thunkをsubjectに修正する
 /**
- * 
+ *
  * @param subject アドバイスを適用する対象の処理
- * @returns 
+ * @returns
  */
 export function withAuth<T>(subject: () => T): T {
-    const fname = 'withAuth: ';
+    const logPrefix = LogPrefix.format({ moduleName, functionName: 'withAuth' });
     try {
         // 認証
         authenticate();
@@ -29,7 +30,7 @@ export function withAuth<T>(subject: () => T): T {
         if (isAuthError(error)) {
             // 認証エラーのみ補足する。ここではエラーメッセージだけ出して、
             // スタックトレースは外側のwithErrorHandlingでまとめて出すようにする
-            logger.error(`${logPrefix}${fname}${formatError({ error }).message}`);
+            logger.error(logPrefix + formatError({ error }).message);
         }
         // 認証エラー以外は外側のwithErrorHandlingで処理させる
         throw error;
@@ -40,14 +41,14 @@ export function withAuth<T>(subject: () => T): T {
  * 引数に渡されたサンクに認証処理を追加して実行する。
  */
 export async function withAuthAsync<T>(subject: () => Promise<T>): Promise<T> {
-    const fname = 'withAuthAsync: ';
+    const logPrefix = LogPrefix.format({ moduleName, functionName: 'withAuthAsync' });
     try {
         authenticate();
         return await subject();
     } catch (error) {
-        // TODO: 認証エラーページに遷移。サーバーサイドとクラインとサイド
+        // TODO: 認証エラーページに遷移。サーバーサイドとクライアントサイド
         if (isAuthError(error)) {
-            logger.error(`${logPrefix}${fname}${formatError({ error }).message}`);
+            logger.error(logPrefix + formatError({ error }).message);
         }
         throw error;
     }
