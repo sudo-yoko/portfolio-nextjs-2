@@ -7,7 +7,8 @@ import { Button } from '@/presentation/_system/components/button.decorator.simpl
 import { applicationError } from '@/presentation/_system/error/error.factories';
 import { ErrorRedirect } from '@/presentation/_system/error/views/component.error-redirect';
 
-export default function Input(props: { err?: string }) {
+// NOTE: 関数名がスタックトレースに出るので、一意な関数名前にすると良い
+export default function ErrTestInput(props: { err?: string }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
@@ -18,7 +19,7 @@ export default function Input(props: { err?: string }) {
         );
         function _() {
             if (props.err === '21') {
-                throw applicationError({ message: props.err });
+                throw applicationError({ message: props.err, location: 'ErrTestInput.useEffect' });
             }
             setLoading(false);
         }
@@ -31,7 +32,7 @@ export default function Input(props: { err?: string }) {
         );
         function _() {
             if (props.err === '22') {
-                throw applicationError({ message: props.err });
+                throw applicationError({ message: props.err, location: 'ErrTestInput.handleClick' });
             }
         }
     }

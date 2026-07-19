@@ -19,24 +19,29 @@ import {
  * - `message`: エラーメッセージのみ（スタックトレースを含まない）
  * - `all`: スタックトレースを含むすべてのメッセージ
  */
-export function formatError(props: { error?: unknown; description?: string; details?: string }): {
+export function formatError(props: {
+    error?: unknown;
+    description?: string;
+    details?: string;
+    location?: string;
+}): {
     message: string;
     all: string;
 } {
-    const { error, description, details } = props;
+    const { error, description, details, location } = props;
     if (!error) {
         const message = '';
-        return { message, all: joinAll({ description, message, details }) };
+        return { message, all: joinAll({ description, message, details, location }) };
     } else if (typeof error === 'string') {
         const message = error;
-        return { message, all: joinAll({ description, message, details }) };
+        return { message, all: joinAll({ description, message, details, location }) };
     } else if (error instanceof Error) {
         const { name, message } = error;
         const stacks = getStackTrace(error);
-        return { message, all: joinAll({ description, name, message, details, stacks }) };
+        return { message, all: joinAll({ description, name, message, details, location, stacks }) };
     } else {
         const message = 'unknown type error.';
-        return { message, all: joinAll({ description, message, details }) };
+        return { message, all: joinAll({ description, message, details, location }) };
     }
 }
 
@@ -76,12 +81,16 @@ function joinAll(props: {
     name?: string;
     message?: string;
     details?: string;
+    location?: string;
     stacks?: string[];
 }): string {
-    const { description, name, message, details, stacks } = props;
+    const { description, name, message, details, location, stacks } = props;
     const errMessage: string[] = [];
     if (description) {
         errMessage.push(description);
+    }
+    if (location) {
+        errMessage.push(`\nlocation: ${location}`);
     }
     if (name) {
         errMessage.push(`\nname: ${name}`);

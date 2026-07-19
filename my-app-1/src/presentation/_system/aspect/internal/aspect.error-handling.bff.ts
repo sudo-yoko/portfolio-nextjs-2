@@ -6,21 +6,20 @@ import { AopResult } from '@/presentation/_system/aspect/aspect.types';
 import { formatError, getCustomErrorProperties } from '@/presentation/_system/error/error.helper.stringify';
 import { isCustomError, isRetryableError } from '@/presentation/_system/error/error.helpers';
 import logger from '@/presentation/_system/logging/logger.s';
-import { LogPrefix } from '@/presentation/_system/logging/logging.utils';
 import { abort, retry } from '@/presentation/_system/result/result.factories';
 import { RESULT } from '@/presentation/_system/result/result.types';
 
-const moduleName = 'aspect.error-handling.bff.ts';
+const logPrefix = 'aspect.error-handling.bff.ts: ';
 
 /**
  * 引数に渡されたサンクにエラーハンドリングを追加して実行する。
  */
 export function withErrorHandling(thunk: () => RESULT): RESULT {
-    const logPrefix = LogPrefix.format({ moduleName, functionName: 'withErrorHandling' });
+    const location = 'withErrorHandling';
     try {
         return thunk();
     } catch (e) {
-        return handleError(logPrefix, e);
+        return handleError(location, e);
     }
 }
 
@@ -28,15 +27,15 @@ export function withErrorHandling(thunk: () => RESULT): RESULT {
  * 引数に渡されたサンクにエラーハンドリングを追加して実行する。
  */
 export async function withErrorHandlingAsync(thunk: () => Promise<RESULT>): Promise<RESULT> {
-    const logPrefix = LogPrefix.format({ moduleName, functionName: 'withErrorHandlingAsync' });
+    const location = 'withErrorHandlingAsync';
     try {
         return await thunk();
     } catch (e) {
-        return handleError(logPrefix, e);
+        return handleError(location, e);
     }
 }
 
-function handleError(logPrefix: string, e: unknown): AopResult {
+function handleError(location: string, e: unknown): AopResult {
     const errProps: Parameters<typeof formatError>[0] = {};
     const abortProps: Parameters<typeof abort>[0] = {};
 
@@ -44,6 +43,7 @@ function handleError(logPrefix: string, e: unknown): AopResult {
         // カスタムエラー固有のプロパティを取得する
         const { obj, text } = getCustomErrorProperties(e);
         errProps.details = text;
+        errProps.location = location;
         abortProps.type = obj.errType;
         abortProps.code = obj.code;
     }
