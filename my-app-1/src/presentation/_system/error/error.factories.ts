@@ -185,7 +185,12 @@ export function invalidStatusError(
     if (body) {
         message.push(`body=${body}`);
     }
-    return customError({ message: message.join(', '), errType: ErrType.InvalidStatusError, location });
+    return customError({
+        message: message.join(', '),
+        errType: ErrType.InvalidStatusError,
+        location,
+        extra: { status, body },
+    });
 }
 
 export function retryableError(props: { message?: string; location?: string } = {}): RetryableError {

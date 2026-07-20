@@ -7,7 +7,11 @@ import { Button } from '@/presentation/_system/components/button.decorator.simpl
 import { applicationError, resultError } from '@/presentation/_system/error/error.factories';
 import { ErrorRedirect } from '@/presentation/_system/error/views/component.error-redirect';
 import { isOkEmpty } from '@/presentation/_system/result/result.helpers';
-import { sendViaAction, sendViaRoute } from '@/presentation/err-test/models/err-type.client';
+import {
+    sendViaAction,
+    sendViaRoute,
+    sendViaRouteClientError,
+} from '@/presentation/err-test/models/err-type.client';
 
 const logPrefix = 'err-test.component.input.tsx: ';
 
@@ -62,14 +66,29 @@ export default function ErrTestInput(props: { err?: string }) {
         }
     }
 
+    async function handleClick24() {
+        await withAdviceAsync(
+            () => _(),
+            () => setError(true),
+        );
+        async function _() {
+            if (props.err === '24') {
+                const result = await sendViaRouteClientError();
+                if (!isOkEmpty(result)) {
+                    throw resultError({ result, location: logPrefix + 'ErrTestInput.handleClick2' });
+                }
+            }
+        }
+    }
+
     return (
         <>
             {error && <ErrorRedirect />}
             {!loading && (
                 <div>
-                    <Button onClick={() => handleClick1()}>ボタン１</Button>
-                    <Button onClick={() => handleClick2()}>ボタン２</Button>
-                    <Button onClick={() => {}}>ボタン３</Button>
+                    <Button onClick={() => handleClick1()}>22</Button>
+                    <Button onClick={() => handleClick2()}>23</Button>
+                    <Button onClick={() => handleClick24()}>24</Button>
                 </div>
             )}
         </>

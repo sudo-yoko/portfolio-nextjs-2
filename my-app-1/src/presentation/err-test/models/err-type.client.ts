@@ -27,5 +27,20 @@ const viaAction: Send = async () => {
     return result as ErrTestResult;
 };
 
+/**
+ * クライアント側エラーが起こる
+ */
+const viaRouteClientError: Send = async () => {
+    const res: RawResponse = await client.send({
+        url: 'httpp::::////api/bff/err-test',
+        method: Method.GET,
+    });
+    // TODO: レスポンスボディが無い時もこれが必要なのか？
+    // →必要。BFFのリクエストの場合は、rawBodyはRESULT型の値のため。
+    const result = parseResult(res.rawBody);
+    return result as ErrTestResult;
+};
+
 export const sendViaRoute: Send = viaRoute;
 export const sendViaAction: Send = viaAction;
+export const sendViaRouteClientError: Send = viaRouteClientError;
