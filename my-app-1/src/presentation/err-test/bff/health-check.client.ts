@@ -12,7 +12,7 @@ export async function send(): Promise<void> {
 
 // NOTE: このようにすることで、スタックトレースに関数名が出るので追いやすくなる。
 async function errTestSend(): Promise<void> {
-    const url = 'http://localhost:3006/healthcheck';
+    const url = 'http://localhost:3007/internal-server-error';
     logger.info(logPrefix + `url=${url}`);
 
     const result = await client.send({ url, method: Method.GET });
