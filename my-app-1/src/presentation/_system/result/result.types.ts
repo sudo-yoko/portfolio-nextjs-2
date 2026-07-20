@@ -97,5 +97,6 @@ export type OkData<DATA> = { tag: typeof Tag.OkData; data: DATA };
 export type Invalid<FIELD extends string> = { tag: typeof Tag.Invalid; violations: Violations<FIELD> };
 export type Retryable = { tag: typeof Tag.Retryable; retryMsg: string[] };
 export type Aborted = { tag: typeof Tag.Aborted; errType?: ErrType; code?: string; message?: string };
+//TODO: 認証エラーを追加
 
 export type BffResult<T extends RESULT> = T | AopResult;
