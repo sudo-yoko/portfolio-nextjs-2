@@ -13,7 +13,7 @@ import { applicationError } from '@/presentation/_system/error/error.factories';
 import { formatError, getAxiosErrorProperties } from '@/presentation/_system/error/error.helper.stringify';
 import logger from '@/presentation/_system/logging/logger.s';
 
-const logPrefix = 'client.adapter.axios.ts: ';
+const logPrefix = 'axios-adapter.ts: ';
 
 // Axios インスタンスはアプリケーション内で一意
 // NOTE: 即時実行関数 (() => { ... })();
@@ -76,7 +76,7 @@ export const axiosClient = (proxy?: AxiosProxyConfig): Client => ({
                 message,
                 cause: error,
                 location: logPrefix + location,
-                extra: { message, ...details, axios: { name, ...option } },
+                extra: { ...details, cause: { name, message, ...option } },
             });
             // throw error;
         }

@@ -5,11 +5,11 @@ import 'client-only';
 
 import { defaultValidateStatusClient } from '@/presentation/_system/client/client.constants';
 import { Client, RawResponse } from '@/presentation/_system/client/client.types';
-import { invalidStatusError } from '@/presentation/_system/error/error.factories';
+import { applicationError, invalidStatusError } from '@/presentation/_system/error/error.factories';
 import { formatError, getCustomErrorProperties } from '@/presentation/_system/error/error.helper.stringify';
 import logger from '@/presentation/_system/logging/logger.c';
 
-const logPrefix = 'client.adapter.fetch.ts: ';
+const logPrefix = 'fetch-adapter.ts: ';
 
 export const fetchClient = (): Client => ({
     send: async (config) => {
@@ -57,10 +57,23 @@ export const fetchClient = (): Client => ({
             return result;
         } catch (error) {
             // NOTE: クライント側エラーはTypeErrorになる
+
+            // エラー情報
+            const location = 'fetchClient.send';
+            const details = { config };
             const option = getCustomErrorProperties(error);
-            logger.error(logPrefix + formatError({ error, option }).all);
-            // throw aplError({ cause: error });
-            throw error;
+
+            // エラーログ出力
+            const { all, message, name } = formatError({ error, option, location, details });
+            logger.error(logPrefix + all);
+
+            // 発生したエラーをApplicationErrorにラップして再スロー
+            throw applicationError({
+                message,
+                cause: error,
+                location: logPrefix + location,
+                extra: { ...details, cause: { name, message, ...option } },
+            });
         }
     },
 });

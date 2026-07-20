@@ -12,7 +12,7 @@ import { formatError } from '@/presentation/_system/error/error.helper.stringify
 import logger from '@/presentation/_system/logging/logger.s';
 import { applicationError } from '../../error/error.factories';
 
-const logPrefix = 'client.adapter.undici.ts: ';
+const logPrefix = 'undici-adapter.ts: ';
 
 export const undiciClient = (proxyUrl?: string): Client => ({
     send: async (config) => {

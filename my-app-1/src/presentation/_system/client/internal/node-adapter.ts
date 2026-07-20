@@ -8,7 +8,7 @@ import { applicationError } from '@/presentation/_system/error/error.factories';
 import { formatError, getNodeErrorProperties } from '@/presentation/_system/error/error.helper.stringify';
 import logger from '@/presentation/_system/logging/logger.s';
 
-const logPrefix = 'client.adapter.node.ts: ';
+const logPrefix = 'node-adapter.ts: ';
 
 export const nodeClient = (): Client => ({
     send: async (config) => {

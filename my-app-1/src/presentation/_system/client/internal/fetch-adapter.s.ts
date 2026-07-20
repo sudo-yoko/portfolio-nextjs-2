@@ -65,14 +65,14 @@ export const fetchClient = (): Client => ({
 
             // エラーログ出力
             const { all, message, name } = formatError({ error, option, location, details });
-            logger.error(logPrefix + all);
+            // logger.error(logPrefix + all);
 
             // 発生したエラーをApplicationErrorにラップして再スロー
             throw applicationError({
                 message,
                 cause: error,
                 location: logPrefix + location,
-                extra: { message, ...details, fetch: { name, ...option } },
+                extra: { ...details, cause: { name, message, ...option } },
             });
         }
     },

@@ -36,7 +36,7 @@ export default function ErrTestInput(props: { err?: string }) {
         }
     }, [props.err]);
 
-    async function handleClick1() {
+    async function handle22Click() {
         await withAdviceAsync(
             () => _(),
             () => setError(true),
@@ -45,13 +45,13 @@ export default function ErrTestInput(props: { err?: string }) {
             if (props.err === '22') {
                 const result = await sendViaRoute();
                 if (!isOkEmpty(result)) {
-                    throw resultError({ result, location: logPrefix + 'ErrTestInput.handleClick1' });
+                    throw resultError({ result, location: logPrefix + 'ErrTestInput.handle22Click' });
                 }
             }
         }
     }
 
-    async function handleClick2() {
+    async function handle23Click() {
         await withAdviceAsync(
             () => _(),
             () => setError(true),
@@ -60,13 +60,13 @@ export default function ErrTestInput(props: { err?: string }) {
             if (props.err === '23') {
                 const result = await sendViaAction();
                 if (!isOkEmpty(result)) {
-                    throw resultError({ result, location: logPrefix + 'ErrTestInput.handleClick2' });
+                    throw resultError({ result, location: logPrefix + 'ErrTestInput.handle23Click' });
                 }
             }
         }
     }
 
-    async function handleClick24() {
+    async function handle24Click() {
         await withAdviceAsync(
             () => _(),
             () => setError(true),
@@ -75,7 +75,7 @@ export default function ErrTestInput(props: { err?: string }) {
             if (props.err === '24') {
                 const result = await sendViaRouteClientError();
                 if (!isOkEmpty(result)) {
-                    throw resultError({ result, location: logPrefix + 'ErrTestInput.handleClick2' });
+                    throw resultError({ result, location: logPrefix + 'ErrTestInput.handle24Click' });
                 }
             }
         }
@@ -86,9 +86,9 @@ export default function ErrTestInput(props: { err?: string }) {
             {error && <ErrorRedirect />}
             {!loading && (
                 <div>
-                    <Button onClick={() => handleClick1()}>22</Button>
-                    <Button onClick={() => handleClick2()}>23</Button>
-                    <Button onClick={() => handleClick24()}>24</Button>
+                    <Button onClick={() => handle22Click()}>22</Button>
+                    <Button onClick={() => handle23Click()}>23</Button>
+                    <Button onClick={() => handle24Click()}>24</Button>
                 </div>
             )}
         </>
