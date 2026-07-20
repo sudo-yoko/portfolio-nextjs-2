@@ -48,7 +48,11 @@ export type ValidateStatus = (status: number) => boolean;
 // TODO: RESULT型と型名が似ているため、ClientResult、RawResponseなどにする
 export type RawResponse = {
     status: number;
-    rawBody: string;
+    /**
+     * BFFのリクエストの場合は、RESULT型の値が格納される。
+     * BEのリクエストの場合は、結果のレスポンスボディが格納される。
+     */
+    rawBody: string;    // TODO: 名前をdataにするか
 };
 
 /**

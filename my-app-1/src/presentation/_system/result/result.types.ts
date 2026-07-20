@@ -88,6 +88,7 @@ export type Tag = (typeof Tag)[keyof typeof Tag];
 
 // NOTE: ↓RESULTにOkDataの型パラメータを追加してみた
 // export type RESULT = OkEmpty | OkData<unknown> | Invalid<string> | Retryable | Aborted;
+// TODO: unknownとneverどちらがよいか
 export type RESULT<T = unknown> = OkEmpty | OkData<T> | Invalid<string> | Retryable | Aborted;
 // NOTE: ↑
 

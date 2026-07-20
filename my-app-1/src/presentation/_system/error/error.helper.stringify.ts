@@ -28,6 +28,7 @@ export function formatError(props: {
     location?: string;
 }): {
     message: string;
+    name?: string;
     all: string;
 } {
     const { error, option, description, details, location } = props;
@@ -40,7 +41,11 @@ export function formatError(props: {
     } else if (error instanceof Error) {
         const { name, message } = error;
         const stacks = getStackTrace(error);
-        return { message, all: joinAll({ description, name, message, details, location, stacks, option }) };
+        return {
+            message,
+            name,
+            all: joinAll({ description, name, message, details, location, stacks, option }),
+        };
     } else {
         const message = 'unknown type error.';
         return { message, all: joinAll({ description, message, details, location, option }) };

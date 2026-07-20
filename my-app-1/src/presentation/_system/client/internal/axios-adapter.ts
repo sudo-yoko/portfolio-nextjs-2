@@ -66,7 +66,7 @@ export const axiosClient = (proxy?: AxiosProxyConfig): Client => ({
             const option = getAxiosErrorProperties(error); // Axios固有のエラープロパティを取得
 
             // エラーログ出力
-            const { all, message } = formatError({ error, option, location, details });
+            const { all, message, name } = formatError({ error, option, location, details });
             logger.error(logPrefix + all);
 
             // 発生したエラーをApplicationErrorにラップして再スロー
@@ -76,7 +76,7 @@ export const axiosClient = (proxy?: AxiosProxyConfig): Client => ({
                 message,
                 cause: error,
                 location: logPrefix + location,
-                extra: { message, ...details, axios: option },
+                extra: { message, ...details, axios: { name, ...option } },
             });
             // throw error;
         }

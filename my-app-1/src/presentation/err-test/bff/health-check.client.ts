@@ -16,5 +16,5 @@ async function errTestSend(): Promise<void> {
     logger.info(logPrefix + `url=${url}`);
 
     const result = await client.send({ url, method: Method.GET });
-    logger.info(logPrefix + `status=${result.status}`);
+    logger.info(logPrefix + `status=${result.status}, body=${result.rawBody}`);
 }
