@@ -44,8 +44,9 @@ function handleError(location: string, e: unknown): void {
     const errProps: Parameters<typeof formatError>[0] = {};
     if (isCustomError(e)) {
         // カスタムエラー固有のプロパティを取得する
-        const { text } = getCustomErrorProperties(e);
-        errProps.details = text;
+        const option = getCustomErrorProperties(e);
+        errProps.option = option;
+        // errProps.details = option.details;
     }
     // ログ出力
     errProps.error = e;

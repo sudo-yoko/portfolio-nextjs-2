@@ -5,6 +5,7 @@ import {
     ApplicationError,
     AuthError,
     CustomErrorBase,
+    EXTRA,
     ERR_CODE,
     ERR_TYPE,
     ErrType,
@@ -154,12 +155,14 @@ function customError<T extends ErrType>(props: {
     cause?: unknown;
     errType: T;
     location?: string;
+    extra?: object;
 }): CustomErrorBase<T> {
-    const { message, cause, errType, location } = props;
+    const { message, cause, errType, location, extra } = props;
     const base = new Error(message, { cause });
     return Object.assign(base, {
         [ERR_TYPE]: errType,
         [LOCATION]: location,
+        [EXTRA]: extra,
     });
 }
 
@@ -202,10 +205,11 @@ export function applicationError(
         code?: string;
         location?: string;
         message?: string;
+        extra?: object;
     } = {},
 ): ApplicationError {
-    const { cause, result, code, location, message } = props;
-    const base = customError({ message, cause, errType: ErrType.ApplicationError, location });
+    const { cause, result, code, location, message, extra } = props;
+    const base = customError({ message, cause, errType: ErrType.ApplicationError, location, extra });
     return Object.assign(base, { [RESULT_TYPE]: result, [ERR_CODE]: code });
 }
 

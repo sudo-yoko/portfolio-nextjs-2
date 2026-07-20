@@ -25,10 +25,10 @@ const axiosInstance = (() => {
 // NOTE: オブジェクトの暗黙的返却 const func = (arg) => ({ ... });
 export const axiosClient = (proxy?: AxiosProxyConfig): Client => ({
     send: async (config) => {
-        const location = 'client.adapter.axios.ts#send';
+        // const location = 'client.adapter.axios.ts#send';
 
         logger.info(
-            logPrefix + `Request -> config=${JSON.stringify(config)}}, proxy=${JSON.stringify(proxy)}`,
+            logPrefix + `Request -> config=${JSON.stringify(config)}, proxy=${JSON.stringify(proxy)}`,
         );
         //
         // リクエスト設定
@@ -59,10 +59,25 @@ export const axiosClient = (proxy?: AxiosProxyConfig): Client => ({
             return result;
         } catch (error) {
             // クライアント側エラーもサーバー側エラーもここに来る
-            const details = getAxiosErrorProperties(error); // Axios固有のエラープロパティを取得
-            const { all, message } = formatError({ error, details });
+
+            // エラー情報
+            const location = 'axiosClient.send';
+            const details = { config, proxy };
+            const option = getAxiosErrorProperties(error); // Axios固有のエラープロパティを取得
+
+            // エラーログ出力
+            const { all, message } = formatError({ error, option, location, details });
             logger.error(logPrefix + all);
-            throw applicationError({ location, message, cause: error });
+
+            // 発生したエラーをApplicationErrorにラップして再スロー
+            // TODO: formatErrorに渡すのと同じ情報をわたせるようにする
+            // TODO: ApplicationErrorにリクエスト情報も渡せるようにする
+            throw applicationError({
+                message,
+                cause: error,
+                location: logPrefix + location,
+                extra: { message, ...details, axios: option },
+            });
             // throw error;
         }
     },

@@ -57,8 +57,8 @@ export const fetchClient = (): Client => ({
             return result;
         } catch (error) {
             // NOTE: クライント側エラーはTypeErrorになる
-            const details = getCustomErrorProperties(error).text;
-            logger.error(logPrefix + formatError({ error, details }).all);
+            const option = getCustomErrorProperties(error);
+            logger.error(logPrefix + formatError({ error, option }).all);
             // throw aplError({ cause: error });
             throw error;
         }

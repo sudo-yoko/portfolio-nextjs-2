@@ -5,6 +5,7 @@ import {
     CustomErrorProperties,
     ERR_CODE,
     ERR_TYPE,
+    EXTRA,
     LOCATION,
     RESULT_TYPE,
 } from '@/presentation/_system/error/error.types';
@@ -21,27 +22,28 @@ import {
  */
 export function formatError(props: {
     error?: unknown;
+    option?: object;
     description?: string;
-    details?: string;
+    details?: object;
     location?: string;
 }): {
     message: string;
     all: string;
 } {
-    const { error, description, details, location } = props;
+    const { error, option, description, details, location } = props;
     if (!error) {
         const message = '';
-        return { message, all: joinAll({ description, message, details, location }) };
+        return { message, all: joinAll({ description, message, details, location, option }) };
     } else if (typeof error === 'string') {
         const message = error;
-        return { message, all: joinAll({ description, message, details, location }) };
+        return { message, all: joinAll({ description, message, details, location, option }) };
     } else if (error instanceof Error) {
         const { name, message } = error;
         const stacks = getStackTrace(error);
-        return { message, all: joinAll({ description, name, message, details, location, stacks }) };
+        return { message, all: joinAll({ description, name, message, details, location, stacks, option }) };
     } else {
         const message = 'unknown type error.';
-        return { message, all: joinAll({ description, message, details, location }) };
+        return { message, all: joinAll({ description, message, details, location, option }) };
     }
 }
 
@@ -80,11 +82,12 @@ function joinAll(props: {
     description?: string;
     name?: string;
     message?: string;
-    details?: string;
+    option?: object;
+    details?: object;
     location?: string;
     stacks?: string[];
 }): string {
-    const { description, name, message, details, location, stacks } = props;
+    const { description, name, message, option, details, location, stacks } = props;
     const errMessage: string[] = [];
     if (description) {
         errMessage.push(description);
@@ -98,8 +101,11 @@ function joinAll(props: {
     if (message) {
         errMessage.push(`\nmessage: ${message}`);
     }
+    if (option) {
+        errMessage.push(`\noption: ${JSON.stringify(option, null, 2)}`);
+    }
     if (details) {
-        errMessage.push(`\ndetails: ${details}`);
+        errMessage.push(`\ndetails: ${JSON.stringify(details, null, 2)}`);
     }
     if (stacks) {
         errMessage.push(`\nstacks: \n${stacks?.join('\n')}`);
@@ -113,49 +119,50 @@ type All = Parameters<typeof joinAll>[0];
 /**
  * Errorオブジェクトの中からaxios固有のプロパティを取得する
  */
-export function getAxiosErrorProperties(err: unknown): string {
-    const description: Record<string, unknown> = {};
+export function getAxiosErrorProperties(err: unknown): object {
+    const option: Record<string, unknown> = {};
     if (axios.isAxiosError(err)) {
-        description['code'] = err.code;
-        description['status'] = err.response?.status ?? 'undefined';
-        description['message'] = err.message;
-        return JSON.stringify(description, null, 2);
+        option['code'] = err.code;
+        option['status'] = err.response?.status ?? 'undefined';
+        option['message'] = err.message;
+        // return { str: JSON.stringify(option, null, 2), obj: option };
     }
-    return JSON.stringify(description, null, 2);
+    // return { str: JSON.stringify(option, null, 2), obj: option };
+    return option;
 }
 
 /**
  * Errorオブジェクトの中からnode:http固有のプロパティを取得する
  */
-export function getNodeErrorProperties(err: Error): string {
-    const description: Record<string, unknown> = {};
+export function getNodeErrorProperties(err: Error): object {
+    const option: Record<string, unknown> = {};
     if ('code' in err) {
-        description['code'] = err.code;
+        option['code'] = err.code;
     }
-    return JSON.stringify(description, null, 2);
+    // return JSON.stringify(option, null, 2);
+    return option;
 }
 
 /**
  * Errorオブジェクトの中からカスタムエラー固有のプロパティを取得する
  */
-export function getCustomErrorProperties(err: unknown): {
-    text: string | undefined;
-    obj: CustomErrorProperties;
-} {
-    const obj: CustomErrorProperties = {};
+export function getCustomErrorProperties(err: unknown): CustomErrorProperties {
+    const option: CustomErrorProperties = {};
     if (isCustomError(err)) {
-        obj.errType = err[ERR_TYPE]; // TODO: ログにERR_TYPE出さない方がよいかもしれない
-        obj.location = err[LOCATION];
+        option.errType = err[ERR_TYPE]; // TODO: ログにERR_TYPE出さない方がよいかもしれない
+        option.location = err[LOCATION];
+        option.extra = err[EXTRA];
         if (ERR_CODE in err) {
-            obj.code = err[ERR_CODE];
+            option.code = err[ERR_CODE];
         }
         if (RESULT_TYPE in err) {
-            obj.result = err[RESULT_TYPE];
+            option.result = err[RESULT_TYPE];
         }
     }
-    // NOTE: シンボル（ERR_TYPE]、[ERR_CODE]、[RESULT_TYPE]）はJSON.stringifyでシリアライズできない（無視される）
-    const text = isEmpty(obj) ? undefined : JSON.stringify(obj, null, 2);
-    return { text, obj };
+    // NOTE: シンボル（ERR_TYPE]、[ERR_CODE]、[RESULT_TYPE]）はJSON.stringifyでシリアライズできない（無視される）？
+    // const text = isEmpty(option) ? undefined : JSON.stringify(option, null, 2);
+    //  return { text, option };
+    return option;
 }
 
 function isEmpty(obj: Record<string, unknown>): boolean {

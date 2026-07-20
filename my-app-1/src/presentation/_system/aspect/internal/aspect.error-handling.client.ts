@@ -47,14 +47,14 @@ export async function withErrorHandlingAsync<T>(
 
 async function handleError(location: string, e: unknown): Promise<void> {
     const errProps: Parameters<typeof formatError>[0] = {};
+    errProps.error = e;
+    errProps.location = location;
+    // カスタムエラー固有のプロパティを取得する
     if (isCustomError(e)) {
-        // カスタムエラー固有のプロパティを取得する
-        const { text } = getCustomErrorProperties(e);
-        errProps.details = text;
-        errProps.location = location;
+        const option = getCustomErrorProperties(e);
+        errProps.option = option;
     }
     // ログ出力
-    errProps.error = e;
     const { all } = formatError(errProps);
     void logger.errorAsync(logPrefix + all);
     throw e;

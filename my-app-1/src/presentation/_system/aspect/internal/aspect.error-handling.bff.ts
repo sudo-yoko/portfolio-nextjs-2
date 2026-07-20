@@ -39,17 +39,16 @@ function handleError(location: string, e: unknown): AopResult {
     const errProps: Parameters<typeof formatError>[0] = {};
     const abortProps: Parameters<typeof abort>[0] = {};
 
-    if (isCustomError(e)) {
-        // カスタムエラー固有のプロパティを取得する
-        const { obj, text } = getCustomErrorProperties(e);
-        errProps.details = text;
-        errProps.location = location;
-        abortProps.type = obj.errType;
-        abortProps.code = obj.code;
-    }
-
-    // ログ出力
     errProps.error = e;
+    errProps.location = location;
+    // カスタムエラー固有のプロパティを取得する
+    if (isCustomError(e)) {
+        const option = getCustomErrorProperties(e);
+        errProps.option = option;
+        abortProps.type = option.errType;
+        abortProps.code = option.code;
+    }
+    // ログ出力
     const { message, all } = formatError(errProps);
     logger.error(logPrefix + all);
 
