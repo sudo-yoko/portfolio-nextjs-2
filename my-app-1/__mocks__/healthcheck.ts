@@ -19,6 +19,10 @@ app.get(path, async (_req, res: Response<void>) => {
     res.sendStatus(200);
 });
 
+app.get(path + '/internal-server-error', async (_req, res: Response<void>) => {
+    res.sendStatus(500);
+});
+
 app.listen(port, () => {
     console.log(`Mock server running on http://localhost:${port} (healthcheck)`);
 });
