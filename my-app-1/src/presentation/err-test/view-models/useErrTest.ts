@@ -1,5 +1,6 @@
 // カスタムフック化　未使用
-import 'client-only';
+// import 'client-only';    // TODO: tsモジュールでのclient-onlyとuse clientの違い
+'use client';
 
 import { useEffect, useState } from 'react';
 

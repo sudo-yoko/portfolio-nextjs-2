@@ -20,7 +20,7 @@ const logPrefix = 'aspect.server.ts: ';
 /**
  * 引数に渡されたサンクに共通処理を追加して実行する。
  */
-export function withAdvice<T>(thunk: () => T): T {
+export function withAdvice<T>(thunk: () => T) {
     const ctx: Ctx = { logger, logPrefix, process: 'sync server process' };
     return withLogging(ctx, () => withErrorHandling(() => withAuth(thunk)));
 }
@@ -28,7 +28,7 @@ export function withAdvice<T>(thunk: () => T): T {
 /**
  * 引数に渡されたサンクに共通処理を追加して実行する。
  */
-export async function withAdviceAsync<T>(thunk: () => Promise<T>): Promise<T> {
+export async function withAdviceAsync<T>(thunk: () => Promise<T>){
     const ctx: Ctx = { logger, logPrefix, process: 'async server process' };
     return await withLoggingAsync(ctx, () => withErrorHandlingAsync(() => withAuthAsync(thunk)));
 }

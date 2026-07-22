@@ -12,24 +12,30 @@ import { RESULT } from '@/presentation/_system/result/result.types';
 const logPrefix = 'aspect.error-handling.bff.ts: ';
 
 /**
- * 引数に渡されたサンクにエラーハンドリングを追加して実行する。
+ * エラーハンドリングを追加して実行する
+ * 
+ * @param subject 実行する関数（RESULT型を返す関数であること）
+ * @returns 正常時：関数の戻り値をそのまま返す、エラー時：エラー系のRESULT型を返す
  */
-export function withErrorHandling(thunk: () => RESULT): RESULT {
+export function withErrorHandling(subject: () => RESULT): RESULT {
     const location = 'withErrorHandling';
     try {
-        return thunk();
+        return subject();
     } catch (e) {
         return handleError(location, e);
     }
 }
 
 /**
- * 引数に渡されたサンクにエラーハンドリングを追加して実行する。
+ * エラーハンドリングを追加して実行する
+ * 
+ * @param subject 実行する非同期関数（RESULT型を返す関数であること）
+ * @returns 正常時：関数の戻り値をそのまま返す、エラー時：エラー系のRESULT型を返す
  */
-export async function withErrorHandlingAsync(thunk: () => Promise<RESULT>): Promise<RESULT> {
+export async function withErrorHandlingAsync(subject: () => Promise<RESULT>): Promise<RESULT> {
     const location = 'withErrorHandlingAsync';
     try {
-        return await thunk();
+        return await subject();
     } catch (e) {
         return handleError(location, e);
     }

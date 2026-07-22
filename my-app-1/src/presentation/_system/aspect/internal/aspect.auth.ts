@@ -3,12 +3,24 @@ import 'server-only';
 
 import { authenticate } from '@/presentation/_system/auth/authentication';
 
-export function withAuth<T>(subject: () => T): T {
+/**
+ * 認証処理を追加して実行する
+ *
+ * @param subject 実行する関数（戻り値なしorあり）
+ * @returns 関数の戻り値をそのまま返す
+ */
+export function withAuth<T>(subject: () => T) {
     authenticate();
     return subject();
 }
 
-export async function withAuthAsync<T>(subject: () => Promise<T>): Promise<T> {
+/**
+ * 認証処理を追加して実行する
+ *
+ * @param subject 実行する非同期関数（戻り値なしorあり）
+ * @returns 関数の戻り値をそのまま返す
+ */
+export async function withAuthAsync<T>(subject: () => Promise<T>) {
     authenticate();
     return await subject();
 }
