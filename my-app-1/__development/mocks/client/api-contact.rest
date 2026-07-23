@@ -1,4 +1,4 @@
-POST http://localhost:3000/api/contact/mvvm
+POST http://localhost:3000/api/bff/contact/mvvm
 Content-Type: application/json; charset=UTF-8
 
 {

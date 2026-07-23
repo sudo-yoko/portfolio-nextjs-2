@@ -2,7 +2,7 @@ import cors from 'cors';
 import type { Response } from 'express';
 import express from 'express';
 
-import { delay, loggingReq } from '@/__mocks__/utils/express-middlewares';
+import { delay, loggingReq } from './utils/express-middlewares';
 
 const logPrefix = 'healthcheck';
 

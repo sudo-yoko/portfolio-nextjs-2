@@ -22,7 +22,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "@/__tests__/*": ["./__tests__/*"],
-      "@/__mocks__/*": ["./__mocks__/*"],
+      "@/__development/mocks/*": ["./__development/mocks/*"],
     }
   },
   "include": [
