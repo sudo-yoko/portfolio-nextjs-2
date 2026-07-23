@@ -12,7 +12,7 @@ import { envByStaticKey as env } from '@/presentation/_system/env/env.s';
 const appName = 'portfolio-application';
 
 // ログ出力先フォルダ
-const logDir = path.join('_log');
+const logDir = path.join('log');
 
 // ログファイル名
 const logName = 'app-%DATE%.log';
