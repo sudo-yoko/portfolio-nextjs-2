@@ -170,7 +170,7 @@ const config = {
   //   "**/__tests__/**/*.?([mc])[jt]s?(x)",
   //   "**/?(*.)+(spec|test).?([mc])[jt]s?(x)"
   // ],
-  testMatch: ['**/__tests__/next-jest/**/*.?([mc])[jt]s?(x)'],
+  testMatch: ['**/__development/tests/next-jest/**/*.?([mc])[jt]s?(x)'],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
   // testPathIgnorePatterns: [

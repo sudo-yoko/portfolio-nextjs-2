@@ -120,7 +120,7 @@ const eslintConfig = defineConfig([
     },
     // テストコードは internal を触ってOKにする
     {
-        files: ['**/__tests__/**/*.ts'],
+        files: ['**/__development/tests/**/*.ts'],
         rules: {
             'no-restricted-imports': 'off',
         },

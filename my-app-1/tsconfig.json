@@ -21,7 +21,7 @@
         "types": ["jest"],
         "paths": {
             "@/*": ["./src/*"],
-            "@/__tests__/*": ["./__tests__/*"],
+            "@/tests/*": ["./__development/tests/*"],
             "@/__development/mocks/*": ["./__development/mocks/*"]
         }
     },
