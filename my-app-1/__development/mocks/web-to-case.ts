@@ -2,10 +2,11 @@
 // Salesforce Web-to-Case エンドポイントのモック
 //
 // TODO: Express後継Koa
-import { delay, loggingReq, loggingRes } from './utils/express-middlewares';
 import cors from 'cors';
 import type { Request, Response } from 'express';
 import express from 'express';
+
+import { delay, loggingReq, loggingRes } from '@/mocks/utils/express-middlewares';
 
 const port = 3001;
 const path = '/servlet/servlet.WebToCase';

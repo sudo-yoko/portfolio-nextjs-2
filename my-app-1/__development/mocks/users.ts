@@ -2,7 +2,7 @@ import cors from 'cors';
 import type { Request, Response } from 'express';
 import express from 'express';
 
-import { delay, loggingReq, loggingRes } from './utils/express-middlewares';
+import { delay, loggingReq, loggingRes } from '@/mocks/utils/express-middlewares';
 
 const logPrefix = 'users-mock';
 
