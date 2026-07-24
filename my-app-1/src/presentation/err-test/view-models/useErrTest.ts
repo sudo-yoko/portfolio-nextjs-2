@@ -4,7 +4,7 @@
 
 import { useEffect, useState } from 'react';
 
-import { withAdvice, withAdviceAsync } from '@/presentation/_system/aspect/aspect.client';
+import { useWithAdvice } from '@/presentation/_system/aspect/aspect.client.useWithAdvice';
 import { applicationError, resultError } from '@/presentation/_system/error/error.factories';
 import { isOkEmpty } from '@/presentation/_system/result/result.helpers';
 import {
@@ -17,68 +17,62 @@ const logPrefix = 'useErrTest.ts: ';
 
 export function useErrTest(props: { err?: string }) {
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
+    const { withAdvice, withAdviceAsync } = useWithAdvice();
 
     useEffect(() => {
-        withAdvice(
-            () => _(),
-            () => setError(true),
-        );
+        withAdvice(() => _());
         function _() {
             if (props.err === '21') {
                 throw applicationError({
                     message: props.err,
-                    location: logPrefix + 'useErrTest.useEffect',
+                    location: logPrefix + 'ErrTestInput.useEffect',
                 });
             }
             setLoading(false);
         }
     }, [props.err]);
 
-    const handle22Click = async () => {
-        await withAdviceAsync(
-            () => _(),
-            () => setError(true),
-        );
+    async function handle22Click() {
+        setLoading(true);
+        await withAdviceAsync(() => _());
         async function _() {
             if (props.err === '22') {
                 const result = await sendViaRoute();
                 if (!isOkEmpty(result)) {
-                    throw resultError({ result, location: logPrefix + 'useErrTest.handle22Click' });
+                    throw resultError({ result, location: logPrefix + 'ErrTestInput.handle22Click' });
                 }
+                setLoading(false);
             }
         }
-    };
+    }
 
-    const handle23Click = async () => {
-        await withAdviceAsync(
-            () => _(),
-            () => setError(true),
-        );
+    async function handle23Click() {
+        setLoading(true);
+        await withAdviceAsync(() => _());
         async function _() {
             if (props.err === '23') {
                 const result = await sendViaAction();
                 if (!isOkEmpty(result)) {
-                    throw resultError({ result, location: logPrefix + 'useErrTest.handle23Click' });
+                    throw resultError({ result, location: logPrefix + 'ErrTestInput.handle23Click' });
                 }
+                setLoading(false);
             }
         }
-    };
+    }
 
-    const handle24Click = async () => {
-        await withAdviceAsync(
-            () => _(),
-            () => setError(true),
-        );
+    async function handle24Click() {
+        setLoading(true);
+        await withAdviceAsync(() => _());
         async function _() {
             if (props.err === '24') {
                 const result = await sendViaRouteClientError();
                 if (!isOkEmpty(result)) {
-                    throw resultError({ result, location: logPrefix + 'useErrTest.handle24Click' });
+                    throw resultError({ result, location: logPrefix + 'ErrTestInput.handle24Click' });
                 }
+                setLoading(false);
             }
         }
-    };
+    }
 
-    return { loading, error, handle22Click, handle23Click, handle24Click };
+    return { loading, handle22Click, handle23Click, handle24Click };
 }

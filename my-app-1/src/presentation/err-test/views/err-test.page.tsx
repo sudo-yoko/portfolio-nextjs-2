@@ -5,7 +5,7 @@ import { withAdviceAsync } from '@/presentation/_system/aspect/aspect.server';
 import { applicationError } from '@/presentation/_system/error/error.factories';
 import { getStringParam, SearchParams } from '@/presentation/_system/types/search-params';
 import { send } from '@/presentation/err-test/bff/health-check.client';
-import ErrTestInput from '@/presentation/err-test/views/err-test.component.input';
+import ErrTestInput from '@/presentation/err-test/views/err-test.input';
 
 const logPrefix = 'err-test.page.tsx: ';
 
