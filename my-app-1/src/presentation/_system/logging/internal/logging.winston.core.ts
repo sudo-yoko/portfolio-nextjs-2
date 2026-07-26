@@ -6,6 +6,7 @@ import winston, { createLogger, format, transports } from 'winston';
 import 'winston-daily-rotate-file';
 import DailyRotateFile from 'winston-daily-rotate-file';
 
+import { consoleHeader } from '@/presentation/_system/console-header';
 import { envByStaticKey as env } from '@/presentation/_system/env/env.s';
 
 // アプリケーション名
@@ -68,7 +69,7 @@ logger.level = 'debug';
 
 // ロガーの設定完了メッセージ
 console.log(
-    `Logger setup complete. Log directory=${logDir}, Rotation max size=${options.maxSize}, Rotation max files=${options.maxFiles}`,
+    `${consoleHeader} Logger setup complete. Log directory=${logDir}, Rotation max size=${options.maxSize}, Rotation max files=${options.maxFiles}`,
 );
 
 export default logger;

@@ -6,7 +6,7 @@
 import http, { IncomingMessage, ServerResponse } from 'http';
 import httpProxy from 'http-proxy';
 
-const logPrefix = '>>> ';
+import { consoleHeader } from '@/presentation/_system/console-header';
 
 const PORT = 9999;
 
@@ -16,12 +16,12 @@ const server = http.createServer((req: IncomingMessage, res: ServerResponse) => 
     if (req.url) {
         const port = new URL(req.url).port;
         const target = `http://localhost:${port}`;
-        console.log(logPrefix + `Proxying -> method=${req.method}, url=${req.url} target=${target}`);
+        console.log(`${consoleHeader} Proxying -> method=${req.method}, url=${req.url} target=${target}`);
         // リクエストをプロキシ転送する
         proxy.web(req, res, { target });
     }
 });
 
 server.listen(PORT, () => {
-    console.log(logPrefix + `Mock service running on http://localhost:${PORT} (proxy-service-mock)`);
+    console.log(`${consoleHeader} Mock service running on http://localhost:${PORT} (proxy-service-mock)`);
 });

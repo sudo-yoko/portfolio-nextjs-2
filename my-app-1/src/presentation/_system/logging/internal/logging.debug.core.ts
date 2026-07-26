@@ -6,6 +6,7 @@
 //
 // TODO: 予備スロットに対応
 import { envByStaticKey as env } from '@/presentation/_system/env/env';
+import { consoleHeader } from '@/presentation/_system/console-header';
 
 /**
  * ロガーの型定義
@@ -25,20 +26,25 @@ const noop: DebugLogger = () => {}; // 空実装を適用する
 /**
  * ロガーの実装を決定する
  */
-function createDebugLogger(): DebugLogger {
+function resolveDebugLogger(): DebugLogger {
     // productionモードの場合でもでバックロガーを使いたい場合
     if (env.NEXT_PUBLIC_DEBUG_LOGGER) {
-        return debugLogger;
+        return getDebugLogger();
     }
     if (env.NODE_ENV === 'production') {
         return noop;
     }
+    return getDebugLogger();
+}
+
+function getDebugLogger() {
+    console.log(`${consoleHeader} Debug logger is enabled.`);
     return debugLogger;
 }
 
 /**
  * デバッグロガー
  */
-const debug: DebugLogger = createDebugLogger();
+const debug: DebugLogger = resolveDebugLogger();
 
 export default debug;

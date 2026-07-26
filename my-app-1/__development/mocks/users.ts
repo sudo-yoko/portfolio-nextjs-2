@@ -3,6 +3,7 @@ import type { Request, Response } from 'express';
 import express from 'express';
 
 import { delay, loggingReq, loggingRes } from '@/mocks/utils/express-middlewares';
+import { consoleHeader } from '@/presentation/_system/console-header';
 
 const logPrefix = 'users-mock';
 
@@ -108,5 +109,5 @@ function handleRequest(
 }
 
 app.listen(port, () => {
-    console.log(`>>> Mock service running on http://localhost:${port} (users-mock)`);
+    console.log(`${consoleHeader} Mock service running on http://localhost:${port} (users-mock)`);
 });

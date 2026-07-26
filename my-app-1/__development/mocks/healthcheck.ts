@@ -3,6 +3,7 @@ import type { Response } from 'express';
 import express from 'express';
 
 import { delay, loggingReq } from '@/mocks/utils/express-middlewares';
+import { consoleHeader } from '@/presentation/_system/console-header';
 
 const logPrefix = 'healthcheck';
 
@@ -24,5 +25,5 @@ app.get(path + '/internal-server-error', async (_req, res: Response<void>) => {
 });
 
 app.listen(port, () => {
-    console.log(`Mock server running on http://localhost:${port} (healthcheck)`);
+    console.log(`${consoleHeader} Mock server running on http://localhost:${port} (healthcheck)`);
 });

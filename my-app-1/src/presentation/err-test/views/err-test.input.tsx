@@ -12,7 +12,7 @@ import {
     sendViaRouteClientError,
 } from '@/presentation/err-test/models/err-test.client';
 
-const logPrefix = 'err-test.component.input.tsx: ';
+const logPrefix = 'err-test.input.tsx: ';
 
 // NOTE: 関数名がスタックトレースに出るので、一意な関数名前にすると良い
 export default function ErrTestInput(props: { err?: string }) {

@@ -7,6 +7,7 @@ import type { Request, Response } from 'express';
 import express from 'express';
 
 import { delay, loggingReq, loggingRes } from '@/mocks/utils/express-middlewares';
+import { consoleHeader } from '@/presentation/_system/console-header';
 
 const port = 3001;
 const path = '/servlet/servlet.WebToCase';
@@ -38,5 +39,5 @@ app.post(path, async (_req: Request<undefined, undefined, FormData>, res: Respon
 });
 
 app.listen(port, () => {
-    console.log(`>>> Mock service running on http://localhost:${port} (web-to-case-mock)`);
+    console.log(`${consoleHeader} Mock service running on http://localhost:${port} (web-to-case-mock)`);
 });
