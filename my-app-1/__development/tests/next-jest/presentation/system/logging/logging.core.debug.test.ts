@@ -18,7 +18,7 @@ test('test1-1', async () => {
         },
     }));
 
-    const debug = (await import('@/presentation/_system/logging/internal/logging.debug.core')).default;
+    const debug = (await import('@/presentation/_system/logging/internal/logging.debug')).default;
 
     print('start');
     const param1 = 'param1';
