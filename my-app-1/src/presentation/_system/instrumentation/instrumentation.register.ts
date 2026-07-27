@@ -6,9 +6,10 @@ export async function register() {
     console.log(`${consoleHeader} ${logPrefix} NEXT_RUNTIME=${process.env.NEXT_RUNTIME}`);
     if (process.env.NEXT_RUNTIME === 'nodejs') {
         // Next.jsサーバー起動時に、グローバルインスタンスを読み込んでおく
-        await import('@/presentation/_system/logging/internal/logging.debug');
-        await import('@/presentation/_system/logging/internal/logging.winston');
-        await import('@/presentation/_system/client/internal/client.axios');
+        // TODO: instrumentationとServer Componentで読み込まれる領域が異なっているため期待通りにならない
+        const debug = (await import('@/presentation/_system/logging/internal/logging.debug')).default;
+        const logger = (await import('@/presentation/_system/logging/internal/logging.winston')).default;
+        const client = (await import('@/presentation/_system/client/internal/client.axios')).default;
     } else if (process.env.NEXT_RUNTIME === 'edge') {
     } else {
     }
