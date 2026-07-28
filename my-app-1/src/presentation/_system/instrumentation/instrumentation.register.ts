@@ -1,4 +1,4 @@
-import { consoleHeader } from '@/presentation/_system/console-header';
+import { consoleHeader } from '@/presentation/_system/logging/logging.utils';
 
 const logPrefix = 'instrumentation.register.ts:';
 export async function register() {

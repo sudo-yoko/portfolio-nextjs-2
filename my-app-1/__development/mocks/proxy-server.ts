@@ -6,7 +6,7 @@
 import http, { IncomingMessage, ServerResponse } from 'http';
 import httpProxy from 'http-proxy';
 
-import { consoleHeader } from '@/presentation/_system/console-header';
+import { consoleHeader } from '@/presentation/_system/logging/logging.utils';
 
 const PORT = 9999;
 

@@ -2,7 +2,7 @@ import 'server-only';
 
 import axios from 'axios';
 
-import { consoleHeader } from '@/presentation/_system/console-header';
+import { consoleHeader } from '@/presentation/_system/logging/logging.utils';
 
 const logPrefix = 'client.axios.ts: ';
 

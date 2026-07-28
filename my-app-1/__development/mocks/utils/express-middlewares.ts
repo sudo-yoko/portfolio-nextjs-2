@@ -1,13 +1,15 @@
 // APIモック(express)用の独自ミドルウェア
 import { RequestHandler } from 'express';
 
+import { consoleHeader } from '@/presentation/_system/logging/logging.utils';
+
 /**
  * 指定されたミリ秒で待機して、処理待ち時間をシミュレートする
  */
 export function delay(ms: number): RequestHandler {
     return (_req, _res, next) => {
         setTimeout(() => {
-            console.log(`>>> ${ms} ms delay done.`);
+            console.log(`${consoleHeader} ${ms} ms delay done.`);
             next();
         }, ms);
     };
@@ -19,7 +21,7 @@ export function delay(ms: number): RequestHandler {
 export function loggingReq(logPrefix: string): RequestHandler {
     return (req, _res, next) => {
         const { method, url, headers, params, query, body } = req;
-        console.log(`>>> [${logPrefix}] Request ->`, { method, url, headers, params, query, body });
+        console.log(`${consoleHeader} [${logPrefix}] Request ->`, { method, url, headers, params, query, body });
         next();
     };
 }
@@ -34,7 +36,7 @@ export function loggingRes(logPrefix: string): RequestHandler {
         // });
         const originalSend = res.send;
         res.send = function (body) {
-            console.log(`>>> [${logPrefix}] Response -> status=${res.statusCode}, body=`, body);
+            console.log(`${consoleHeader} [${logPrefix}] Response -> status=${res.statusCode}, body=`, body);
             return originalSend.call(this, body);
         };
         next();

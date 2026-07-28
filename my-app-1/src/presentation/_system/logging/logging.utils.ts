@@ -1,3 +1,5 @@
+export const consoleHeader = '#########';
+
 // export const LogPrefix = {
 //     format(props: { moduleName?: string; functionName?: string; location?: string }): string {
 //         const parts: string[] = [];

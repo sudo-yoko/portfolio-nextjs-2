@@ -7,7 +7,7 @@ import type { Request, Response } from 'express';
 import express from 'express';
 
 import { delay, loggingReq, loggingRes } from '@/mocks/utils/express-middlewares';
-import { consoleHeader } from '@/presentation/_system/console-header';
+import { consoleHeader } from '@/presentation/_system/logging/logging.utils';
 
 const port = 3001;
 const path = '/servlet/servlet.WebToCase';

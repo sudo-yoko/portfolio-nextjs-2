@@ -3,7 +3,7 @@ import type { Response } from 'express';
 import express from 'express';
 
 import { delay, loggingReq } from '@/mocks/utils/express-middlewares';
-import { consoleHeader } from '@/presentation/_system/console-header';
+import { consoleHeader } from '@/presentation/_system/logging/logging.utils';
 
 const logPrefix = 'healthcheck';
 

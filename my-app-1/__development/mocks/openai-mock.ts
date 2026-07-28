@@ -5,9 +5,9 @@ import cors from 'cors';
 import type { Request, Response } from 'express';
 import express from 'express';
 
-import { consoleHeader } from '@/presentation/_system/console-header';
+import { consoleHeader } from '@/presentation/_system/logging/logging.utils';
 
-const logPrefix = '>>> openai-mock: ';
+const logPrefix = `${consoleHeader} openai-mock: `;
 
 const port = 3002;
 const path = '/openai/chat';

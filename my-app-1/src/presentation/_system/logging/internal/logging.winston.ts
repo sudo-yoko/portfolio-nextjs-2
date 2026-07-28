@@ -6,8 +6,8 @@ import winston, { createLogger, format, transports } from 'winston';
 import 'winston-daily-rotate-file';
 import DailyRotateFile from 'winston-daily-rotate-file';
 
-import { consoleHeader } from '@/presentation/_system/console-header';
 import { envByStaticKey as env } from '@/presentation/_system/env/env.s';
+import { consoleHeader } from '@/presentation/_system/logging/logging.utils';
 
 // アプリケーション名
 const appName = 'portfolio-application';

@@ -6,7 +6,7 @@
 //
 // TODO: 予備スロットに対応
 import { envByStaticKey as env } from '@/presentation/_system/env/env';
-import { consoleHeader } from '@/presentation/_system/console-header';
+import { consoleHeader } from '@/presentation/_system/logging/logging.utils';
 
 /**
  * ロガーの型定義
