@@ -4,11 +4,19 @@
 import { Validator } from '@/presentation/_system/validation/validation.types';
 
 /**
+ * 入力有無の判定
+ */
+export const isBlank = (value: string | undefined | null): boolean => {
+    return !value || value.trim() === '';
+};
+
+/**
  * 必須入力
  */
 export const required: Validator = (value, label) => {
     const errors: string[] = [];
-    if (!value || value.trim() === '') {
+    // if (!value || value.trim() === '') {
+    if (isBlank(value)) {
         errors.push(`${label}を入力してください。`);
     }
     return errors;
@@ -18,8 +26,8 @@ export const required: Validator = (value, label) => {
 export const requiredAny = (values: string[], labels: string[]): string[] => {
     const errors: string[] = [];
     const result = values.some((value) => value && value.trim() !== '');
-    if(!result){
-        errors.push(`${labels.join(",")}のどれかを入力してください。`)
+    if (!result) {
+        errors.push(`${labels.join(',')}のどれかを入力してください。`);
     }
     return errors;
 };

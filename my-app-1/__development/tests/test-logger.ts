@@ -1,3 +1,5 @@
+import { consoleHeader } from '@/presentation/_system/logging/logging.utils';
+
 /**
  * コンソールログ出力関数を返す。
  *
@@ -6,7 +8,7 @@
  */
 export function printf({ logPrefix, stdout }: { logPrefix: string; stdout: boolean }) {
     return (...s: unknown[]) => {
-        const message = [logPrefix, ...s];
+        const message = [consoleHeader, logPrefix, ...s];
         return stdout ? process.stdout.write(message.join(' ') + '\n') : console.log(...message);
     };
 }

@@ -1,8 +1,8 @@
-import { FormValidator, Validator, Violations } from '@/presentation/_system/validation/validation.types';
+import { FormValidator, Violations } from '@/presentation/_system/validation/validation.types';
 import { requiredEmail } from '@/presentation/_system/validation/validators.email';
+import { requiredMax50 } from '@/presentation/_system/validation/validators.length';
 import { required } from '@/presentation/_system/validation/validators.presence';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
-import { z } from 'zod';
 
 /**
  * フォームのバリデーション
@@ -42,18 +42,18 @@ function validateBody(body: string) {
 /**
  * バリデーション：必須で最大５０桁まで
  */
-const requiredMax50: Validator = (value, label) => {
-    let errors: string[] = [];
-    // 必須チェック
-    errors = required(value, label);
-    if (errors.length > 0) {
-        return errors;
-    }
-    // 桁数チェック
-    const result = z.string().max(50, `${label}は50文字以内にしてください。`).safeParse(value);
-    if (result.error) {
-        errors = result.error.issues.map((issue) => issue.message);
-        return errors;
-    }
-    return errors;
-};
+// const requiredMax50: Validator = (value, label) => {
+//     let errors: string[] = [];
+//     // 必須チェック
+//     errors = required(value, label);
+//     if (errors.length > 0) {
+//         return errors;
+//     }
+//     // 桁数チェック
+//     const result = z.string().max(50, `${label}は50文字以内にしてください。`).safeParse(value);
+//     if (result.error) {
+//         errors = result.error.issues.map((issue) => issue.message);
+//         return errors;
+//     }
+//     return errors;
+// };

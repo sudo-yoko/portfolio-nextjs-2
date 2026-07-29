@@ -1,7 +1,12 @@
 //
 // バリデーションのヘルパー関数
 //
-import { FormData, Violations, ViolationsMap } from '@/presentation/_system/validation/validation.types';
+import {
+    FormData,
+    Violation,
+    Violations,
+    ViolationsMap,
+} from '@/presentation/_system/validation/validation.types';
 
 /**
  * バリデーションエラーの有無を調べる
@@ -27,7 +32,7 @@ export function getViolationsMap<FIELD extends string>(input: Violations<FIELD>)
 }
 
 /**
- * 
+ *
  */
 export function initialFormDataCore<FIELD extends string>(
     keyObj: Readonly<Record<string, FIELD>>,
@@ -59,3 +64,23 @@ export function initialFormDataCore<FIELD extends string>(
 // return false;
 // }
 // }
+
+/**
+ * 先頭から検証し、最初に見つかった違反だけを返す
+ */
+export function validateFirst(validations: (() => Violation)[]): Violation {
+    for (const validation of validations) {
+        const violation = validation();
+        if (violation.length > 0) {
+            return violation;
+        }
+    }
+    return [];
+}
+
+/**
+ * すべてのバリデーションを実行してエラーを集約する
+ */
+export function validateAll(validations: (() => Violation)[]) {
+    // No Implemented
+}
