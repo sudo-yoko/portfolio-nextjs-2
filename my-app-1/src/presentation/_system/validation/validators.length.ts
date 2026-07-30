@@ -7,7 +7,7 @@ import { isBlank, required } from '@/presentation/_system/validation/validators.
 /**
  * 任意かつ桁数上限チェック
  */
-const validateMax = (max: number): Validator => {
+export const validateMax = (max: number): Validator => {
     const schema = z.string().max(max);
     return (value, label) => {
         // 未入力の場合はチェックしない
@@ -28,11 +28,14 @@ const validateMax = (max: number): Validator => {
 const requiredMax = (max: number): Validator => {
     return (value, label) => {
         // バリデーション実行
-        const violation = validateFirst([
+        const violation = validateFirst(
+            value,
+            label,
+        )([
             // 必須チェック
-            () => required(value, label),
+            required,
             // 桁数チェック
-            () => validateMax(max)(value, label),
+            validateMax(max),
         ]);
         return violation;
     };

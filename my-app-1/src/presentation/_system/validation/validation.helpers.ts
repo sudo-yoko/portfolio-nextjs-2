@@ -3,6 +3,7 @@
 //
 import {
     FormData,
+    Validator,
     Violation,
     Violations,
     ViolationsMap,
@@ -68,14 +69,16 @@ export function initialFormDataCore<FIELD extends string>(
 /**
  * 先頭から検証し、最初に見つかった違反だけを返す
  */
-export function validateFirst(validations: (() => Violation)[]): Violation {
-    for (const validation of validations) {
-        const violation = validation();
-        if (violation.length > 0) {
-            return violation;
+export function validateFirst(value: string, label: string) {
+    return (validators: Validator[]) => {
+        for (const validator of validators) {
+            const violation = validator(value, label);
+            if (violation.length > 0) {
+                return violation;
+            }
         }
-    }
-    return [];
+        return [];
+    };
 }
 
 /**

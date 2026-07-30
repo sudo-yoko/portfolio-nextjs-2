@@ -3,6 +3,8 @@
 //
 import { Validator } from '@/presentation/_system/validation/validation.types';
 
+// TODO: string | undefined | null の型を作る
+
 /**
  * 入力有無の判定
  */

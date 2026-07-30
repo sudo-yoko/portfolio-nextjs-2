@@ -7,24 +7,24 @@ import test from 'node:test';
 import { isBlank, required, requiredAny } from '@/presentation/_system/validation/validators.presence';
 import { printf } from '@/tests/test-logger';
 
-const print = printf({ logPrefix: '[validators.presence.test.ts]', stdout: false });
+const print = printf({ logPrefix: '[validators.presence.test.ts]', stdout: true });
 
 // npm exec -- node --test --import tsx --test-name-pattern='^test1-1$' __development/tests/node-test/presentation/system/validation/validators.presence.test.ts
-test('test1-1', async (t) => {
+test('test1-1', () => {
     const value = undefined;
     const result = isBlank(value);
     assert.strictEqual(result, true);
 });
 
 // npm exec -- node --test --import tsx --test-name-pattern='^test1-2$' __development/tests/node-test/presentation/system/validation/validators.presence.test.ts
-test('test1-2', async (t) => {
+test('test1-2', () => {
     const value = null;
     const result = isBlank(value);
     assert.strictEqual(result, true);
 });
 
 // npm exec -- node --test --import tsx --test-name-pattern='^test1-3$' __development/tests/node-test/presentation/system/validation/validators.presence.test.ts
-test('test1-3', async (t) => {
+test('test1-3', () => {
     const value = '　';
     const result = isBlank(value);
     assert.strictEqual(result, true);
@@ -33,14 +33,12 @@ test('test1-3', async (t) => {
 // npm exec -- node --test --import tsx --test-name-pattern='^test2-1$' __development/tests/node-test/presentation/system/validation/validators.presence.test.ts
 test('test2-1', (t) => {
     const result = required('', 'userId');
-    print(`[${t.name}] result -> ${result}`);
+    print(`[${t.name}]`, 'result ->', result);
 });
 
 // npm exec -- node --test --import tsx --test-name-pattern='^test3-1$' __development/tests/node-test/presentation/system/validation/validators.presence.test.ts
 test('test3-1', (t) => {
     const FormKeys = {
-        offset: 'offset',
-        limit: 'limit',
         userId: 'userId',
         userName: 'userName',
     } as const;
@@ -49,7 +47,7 @@ test('test3-1', (t) => {
     const values: string[] = ['', ''];
     const labels: string[] = [FormKeys.userId, FormKeys.userName];
     const result = requiredAny(values, labels);
-    print(`[${t.name}] result -> `, result);
+    print(`[${t.name}]`, 'result ->', result);
 });
 
 // void test('test2', () => {

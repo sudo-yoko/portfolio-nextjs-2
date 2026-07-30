@@ -1,3 +1,5 @@
+import util from 'node:util';
+
 import { consoleHeader } from '@/presentation/_system/logging/logging.utils';
 
 /**
@@ -9,6 +11,13 @@ import { consoleHeader } from '@/presentation/_system/logging/logging.utils';
 export function printf({ logPrefix, stdout }: { logPrefix: string; stdout: boolean }) {
     return (...s: unknown[]) => {
         const message = [consoleHeader, logPrefix, ...s];
-        return stdout ? process.stdout.write(message.join(' ') + '\n') : console.log(...message);
+
+        // return stdout ? process.stdout.write(message.join(' ') + '\n') : console.log(...message);
+        if (stdout) {
+            const output = util.format(...message) + '\n';
+            process.stdout.write(output);
+        } else {
+            console.log(...message);
+        }
     };
 }

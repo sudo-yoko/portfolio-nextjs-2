@@ -12,11 +12,14 @@ import { isBlank, required } from '@/presentation/_system/validation/validators.
  */
 export const requiredEmail: Validator = (value, label) => {
     // バリデーション実行
-    const violation = validateFirst([
+    const violation = validateFirst(
+        value,
+        label,
+    )([
         // 必須チェック
-        () => required(value, label),
+        required,
         // 形式チェック
-        () => validateEmail(value, label),
+        validateEmail,
     ]);
     return violation;
     // const errors: string[] = [];
