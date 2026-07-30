@@ -4,7 +4,7 @@ import { Validator } from '@/presentation/_system/validation/validation.types';
 import { isBlank } from '@/presentation/_system/validation/validators.presence';
 
 /**
- * 任意かつ桁数上限チェック
+ * 桁数上限チェックバリデーター
  */
 export const validateMax = (max: number): Validator => {
     const schema = z.string().max(max);
@@ -20,7 +20,11 @@ export const validateMax = (max: number): Validator => {
         return [`${label}は${max}文字以内にしてください。`];
     };
 };
+export const validateMax5 = validateMax(5);
 
+/**
+ * 桁数下限チェックバリデーター
+ */
 export const validateMin = (min: number): Validator => {
     const schema = z.string().min(min);
     return (value, label) => {
@@ -59,8 +63,8 @@ export const validateMin = (min: number): Validator => {
 //     };
 // };
 
-export const validateMax50 = validateMax(50);
-export const validateMax100 = validateMax(100);
+// export const validateMax50 = validateMax(50);
+// export const validateMax100 = validateMax(100);
 // export const validateMax150 = validateMax(150);
 // export const requiredMax50 = requiredMax(50);
 // export const requiredMin5 = requiredMin(5);
