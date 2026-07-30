@@ -66,24 +66,31 @@ export function initialFormDataCore<FIELD extends string>(
 // }
 // }
 
-/**
- * 先頭から検証し、最初に見つかった違反だけを返す
- */
-export function validateFirst(value: string, label: string) {
-    return (validators: Validator[]) => {
-        for (const validator of validators) {
-            const violation = validator(value, label);
-            if (violation.length > 0) {
-                return violation;
-            }
-        }
-        return [];
-    };
-}
+// /**
+//  * 先頭から検証し、最初に見つかった違反だけを返す
+//  */
+// export function validateFirst(value: string, label: string) {
+//     return (validators: Validator[]) => {
+//         for (const validator of validators) {
+//             const violation = validator(value, label);
+//             if (violation.length > 0) {
+//                 return violation;
+//             }
+//         }
+//         return [];
+//     };
+// }
 
-/**
- * すべてのバリデーションを実行してエラーを集約する
- */
-export function validateAll(validations: (() => Violation)[]) {
-    // No Implemented
-}
+// /**
+//  * すべてのバリデーションを実行してエラーを集約する
+//  */
+// export function validateAll(value: string, label: string) {
+//     return (validators: Validator[]) => {
+//         let violations: Violation = [];
+//         for (const validator of validators) {
+//             const violation = validator(value, label);
+//             violations.push(...violation);
+//         }
+//         return violations;
+//     };
+// }

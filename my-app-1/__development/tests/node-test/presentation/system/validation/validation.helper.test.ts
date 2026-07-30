@@ -1,16 +1,16 @@
+// すべてのテストを実行
+// npm exec -- node --test --import tsx __development/tests/node-test/presentation/system/validation/validation.helper.test.ts
+
 import assert from 'node:assert';
 import test from 'node:test';
 
-import { formatError } from '@/presentation/_system/error/error.helper.stringify';
 import { isInvalid } from '@/presentation/_system/result/result.helpers';
 import { Invalid, Tag } from '@/presentation/_system/result/result.types';
-import {
-    hasError,
-    initialFormDataCore,
-    validateFirst,
-} from '@/presentation/_system/validation/validation.helpers';
+import { hasError, initialFormDataCore } from '@/presentation/_system/validation/validation.helpers';
 import { Violations } from '@/presentation/_system/validation/validation.types';
-import { validateMax } from '@/presentation/_system/validation/validators.length';
+import { validateAll, validateFirst } from '@/presentation/_system/validation/validators';
+import { validateEmail } from '@/presentation/_system/validation/validators.email';
+import { validateMax, validateMin } from '@/presentation/_system/validation/validators.length';
 import { required } from '@/presentation/_system/validation/validators.presence';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 import { printf } from '@/tests/test-logger';
@@ -133,16 +133,17 @@ test('test1-8', () => {
     const result = {
         tag: Tag.Invalid,
     };
-    // コンパイルエラーになること
-    if (isInvalid(result)) {
-        print(`result=${result.violations}`);
-        expect(() => hasError(result.violations)).toThrow(Error);
-        try {
-            hasError(result.violations);
-        } catch (error) {
-            print(formatError({ error }).all);
-        }
-    }
+
+    isInvalid(result); // コンパイルエラーになること
+    // if (isInvalid(result)) {
+    //     print(`result=${result.violations}`);
+    //     expect(() => hasError(result.violations)).toThrow(Error);
+    //     try {
+    //         hasError(result.violations);
+    //     } catch (error) {
+    //         print(formatError({ error }).all);
+    //     }
+    // }
 });
 
 // npm exec -- node --test --import tsx --test-name-pattern='^test1-9$' __development/tests/node-test/presentation/system/validation/validation.helper.test.ts
@@ -220,5 +221,18 @@ test('test4-1', () => {
         // 桁数チェック
         validateMax(max),
     ]);
+    print(violation);
+});
+
+// ==============================
+// ５. validateAll
+// ==============================
+// npm exec -- node --test --import tsx --test-name-pattern='^test5-1$' __development/tests/node-test/presentation/system/validation/validation.helper.test.ts
+test('test5-1', () => {
+    const value = '1a.com';
+    const label = 'メールアドレス';
+    const min = 10;
+
+    const violation = validateAll(value, label)([required, validateEmail, validateMin(min)]);
     print(violation);
 });

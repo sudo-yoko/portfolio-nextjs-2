@@ -1,8 +1,9 @@
+import { z } from 'zod';
+
 import { FormValidator, Validator, Violations } from '@/presentation/_system/validation/validation.types';
-import { requiredEmail } from '@/presentation/_system/validation/validators.email';
+import { requiredEmail } from '@/presentation/_system/validation/validators';
 import { required } from '@/presentation/_system/validation/validators.presence';
 import { FormKeys } from '@/presentation/contact/small/models/contact.types';
-import { z } from 'zod';
 
 /**
  * フォームのバリデーション

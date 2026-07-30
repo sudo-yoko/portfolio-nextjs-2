@@ -3,38 +3,37 @@
 //
 import { z } from 'zod';
 
-import { validateFirst } from '@/presentation/_system/validation/validation.helpers';
 import { Validator } from '@/presentation/_system/validation/validation.types';
-import { isBlank, required } from '@/presentation/_system/validation/validators.presence';
+import { isBlank } from '@/presentation/_system/validation/validators.presence';
 
 /**
  * 必須のメールアドレス
  */
-export const requiredEmail: Validator = (value, label) => {
-    // バリデーション実行
-    const violation = validateFirst(
-        value,
-        label,
-    )([
-        // 必須チェック
-        required,
-        // 形式チェック
-        validateEmail,
-    ]);
-    return violation;
-    // const errors: string[] = [];
-    // // 必須チェック
-    // errors.push(...required(value, label));
-    // if (errors.length > 0) {
-    //     return errors;
-    // }
-    // // 形式チェック
-    // errors.push(...validateEmail(value, label));
-    // if (errors.length > 0) {
-    //     return errors;
-    // }
-    // return errors;
-};
+// export const requiredEmail: Validator = (value, label) => {
+//     // バリデーション実行
+//     const violation = validateFirst(
+//         value,
+//         label,
+//     )([
+//         // 必須チェック
+//         required,
+//         // 形式チェック
+//         validateEmail,
+//     ]);
+//     return violation;
+//     // const errors: string[] = [];
+//     // // 必須チェック
+//     // errors.push(...required(value, label));
+//     // if (errors.length > 0) {
+//     //     return errors;
+//     // }
+//     // // 形式チェック
+//     // errors.push(...validateEmail(value, label));
+//     // if (errors.length > 0) {
+//     //     return errors;
+//     // }
+//     // return errors;
+// };
 
 /**
  * メールアドレスの形式チェック

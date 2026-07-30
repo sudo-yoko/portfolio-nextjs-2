@@ -1,6 +1,5 @@
 import { FormValidator, Violations } from '@/presentation/_system/validation/validation.types';
-import { requiredEmail } from '@/presentation/_system/validation/validators.email';
-import { requiredMax50 } from '@/presentation/_system/validation/validators.length';
+import { requiredEmail, requiredMax50 } from '@/presentation/_system/validation/validators';
 import { required } from '@/presentation/_system/validation/validators.presence';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 
@@ -20,6 +19,7 @@ export const validate: FormValidator<FormKeys> = (formData) => {
     errors.push({
         field: FormKeys.body,
         violation: validateBody(formData.body),
+        // violation: validateFirst(formData.body, 'お問い合わせ内容')([required, requiredMax50]),
     });
     // errors['name'] = required(formData.name, 'お名前');
     // errors['email'] = requiredEmail(formData.email, 'メールアドレス');

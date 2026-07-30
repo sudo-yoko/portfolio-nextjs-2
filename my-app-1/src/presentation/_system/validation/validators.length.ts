@@ -1,8 +1,7 @@
 import { z } from 'zod';
 
-import { validateFirst } from '@/presentation/_system/validation/validation.helpers';
 import { Validator } from '@/presentation/_system/validation/validation.types';
-import { isBlank, required } from '@/presentation/_system/validation/validators.presence';
+import { isBlank } from '@/presentation/_system/validation/validators.presence';
 
 /**
  * 任意かつ桁数上限チェック
@@ -22,26 +21,46 @@ export const validateMax = (max: number): Validator => {
     };
 };
 
-/**
- * 必須かつ最大桁数チェック
- */
-const requiredMax = (max: number): Validator => {
+export const validateMin = (min: number): Validator => {
+    const schema = z.string().min(min);
     return (value, label) => {
-        // バリデーション実行
-        const violation = validateFirst(
-            value,
-            label,
-        )([
-            // 必須チェック
-            required,
-            // 桁数チェック
-            validateMax(max),
-        ]);
-        return violation;
+        if (isBlank(value)) {
+            return [];
+        }
+        if (schema.safeParse(value).success) {
+            return [];
+        }
+        return [`${label}は${min}文字以上にしてください。`];
     };
 };
 
-// export const validateMax50 = validateMax(50);
-// export const validateMax100 = validateMax(100);
+// /**
+//  * 必須かつ最大桁数チェック
+//  */
+// const requiredMax = (max: number): Validator => {
+//     return (value, label) => {
+//         // バリデーション実行
+//         const violation = validateFirst(
+//             value,
+//             label,
+//         )([
+//             // 必須チェック
+//             required,
+//             // 桁数チェック
+//             validateMax(max),
+//         ]);
+//         return violation;
+//     };
+// };
+
+// const requiredMin = (min: number): Validator => {
+//     return (value, label) => {
+//         return validateFirst(value, label)([required, validateMin(min)]);
+//     };
+// };
+
+export const validateMax50 = validateMax(50);
+export const validateMax100 = validateMax(100);
 // export const validateMax150 = validateMax(150);
-export const requiredMax50 = requiredMax(50);
+// export const requiredMax50 = requiredMax(50);
+// export const requiredMin5 = requiredMin(5);
