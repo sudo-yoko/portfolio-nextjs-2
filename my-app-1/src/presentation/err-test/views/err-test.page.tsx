@@ -4,7 +4,7 @@ import 'server-only';
 import { withAdviceAsync } from '@/presentation/_system/aspect/aspect.server';
 import { applicationError } from '@/presentation/_system/error/error.factories';
 import { getStringParam, SearchParams } from '@/presentation/_system/types/search-params';
-import { requestHealthCheck } from '@/presentation/err-test/models/err-test-client.s';
+import { requestHealthCheckError } from '@/presentation/backend-lib/health-check/health-check.client';
 import ErrTestInput from '@/presentation/err-test/views/err-test.input';
 
 const logPrefix = 'err-test.page.tsx: ';
@@ -26,7 +26,7 @@ export default async function ErrTestPage(props: { searchParams?: SearchParams }
                 throw applicationError({ message: err, location: logPrefix + 'ErrTestPage' });
                 break;
             case '13':
-                await requestHealthCheck();
+                await requestHealthCheckError();
                 break;
         }
         return (

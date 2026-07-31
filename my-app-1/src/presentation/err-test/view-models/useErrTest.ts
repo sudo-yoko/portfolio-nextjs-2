@@ -11,7 +11,7 @@ import {
     sendViaAction,
     sendViaRoute,
     sendViaRouteClientError,
-} from '@/presentation/err-test/models/err-test.client.c';
+} from '@/presentation/err-test/models/err-test.client';
 
 const logPrefix = 'useErrTest.ts: ';
 

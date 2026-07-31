@@ -4,9 +4,9 @@ import client from '@/presentation/_system/client/client.c';
 import { Method, RawResponse } from '@/presentation/_system/client/client.types';
 import { parseResult } from '@/presentation/_system/result/result.parser';
 import { BffResult } from '@/presentation/_system/result/result.types';
+import { Users } from '@/presentation/backend-lib/users/users.types';
 import { post } from '@/presentation/err-test/bff/err-test.action';
 import { HealthCheckResult, UsersResult } from '@/presentation/err-test/models/err-test.types';
-import { ResUsers } from '@/presentation/err-test/models/err-test.users.parser';
 
 //
 // HealthCheckリクエスト
@@ -52,7 +52,7 @@ export const sendViaRouteClientError: HealthCheckRequest = viaRouteClientError;
 //
 // Usersリクエスト
 //
-type UsersRequest = (err: string) => Promise<BffResult<UsersResult<ResUsers>>>;
+type UsersRequest = (err: string) => Promise<BffResult<UsersResult<Users>>>;
 
 const requestUsersViaRoute: UsersRequest = async (err) => {
     const res: RawResponse = await client.send({
@@ -61,7 +61,7 @@ const requestUsersViaRoute: UsersRequest = async (err) => {
         query: [{ key: 'err', value: err }],
     });
     const result = parseResult(res.rawBody);
-    return result as UsersResult<ResUsers>;
+    return result as UsersResult<Users>;
 };
 
 export const requestUsers: UsersRequest = requestUsersViaRoute;
