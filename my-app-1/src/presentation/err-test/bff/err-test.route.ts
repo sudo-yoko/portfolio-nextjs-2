@@ -4,9 +4,9 @@ import { NextRequest } from 'next/server';
 
 import { withAdviceAsync } from '@/presentation/_system/aspect/aspect.route-handler';
 import logger from '@/presentation/_system/logging/logger.s';
-import { executeUsers } from '@/presentation/err-test/bff/err-test.interactor';
+import { executeHealthCheck, executeUsers } from '@/presentation/err-test/bff/err-test.interactor';
 
-const logPrefix = 'err-test.route.ts';
+const logPrefix = 'err-test.route.ts: ';
 
 export async function GET(req: NextRequest): Promise<Response> {
     return await withAdviceAsync(() => _());
@@ -14,6 +14,10 @@ export async function GET(req: NextRequest): Promise<Response> {
         const params = req.nextUrl.searchParams;
         const err = params.get('err');
         logger.info(logPrefix + 'request -> err=' + err);
-        return await executeUsers();
+
+        if (err === '25') {
+            return await executeUsers();
+        }
+        return await executeHealthCheck();
     }
 }

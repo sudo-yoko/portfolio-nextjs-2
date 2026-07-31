@@ -8,7 +8,7 @@ import { queryParam } from '@/presentation/_system/client/client.helpers';
 import client from '@/presentation/_system/client/client.s';
 import { Method } from '@/presentation/_system/client/client.types';
 import { env } from '@/presentation/_system/env/env.helper.validated';
-import { parseResponse, ResUsers } from '@/presentation/err-test/models/err-test.users.parser';
+import { parseUsers, ResUsers } from '@/presentation/err-test/models/err-test.users.parser';
 
 /**
  * バックエンドのアドレス
@@ -32,6 +32,6 @@ export async function requestUsers(): Promise<ResUsers> {
         query: queryParam({ offset: '1', limit: '10' }),
         body: { keyword: 'aaa' },
     });
-    const resUsers = parseResponse(res.rawBody);
+    const resUsers = parseUsers(res.rawBody);
     return resUsers;
 }

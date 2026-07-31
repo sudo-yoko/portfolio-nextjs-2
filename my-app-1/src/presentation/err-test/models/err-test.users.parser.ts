@@ -42,4 +42,4 @@ const typeAssertionParser: ResponseParser<ResUsers> = (rawBody) => {
     return data;
 };
 
-export const parseResponse: ResponseParser<ResUsers> = zodParser;
+export const parseUsers: ResponseParser<ResUsers> = zodParser;
