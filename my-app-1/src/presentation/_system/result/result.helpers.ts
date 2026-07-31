@@ -1,8 +1,6 @@
 //
 // RESULT型 ヘルパー関数
 //
-import { applicationError } from '@/presentation/_system/error/error.factories';
-import { formatError } from '@/presentation/_system/error/error.helper.stringify';
 import {
     Aborted,
     Invalid,
@@ -43,45 +41,45 @@ export function isAborted(result: RESULT): result is Aborted {
     return result.tag === Tag.Aborted;
 }
 
-export function parseResult(text: string): RESULT {
-    try {
-        const parsed = JSON.parse(text);
-        if (isResult(parsed)) {
-            return parsed;
-        }
-        // throw parseResultError(text);
-        throw applicationError({ message: text });
-    } catch (error) {
-        const message = `text=${text} error=${formatError({ error }).message}`;
-        // throw parseResultError(text, formatError({ error }).message);
-        throw applicationError({ message });
-    }
-}
+// export function parseResult(text: string): RESULT {
+//     try {
+//         const parsed = JSON.parse(text);
+//         if (isResult(parsed)) {
+//             return parsed;
+//         }
+//         // throw parseResultError(text);
+//         throw applicationError({ message: text });
+//     } catch (error) {
+//         const message = `text=${text} error=${formatError({ error }).message}`;
+//         // throw parseResultError(text, formatError({ error }).message);
+//         throw applicationError({ message });
+//     }
+// }
 
-function isResult(text: unknown): text is RESULT {
-    if (text === null) {
-        return false;
-    }
-    // プリミティブ型の場合
-    if (typeof text !== 'object') {
-        return false;
-    }
+// function isResult(text: unknown): text is RESULT {
+//     if (text === null) {
+//         return false;
+//     }
+//     // プリミティブ型の場合
+//     if (typeof text !== 'object') {
+//         return false;
+//     }
 
-    const tag = (text as RESULT).tag;
-    if (tag === Tag.OkEmpty) {
-        return true;
-    }
-    if (tag === Tag.OkData) {
-        return true;
-    }
-    if (tag === Tag.Invalid) {
-        return true;
-    }
-    if (tag === Tag.Retryable) {
-        return true;
-    }
-    if (tag === Tag.Aborted) {
-        return true;
-    }
-    return false;
-}
+//     const tag = (text as RESULT).tag;
+//     if (tag === Tag.OkEmpty) {
+//         return true;
+//     }
+//     if (tag === Tag.OkData) {
+//         return true;
+//     }
+//     if (tag === Tag.Invalid) {
+//         return true;
+//     }
+//     if (tag === Tag.Retryable) {
+//         return true;
+//     }
+//     if (tag === Tag.Aborted) {
+//         return true;
+//     }
+//     return false;
+// }

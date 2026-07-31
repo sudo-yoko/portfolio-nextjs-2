@@ -9,7 +9,7 @@ import { queryParam } from '@/presentation/_system/client/client.helpers';
 import { Method } from '@/presentation/_system/client/client.types';
 import { FetchData, FetchPage } from '@/presentation/_system/pagination/standard/models/pagination.requester';
 import { PaginationResult } from '@/presentation/_system/pagination/standard/models/pagination.types';
-import { parseResult } from '@/presentation/_system/result/result.helpers';
+import { parseResult } from '@/presentation/_system/result/result.parser';
 import { BffResult } from '@/presentation/_system/result/result.types';
 import { action } from '@/presentation/users/standard/bff/users.action';
 import { FormKeys, User } from '@/presentation/users/standard/models/users.types';

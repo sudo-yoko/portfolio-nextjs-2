@@ -6,7 +6,7 @@ import 'client-only';
 import client from '@/presentation/_system/client/client.c';
 import { CONTENT_TYPE_APPLICATION_JSON_UTF8 } from '@/presentation/_system/client/client.constants';
 import { Method } from '@/presentation/_system/client/client.types';
-import { parseResult } from '@/presentation/_system/result/result.helpers';
+import { parseResult } from '@/presentation/_system/result/result.parser';
 import { BffResult } from '@/presentation/_system/result/result.types';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 import { post } from '@/presentation/contact/small/bff/contact.action';

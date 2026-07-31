@@ -2,7 +2,8 @@ import 'client-only';
 
 import client from '@/presentation/_system/client/client.c';
 import { Method, RawResponse } from '@/presentation/_system/client/client.types';
-import { parseResult } from '@/presentation/_system/result/result.helpers';
+
+import { parseResult } from '@/presentation/_system/result/result.parser';
 import { BffResult } from '@/presentation/_system/result/result.types';
 import { post } from '@/presentation/err-test/bff/err-test.action';
 import { HealthCheckResult, UsersResult } from '@/presentation/err-test/models/err-test.types';
