@@ -1,13 +1,19 @@
 import 'server-only';
 
+import { NextRequest } from 'next/server';
+
 import { withAdviceAsync } from '@/presentation/_system/aspect/aspect.route-handler';
-import { execute } from '@/presentation/err-test/bff/err-test.interactor';
+import logger from '@/presentation/_system/logging/logger.s';
+import { executeUsers } from '@/presentation/err-test/bff/err-test.interactor';
 
 const logPrefix = 'err-test.route.ts';
 
-export async function GET(): Promise<Response> {
+export async function GET(req: NextRequest): Promise<Response> {
     return await withAdviceAsync(() => _());
     async function _() {
-        return await execute();
+        const params = req.nextUrl.searchParams;
+        const err = params.get('err');
+        logger.info(logPrefix + 'request -> err=' + err);
+        return await executeUsers();
     }
 }

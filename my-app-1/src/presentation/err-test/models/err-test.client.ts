@@ -5,7 +5,8 @@ import { Method, RawResponse } from '@/presentation/_system/client/client.types'
 import { parseResult } from '@/presentation/_system/result/result.helpers';
 import { BffResult } from '@/presentation/_system/result/result.types';
 import { post } from '@/presentation/err-test/bff/err-test.action';
-import { ErrTestResult } from '@/presentation/err-test/models/err-test.types';
+import { ErrTestResult, UsersResult } from '@/presentation/err-test/models/err-test.types';
+import { ResUsers } from '@/presentation/err-test/models/err-test.users.parser';
 
 type Send = {
     (): Promise<BffResult<ErrTestResult>>;
@@ -44,3 +45,17 @@ const viaRouteClientError: Send = async () => {
 export const sendViaRoute: Send = viaRoute;
 export const sendViaAction: Send = viaAction;
 export const sendViaRouteClientError: Send = viaRouteClientError;
+
+type UsersRequest = (err: string) => Promise<BffResult<UsersResult<ResUsers>>>;
+
+const requestUsersViaRoute: UsersRequest = async (err) => {
+    const res: RawResponse = await client.send({
+        url: '/api/bff/err-test',
+        method: Method.GET,
+        query: [{ key: 'err', value: err }],
+    });
+    const result = parseResult(res.rawBody);
+    return result as UsersResult<ResUsers>;
+};
+
+export const requestUsers: UsersRequest = requestUsersViaRoute;

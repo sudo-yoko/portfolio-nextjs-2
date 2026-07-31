@@ -5,8 +5,9 @@ import { useEffect, useState } from 'react';
 import { useWithAdvice } from '@/presentation/_system/aspect/aspect.client.useWithAdvice';
 import { Button } from '@/presentation/_system/components/button.decorator.simple';
 import { applicationError, resultError } from '@/presentation/_system/error/error.factories';
-import { isOkEmpty } from '@/presentation/_system/result/result.helpers';
+import { isOkData, isOkEmpty } from '@/presentation/_system/result/result.helpers';
 import {
+    requestUsers,
     sendViaAction,
     sendViaRoute,
     sendViaRouteClientError,
@@ -74,6 +75,20 @@ export default function ErrTestInput(props: { err?: string }) {
         }
     }
 
+    async function handle25Click() {
+        setLoading(true);
+        await withAdviceAsync(() => _());
+        async function _() {
+            if (props.err === '25') {
+                const result = await requestUsers(props.err);
+                if (!isOkData(result)) {
+                    throw resultError({ result, location: logPrefix + 'ErrTestInput.handle25Click' });
+                }
+            }
+            setLoading(false);
+        }
+    }
+
     return (
         <>
             {!loading && (
@@ -81,6 +96,7 @@ export default function ErrTestInput(props: { err?: string }) {
                     <Button onClick={() => handle22Click()}>22</Button>
                     <Button onClick={() => handle23Click()}>23</Button>
                     <Button onClick={() => handle24Click()}>24</Button>
+                    <Button onClick={() => handle25Click()}>25</Button>
                 </div>
             )}
         </>
