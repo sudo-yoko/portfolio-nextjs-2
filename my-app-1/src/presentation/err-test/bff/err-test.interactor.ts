@@ -2,7 +2,7 @@ import 'server-only';
 
 import { okData, okEmpty } from '@/presentation/_system/result/result.factories';
 import { RESULT } from '@/presentation/_system/result/result.types';
-import { requestHealthCheck, requestUsers } from '@/presentation/err-test/bff/err-test-client.s';
+import { requestHealthCheck, requestUsers } from '@/presentation/err-test/models/err-test-client.s';
 import { HealthCheckResult, UsersResult } from '@/presentation/err-test/models/err-test.types';
 import { ResUsers } from '@/presentation/err-test/models/err-test.users.parser';
 

@@ -11,7 +11,7 @@ import { env } from '@/presentation/_system/env/env.helper.validated';
 import logger from '@/presentation/_system/logging/logger.s';
 import { parseUsers, ResUsers } from '@/presentation/err-test/models/err-test.users.parser';
 
-const logPrefix = 'health-check.client.ts: ';
+const logPrefix = 'err-test-client.s.ts: ';
 
 /**
  * HealthCheckエンドポイントを実行
