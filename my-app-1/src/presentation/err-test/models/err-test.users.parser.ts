@@ -1,7 +1,7 @@
 // バックエンド（REST API）のレスポンスの検証とパース
 import z from 'zod';
 
-import { ResponseParser } from '@/presentation/_system/client/response-parser';
+import { ResponseBodyParser } from '@/presentation/_system/client/response-parser';
 
 /**
  * バックエンドレスポンスのユーザー情報
@@ -29,12 +29,12 @@ const ResUsersSchema: z.ZodType<ResUsers> = z.object({
     users: z.array(ResUserSchema),
 });
 
-const zodParser: ResponseParser<ResUsers> = (rawBody) => {
+const zodParser: ResponseBodyParser<ResUsers> = (rawBody) => {
     const json: unknown = JSON.parse(rawBody);
     return ResUsersSchema.parse(json);
 };
 
-const typeAssertionParser: ResponseParser<ResUsers> = (rawBody) => {
+const typeAssertionParser: ResponseBodyParser<ResUsers> = (rawBody) => {
     // TODO: 何が違うのか
     const data = JSON.parse(rawBody) as ResUsers;
     // const data: ResUsers = JSON.parse(rawData);
@@ -42,4 +42,4 @@ const typeAssertionParser: ResponseParser<ResUsers> = (rawBody) => {
     return data;
 };
 
-export const parseUsers: ResponseParser<ResUsers> = zodParser;
+export const parseUsers: ResponseBodyParser<ResUsers> = zodParser;

@@ -1,1 +1,1 @@
-export type ResponseParser<T> = (rawBody: string) => T;
+export type ResponseBodyParser<T> = (rawBody: string) => T;
