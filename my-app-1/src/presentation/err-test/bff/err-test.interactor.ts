@@ -1,17 +1,24 @@
 import 'server-only';
 
 import { okData, okEmpty } from '@/presentation/_system/result/result.factories';
-import { requestUsers } from '@/presentation/err-test/bff/users.client';
-import { ErrTestResult, UsersResult } from '@/presentation/err-test/models/err-test.types';
+import { RESULT } from '@/presentation/_system/result/result.types';
+import { requestHealthCheck, requestUsers } from '@/presentation/err-test/bff/err-test-client.s';
+import { HealthCheckResult, UsersResult } from '@/presentation/err-test/models/err-test.types';
 import { ResUsers } from '@/presentation/err-test/models/err-test.users.parser';
-import { requestHealthCheck } from './health-check.client';
 
-export async function executeHealthCheck(): Promise<ErrTestResult> {
+export async function execute(err?: string): Promise<RESULT> {
+    if (err === '25') {
+        return await executeUsers();
+    }
+    return await executeHealthCheck();
+}
+
+async function executeHealthCheck(): Promise<HealthCheckResult> {
     await requestHealthCheck();
     return okEmpty();
 }
 
-export async function executeUsers(): Promise<UsersResult<ResUsers>> {
+async function executeUsers(): Promise<UsersResult<ResUsers>> {
     const result = await requestUsers();
     return okData(result);
 }

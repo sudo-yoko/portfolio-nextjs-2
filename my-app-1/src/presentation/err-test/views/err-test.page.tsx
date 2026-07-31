@@ -4,7 +4,7 @@ import 'server-only';
 import { withAdviceAsync } from '@/presentation/_system/aspect/aspect.server';
 import { applicationError } from '@/presentation/_system/error/error.factories';
 import { getStringParam, SearchParams } from '@/presentation/_system/types/search-params';
-import { requestHealthCheck } from '@/presentation/err-test/bff/health-check.client';
+import { requestHealthCheck } from '@/presentation/err-test/bff/err-test-client.s';
 import ErrTestInput from '@/presentation/err-test/views/err-test.input';
 
 const logPrefix = 'err-test.page.tsx: ';

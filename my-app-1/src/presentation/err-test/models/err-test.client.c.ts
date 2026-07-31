@@ -5,14 +5,17 @@ import { Method, RawResponse } from '@/presentation/_system/client/client.types'
 import { parseResult } from '@/presentation/_system/result/result.helpers';
 import { BffResult } from '@/presentation/_system/result/result.types';
 import { post } from '@/presentation/err-test/bff/err-test.action';
-import { ErrTestResult, UsersResult } from '@/presentation/err-test/models/err-test.types';
+import { HealthCheckResult, UsersResult } from '@/presentation/err-test/models/err-test.types';
 import { ResUsers } from '@/presentation/err-test/models/err-test.users.parser';
 
-type Send = {
-    (): Promise<BffResult<ErrTestResult>>;
+//
+// HealthCheckリクエスト
+//
+type HealthCheckRequest = {
+    (): Promise<BffResult<HealthCheckResult>>;
 };
 
-const viaRoute: Send = async () => {
+const viaRoute: HealthCheckRequest = async () => {
     const res: RawResponse = await client.send({
         url: '/api/bff/err-test',
         method: Method.GET,
@@ -20,18 +23,18 @@ const viaRoute: Send = async () => {
     // TODO: レスポンスボディが無い時もこれが必要なのか？
     // →必要。BFFのリクエストの場合は、rawBodyはRESULT型の値のため。
     const result = parseResult(res.rawBody);
-    return result as ErrTestResult;
+    return result as HealthCheckResult;
 };
 
-const viaAction: Send = async () => {
+const viaAction: HealthCheckRequest = async () => {
     const result = await post();
-    return result as ErrTestResult;
+    return result as HealthCheckResult;
 };
 
 /**
  * クライアント側エラーが起こる
  */
-const viaRouteClientError: Send = async () => {
+const viaRouteClientError: HealthCheckRequest = async () => {
     const res: RawResponse = await client.send({
         url: 'httpp::::////api/bff/err-test',
         method: Method.GET,
@@ -39,13 +42,16 @@ const viaRouteClientError: Send = async () => {
     // TODO: レスポンスボディが無い時もこれが必要なのか？
     // →必要。BFFのリクエストの場合は、rawBodyはRESULT型の値のため。
     const result = parseResult(res.rawBody);
-    return result as ErrTestResult;
+    return result as HealthCheckResult;
 };
 
-export const sendViaRoute: Send = viaRoute;
-export const sendViaAction: Send = viaAction;
-export const sendViaRouteClientError: Send = viaRouteClientError;
+export const sendViaRoute: HealthCheckRequest = viaRoute;
+export const sendViaAction: HealthCheckRequest = viaAction;
+export const sendViaRouteClientError: HealthCheckRequest = viaRouteClientError;
 
+//
+// Usersリクエスト
+//
 type UsersRequest = (err: string) => Promise<BffResult<UsersResult<ResUsers>>>;
 
 const requestUsersViaRoute: UsersRequest = async (err) => {
