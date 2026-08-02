@@ -3,7 +3,7 @@ import 'server-only';
 
 import { withAdviceAsync } from '@/presentation/_system/aspect/aspect.server';
 import { applicationError } from '@/presentation/_system/error/error.factories';
-import { getStringParam, SearchParams } from '@/presentation/_system/types/search-params';
+import { getStringParam, SearchParams } from '@/presentation/_system/types/search-params.next';
 import { requestHealthCheckError } from '@/presentation/backend-lib/health-check/health-check.client';
 import ErrTestInput from '@/presentation/err-test/views/err-test.input';
 

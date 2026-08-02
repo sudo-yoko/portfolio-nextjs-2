@@ -1,7 +1,7 @@
 import test from 'node:test';
 
 import { printf } from '@/tests/test-logger';
-import { getArrayParam, getStringParam, SearchParams } from '@/presentation/_system/types/search-params';
+import { getArrayParam, getStringParam, SearchParams } from '@/presentation/_system/types/search-params.next';
 
 const print = printf({ logPrefix: '>>> [search-params.test.ts]', stdout: false });
 
