@@ -1,5 +1,6 @@
 /**
  * URLクエリ文字列の型定義
+ * Pageコンポーネント向け
  */
 export type SearchParam = string | string[] | undefined;
 
