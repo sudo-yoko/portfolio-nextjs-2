@@ -1,17 +1,23 @@
 //
-// URLクエリ文字列
-// JavaScriptのURLSearchParams用
+// URLクエリ文字列を作成する
 //
-
 // TODO: SearchParam利用箇所をこのモジュールに移行
-/**
- * 送信用クエリパラメーター型
- */
-export type QueryParam = { key: string; value: string }[];
 
-export function queryParam(params: Record<string, string | string[]>): QueryParam {
+/** 入力となるフォームオブジェクトの型 */
+export type Form = Record<string, string | string[]>;
+
+/** クエリパラメータの配列 */
+export type QueryParam = { key: string; value: string };
+
+/** クエリパラメータの配列 */
+export type QueryParams = QueryParam[];
+
+/**
+ *
+ */
+export function toQueryParams(form: Form): QueryParams {
     // TODO: mapとflatMapの違い
-    return Object.entries(params).flatMap(([key, value]) => {
+    return Object.entries(form).flatMap(([key, value]) => {
         if (Array.isArray(value)) {
             return value.map((v) => ({ key, value: v }));
         } else {
@@ -20,10 +26,20 @@ export function queryParam(params: Record<string, string | string[]>): QueryPara
     });
 }
 
-export function getURLSearchParams(queryParam: QueryParam): URLSearchParams {
+/**
+ *
+ */
+export function toURLSearchParams(params: QueryParams): URLSearchParams {
     const searchParams = new URLSearchParams();
-    queryParam.forEach(({ key, value }) => searchParams.append(key, value));
+    params.forEach(({ key, value }) => searchParams.append(key, value));
     return searchParams;
+}
+
+/**
+ *
+ */
+export function toQueryString(form: Form): string {
+    return toURLSearchParams(toQueryParams(form)).toString();
 }
 
 // export function getQueryString(queryParam: QueryParam): string {
@@ -31,21 +47,21 @@ export function getURLSearchParams(queryParam: QueryParam): URLSearchParams {
 //     return urlSearchParams.toString();
 // }
 
-export function getQueryString(params: Record<string, string | string[]>): string {
-    const searchParams = new URLSearchParams();
-    for (const [key, value] of Object.entries(params)) {
-        if (Array.isArray(value)) {
-            value.forEach((v) => searchParams.append(key, v));
-        } else {
-            searchParams.set(key, value);
-        }
-    }
-    return searchParams.toString();
+// export function toQueryString(form: Form): string {
+// const searchParams = new URLSearchParams();
+// for (const [key, value] of Object.entries(form)) {
+//     if (Array.isArray(value)) {
+//         value.forEach((v) => searchParams.append(key, v));
+//     } else {
+//         searchParams.set(key, value);
+//     }
+// }
+// return searchParams.toString();
 
-    // const query = queryParam(record);
-    // const searchParams = getURLSearchParams(query);
-    // return searchParams.toString();
-}
+// const query = queryParam(record);
+// const searchParams = getURLSearchParams(query);
+// return searchParams.toString();
+// }
 
 // export function getQueryString(record: Record<string, string>): string {
 //     return new URLSearchParams(record).toString();
