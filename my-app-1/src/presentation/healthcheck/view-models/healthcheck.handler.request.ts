@@ -3,8 +3,9 @@ import 'server-only';
 import { fetch, ProxyAgent, Response } from 'undici';
 
 import { loadClient } from '@/presentation/_system/client/client.factory.s';
-import { Method, QueryParam } from '@/presentation/_system/client/client.types';
+import { Method } from '@/presentation/_system/client/client.types';
 import logger from '@/presentation/_system/logging/logger.s';
+import { QueryParams } from '@/presentation/_system/types/search-params';
 
 const logPrefix = 'healthcheck.handler.request.ts: ';
 
@@ -18,7 +19,7 @@ async function handleRequestNode2(): Promise<string> {
     // const proxyUrl = 'http://localhost:9998';
     // logger.info(logPrefix + `proxyUrl=${proxyUrl}, url=${url}`);
 
-    const query: QueryParam = [
+    const query: QueryParams = [
         { key: 'offset', value: '4' },
         { key: 'limit', value: '10' },
     ];

@@ -2,10 +2,10 @@ import 'client-only';
 
 import client from '@/presentation/_system/client/client.c';
 import { ACCEPT_APPLICATION_JSON } from '@/presentation/_system/client/client.constants';
-import { queryParam } from '@/presentation/_system/client/client.helpers';
 import { Method } from '@/presentation/_system/client/client.types';
 import { parseResult } from '@/presentation/_system/result/result.parser';
 import { Tag } from '@/presentation/_system/result/result.types';
+import { toQueryParams } from '@/presentation/_system/types/search-params';
 import { SendRequest } from '@/presentation/admin-console/api-console/_individual/_shared/models/api-console.individual.requester';
 import { FormKeys } from '@/presentation/admin-console/api-console/_individual/customers/models/api-console.customers.types';
 import { ApiResult } from '@/presentation/admin-console/api-console/models/api-console.types';
@@ -22,7 +22,7 @@ const viaRoute: SendRequest<FormKeys> = async (formData) => {
         headers: {
             ...ACCEPT_APPLICATION_JSON,
         },
-        query: queryParam(formData),
+        query: toQueryParams(formData),
     });
     const result = parseResult(res.rawBody);
     return result as ApiResult<FormKeys>;

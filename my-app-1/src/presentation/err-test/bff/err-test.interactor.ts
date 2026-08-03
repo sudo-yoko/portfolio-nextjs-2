@@ -20,6 +20,6 @@ async function executeHealthCheckError(): Promise<HealthCheckResult> {
 }
 
 async function executeUsers(): Promise<UsersResult<Users>> {
-    const result = await requestUsers('aaa', '1', '10');
+    const result = await requestUsers({ keyword: 'aaa', offset: '1', limit: '10' });
     return okData(result);
 }

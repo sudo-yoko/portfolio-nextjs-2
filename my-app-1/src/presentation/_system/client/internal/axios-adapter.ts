@@ -12,6 +12,7 @@ import { Client, RawResponse } from '@/presentation/_system/client/client.types'
 import { applicationError } from '@/presentation/_system/error/error.factories';
 import { formatError, getAxiosErrorProperties } from '@/presentation/_system/error/error.helper.stringify';
 import logger from '@/presentation/_system/logging/logger.s';
+import { toURLSearchParams } from '@/presentation/_system/types/search-params';
 
 const logPrefix = 'axios-adapter.ts: ';
 
@@ -38,9 +39,10 @@ export const axiosClient = (proxy?: AxiosProxyConfig): Client => ({
         axiosConfig.method = config.method;
         // TODO: リクエストヘッダー
         if (config.query) {
-            const searchParams = new URLSearchParams();
-            config.query.forEach(({ key, value }) => searchParams.append(key, value));
-            axiosConfig.params = searchParams;
+            // const searchParams = new URLSearchParams();
+            // config.query.forEach(({ key, value }) => searchParams.append(key, value));
+            // axiosConfig.params = searchParams;
+            axiosConfig.params = toURLSearchParams(config.query);
         }
         axiosConfig.validateStatus = config.validateStatus ?? defaultValidateStatusServer;
         axiosConfig.data = config.body;

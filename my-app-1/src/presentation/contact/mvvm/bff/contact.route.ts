@@ -12,6 +12,7 @@ export async function POST(req: Request): Promise<Response> {
     return await withAdviceAsync(() => _());
 
     async function _() {
+        // Route Handler用のパーサー
         const contactBody: ContactBody = await req.json();
         logger.info(logPrefix + `contactBody=${JSON.stringify(contactBody)}`);
 
@@ -20,6 +21,10 @@ export async function POST(req: Request): Promise<Response> {
             email: contactBody.email,
             body: contactBody.body,
         };
+        // TODO: 以下の書き方でもOK？
+        // const formData: FormData<FormKeys> = {
+        //     ...contactBody
+        // }
         const result = await execute(formData);
         // return resultResponse(result);
         return result;

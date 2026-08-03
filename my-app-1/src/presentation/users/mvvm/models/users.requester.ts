@@ -5,12 +5,12 @@ import {
     ACCEPT_APPLICATION_JSON,
     CONTENT_TYPE_APPLICATION_JSON_UTF8,
 } from '@/presentation/_system/client/client.constants';
-import { queryParam } from '@/presentation/_system/client/client.helpers';
 import { Method } from '@/presentation/_system/client/client.types';
 import { FetchData, FetchPage } from '@/presentation/_system/pagination/mvvm/models/pagination.requester';
 import { PaginationResult } from '@/presentation/_system/pagination/mvvm/models/pagination.types';
 import { parseResult } from '@/presentation/_system/result/result.parser';
 import { BffResult } from '@/presentation/_system/result/result.types';
+import { toQueryParams } from '@/presentation/_system/types/search-params';
 import { action } from '@/presentation/users/mvvm/bff/users.action';
 import { FormKeys, User } from '@/presentation/users/mvvm/models/users.types';
 
@@ -36,7 +36,7 @@ const viaRoute: FetchPage<User[], FormKeys> = async (offset, limit, formData) =>
             ...CONTENT_TYPE_APPLICATION_JSON_UTF8,
             ...ACCEPT_APPLICATION_JSON,
         },
-        query: queryParam({ offset: String(offset), limit: String(limit) }),
+        query: toQueryParams({ offset: String(offset), limit: String(limit) }),
         body: formData,
         // body: {}
     });

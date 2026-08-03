@@ -1,9 +1,9 @@
 import 'server-only';
 
-import { queryParam } from '@/presentation/_system/client/client.helpers';
 import client from '@/presentation/_system/client/client.s';
 import { Method } from '@/presentation/_system/client/client.types';
 import { env } from '@/presentation/_system/env/env.helper.validated';
+import { toQueryParams } from '@/presentation/_system/types/search-params';
 import { Users, UsersQuery } from '@/presentation/users/min/modules/users.types';
 
 // type RES = {
@@ -21,7 +21,7 @@ export async function send(offset: number, limit: number, query: UsersQuery): Pr
     const res = await client.send({
         method: Method.GET,
         url,
-        query: queryParam({ offset: String(offset), limit: String(limit), ...query }),
+        query: toQueryParams({ offset: String(offset), limit: String(limit), ...query }),
     });
 
     const result: Users = JSON.parse(res.rawBody);

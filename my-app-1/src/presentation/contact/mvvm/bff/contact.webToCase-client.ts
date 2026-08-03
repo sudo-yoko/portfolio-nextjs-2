@@ -10,6 +10,7 @@ import { Method } from '@/presentation/_system/client/client.types';
 import { env } from '@/presentation/_system/env/env.helper.validated';
 import { retryableError } from '@/presentation/_system/error/error.factories';
 import logger from '@/presentation/_system/logging/logger.s';
+import { toQueryString } from '@/presentation/_system/types/search-params';
 import { ContactBody } from '@/presentation/contact/mvvm/models/contact.types';
 
 const logPrefix = 'contact.webToCase-client.ts: ';
@@ -20,7 +21,8 @@ const url = (): string => {
 };
 
 export async function send(model: ContactBody): Promise<void> {
-    const body = new URLSearchParams(model).toString();
+    const body = toQueryString(model);
+    // const body = new URLSearchParams(model).toString();
     // logger.info(logPrefix + `Request(Outbound) -> url=${url}, body:${body}`);
 
     const result = await client.send({

@@ -4,15 +4,16 @@ import {
     ACCEPT_APPLICATION_JSON,
     CONTENT_TYPE_APPLICATION_JSON_UTF8,
 } from '@/presentation/_system/client/client.constants';
-import { queryParam } from '@/presentation/_system/client/client.helpers';
 import client from '@/presentation/_system/client/client.s';
 import { Method } from '@/presentation/_system/client/client.types';
 import { env } from '@/presentation/_system/env/env.helper.validated';
+import { toQueryParams } from '@/presentation/_system/types/search-params';
 import { parseUsers } from '@/presentation/backend-lib/users/users.parser';
-import { Users } from '@/presentation/backend-lib/users/users.types';
+import { Users, UsersRequest } from '@/presentation/backend-lib/users/users.types';
 
-export async function requestUsers(keyword: string, offset: string, limit: string): Promise<Users> {
+export async function requestUsers(req: UsersRequest): Promise<Users> {
     const url = env('USERS_API');
+    const { keyword, offset, limit } = req;
 
     const res = await client.send({
         url,
@@ -21,7 +22,7 @@ export async function requestUsers(keyword: string, offset: string, limit: strin
             ...CONTENT_TYPE_APPLICATION_JSON_UTF8,
             ...ACCEPT_APPLICATION_JSON,
         },
-        query: queryParam({ offset, limit }),
+        query: toQueryParams({ offset, limit }),
         body: { keyword },
     });
     const resUsers = parseUsers(res.rawBody);

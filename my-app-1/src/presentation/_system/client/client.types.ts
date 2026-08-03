@@ -1,3 +1,5 @@
+import { QueryParams } from "@/presentation/_system/types/search-params";
+
 /**
  * REST API クライアントのインターフェース型
  */
@@ -26,7 +28,8 @@ export type RequestConfig<BODY = never> = {
     method: Method;
     url: string;
     body?: BODY;
-    query?: QueryParam;
+    // query?: QueryParam;
+    query?: QueryParams;
     // path?: string; // TODO: BFFではパスパラメータを使用しない方針
     headers?: Record<string, string>;
     timeout?: number;
@@ -59,4 +62,4 @@ export type RawResponse = {
  * 送信用クエリパラメーター型
  */
 // export type QueryParam<K extends string> = Partial<Record<K, string | string[]>>;
-export type QueryParam = { key: string; value: string }[];
+// export type QueryParam = { key: string; value: string }[];

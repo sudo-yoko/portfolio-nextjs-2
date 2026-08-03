@@ -4,10 +4,10 @@ import {
     ACCEPT_APPLICATION_JSON,
     CONTENT_TYPE_APPLICATION_JSON_UTF8,
 } from '@/presentation/_system/client/client.constants';
-import { queryParam } from '@/presentation/_system/client/client.helpers';
 import client from '@/presentation/_system/client/client.s';
 import { Method } from '@/presentation/_system/client/client.types';
 import { env } from '@/presentation/_system/env/env.helper.validated';
+import { toQueryParams } from '@/presentation/_system/types/search-params';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 import { FormKeys, Users } from '@/presentation/users/standard/models/users.types';
 
@@ -32,7 +32,7 @@ export async function send(offset: string, limit: string, formData: FormData<For
             ...CONTENT_TYPE_APPLICATION_JSON_UTF8,
             ...ACCEPT_APPLICATION_JSON,
         },
-        query: queryParam({ offset, limit }),
+        query: toQueryParams({ offset, limit }),
         body: formData,
     });
     const result: Users = JSON.parse(res.rawBody);
