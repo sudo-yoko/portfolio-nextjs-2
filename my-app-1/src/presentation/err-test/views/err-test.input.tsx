@@ -75,6 +75,8 @@ export default function ErrTestInput(props: { err?: string }) {
         }
     }
 
+    // TODO: エラーモーダルの場合の確認（ErrorModal）
+
     async function handle25Click() {
         setLoading(true);
         await withAdviceAsync(() => _());
