@@ -1,43 +1,43 @@
-//
-// 外部APIクライアント
-//
-import 'server-only';
+// backend-libに移行
+// //
+// // 外部APIクライアント
+// //
+// import 'server-only';
 
-//import client from '@/modules/(system)/clients/proxy-client';
-import { CONTENT_TYPE_APPLICATION_FORM } from '@/presentation/_system/client/client.constants';
-import client from '@/presentation/_system/client/client.s';
-import { Method } from '@/presentation/_system/client/client.types';
-import { env } from '@/presentation/_system/env/env.helper.validated';
-import { retryableError } from '@/presentation/_system/error/error.factories';
-import logger from '@/presentation/_system/logging/logger.s';
-import { toQueryString } from '@/presentation/_system/types/search-params';
-import { ContactBody } from '@/presentation/contact/mvvm/models/contact.types';
+// //import client from '@/modules/(system)/clients/proxy-client';
+// import { CONTENT_TYPE_APPLICATION_FORM } from '@/presentation/_system/client/client.constants';
+// import client from '@/presentation/_system/client/client.s';
+// import { Method } from '@/presentation/_system/client/client.types';
+// import { env } from '@/presentation/_system/env/env.helper.validated';
+// import { retryableError } from '@/presentation/_system/error/error.factories';
+// import logger from '@/presentation/_system/logging/logger.s';
+// import { toQueryString } from '@/presentation/_system/types/search-params';
 
-const logPrefix = 'contact.webToCase-client.ts: ';
+// const logPrefix = 'contact.webToCase-client.ts: ';
 
-const url = (): string => {
-    const url = env('WEB_TO_CASE_URL');
-    return url;
-};
+// const url = (): string => {
+//     const url = env('WEB_TO_CASE_URL');
+//     return url;
+// };
 
-export async function send(model: ContactBody): Promise<void> {
-    const body = toQueryString(model);
-    // const body = new URLSearchParams(model).toString();
-    // logger.info(logPrefix + `Request(Outbound) -> url=${url}, body:${body}`);
+// export async function send(model: Body): Promise<void> {
+//     const body = toQueryString(model);
+//     // const body = new URLSearchParams(model).toString();
+//     // logger.info(logPrefix + `Request(Outbound) -> url=${url}, body:${body}`);
 
-    const result = await client.send({
-        url: url(),
-        method: Method.POST,
-        body,
-        headers: {
-            ...CONTENT_TYPE_APPLICATION_FORM,
-        },
-        // ステータスコード200,408(タイムアウト)以外はエラーをスローする
-        validateStatus: (status) => status === 200 || status === 408,
-    });
+//     const result = await client.send({
+//         url: url(),
+//         method: Method.POST,
+//         body,
+//         headers: {
+//             ...CONTENT_TYPE_APPLICATION_FORM,
+//         },
+//         // ステータスコード200,408(タイムアウト)以外はエラーをスローする
+//         validateStatus: (status) => status === 200 || status === 408,
+//     });
 
-    logger.info(logPrefix + `Response(Inbound) -> status=${result.status}`);
-    if (result.status === 408) {
-        throw retryableError({ message: `web-to-case response status=${result.status}` });
-    }
-}
+//     logger.info(logPrefix + `Response(Inbound) -> status=${result.status}`);
+//     if (result.status === 408) {
+//         throw retryableError({ message: `web-to-case response status=${result.status}` });
+//     }
+// }

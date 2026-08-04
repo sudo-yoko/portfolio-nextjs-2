@@ -11,13 +11,15 @@ const logPrefix = 'contact.route.ts: ';
 
 export async function POST(req: Request): Promise<Response> {
     return await withAdviceAsync(() => _());
-
+    // await withBodyParser(() => parse(req), (context:RouteContext<Body>) => _(context))
+    // async function _(context: RouteContext<Body>) {
     async function _() {
         // TODO: Route Handler用のパーサー
         // const contactBody: ContactBody = await req.json();
         // NOTE: req.json()で取得すると型がanyになる。req.text()で取得するとstringになるので、こちらの方が扱いやすい
         // const body = await req.text();
         const { body } = await parse(req);
+        // const body = context.body
 
         logger.info(logPrefix + `contactBody=${JSON.stringify(body)}`);
 

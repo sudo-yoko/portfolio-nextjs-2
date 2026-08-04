@@ -12,7 +12,7 @@ const logPrefix = 'webToCase.client.ts: ';
 
 const client = await loadClient('axios-proxy');
 
-export async function requestWebToCase(form: Form): Promise<void> {
+export async function sendWebToCase(form: Form): Promise<void> {
     const url = env('WEB_TO_CASE_URL');
     const body = toQueryString(form);
     logger.info(logPrefix + `Request -> url=${url}, body:${body}`);

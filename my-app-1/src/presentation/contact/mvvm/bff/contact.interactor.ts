@@ -7,7 +7,7 @@ import logger from '@/presentation/_system/logging/logger.s';
 import { invalid, okEmpty } from '@/presentation/_system/result/result.factories';
 import { hasError } from '@/presentation/_system/validation/validation.helpers';
 import { FormData } from '@/presentation/_system/validation/validation.types';
-import { send } from '@/presentation/contact/mvvm/bff/contact.webToCase-client';
+import { sendWebToCase } from '@/presentation/backend-lib/web-to-case/webToCase.client';
 import { ContactResult, FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 import { validate } from '@/presentation/contact/mvvm/models/contact.validator';
 
@@ -35,6 +35,7 @@ export async function execute(formData: FormData<FormKeys>): Promise<ContactResu
     //
     // 送信
     //
-    await send({ ...formData });
+    // await send({ ...formData });
+    await sendWebToCase(formData);
     return okEmpty();
 }
