@@ -1,13 +1,14 @@
 import test from 'node:test';
 
-import { printf } from '@/tests/test-logger';
 import {
     Form,
     QueryParams,
+    toForm,
     toQueryParams,
     toQueryString,
     toURLSearchParams,
 } from '@/presentation/_system/types/search-params';
+import { printf } from '@/tests/test-logger';
 
 const print = printf({ logPrefix: '[search-params.test.ts]', stdout: true });
 
@@ -99,3 +100,27 @@ test('test3-2', (t) => {
     print(`[${t.name}]`, 'result ->', result);
 });
 
+//
+// toForm
+//
+// npm exec -- node --test --import tsx --test-name-pattern='^test4-1$' __development/tests/node-test/presentation/system/search-params.test.ts
+test('test4-1', (t) => {
+    const params = new URLSearchParams();
+    params.append('key1', 'value-1');
+    params.append('key2', 'value-2-1');
+    params.append('key2', 'value-2-2');
+    params.append('key3', 'value-3');
+    print(`[${t.name}]`, 'params ->', params);
+
+    const form = toForm(params);
+    print(`[${t.name}]`, 'form ->', form);
+});
+
+// npm exec -- node --test --import tsx --test-name-pattern='^test4-2$' __development/tests/node-test/presentation/system/search-params.test.ts
+test('test4-2', (t) => {
+    const params = new URLSearchParams();
+    print(`[${t.name}]`, 'params ->', params);
+
+    const form = toForm(params);
+    print(`[${t.name}]`, 'form ->', form);
+});

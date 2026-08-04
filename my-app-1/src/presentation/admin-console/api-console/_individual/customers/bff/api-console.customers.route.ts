@@ -4,9 +4,8 @@ import { NextRequest } from 'next/server';
 
 import { withAdviceAsync } from '@/presentation/_system/aspect/aspect.route-handler';
 import logger from '@/presentation/_system/logging/logger.s';
-import { FormData } from '@/presentation/_system/validation/validation.types';
 import { execute } from '@/presentation/admin-console/api-console/_individual/customers/bff/api-console.customers.interactor';
-import { FormKeys } from '@/presentation/admin-console/api-console/_individual/customers/models/api-console.customers.types';
+import { parse } from '@/presentation/admin-console/api-console/_individual/customers/bff/api-console.customers.route.parser';
 
 const logPrefix = 'api-console.customers.route.ts: ';
 
@@ -15,12 +14,14 @@ export async function GET(req: NextRequest): Promise<Response> {
     return await withAdviceAsync(() => _());
 
     async function _() {
-        const params = req.nextUrl.searchParams;
         // TODO: パースの設計を再検討
-        const formData = Object.fromEntries(params.entries()) as FormData<FormKeys>;
-        logger.info(logPrefix + `query=${JSON.stringify(formData)}`);
+        // const params = req.nextUrl.searchParams;
+        // const formData = Object.fromEntries(params.entries()) as FormData<FormKeys>;
+        const { params } = await parse(req);
+        logger.info(logPrefix + `query=${JSON.stringify(params)}`);
 
-        const result = await execute(formData);
+        // TODO: RouteContext型を引数のFormData<FormKeys>型にセットしているが問題ないか
+        const result = await execute(params);
         return result;
     }
 }

@@ -5,6 +5,7 @@
 /**
  * 入力フォームの各フィールドの値を保持する
  */
+// TODO: 配列に未対応
 export type FormData<FIELD extends string, VALUE = string> = Record<FIELD, VALUE>;
 
 /**

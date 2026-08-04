@@ -4,6 +4,7 @@
 // TODO: SearchParam利用箇所をこのモジュールに移行
 
 /** 入力となるフォームオブジェクトの型 */
+// TODO: validationのFormDataでは配列に未対応
 export type Form = Record<string, string | string[]>;
 
 /** クエリパラメータの配列 */
@@ -40,6 +41,26 @@ export function toURLSearchParams(params: QueryParams): URLSearchParams {
  */
 export function toQueryString(form: Form): string {
     return toURLSearchParams(toQueryParams(form)).toString();
+}
+
+/**
+ *
+ */
+export function toForm(params: URLSearchParams): Form {
+    const form: Form = {};
+    for (const [key, value] of params) {
+        if (key in form) {
+            const current = form[key];
+            if (Array.isArray(current)) {
+                current.push(value);
+            } else {
+                form[key] = [current, value];
+            }
+        } else {
+            form[key] = value;
+        }
+    }
+    return form;
 }
 
 // export function getQueryString(queryParam: QueryParam): string {
