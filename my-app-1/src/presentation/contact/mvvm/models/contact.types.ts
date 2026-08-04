@@ -24,11 +24,11 @@ export type FormKeys = (typeof FormKeys)[keyof typeof FormKeys];
 /**
  * お問い合わせ入力内容
  */
-export type ContactBody = {
-    name: string;
-    email: string;
-    body: string;
-};
+// export type ContactBody = {
+//     name: string;
+//     email: string;
+//     body: string;
+// };
 
 /**
  * お問い合わせフォームのRESULT型

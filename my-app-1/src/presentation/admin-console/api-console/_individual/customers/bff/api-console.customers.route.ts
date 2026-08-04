@@ -16,6 +16,7 @@ export async function GET(req: NextRequest): Promise<Response> {
 
     async function _() {
         const params = req.nextUrl.searchParams;
+        // TODO: パースの設計を再検討
         const formData = Object.fromEntries(params.entries()) as FormData<FormKeys>;
         logger.info(logPrefix + `query=${JSON.stringify(formData)}`);
 
