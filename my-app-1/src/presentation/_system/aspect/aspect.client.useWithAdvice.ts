@@ -18,12 +18,13 @@ export function useWithAdvice() {
      *
      * @param subject 実行する関数（戻り値の無い関数であること）
      */
-    const withAdvice = (subject: () => void, onAbort?: () => void): void => {
+    // TODO: onAbort引数の検討。エラー時にエラーモーダルを出したい場合の考慮
+    const withAdvice = (subject: () => void): void => {
         const location = 'withAdvice';
         try {
             subject();
         } catch (error) {
-            handleError(location, error, onAbort);
+            handleError(location, error);
         }
     };
 
@@ -32,16 +33,16 @@ export function useWithAdvice() {
      *
      * @param subject 実行する非同期関数（戻り値の無い関数であること）
      */
-    const withAdviceAsync = async (subject: () => Promise<void>, onAbort?: () => void): Promise<void> => {
+    const withAdviceAsync = async (subject: () => Promise<void>): Promise<void> => {
         const location = 'withAdviceAsync';
         try {
             await subject();
         } catch (error) {
-            handleError(location, error, onAbort);
+            handleError(location, error);
         }
     };
 
-    function handleError(location: string, error: unknown, onAbort?: () => void): void {
+    function handleError(location: string, error: unknown): void {
         const errProps: Parameters<typeof formatError>[0] = {};
         errProps.error = error;
         errProps.location = location;
@@ -53,12 +54,7 @@ export function useWithAdvice() {
         // ログ出力
         const { all } = formatError(errProps);
         void logger.errorAsync(logPrefix + all);
-        if (onAbort) {
-            onAbort();
-            return;
-        } else {
-            router.push('/system-error');
-        }
+        router.push('/system-error');
     }
 
     return { withAdvice, withAdviceAsync };
