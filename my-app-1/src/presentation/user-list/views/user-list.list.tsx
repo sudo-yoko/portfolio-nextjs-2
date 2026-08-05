@@ -1,6 +1,6 @@
 'use client';
 
-import { User } from '@/presentation/user-list/models/user-list.types';
+import { User } from '@/presentation/backend-lib/users/users.types';
 
 export default function UserList({ users }: { users: User[] }) {
     return (

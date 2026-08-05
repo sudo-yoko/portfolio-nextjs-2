@@ -3,8 +3,9 @@
 import { Button } from '@/presentation/_system/components/button.decorator.simple';
 import { ProcessingModalB } from '@/presentation/_system/components/processing.modal.b';
 import { ErrorModal } from '@/presentation/_system/error/views/component.error-modal.feature.close';
-import { handleReset, handleSearch, useSearch } from '@/presentation/user-list/view-models/user-list.hooks';
-import { setKeyword, Step } from '@/presentation/user-list/view-models/user-list.reducer';
+import { handleReset, handleSearch } from '@/presentation/user-list/view-models/user-list.event-handlers';
+import { setError, setKeyword, Step } from '@/presentation/user-list/view-models/user-list.reducer';
+import { useSearch } from '@/presentation/user-list/view-models/user-list.useSearch';
 import UserList from '@/presentation/user-list/views/user-list.list';
 
 export function Main() {
