@@ -13,7 +13,7 @@ const logPrefix = 'aspect.error-handling.bff.ts: ';
 
 /**
  * エラーハンドリングを追加して実行する
- * 
+ *
  * @param subject 実行する関数（RESULT型を返す関数であること）
  * @returns 正常時：関数の戻り値をそのまま返す、エラー時：エラー系のRESULT型を返す
  */
@@ -29,7 +29,7 @@ export function withErrorHandling(subject: () => RESULT): RESULT {
 
 /**
  * エラーハンドリングを追加して実行する
- * 
+ *
  * @param subject 実行する非同期関数（RESULT型を返す関数であること）
  * @returns 正常時：関数の戻り値をそのまま返す、エラー時：エラー系のRESULT型を返す
  */

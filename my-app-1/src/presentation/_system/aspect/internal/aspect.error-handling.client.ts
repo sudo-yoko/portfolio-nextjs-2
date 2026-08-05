@@ -11,11 +11,11 @@ const logPrefix = 'aspect.error-handling.client.ts: ';
 /**
  * 引数に渡されたサンクにエラーハンドリングを追加して実行する。
  */
-export function withErrorHandling<T>(thunk: () => T, onAbort: () => void): T | void {
+export function withErrorHandling(subject: () => void, onAbort: () => void): void {
     const location = 'withErrorHandling';
     try {
         // 引数に渡されたサンクを実行
-        return thunk();
+        return subject();
     } catch (error) {
         // TODO: クライアントサイドにも認証エラーチェックつけるか
         // TODO: クライアントサイドでBffRESULTのパースエラーチェック
@@ -30,13 +30,13 @@ export function withErrorHandling<T>(thunk: () => T, onAbort: () => void): T | v
 /**
  * 引数に渡されたサンクにエラーハンドリングを追加して実行する。
  */
-export async function withErrorHandlingAsync<T>(
-    thunk: () => Promise<T>,
+export async function withErrorHandlingAsync(
+    subject: () => Promise<void>,
     onAbort: () => void,
-): Promise<T | void> {
+): Promise<void> {
     const location = 'withErrorHandlingAsync';
     try {
-        return await thunk();
+        return await subject();
     } catch (error) {
         // エラーログをサーバーに送信
         // void logger.errorAsync(logPrefix + fname + formatError({ error }).all);

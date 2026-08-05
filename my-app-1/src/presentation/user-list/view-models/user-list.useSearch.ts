@@ -2,7 +2,7 @@ import 'client-only';
 
 import { useEffect, useReducer } from 'react';
 
-import { useWithAdvice } from '@/presentation/_system/aspect/aspect.client.useWithAdvice';
+import { withAdviceAsync } from '@/presentation/_system/aspect/aspect.client';
 import { resultError } from '@/presentation/_system/error/error.factories';
 import { isInvalid, isOkData } from '@/presentation/_system/result/result.helpers';
 import { fetchData } from '@/presentation/user-list/models/user-list.client';
@@ -14,7 +14,6 @@ import {
     Step,
     toIdle,
 } from '@/presentation/user-list/view-models/user-list.reducer';
-import { withErrorHandlingAsync } from '@/presentation/_system/aspect/internal/aspect.error-handling.client';
 
 const logPrefix = 'user-list.useSearch.ts: ';
 
@@ -23,7 +22,7 @@ export function useSearch() {
 
     useEffect(() => {
         void (async () => {
-            await withErrorHandlingAsync(
+            await withAdviceAsync(
                 () => _(),
                 () => setError(dispatch, true),
             );
