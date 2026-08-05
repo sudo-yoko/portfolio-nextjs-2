@@ -21,13 +21,14 @@ export function useSearch() {
     const [state, dispatch] = useReducer(reducer, initialState);
 
     useEffect(() => {
-        void (async () => {
+        void _();
+        async function _() {
             await withAdviceAsync(
-                () => _(),
+                () => __(),
                 () => setError(dispatch, true),
             );
-        })();
-        async function _() {
+        }
+        async function __() {
             if (state.step !== Step.Search) {
                 return;
             }
