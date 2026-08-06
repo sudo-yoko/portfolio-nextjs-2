@@ -30,7 +30,7 @@ export type ResUsers = {
 /**
  * Zodを使ったAPI通信のパース
  */
-const viaZod: Deserializer<ResUsers> = (rawBody) => {
+function zodDeserializer(): Deserializer<ResUsers> {
     const ResUserSchema: z.ZodType<ResUser> = z.object({
         userId: z.string(),
         userName: z.string(),
@@ -39,16 +39,18 @@ const viaZod: Deserializer<ResUsers> = (rawBody) => {
         total: z.string(),
         users: z.array(ResUserSchema),
     });
-    // TODO: zodだとリスト（配列）の全データを検証してエラーがあると全データがログに出力されて大量データの場合にログを圧迫する
-    // API通信のパースについてはzod以外のライブラリにするか、zodのエラーを先頭に数件に絞ることを検討
-    const json: unknown = JSON.parse(rawBody);
-    return zodUtil.withErrorHandling(() => ResUsersSchema.parse(json));
-};
+    return (rawBody) => {
+        // TODO: zodだとリスト（配列）の全データを検証してエラーがあると全データがログに出力されて大量データの場合にログを圧迫する
+        // API通信のパースについてはzod以外のライブラリにするか、zodのエラーを先頭に数件に絞ることを検討
+        const json: unknown = JSON.parse(rawBody);
+        return zodUtil.withErrorHandling(() => ResUsersSchema.parse(json));
+    };
+}
 
 /**
  * TypeBoxを使ったAPI通信のパース
  */
-const viaTypeBox: Deserializer<ResUsers> = (rawBody) => {
+function typeBoxDeserializer(): Deserializer<ResUsers> {
     const ResUserSchema = tbSchema(
         Type.Object({
             userId: Type.String(),
@@ -61,21 +63,24 @@ const viaTypeBox: Deserializer<ResUsers> = (rawBody) => {
             users: Type.Array(ResUserSchema),
         }),
     );
-    const json: unknown = JSON.parse(rawBody);
-    return tbUtil.withErrorHandling(() => Value.Decode(ResUsersSchema, json));
-    // if (!Value.Check(ResUsersSchema, json)) {
-    //     const errors = [...Value.Errors(ResUsersSchema, json)];
-    //     logger.error(logPrefix + 'API Response Validation Error:' + JSON.stringify(errors, null, 2));
-    //     throw new Error('APIから返却されたデータの形式が不正です。');
-    // }
-};
+    return (rawBody) => {
+        const json: unknown = JSON.parse(rawBody);
+        return tbUtil.withErrorHandling(() => Value.Decode(ResUsersSchema, json));
+        // if (!Value.Check(ResUsersSchema, json)) {
+        //     const errors = [...Value.Errors(ResUsersSchema, json)];
+        //     logger.error(logPrefix + 'API Response Validation Error:' + JSON.stringify(errors, null, 2));
+        //     throw new Error('APIから返却されたデータの形式が不正です。');
+        // }
+    };
+}
+function typeAssertionDeserializer(): Deserializer<ResUsers> {
+    return (rawBody) => {
+        // TODO: 何が違うのか
+        const data = JSON.parse(rawBody) as ResUsers;
+        // const data: ResUsers = JSON.parse(rawData);
 
-const viaTypeAssertion: Deserializer<ResUsers> = (rawBody) => {
-    // TODO: 何が違うのか
-    const data = JSON.parse(rawBody) as ResUsers;
-    // const data: ResUsers = JSON.parse(rawData);
+        return data;
+    };
+}
 
-    return data;
-};
-
-export const deserialize: Deserializer<ResUsers> = viaTypeBox;
+export const deserialize: Deserializer<ResUsers> = typeBoxDeserializer();

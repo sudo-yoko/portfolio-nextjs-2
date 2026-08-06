@@ -19,7 +19,7 @@ export const tbUtil = {
         } catch (error) {
             if (error instanceof TransformDecodeCheckError) {
                 throw applicationError({
-                    message: error.message,
+                    message: "バックエンドAPI通信のデシリアライズに失敗しました。（型の不一致）" + error.message,
                     cause: error,
                     extra: { errType: 'TransformDecodeCheckError', ...error.error },
                 });
