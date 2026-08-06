@@ -9,7 +9,7 @@ import { Deserializer } from '@/presentation/_system/client/client.deserializer'
 import { tbSchema, tbUtil } from '@/presentation/_system/utils/typebox-utils';
 import { zodUtil } from '@/presentation/_system/utils/zod-utils';
 
-const logPrefix = 'users.parser.ts: ';
+const logPrefix = 'users.deserializer.ts: ';
 
 /**
  * バックエンドレスポンスのユーザー情報
@@ -39,12 +39,13 @@ function zodDeserializer(): Deserializer<ResUsers> {
         total: z.string(),
         users: z.array(ResUserSchema),
     });
-    return (rawBody) => {
+    const deserializer: Deserializer<ResUsers> = (rawBody) => {
         // TODO: zodだとリスト（配列）の全データを検証してエラーがあると全データがログに出力されて大量データの場合にログを圧迫する
         // API通信のパースについてはzod以外のライブラリにするか、zodのエラーを先頭に数件に絞ることを検討
         const json: unknown = JSON.parse(rawBody);
         return zodUtil.withErrorHandling(() => ResUsersSchema.parse(json));
     };
+    return deserializer;
 }
 
 /**
@@ -63,7 +64,7 @@ function typeBoxDeserializer(): Deserializer<ResUsers> {
             users: Type.Array(ResUserSchema),
         }),
     );
-    return (rawBody) => {
+    const deserializer: Deserializer<ResUsers> = (rawBody) => {
         const json: unknown = JSON.parse(rawBody);
         return tbUtil.withErrorHandling(() => Value.Decode(ResUsersSchema, json));
         // if (!Value.Check(ResUsersSchema, json)) {
@@ -72,15 +73,17 @@ function typeBoxDeserializer(): Deserializer<ResUsers> {
         //     throw new Error('APIから返却されたデータの形式が不正です。');
         // }
     };
+    return deserializer;
 }
 function typeAssertionDeserializer(): Deserializer<ResUsers> {
-    return (rawBody) => {
+    const deserializer: Deserializer<ResUsers> = (rawBody) => {
         // TODO: 何が違うのか
         const data = JSON.parse(rawBody) as ResUsers;
         // const data: ResUsers = JSON.parse(rawData);
 
         return data;
     };
+    return deserializer;
 }
 
 export const deserialize: Deserializer<ResUsers> = typeBoxDeserializer();

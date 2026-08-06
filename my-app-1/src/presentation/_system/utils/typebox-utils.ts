@@ -17,14 +17,18 @@ export const tbUtil = {
         try {
             return subject();
         } catch (error) {
-            if (error instanceof TransformDecodeCheckError) {
-                throw applicationError({
-                    message: "バックエンドAPI通信のデシリアライズに失敗しました。（型の不一致）" + error.message,
-                    cause: error,
-                    extra: { errType: 'TransformDecodeCheckError', ...error.error },
-                });
-            }
+            handleError(error);
             throw error;
         }
     },
 };
+
+function handleError(error: unknown) {
+    if (error instanceof TransformDecodeCheckError) {
+        throw applicationError({
+            message: 'バックエンドAPI通信のデシリアライズに失敗しました。（型の不一致）' + error.message,
+            cause: error,
+            extra: { errType: 'TransformDecodeCheckError', ...error.error },
+        });
+    }
+}

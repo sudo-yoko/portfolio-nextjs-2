@@ -8,7 +8,7 @@ import {
 import { Method } from '@/presentation/_system/client/client.types';
 import { FetchData, FetchPage } from '@/presentation/_system/pagination/standard/models/pagination.requester';
 import { PaginationResult } from '@/presentation/_system/pagination/standard/models/pagination.types';
-import { parseResult } from '@/presentation/_system/result/result.parser';
+import { deserialize } from '@/presentation/_system/result/result.deserializer';
 import { BffResult } from '@/presentation/_system/result/result.types';
 import { toQueryParams } from '@/presentation/_system/types/search-params';
 import { action } from '@/presentation/users/standard/bff/users.action';
@@ -48,7 +48,7 @@ const viaRoute: FetchPage<User[], FormKeys> = async (offset, limit, formData) =>
     // body: { offset, limit, query },
     // });
     // return parseFromText<FetchData<User[]>, FormKeys>(res.rawBody);
-    const result = parseResult(res.rawBody);
+    const result = deserialize(res.rawBody);
     return result as BffResult<PaginationResult<FetchData<User[]>, FormKeys>>;
 
     // const res = await window.fetch(url, {

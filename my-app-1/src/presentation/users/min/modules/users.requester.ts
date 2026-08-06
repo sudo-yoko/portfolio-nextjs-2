@@ -5,7 +5,7 @@ import { CONTENT_TYPE_APPLICATION_JSON_UTF8 } from '@/presentation/_system/clien
 import { Method } from '@/presentation/_system/client/client.types';
 import { FetchData, FetchPage } from '@/presentation/_system/pagination/min/modules/pagination.requester';
 import { PaginationResult } from '@/presentation/_system/pagination/min/modules/pagination.types';
-import { parseResult } from '@/presentation/_system/result/result.parser';
+import { deserialize } from '@/presentation/_system/result/result.deserializer';
 import { action } from '@/presentation/users/min/modules/users.action';
 import { FormKeys, User } from '@/presentation/users/min/modules/users.types';
 
@@ -30,7 +30,7 @@ const viaRoute: FetchPage<User[], FormKeys> = async (offset, limit, query) => {
         body: { offset, limit, query },
     });
     // return parseFromText<FetchData<User[]>, FormKeys>(result.rawBody);
-    const result = parseResult(res.rawBody);
+    const result = deserialize(res.rawBody);
     return result as PaginationResult<FetchData<User[]>, FormKeys>;
 
     // const res = await window.fetch(url, {

@@ -6,7 +6,7 @@ import 'client-only';
 import client from '@/presentation/_system/client/client.c';
 import { CONTENT_TYPE_APPLICATION_JSON_UTF8 } from '@/presentation/_system/client/client.constants';
 import { Method } from '@/presentation/_system/client/client.types';
-import { parseResult } from '@/presentation/_system/result/result.parser';
+import { deserialize } from '@/presentation/_system/result/result.deserializer';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 import { post } from '@/presentation/contact/mvvm/bff/contact.action';
 import { ContactResult, FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
@@ -42,7 +42,7 @@ const viaRoute: Send = async (formData) => {
         body: formData,
     });
     // return parseFromText<FormKeys>(res.rawBody);
-    const result = parseResult(res.rawBody);
+    const result = deserialize(res.rawBody);
     return result as ContactResult<FormKeys>;
 };
 

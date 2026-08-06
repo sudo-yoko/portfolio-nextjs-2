@@ -2,7 +2,7 @@ import 'client-only';
 
 import client from '@/presentation/_system/client/client.c';
 import { Method, RawResponse } from '@/presentation/_system/client/client.types';
-import { parseResult } from '@/presentation/_system/result/result.parser';
+import { deserialize } from '@/presentation/_system/result/result.deserializer';
 import { BffResult } from '@/presentation/_system/result/result.types';
 import { Users } from '@/presentation/backend-lib/users/users.types';
 import { post } from '@/presentation/err-test/bff/err-test.action';
@@ -22,7 +22,7 @@ const viaRoute: HealthCheckRequest = async () => {
     });
     // TODO: レスポンスボディが無い時もこれが必要なのか？
     // →必要。BFFのリクエストの場合は、rawBodyはRESULT型の値のため。
-    const result = parseResult(res.rawBody);
+    const result = deserialize(res.rawBody);
     return result as HealthCheckResult;
 };
 
@@ -41,7 +41,7 @@ const viaRouteClientError: HealthCheckRequest = async () => {
     });
     // TODO: レスポンスボディが無い時もこれが必要なのか？
     // →必要。BFFのリクエストの場合は、rawBodyはRESULT型の値のため。
-    const result = parseResult(res.rawBody);
+    const result = deserialize(res.rawBody);
     return result as HealthCheckResult;
 };
 
@@ -60,7 +60,7 @@ const requestUsersViaRoute: UsersRequest = async (err) => {
         method: Method.GET,
         query: [{ key: 'err', value: err }],
     });
-    const result = parseResult(res.rawBody);
+    const result = deserialize(res.rawBody);
     return result as UsersResult<Users>;
 };
 

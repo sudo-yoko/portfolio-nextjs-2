@@ -6,7 +6,7 @@ import 'client-only';
 import client from '@/presentation/_system/client/client.c';
 import { CONTENT_TYPE_APPLICATION_JSON_UTF8 } from '@/presentation/_system/client/client.constants';
 import { Method } from '@/presentation/_system/client/client.types';
-import { parseResult } from '@/presentation/_system/result/result.parser';
+import { deserialize } from '@/presentation/_system/result/result.deserializer';
 import { BffResult } from '@/presentation/_system/result/result.types';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 import { post } from '@/presentation/contact/small/bff/contact.action';
@@ -46,7 +46,7 @@ const viaRoute: Send = async (formData) => {
         body: formData,
     });
     // return parseFromText<FormKeys>(res.rawBody);
-    const result = parseResult(res.rawBody);
+    const result = deserialize(res.rawBody);
     // TODO: withErrorHandlingでエラーを返す場合があるためasでアサーション不可。RESULTを返すようにする
     // return result as ContactResult<FormKeys>;
     return result as BffResult<ContactResult<FormKeys>>;

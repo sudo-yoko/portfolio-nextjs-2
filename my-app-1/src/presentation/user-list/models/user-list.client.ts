@@ -6,7 +6,7 @@ import {
     CONTENT_TYPE_APPLICATION_JSON_UTF8,
 } from '@/presentation/_system/client/client.constants';
 import { Method } from '@/presentation/_system/client/client.types';
-import { parseResult } from '@/presentation/_system/result/result.parser';
+import { deserialize } from '@/presentation/_system/result/result.deserializer';
 import { BffResult } from '@/presentation/_system/result/result.types';
 import { toQueryParams } from '@/presentation/_system/types/search-params';
 import { FormData } from '@/presentation/_system/validation/validation.types';
@@ -25,7 +25,7 @@ const viaRoute: FetchData = async (limit, formData) => {
         query: toQueryParams({ offset: '1', limit: String(limit) }), // TODO: 型名Formはこのケースでおかしい
         body: formData,
     });
-    const result = parseResult(res.rawBody);
+    const result = deserialize(res.rawBody);
     return result as BffResult<UserListResult>;
 };
 
