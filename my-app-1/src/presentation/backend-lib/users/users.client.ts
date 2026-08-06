@@ -8,7 +8,7 @@ import client from '@/presentation/_system/client/client.s';
 import { Method } from '@/presentation/_system/client/client.types';
 import { env } from '@/presentation/_system/env/env.helper.validated';
 import { toQueryParams } from '@/presentation/_system/types/search-params';
-import { parseUsers } from '@/presentation/backend-lib/users/users.parser';
+import { deserialize } from '@/presentation/backend-lib/users/users.deserializer';
 import { Users, UsersRequest } from '@/presentation/backend-lib/users/users.types';
 
 export async function requestUsers(req: UsersRequest): Promise<Users> {
@@ -25,7 +25,7 @@ export async function requestUsers(req: UsersRequest): Promise<Users> {
         query: toQueryParams({ offset, limit }),
         body: { keyword },
     });
-    const resUsers = parseUsers(res.rawBody);
+    const resUsers = deserialize(res.rawBody);
     const users: Users = {
         ...resUsers,
         total: Number(resUsers.total),

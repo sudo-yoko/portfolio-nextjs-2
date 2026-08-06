@@ -5,7 +5,7 @@ import { Type } from '@sinclair/typebox';
 import { Value } from '@sinclair/typebox/value';
 import z from 'zod';
 
-import { ResponseBodyParser } from '@/presentation/_system/client/response-parser';
+import { Deserializer } from '@/presentation/_system/client/client.deserializer';
 import { tbSchema, tbUtil } from '@/presentation/_system/utils/typebox-utils';
 import { zodUtil } from '@/presentation/_system/utils/zod-utils';
 
@@ -30,7 +30,7 @@ export type ResUsers = {
 /**
  * Zodを使ったAPI通信のパース
  */
-const zodParser: ResponseBodyParser<ResUsers> = (rawBody) => {
+const viaZod: Deserializer<ResUsers> = (rawBody) => {
     const ResUserSchema: z.ZodType<ResUser> = z.object({
         userId: z.string(),
         userName: z.string(),
@@ -48,7 +48,7 @@ const zodParser: ResponseBodyParser<ResUsers> = (rawBody) => {
 /**
  * TypeBoxを使ったAPI通信のパース
  */
-const tbParser: ResponseBodyParser<ResUsers> = (rawBody) => {
+const viaTypeBox: Deserializer<ResUsers> = (rawBody) => {
     const ResUserSchema = tbSchema(
         Type.Object({
             userId: Type.String(),
@@ -70,7 +70,7 @@ const tbParser: ResponseBodyParser<ResUsers> = (rawBody) => {
     // }
 };
 
-const typeAssertionParser: ResponseBodyParser<ResUsers> = (rawBody) => {
+const viaTypeAssertion: Deserializer<ResUsers> = (rawBody) => {
     // TODO: 何が違うのか
     const data = JSON.parse(rawBody) as ResUsers;
     // const data: ResUsers = JSON.parse(rawData);
@@ -78,4 +78,4 @@ const typeAssertionParser: ResponseBodyParser<ResUsers> = (rawBody) => {
     return data;
 };
 
-export const parseUsers: ResponseBodyParser<ResUsers> = tbParser;
+export const deserialize: Deserializer<ResUsers> = viaTypeBox;
