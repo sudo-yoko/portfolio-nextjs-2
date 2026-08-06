@@ -2,12 +2,19 @@ import 'server-only';
 
 import fs from 'fs';
 import path from 'path';
+import sourceMapSupport from 'source-map-support';
 import winston, { createLogger, format, transports } from 'winston';
 import 'winston-daily-rotate-file';
 import DailyRotateFile from 'winston-daily-rotate-file';
 
 import { envByStaticKey as env } from '@/presentation/_system/env/env.s';
 import { consoleHeader } from '@/presentation/_system/logging/logging.utils';
+
+// スタックトレースのソースマップサポート。productionでのみ効果がある
+sourceMapSupport.install({
+    environment: 'node',
+    hookRequire: false,
+});
 
 // アプリケーション名
 const appName = 'portfolio-application';
