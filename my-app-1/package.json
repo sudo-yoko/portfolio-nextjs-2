@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
+    "@sinclair/typebox": "^0.34.52",
     "axios": "^1.15.0",
     "next": "^16.2.4",
     "react": "^19.2.5",
