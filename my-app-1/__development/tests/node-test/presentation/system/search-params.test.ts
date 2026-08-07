@@ -1,9 +1,9 @@
 import test from 'node:test';
 
 import {
-    Form,
+    MultiValuedMap,
     QueryParams,
-    toForm,
+    toMultiValuedMap,
     toQueryParams,
     toQueryString,
     toURLSearchParams,
@@ -17,7 +17,7 @@ const print = printf({ logPrefix: '[search-params.test.ts]', stdout: true });
 //
 // npm exec -- node --test --import tsx --test-name-pattern='^test1-1$' __development/tests/node-test/presentation/system/search-params.test.ts
 test('test1-1', (t) => {
-    const form: Form = {};
+    const form: MultiValuedMap = {};
     form['name'] = 'aaa';
     form['email'] = 'aaa1@test.com';
     form['body'] = 'test';
@@ -28,7 +28,7 @@ test('test1-1', (t) => {
 
 // npm exec -- node --test --import tsx --test-name-pattern='^test1-2$' __development/tests/node-test/presentation/system/search-params.test.ts
 test('test1-2', (t) => {
-    const form: Form = {};
+    const form: MultiValuedMap = {};
     form['name'] = 'aaa';
     form['email'] = ['aaa1@test.com', 'bbb2@test.com'];
     form['body'] = 'test';
@@ -112,7 +112,7 @@ test('test4-1', (t) => {
     params.append('key3', 'value-3');
     print(`[${t.name}]`, 'params ->', params);
 
-    const form = toForm(params);
+    const form = toMultiValuedMap(params);
     print(`[${t.name}]`, 'form ->', form);
 });
 
@@ -121,6 +121,6 @@ test('test4-2', (t) => {
     const params = new URLSearchParams();
     print(`[${t.name}]`, 'params ->', params);
 
-    const form = toForm(params);
+    const form = toMultiValuedMap(params);
     print(`[${t.name}]`, 'form ->', form);
 });

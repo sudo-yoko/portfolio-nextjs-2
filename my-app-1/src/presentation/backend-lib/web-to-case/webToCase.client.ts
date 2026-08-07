@@ -6,13 +6,13 @@ import { Method } from '@/presentation/_system/client/client.types';
 import { env } from '@/presentation/_system/env/env.helper.validated';
 import { retryableError } from '@/presentation/_system/error/error.factories';
 import logger from '@/presentation/_system/logging/logger.s';
-import { Form, toQueryString } from '@/presentation/_system/types/search-params';
+import { MultiValuedMap, toQueryString } from '@/presentation/_system/types/search-params';
 
 const logPrefix = 'webToCase.client.ts: ';
 
 const client = await loadClient('axios-proxy');
 
-export async function sendWebToCase(form: Form): Promise<void> {
+export async function sendWebToCase(form: MultiValuedMap): Promise<void> {
     const url = env('WEB_TO_CASE_URL');
     const body = toQueryString(form);
     logger.info(logPrefix + `Request -> url=${url}, body:${body}`);

@@ -3,8 +3,8 @@ import 'server-only';
 import { NextRequest } from 'next/server';
 import z from 'zod';
 
-import { toForm } from '@/presentation/_system/types/search-params';
-import { zodUtil } from '@/presentation/_system/utils/zod-utils';
+import { zodUtil } from '@/presentation/_system/io/deserialize.zod';
+import { toMultiValuedMap } from '@/presentation/_system/types/search-params';
 
 // export type Params = z.infer<typeof ParamsSchema>;
 // export type Body = z.infer<typeof BodySchema>;
@@ -25,7 +25,7 @@ export type RouteContext = {
 
 type RouteDeserializer = (req: NextRequest) => Promise<RouteContext>;
 
-function zodDeserializer(): RouteDeserializer {
+function withZod(): RouteDeserializer {
     const ParamsSchema: z.ZodType<Params> = z.object({
         offset: z.string(),
         limit: z.string(),
@@ -36,7 +36,7 @@ function zodDeserializer(): RouteDeserializer {
     const deserializer: RouteDeserializer = async (req) => {
         // クエリ
         const searchParams = req.nextUrl.searchParams;
-        const form = toForm(searchParams);
+        const form = toMultiValuedMap(searchParams);
         const params = zodUtil.withErrorHandling(() => ParamsSchema.parse(form));
         // ボディ
         const text = await req.text();
@@ -69,4 +69,4 @@ function zodDeserializer(): RouteDeserializer {
 //     return { params, body };
 // };
 
-export const deserialize: RouteDeserializer = zodDeserializer();
+export const deserialize: RouteDeserializer = withZod();

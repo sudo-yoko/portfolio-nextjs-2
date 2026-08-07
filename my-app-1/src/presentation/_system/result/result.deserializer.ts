@@ -7,7 +7,7 @@ type ResultDeserializer = (text: string) => RESULT;
 /**
  * 型ガードを用いた自作パーサー
  */
-function typeGuardDeserializer(text: string): RESULT {
+function withTypeGuard(text: string): RESULT {
     const isResult = (text: unknown): text is RESULT => {
         if (text === null) {
             return false;
@@ -46,4 +46,4 @@ function typeGuardDeserializer(text: string): RESULT {
     }
 }
 
-export const deserialize: ResultDeserializer = typeGuardDeserializer;
+export const deserialize: ResultDeserializer = withTypeGuard;

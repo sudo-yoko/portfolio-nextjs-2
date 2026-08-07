@@ -5,7 +5,7 @@
 
 /** 入力となるフォームオブジェクトの型 */
 // TODO: validationのFormDataでは配列に未対応
-export type Form = Record<string, string | string[]>;
+export type MultiValuedMap = Record<string, string | string[]>;
 
 /** クエリパラメータの配列 */
 export type QueryParam = { key: string; value: string };
@@ -16,9 +16,9 @@ export type QueryParams = QueryParam[];
 /**
  *
  */
-export function toQueryParams(form: Form): QueryParams {
+export function toQueryParams(map: MultiValuedMap): QueryParams {
     // TODO: mapとflatMapの違い
-    return Object.entries(form).flatMap(([key, value]) => {
+    return Object.entries(map).flatMap(([key, value]) => {
         if (Array.isArray(value)) {
             return value.map((v) => ({ key, value: v }));
         } else {
@@ -39,28 +39,28 @@ export function toURLSearchParams(params: QueryParams): URLSearchParams {
 /**
  *
  */
-export function toQueryString(form: Form): string {
-    return toURLSearchParams(toQueryParams(form)).toString();
+export function toQueryString(map: MultiValuedMap): string {
+    return toURLSearchParams(toQueryParams(map)).toString();
 }
 
 /**
  *
  */
-export function toForm(params: URLSearchParams): Form {
-    const form: Form = {};
+export function toMultiValuedMap(params: URLSearchParams): MultiValuedMap {
+    const map: MultiValuedMap = {};
     for (const [key, value] of params) {
-        if (key in form) {
-            const current = form[key];
+        if (key in map) {
+            const current = map[key];
             if (Array.isArray(current)) {
                 current.push(value);
             } else {
-                form[key] = [current, value];
+                map[key] = [current, value];
             }
         } else {
-            form[key] = value;
+            map[key] = value;
         }
     }
-    return form;
+    return map;
 }
 
 // export function getQueryString(queryParam: QueryParam): string {

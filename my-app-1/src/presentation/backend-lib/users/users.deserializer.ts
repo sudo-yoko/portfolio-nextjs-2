@@ -1,4 +1,5 @@
 // バックエンド（REST API）のレスポンスの検証とパース
+// バックエンドAPIのレスポンスを型付オブジェクト（ドメイン型）にデシリアライズする
 import 'server-only';
 
 import { Type } from '@sinclair/typebox';
@@ -6,8 +7,8 @@ import { Value } from '@sinclair/typebox/value';
 import z from 'zod';
 
 import { Deserializer } from '@/presentation/_system/client/client.deserializer';
-import { tbSchema, tbUtil } from '@/presentation/_system/utils/typebox-utils';
-import { zodUtil } from '@/presentation/_system/utils/zod-utils';
+import { tbSchema, tbUtil } from '@/presentation/_system/io/deserialize.typebox';
+import { zodUtil } from '@/presentation/_system/io/deserialize.zod';
 
 const logPrefix = 'users.deserializer.ts: ';
 
@@ -30,7 +31,7 @@ export type ResUsers = {
 /**
  * Zodを使ったAPI通信のパース
  */
-function zodDeserializer(): Deserializer<ResUsers> {
+function withZod(): Deserializer<ResUsers> {
     const ResUserSchema: z.ZodType<ResUser> = z.object({
         userId: z.string(),
         userName: z.string(),
@@ -51,7 +52,7 @@ function zodDeserializer(): Deserializer<ResUsers> {
 /**
  * TypeBoxを使ったAPI通信のパース
  */
-function typeBoxDeserializer(): Deserializer<ResUsers> {
+function withTypeBox(): Deserializer<ResUsers> {
     const ResUserSchema = tbSchema(
         Type.Object({
             userId: Type.String(),
@@ -75,7 +76,7 @@ function typeBoxDeserializer(): Deserializer<ResUsers> {
     };
     return deserializer;
 }
-function typeAssertionDeserializer(): Deserializer<ResUsers> {
+function withTypeAssertion(): Deserializer<ResUsers> {
     const deserializer: Deserializer<ResUsers> = (rawBody) => {
         // TODO: 何が違うのか
         const data = JSON.parse(rawBody) as ResUsers;
@@ -86,4 +87,4 @@ function typeAssertionDeserializer(): Deserializer<ResUsers> {
     return deserializer;
 }
 
-export const deserialize: Deserializer<ResUsers> = typeBoxDeserializer();
+export const deserialize: Deserializer<ResUsers> = withTypeBox();
