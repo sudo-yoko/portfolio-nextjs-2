@@ -1,9 +1,12 @@
 import 'server-only';
 
-import { TSchema } from '@sinclair/typebox';
+import { TSchema, TypeBoxError } from '@sinclair/typebox';
 import { TransformDecodeCheckError } from '@sinclair/typebox/value';
 
 import { applicationError } from '@/presentation/_system/error/error.factories';
+import logger from '@/presentation/_system/logging/logger.s';
+
+const logPrefix = 'deserialize.typebox.ts: ';
 
 export function tbSchema<T>(schema: TSchema & { static: T }): typeof schema {
     return schema;
@@ -11,28 +14,31 @@ export function tbSchema<T>(schema: TSchema & { static: T }): typeof schema {
 
 export const tbUtil = {
     /**
-     * TypeBox固有のエラーハンドリングを追加する
+     * TypeBox用エラーハンドリング
      */
-    withErrorHandling: <T>(subject: () => T): T => {
+    withErrorHandling: <T>(deserialize: () => T): T => {
         try {
-            return subject();
+            return deserialize();
         } catch (error) {
             handleError(error);
-            throw error;
         }
     },
 };
 
-const handleError = (error: unknown) => {
-    if (error instanceof TransformDecodeCheckError) {
+function handleError(err: unknown): never {
+    if (err instanceof TypeBoxError) {
+        const props: Record<string, unknown> = {};
+        props['message'] = err.message;
+        props['name'] = err.constructor.name;
+        if (err instanceof TransformDecodeCheckError) {
+            props['error'] = err.error;
+        }
+        logger.error(logPrefix + props.message);
         throw applicationError({
-            message: error.message,
-            cause: error,
-            extra: {
-                name: error.constructor.name,
-                message: error.message,
-                error: error.error,
-            },
+            message: 'TypeBoxのデシリアライズに失敗しました。',
+            cause: err,
+            extra: props,
         });
     }
-};
+    throw err;
+}
