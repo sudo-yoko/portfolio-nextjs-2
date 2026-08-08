@@ -7,6 +7,7 @@ import {
 import client from '@/presentation/_system/client/client.s';
 import { Method } from '@/presentation/_system/client/client.types';
 import { env } from '@/presentation/_system/env/env.helper.validated';
+import { DeserUtil } from '@/presentation/_system/io/deserialize.utils';
 import { toQueryParams } from '@/presentation/_system/types/search-params';
 import { deserialize } from '@/presentation/backend-lib/users/users.deserializer';
 import { Users, UsersRequest } from '@/presentation/backend-lib/users/users.types';
@@ -15,7 +16,7 @@ export async function requestUsers(req: UsersRequest): Promise<Users> {
     const url = env('USERS_API');
     const { keyword, offset, limit } = req;
 
-    const res = await client.send({
+    const config = {
         url,
         method: Method.POST,
         headers: {
@@ -24,8 +25,10 @@ export async function requestUsers(req: UsersRequest): Promise<Users> {
         },
         query: toQueryParams({ offset, limit }),
         body: { keyword },
-    });
-    const resUsers = deserialize(res.rawBody);
+    };
+
+    const res = await client.send(config);
+    const resUsers = DeserUtil.withErrorHandling(() => deserialize(res.rawBody), { req: config, res });
     const users: Users = {
         ...resUsers,
         total: Number(resUsers.total),
