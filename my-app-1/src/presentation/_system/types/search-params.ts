@@ -7,7 +7,7 @@
 // TODO: validationのFormDataでは配列に未対応
 export type MultiValuedMap = Record<string, string | string[]>;
 
-/** クエリパラメータの配列 */
+/** クエリパラメータ */
 export type QueryParam = { key: string; value: string };
 
 /** クエリパラメータの配列 */

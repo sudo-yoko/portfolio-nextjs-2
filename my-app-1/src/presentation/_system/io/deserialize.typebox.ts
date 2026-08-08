@@ -26,7 +26,7 @@ export const tbUtil = {
 const handleError = (error: unknown) => {
     if (error instanceof TransformDecodeCheckError) {
         throw applicationError({
-            message: 'バックエンドAPI通信のデシリアライズに失敗しました。（型の不一致）',
+            message: 'API通信のデシリアライズに失敗しました。（型の不一致）',
             cause: error,
             extra: {
                 cause: {
