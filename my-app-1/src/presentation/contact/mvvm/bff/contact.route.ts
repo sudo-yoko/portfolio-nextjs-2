@@ -4,7 +4,7 @@ import { withAdviceAsync } from '@/presentation/_system/aspect/aspect.route-hand
 import logger from '@/presentation/_system/logging/logger.s';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 import { execute } from '@/presentation/contact/mvvm/bff/contact.interactor';
-import { parse } from '@/presentation/contact/mvvm/bff/contact.route.parser';
+import { parse } from '@/presentation/contact/mvvm/models/contact.deserializer';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 
 const logPrefix = 'contact.route.ts: ';

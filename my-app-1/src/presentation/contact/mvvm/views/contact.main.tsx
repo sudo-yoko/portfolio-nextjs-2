@@ -1,11 +1,16 @@
 'use client';
 
 import { ErrorModal } from '@/presentation/_system/error/views/component.error-modal.feature.reset';
-import { initialState, reducer, reset, Status } from '@/presentation/contact/mvvm/view-models/contact.reducer';
-import Complete from '@/presentation/contact/mvvm/views/contact.component.complete';
-import Confirm from '@/presentation/contact/mvvm/views/contact.component.confirm';
-import Input from '@/presentation/contact/mvvm/views/contact.component.input';
-import Sending from '@/presentation/contact/mvvm/views/contact.component.sending';
+import {
+    initialState,
+    reducer,
+    reset,
+    Status,
+} from '@/presentation/contact/mvvm/view-models/contact.reducer';
+import Complete from '@/presentation/contact/mvvm/views/contact.complete';
+import Confirm from '@/presentation/contact/mvvm/views/contact.confirm';
+import Input from '@/presentation/contact/mvvm/views/contact.input';
+import Sending from '@/presentation/contact/mvvm/views/contact.sending';
 import { useReducer } from 'react';
 
 /**

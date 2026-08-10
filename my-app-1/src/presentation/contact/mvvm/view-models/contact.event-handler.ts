@@ -8,7 +8,7 @@ import { resultError } from '@/presentation/_system/error/error.factories';
 import { isInvalid, isOkEmpty, isRetryable } from '@/presentation/_system/result/result.helpers';
 import { hasError } from '@/presentation/_system/validation/validation.helpers';
 import { Violations } from '@/presentation/_system/validation/validation.types';
-import { send } from '@/presentation/contact/mvvm/models/contact.requester';
+import { send } from '@/presentation/contact/mvvm/models/contact.client';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 import { validate } from '@/presentation/contact/mvvm/models/contact.validator';
 import {

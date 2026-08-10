@@ -1,4 +1,4 @@
-import { parse } from '@/presentation/contact/mvvm/bff/contact.route.parser';
+import { parse } from '@/presentation/contact/mvvm/models/contact.deserializer';
 import { printf } from '@/tests/test-logger';
 
 const print = printf({ logPrefix: '[contact.route.parser.test.ts]', stdout: true });
