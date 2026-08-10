@@ -8,12 +8,12 @@ const logPrefix = 'health-check-client.ts: ';
 
 export async function requestHealthCheckError(): Promise<void> {
     const url = 'http://localhost:3006/healthcheck/internal-server-error';
-    requestHealthCheck(url);
+    await requestHealthCheck(url); // TODO: awaitつけ忘れの警告が出ない
 }
 
 export async function requestHealthCheckOk(): Promise<void> {
     const url = 'http://localhost:3006/healthcheck';
-    requestHealthCheck(url);
+    await requestHealthCheck(url); // TODO: awaitつけ忘れの警告が出ない
 }
 
 async function requestHealthCheck(url: string): Promise<void> {
