@@ -1,14 +1,16 @@
 //
 // カスタムエラーファクトリー
 //
+import { isCustomError } from '@/presentation/_system/error/error.helpers';
 import {
     ApplicationError,
     AuthError,
+    CAUSES,
     CustomErrorBase,
-    EXTRA,
     ERR_CODE,
     ERR_TYPE,
     ErrType,
+    EXTRA,
     InvalidStatusError,
     LOCATION,
     RESULT_TYPE,
@@ -159,10 +161,19 @@ function customError<T extends ErrType>(props: {
 }): CustomErrorBase<T> {
     const { message, cause, errType, location, extra } = props;
     const base = new Error(message, { cause });
+    let causes: object[] = [];
+    if (isCustomError(cause)) {
+        const { message, name, [ERR_TYPE]: errType, [LOCATION]: location, [EXTRA]: extra } = cause;
+        causes.push({ message, name, customError: { errType, location, extra } });
+        if (cause[CAUSES]) {
+            causes.push(...cause[CAUSES]);
+        }
+    }
     return Object.assign(base, {
         [ERR_TYPE]: errType,
         [LOCATION]: location,
         [EXTRA]: extra,
+        [CAUSES]: causes,
     });
 }
 
@@ -205,11 +216,14 @@ export function retryableError(props: { message?: string; location?: string } = 
 
 export function applicationError(
     props: {
+        /** キャッチしたエラー */
         cause?: unknown;
         result?: RESULT;
         code?: string;
+        /** エラーをキャッチした場所 */
         location?: string;
         message?: string;
+        /** その他何でも */
         extra?: object;
     } = {},
 ): ApplicationError {

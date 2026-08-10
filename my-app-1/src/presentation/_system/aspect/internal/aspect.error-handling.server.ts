@@ -53,7 +53,7 @@ function handleError(location: string, e: unknown) {
     if (isCustomError(e)) {
         // カスタムエラー固有のプロパティを取得する
         const option = getCustomErrorProperties(e);
-        errProps.option = option;
+        errProps.details = option;
         // errProps.details = option.details;
     }
     // ログ出力

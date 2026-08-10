@@ -51,7 +51,7 @@ function handleError(location: string, e: unknown): AopResult {
     // カスタムエラー固有のプロパティを取得する
     if (isCustomError(e)) {
         const option = getCustomErrorProperties(e);
-        errProps.option = option;
+        errProps.details = option;
         abortProps.type = option.errType;
         abortProps.code = option.code;
     }

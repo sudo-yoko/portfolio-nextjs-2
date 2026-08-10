@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import { isCustomError } from '@/presentation/_system/error/error.helpers';
 import {
+    CAUSES,
     CustomErrorProperties,
     ERR_CODE,
     ERR_TYPE,
@@ -21,34 +22,33 @@ import {
  * - `all`: スタックトレースを含むすべてのメッセージ
  */
 export function formatError(props: {
-    error?: unknown;
-    option?: object;
     description?: string;
-    details?: object;
     location?: string;
+    error?: unknown;
+    details?: object;
 }): {
     message: string;
     name?: string;
     all: string;
 } {
-    const { error, option, description, details, location } = props;
+    const { error, description, details, location } = props;
     if (!error) {
         const message = '';
-        return { message, all: joinAll({ description, message, details, location, option }) };
+        return { message, all: joinAll({ description, message, details, location }) };
     } else if (typeof error === 'string') {
         const message = error;
-        return { message, all: joinAll({ description, message, details, location, option }) };
+        return { message, all: joinAll({ description, message, details, location }) };
     } else if (error instanceof Error) {
         const { name, message } = error;
         const stacks = getStackTrace(error);
         return {
             message,
             name,
-            all: joinAll({ description, name, message, details, location, stacks, option }),
+            all: joinAll({ description, name, message, details, location, stacks }),
         };
     } else {
         const message = 'unknown type error.';
-        return { message, all: joinAll({ description, message, details, location, option }) };
+        return { message, all: joinAll({ description, message, details, location }) };
     }
 }
 
@@ -87,12 +87,11 @@ function joinAll(props: {
     description?: string;
     name?: string;
     message?: string;
-    option?: object;
     details?: object;
     location?: string;
     stacks?: string[];
 }): string {
-    const { description, name, message, option, details, location, stacks } = props;
+    const { description, name, message, details, location, stacks } = props;
     const errMessage: string[] = [];
     if (description) {
         errMessage.push(description);
@@ -105,9 +104,6 @@ function joinAll(props: {
     }
     if (message) {
         errMessage.push(`\nmessage: ${message}`);
-    }
-    if (option) {
-        errMessage.push(`\noption: ${JSON.stringify(option, null, 2)}`);
     }
     if (details) {
         errMessage.push(`\ndetails: ${JSON.stringify(details, null, 2)}`);
@@ -127,9 +123,11 @@ type All = Parameters<typeof joinAll>[0];
 export function getAxiosErrorProperties(err: unknown): object {
     const option: Record<string, unknown> = {};
     if (axios.isAxiosError(err)) {
+        option['name'] = err.constructor.name;
+        option['message'] = err.message;
         option['code'] = err.code;
         option['status'] = err.response?.status ?? 'undefined';
-        option['message'] = err.message;
+
         // return { str: JSON.stringify(option, null, 2), obj: option };
     }
     // return { str: JSON.stringify(option, null, 2), obj: option };
@@ -157,6 +155,7 @@ export function getCustomErrorProperties(err: unknown): CustomErrorProperties {
         option.errType = err[ERR_TYPE]; // TODO: ログにERR_TYPE出さない方がよいかもしれない
         option.location = err[LOCATION];
         option.extra = err[EXTRA];
+        option.causes = err[CAUSES];
         if (ERR_CODE in err) {
             option.code = err[ERR_CODE];
         }

@@ -37,7 +37,7 @@ function handleError(err: unknown): never {
         throw applicationError({
             message: 'TypeBoxのデシリアライズに失敗しました。',
             cause: err,
-            extra: props,
+            extra: { typeBoxError: props },
         });
     }
     throw err;

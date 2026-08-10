@@ -60,11 +60,12 @@ export const fetchClient = (): Client => ({
 
             // エラー情報
             const location = 'fetchClient.send';
-            const details = { config };
+            // const details = { config };
             const option = getCustomErrorProperties(error);
+            const details = { config, option };
 
             // エラーログ出力
-            const { all, message, name } = formatError({ error, option, location, details });
+            const { all, message, name } = formatError({ error, location, details });
             logger.error(logPrefix + all);
 
             // 発生したエラーをApplicationErrorにラップして再スロー

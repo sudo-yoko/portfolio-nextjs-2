@@ -49,7 +49,7 @@ export function useWithErrorHandling() {
         // カスタムエラー固有のプロパティを取得する
         if (isCustomError(error)) {
             const option = getCustomErrorProperties(error);
-            errProps.option = option;
+            errProps.details = option;
         }
         // ログ出力
         const { all } = formatError(errProps);

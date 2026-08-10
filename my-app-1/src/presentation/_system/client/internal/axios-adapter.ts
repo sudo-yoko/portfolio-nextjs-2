@@ -64,21 +64,22 @@ export const axiosClient = (proxy?: AxiosProxyConfig): Client => ({
 
             // エラー情報
             const location = 'axiosClient.send';
-            const details = { config, proxy };
+            // const details = { config, proxy };
             const option = getAxiosErrorProperties(error); // Axios固有のエラープロパティを取得
+            const details = { req: config, proxy, axiosError: option };
 
             // エラーログ出力
-            const { all, message, name } = formatError({ error, option, location, details });
+            const { all, message, name } = formatError({ error, location, details });
             logger.error(logPrefix + all);
 
             // 発生したエラーをApplicationErrorにラップして再スロー
             // TODO: formatErrorに渡すのと同じ情報をわたせるようにする
             // TODO: ApplicationErrorにリクエスト情報も渡せるようにする
             throw applicationError({
-                message,
+                message: 'バックエンドAPIのリクエストで失敗しました。',
                 cause: error,
                 location: logPrefix + location,
-                extra: { ...details, cause: { name, message, ...option } },
+                extra: details,
             });
             // throw error;
         }

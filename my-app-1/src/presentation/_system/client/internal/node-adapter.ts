@@ -68,7 +68,7 @@ export const nodeClient = (): Client => ({
                 res.on('error', (error) => {
                     logger.info(logPrefix + '### Response error');
                     const option = getNodeErrorProperties(error);
-                    logger.info(logPrefix + formatError({ error, option }).all);
+                    logger.info(logPrefix + formatError({ error, details: option }).all);
                     reject(applicationError({ cause: error }));
                 });
                 res.on('close', () => {
@@ -92,7 +92,7 @@ export const nodeClient = (): Client => ({
             req.on('error', (error) => {
                 // Errorオブジェクトの拡張プロパティを取得する。node:http固有のエラーが含まれているため。
                 const option = getNodeErrorProperties(error);
-                logger.info(logPrefix + '### Request error' + formatError({ error, option }).all);
+                logger.info(logPrefix + '### Request error' + formatError({ error, details: option }).all);
                 // TODO: unknown type errorが出ている
                 reject(applicationError({ cause: error }));
             });

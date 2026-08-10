@@ -52,7 +52,7 @@ async function handleError(location: string, e: unknown): Promise<void> {
     // カスタムエラー固有のプロパティを取得する
     if (isCustomError(e)) {
         const option = getCustomErrorProperties(e);
-        errProps.option = option;
+        errProps.details = option;
     }
     // ログ出力
     const { all } = formatError(errProps);
