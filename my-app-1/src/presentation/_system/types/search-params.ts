@@ -5,7 +5,7 @@
 
 /** 入力となるフォームオブジェクトの型 */
 // TODO: validationのFormDataでは配列に未対応
-export type MultiValuedMap = Record<string, string | string[]>;
+export type MultiValuedMap = Record<string, string | string[] | undefined>;
 
 /** クエリパラメータ */
 export type QueryParam = { key: string; value: string };
@@ -19,6 +19,9 @@ export type QueryParams = QueryParam[];
 export function toQueryParams(map: MultiValuedMap): QueryParams {
     // TODO: mapとflatMapの違い
     return Object.entries(map).flatMap(([key, value]) => {
+        if (value === undefined) {
+            return [];
+        }
         if (Array.isArray(value)) {
             return value.map((v) => ({ key, value: v }));
         } else {
@@ -51,6 +54,9 @@ export function toMultiValuedMap(params: URLSearchParams): MultiValuedMap {
     for (const [key, value] of params) {
         if (key in map) {
             const current = map[key];
+            if (current === undefined) {
+                continue;
+            }
             if (Array.isArray(current)) {
                 current.push(value);
             } else {

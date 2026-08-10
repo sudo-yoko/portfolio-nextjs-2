@@ -1,7 +1,7 @@
 'use client';
 
 import { AutoResizeTextAreaSimple } from '@/presentation/_system/components/autoResizeTextArea.decorator.simple';
-import { Button } from '@/presentation/_system/components/button.decorator.simple';
+import { Button, ButtonMin } from '@/presentation/_system/components/button.decorator.simple';
 import { ToastError } from '@/presentation/_system/components/toast.feature.error';
 import {
     applyViolations,
@@ -67,6 +67,21 @@ export default function Input({
                             <p className="text-red-500">{err}</p>
                         </div>
                     ))}
+                </div>
+                <div>
+                    <div>事業所：</div>
+                    <div className="flex flex-col gap-1">
+                        <div>
+                            <input type="text" className="w-32 border-2 border-black" />
+                            <ButtonMin>検索</ButtonMin>
+                        </div>
+                        <div>
+                            <input type="text" className="w-80 border-2 border-black" />
+                        </div>
+                        <div>
+                            <input type="text" className="w-80 border-2 border-black" />
+                        </div>
+                    </div>
                 </div>
                 <div>
                     <div>お問い合わせ内容：</div>

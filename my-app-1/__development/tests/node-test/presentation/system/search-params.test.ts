@@ -37,6 +37,17 @@ test('test1-2', (t) => {
     print(`[${t.name}]`, 'result ->', result);
 });
 
+// npm exec -- node --test --import tsx --test-name-pattern='^test1-3$' __development/tests/node-test/presentation/system/search-params.test.ts
+test('test1-3', (t) => {
+    const offset: string = '1';
+    const arr: string[] = ['aaa', 'bbb'];
+    const limit = undefined;
+    const form: MultiValuedMap = { offset, arr, limit };
+
+    const result = toQueryParams(form);
+    print(`[${t.name}]`, 'result ->', result);
+});
+
 //
 // toURLSearchParams
 //

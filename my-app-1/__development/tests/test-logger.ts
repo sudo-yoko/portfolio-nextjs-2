@@ -1,5 +1,7 @@
 import util from 'node:util';
 
+import { formatError, getCustomErrorProperties } from '@/presentation/_system/error/error.helper.stringify';
+import { isCustomError } from '@/presentation/_system/error/error.helpers';
 import { consoleHeader } from '@/presentation/_system/logging/logging.utils';
 
 /**
@@ -20,4 +22,13 @@ export function printf({ logPrefix, stdout }: { logPrefix: string; stdout: boole
             console.log(...message);
         }
     };
+}
+
+export function errLog(error: unknown) {
+    const args: Parameters<typeof formatError>[0] = {};
+    args.error = error;
+    if (isCustomError(error)) {
+        args.details = { customError: getCustomErrorProperties(error) };
+    }
+    return formatError(args).all;
 }
