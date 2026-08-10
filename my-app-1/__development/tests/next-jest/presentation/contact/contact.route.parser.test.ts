@@ -1,4 +1,4 @@
-import { parse } from '@/presentation/contact/mvvm/models/contact.deserializer';
+import { deserialize } from '@/presentation/contact/mvvm/models/contact.deserializer';
 import { printf } from '@/tests/test-logger';
 
 const print = printf({ logPrefix: '[contact.route.parser.test.ts]', stdout: true });
@@ -8,7 +8,7 @@ test('test1-1', async () => {
     const body = '{"name":"name-1","email":"email-1","body":"body-1"}';
     const req = new Request('http://localhost:3000', { method: 'POST', body });
 
-    const parsed = await parse(req);
+    const parsed = await deserialize(req);
     print(`[${expect.getState().currentTestName}]`, 'result ->', parsed);
 });
 
@@ -17,7 +17,7 @@ test('test1-2', async () => {
     const body = '{"name":"name-1","email":"email-1","body":"body-1","detail":"detail-1"}';
     const req = new Request('http://localhost:3000', { method: 'POST', body });
 
-    const parsed = await parse(req);
+    const parsed = await deserialize(req);
     print(`[${expect.getState().currentTestName}]`, 'result ->', parsed);
 });
 
@@ -27,7 +27,7 @@ test('test1-3', async () => {
     const req = new Request('http://localhost:3000', { method: 'POST', body });
 
     try {
-        await parse(req);
+        await deserialize(req);
     } catch (e) {
         print(`[${expect.getState().currentTestName}]`, 'result ->', e);
     }
@@ -39,7 +39,7 @@ test('test1-4', async () => {
     const req = new Request('http://localhost:3000', { method: 'POST', body });
 
     try {
-        await parse(req);
+        await deserialize(req);
     } catch (e) {
         print(`[${expect.getState().currentTestName}]`, 'result ->', e);
     }
@@ -52,7 +52,7 @@ test('test1-5', async () => {
 
     print(JSON.parse(body));
     try {
-        await parse(req);
+        await deserialize(req);
     } catch (e) {
         print(`[${expect.getState().currentTestName}]`, 'result ->', e);
     }

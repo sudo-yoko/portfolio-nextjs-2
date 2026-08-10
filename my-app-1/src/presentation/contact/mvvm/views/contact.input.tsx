@@ -73,7 +73,7 @@ export default function Input({
                     <div className="flex flex-col gap-1">
                         <div>
                             <input type="text" className="w-32 border-2 border-black" />
-                            <ButtonMin>検索</ButtonMin>
+                            <ButtonMin>住所検索</ButtonMin>
                         </div>
                         <div>
                             <input type="text" className="w-80 border-2 border-black" />

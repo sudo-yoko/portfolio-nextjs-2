@@ -1,10 +1,11 @@
 import 'server-only';
 
 import { withAdviceAsync } from '@/presentation/_system/aspect/aspect.route-handler';
+import { deserUtil } from '@/presentation/_system/io/deserialize.utils';
 import logger from '@/presentation/_system/logging/logger.s';
 import { FormData } from '@/presentation/_system/validation/validation.types';
 import { execute } from '@/presentation/contact/mvvm/bff/contact.interactor';
-import { parse } from '@/presentation/contact/mvvm/models/contact.deserializer';
+import { deserialize } from '@/presentation/contact/mvvm/models/contact.deserializer';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 
 const logPrefix = 'contact.route.ts: ';
@@ -18,7 +19,7 @@ export async function POST(req: Request): Promise<Response> {
         // const contactBody: ContactBody = await req.json();
         // NOTE: req.json()で取得すると型がanyになる。req.text()で取得するとstringになるので、こちらの方が扱いやすい
         // const body = await req.text();
-        const { body } = await parse(req);
+        const { body } = await deserUtil.withErrorHandlingAsync(() => deserialize(req));
         // const body = context.body
 
         logger.info(logPrefix + `contactBody=${JSON.stringify(body)}`);

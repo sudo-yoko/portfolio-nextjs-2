@@ -24,11 +24,19 @@ export type FormKeys = (typeof FormKeys)[keyof typeof FormKeys];
 /**
  * お問い合わせ入力内容
  */
-// export type ContactBody = {
-//     name: string;
-//     email: string;
-//     body: string;
-// };
+export type ContactBody = {
+    name: string;
+    email: string;
+    body: string;
+};
+
+/**
+ * Route Handlerで受け取る値
+ */
+// TODO: これは共通? -> ボディが無いルートもある
+export type RouteContext = {
+    body: ContactBody;
+};
 
 /**
  * お問い合わせフォームのRESULT型

@@ -40,6 +40,7 @@ const viaRoute: Send = async (formData) => {
         },
         //body: { name, email, body }, // オブジェクトのまま（JSON.stringify不要）で渡す
         body: formData,
+        // body: {}
     });
     // return parseFromText<FormKeys>(res.rawBody);
     const result = deserialize(res.rawBody);
