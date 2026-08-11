@@ -8,12 +8,15 @@ import { resultError } from '@/presentation/_system/error/error.factories';
 import { isInvalid, isOkEmpty, isRetryable } from '@/presentation/_system/result/result.helpers';
 import { hasError } from '@/presentation/_system/validation/validation.helpers';
 import { Violations } from '@/presentation/_system/validation/validation.types';
+import { requestAddress } from '@/presentation/backend-lib/zipcloud/zipcloud.client';
+import { ZipCloudRequest } from '@/presentation/backend-lib/zipcloud/zipcloud.types';
 import { send } from '@/presentation/contact/mvvm/models/contact.client';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 import { validate } from '@/presentation/contact/mvvm/models/contact.validator';
 import {
     Action,
     setRetryable,
+    setValue,
     setViolations,
     State,
     toComplete,
@@ -45,6 +48,29 @@ export function handleNext(state: State, dispatch: React.ActionDispatch<[action:
         }
         toConfirm(dispatch);
     })(validate(state.formData));
+}
+
+export async function handleSearch(
+    state: State,
+    dispatch: React.ActionDispatch<[action: Action]>,
+    onAbort: () => void,
+) {
+    await withAdviceAsync(() => _(), onAbort);
+
+    async function _() {
+        const req: ZipCloudRequest = {
+            zipcode: state.formData.zipcode,
+        };
+        const result = await requestAddress(req);
+        if (result.status === 200) {
+            if (result.results === null) {
+                setValue(dispatch, 'address1', '');
+            } else {
+                const add = result.results[0];
+                setValue(dispatch, 'address1', add.address1 + add.address2 + add.address3);
+            }
+        }
+    }
 }
 
 /**

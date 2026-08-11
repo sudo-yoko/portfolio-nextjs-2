@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect } from 'react';
+
 import { AutoResizeTextAreaSimple } from '@/presentation/_system/components/autoResizeTextArea.decorator.simple';
 import { Button, ButtonMin } from '@/presentation/_system/components/button.decorator.simple';
 import { ToastError } from '@/presentation/_system/components/toast.feature.error';
@@ -7,9 +9,9 @@ import {
     applyViolations,
     dismissRetry,
     handleNext,
+    handleSearch,
 } from '@/presentation/contact/mvvm/view-models/contact.event-handler';
-import { Action, setValue, State } from '@/presentation/contact/mvvm/view-models/contact.reducer';
-import { useEffect } from 'react';
+import { Action, failed, setValue, State } from '@/presentation/contact/mvvm/view-models/contact.reducer';
 
 /**
  * 入力フォームコンポーネント
@@ -72,14 +74,34 @@ export default function Input({
                     <div>事業所：</div>
                     <div className="flex flex-col gap-1">
                         <div>
-                            <input type="text" className="w-32 border-2 border-black" />
-                            <ButtonMin>住所検索</ButtonMin>
+                            <input
+                                type="text"
+                                value={state.formData.zipcode}
+                                onChange={(e) => setValue(dispatch, 'zipcode', e.target.value)}
+                                placeholder="郵便番号"
+                                className="w-32 border-2 border-black"
+                            />
+                            <ButtonMin onClick={() => handleSearch(state, dispatch, () => failed(dispatch))}>
+                                住所検索
+                            </ButtonMin>
                         </div>
                         <div>
-                            <input type="text" className="w-80 border-2 border-black" />
+                            <input
+                                type="text"
+                                value={state.formData.address1}
+                                onChange={(e) => setValue(dispatch, 'address1', e.target.value)}
+                                placeholder="都道府県、市区町村、町域"
+                                className="w-80 border-2 border-black"
+                            />
                         </div>
                         <div>
-                            <input type="text" className="w-80 border-2 border-black" />
+                            <input
+                                type="text"
+                                value={state.formData.address2}
+                                onChange={(e) => setValue(dispatch, 'address2', e.target.value)}
+                                placeholder="以降の住所"
+                                className="w-80 border-2 border-black"
+                            />
                         </div>
                     </div>
                 </div>

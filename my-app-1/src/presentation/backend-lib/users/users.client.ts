@@ -28,6 +28,7 @@ export async function requestUsers(req: UsersRequest): Promise<Users> {
     };
 
     const res = await client.send(config);
+    // TODO: データなしやエラーの場合
     const resUsers = deserUtil.withErrorHandling(() => deserialize(res.rawBody), { req: config, res });
     const users: Users = {
         ...resUsers,

@@ -17,6 +17,9 @@ export type ContactParams = {
 export const FormKeys = {
     name: 'name',
     email: 'email',
+    zipcode: 'zipcode',
+    address1: 'address1',
+    address2: 'address2',
     body: 'body',
 } as const;
 export type FormKeys = (typeof FormKeys)[keyof typeof FormKeys];
@@ -24,19 +27,22 @@ export type FormKeys = (typeof FormKeys)[keyof typeof FormKeys];
 /**
  * お問い合わせ入力内容
  */
-export type ContactBody = {
-    name: string;
-    email: string;
-    body: string;
-};
+// export type ContactBody = {
+//     name: string;
+//     email: string;
+//     zipcode?: string;
+//     address1?: string;
+//     address2?: string;
+//     body: string;
+// };
 
-/**
- * Route Handlerで受け取る値
- */
-// TODO: これは共通? -> ボディが無いルートもある
-export type RouteContext = {
-    body: ContactBody;
-};
+// /**
+//  * Route Handlerで受け取る値
+//  */
+// // TODO: これは共通? -> ボディが無いルートもある
+// export type RouteContext = {
+//     body: ContactBody;
+// };
 
 /**
  * お問い合わせフォームのRESULT型

@@ -1,9 +1,9 @@
-import 'server-only';
+// import 'server-only';    // ZipCloudでクライアントサイドから直接fetchするためクライアントサイドでもデリシアイズする
 
 import { ZodError } from 'zod';
 
 import { applicationError } from '@/presentation/_system/error/error.factories';
-import logger from '@/presentation/_system/logging/logger.s';
+// import logger from '@/presentation/_system/logging/logger.s';
 
 const logPrefix = 'deserialize.zod.ts: ';
 
@@ -24,7 +24,7 @@ function handleError(err: unknown): never {
     if (err instanceof ZodError) {
         const props: Record<string, unknown> = {};
         props['name'] = err.constructor.name;
-        logger.error(logPrefix + props.message);
+        // logger.error(logPrefix + props.message);
         throw applicationError({
             message: 'Zodのデシリアライズに失敗しました。',
             cause: err,

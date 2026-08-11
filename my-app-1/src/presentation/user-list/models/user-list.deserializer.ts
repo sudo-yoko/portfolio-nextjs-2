@@ -1,3 +1,7 @@
+//
+// デシリアライザ
+// Type-First（型からスキーマを生成）設計
+//
 import 'server-only';
 
 import { Type } from '@sinclair/typebox';

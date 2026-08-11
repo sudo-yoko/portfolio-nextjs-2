@@ -24,7 +24,7 @@ export function printf({ logPrefix, stdout }: { logPrefix: string; stdout: boole
     };
 }
 
-export function errLog(error: unknown) {
+export function errlog(error: unknown) {
     const args: Parameters<typeof formatError>[0] = {};
     args.error = error;
     if (isCustomError(error)) {
