@@ -1,12 +1,13 @@
+// Type-First設計
 import { Type } from '@sinclair/typebox';
 import { Value } from '@sinclair/typebox/value';
 
 import { Deserializer } from '@/presentation/_system/client/client.deserializer';
 import { tbSchema, tbUtil } from '@/presentation/_system/io/deserialize.typebox';
+import { normalize, RawZipCloudResponseOk } from '@/presentation/backend-lib/zipcloud/zipcloud.normalizer';
 import {
     ZipCloudResponse,
     ZipCloudResponseError,
-    ZipCloudResponseOk,
     ZipCloudResponseStatus,
     ZipCloudResult,
 } from '@/presentation/backend-lib/zipcloud/zipcloud.types';
@@ -29,7 +30,7 @@ function withTypeBox(): Deserializer<ZipCloudResponse> {
             kana3: Type.String(),
         }),
     );
-    const okSchema = tbSchema<ZipCloudResponseOk>(
+    const okSchema = tbSchema<RawZipCloudResponseOk>(
         Type.Object({
             status: Type.Literal(200),
             results: Type.Union([Type.Array(resultSchema), Type.Null()]),
@@ -43,11 +44,12 @@ function withTypeBox(): Deserializer<ZipCloudResponse> {
     );
     const deserializer: Deserializer<ZipCloudResponse> = (rawBody) => {
         const json: unknown = JSON.parse(rawBody);
-        console.log('★' + JSON.stringify(json, null, 2));
         return tbUtil.withErrorHandling(() => {
             const status = Value.Decode(statusSchema, json);
             if (status.status === 200) {
-                return Value.Decode(okSchema, json);
+                const rawData = Value.Decode(okSchema, json);
+                const normalized = normalize(rawData);
+                return normalized;
             } else {
                 return Value.Decode(errorSchema, json);
             }

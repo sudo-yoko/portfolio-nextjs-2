@@ -16,14 +16,6 @@ const RouteBodySchema = z.object({
     address2: z.string(),
     body: z.string(),
 });
-export type RouteBody = z.infer<typeof RouteBodySchema>;
-
-/**
- * Route Handlerで受け取る値
- */
-export type RouteContext = {
-    body: RouteBody;
-};
 
 // export type BodyParser<T> = (rawBody: string) => T;
 // export type RouteDeserializer = (req: Request) => Promise<RouteContext>;
@@ -45,3 +37,12 @@ export async function deserialize(req: Request): Promise<RouteContext> {
 // };
 
 // export const deserialize: RouteDeserializer = withZod();
+
+export type RouteBody = z.infer<typeof RouteBodySchema>;
+
+/**
+ * Route Handlerで受け取る値
+ */
+export type RouteContext = {
+    body: RouteBody;
+};
