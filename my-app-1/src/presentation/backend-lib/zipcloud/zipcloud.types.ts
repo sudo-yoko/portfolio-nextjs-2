@@ -41,7 +41,8 @@ export type ZipCloudResponseOk = ZipCloudResponseStatus & {
     results: ZipCloudResult[];
 };
 export type ZipCloudResponseError = ZipCloudResponseStatus & {
-    status: 400 | 500;
+    // status: 400 | 500;
+    status: Exclude<number, 200>;
     message: string;
 };
 export type ZipCloudResult = {

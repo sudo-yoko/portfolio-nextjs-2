@@ -58,18 +58,18 @@ export async function handleSearch(
     await withAdviceAsync(() => _(), onAbort);
 
     async function _() {
-        const req: ZipCloudRequest = {
-            zipcode: state.formData.zipcode,
-        };
-        const result = await requestAddress(req);
-        if (result.status === 200) {
-            if (result.results === null) {
-                setValue(dispatch, 'address1', '');
-            } else {
-                const add = result.results[0];
-                setValue(dispatch, 'address1', add.address1 + add.address2 + add.address3);
-            }
-        }
+        // const req: ZipCloudRequest = {
+        //     zipcode: state.formData.zipcode,
+        // };
+        // const result = await requestAddress(req);
+        // if (result.status === 200) {
+        //     if (result.results === null) {
+        //         setValue(dispatch, 'address1', '');
+        //     } else {
+        //         const add = result.results[0];
+        //         setValue(dispatch, 'address1', add.address1 + add.address2 + add.address3);
+        //     }
+        // }
     }
 }
 

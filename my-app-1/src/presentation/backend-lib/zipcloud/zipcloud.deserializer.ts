@@ -4,7 +4,10 @@ import { Value } from '@sinclair/typebox/value';
 
 import { Deserializer } from '@/presentation/_system/client/client.deserializer';
 import { tbSchema, tbUtil } from '@/presentation/_system/io/deserialize.typebox';
-import { normalize, RawZipCloudResponseOk } from '@/presentation/backend-lib/zipcloud/zipcloud.normalizer';
+import {
+    normalizeStructure,
+    RawZipCloudResponseOk,
+} from '@/presentation/backend-lib/zipcloud/zipcloud.normalizer';
 import {
     ZipCloudResponse,
     ZipCloudResponseError,
@@ -38,7 +41,8 @@ function withTypeBox(): Deserializer<ZipCloudResponse> {
     );
     const errorSchema = tbSchema<ZipCloudResponseError>(
         Type.Object({
-            status: Type.Union([Type.Literal(400), Type.Literal(500)]),
+            // status: Type.Union([Type.Literal(400), Type.Literal(500)]),
+            status: Type.Intersect([Type.Number(), Type.Not(Type.Literal(200))]),
             message: Type.String(),
         }),
     );
@@ -48,7 +52,7 @@ function withTypeBox(): Deserializer<ZipCloudResponse> {
             const status = Value.Decode(statusSchema, json);
             if (status.status === 200) {
                 const rawData = Value.Decode(okSchema, json);
-                const normalized = normalize(rawData);
+                const normalized = normalizeStructure(rawData);
                 return normalized;
             } else {
                 return Value.Decode(errorSchema, json);
