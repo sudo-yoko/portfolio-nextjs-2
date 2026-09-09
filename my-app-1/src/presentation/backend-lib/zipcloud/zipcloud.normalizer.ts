@@ -30,7 +30,7 @@ export type RawZipCloudResponseOk = Prettify<
  * 型の変換（構造の正規化）
  */
 export function normalizeStructure(rawData: RawZipCloudResponseOk): ZipCloudResponseOk {
-    // resultsがnullの場合は空文字にする
+    // resultsがnullの場合は空の配列にする
     const normalized: ZipCloudResponseOk = {
         ...rawData,
         results: rawData.results ?? [],

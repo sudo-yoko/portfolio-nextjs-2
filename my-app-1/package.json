@@ -14,7 +14,8 @@
     "mock4": "tsx watch __development/mocks/proxy-server.ts",
     "mock5": "tsx watch __development/mocks/web-to-case.ts",
     "mock6": "tsx watch __development/mocks/healthcheck.ts",
-    "dev:mock": "npm-run-all --parallel dev mock1 mock2 mock3 mock4 mock5 mock6",
+    "mock7": "tsx watch __development/mocks/zipcloud.ts",
+    "dev:mock": "npm-run-all --parallel dev mock1 mock2 mock3 mock4 mock5 mock6 mock7",
     "start:mock": "npm-run-all --parallel start mock1 mock2 mock3 mock4 mock5"
   },
   "dependencies": {

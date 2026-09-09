@@ -2,6 +2,7 @@ import 'client-only';
 
 import client from '@/presentation/_system/client/client.c';
 import { Method, RequestConfig } from '@/presentation/_system/client/client.types';
+import { formatError } from '@/presentation/_system/error/error.helper.stringify';
 import { deserUtil } from '@/presentation/_system/io/deserialize.utils';
 import logger from '@/presentation/_system/logging/logger.c';
 import { toQueryParams } from '@/presentation/_system/types/search-params';
@@ -19,6 +20,8 @@ export async function requestAddress(req: ZipCloudRequest): Promise<ZipCloudResp
     const { zipcode, limit } = req;
     const config: RequestConfig = {
         url: 'https://zipcloud.ibsnet.co.jp/api/search',
+        // url: 'http://localhost:3007/zipcloud/internal-server-error',
+        // url: 'http://localhost:3007/zipcloud/not-found',
         method: Method.GET,
         query: toQueryParams({ zipcode, limit }),
         validateStatus: () => true,
@@ -34,12 +37,19 @@ export async function requestAddress(req: ZipCloudRequest): Promise<ZipCloudResp
             });
             if (deserialized.status !== 200) {
                 void logger.errorAsync(
-                    logPrefix + `zipCloudのエラー ${JSON.stringify({ res, deserialized })}`,
+                    logPrefix +
+                        formatError({
+                            description: 'zipcloudのエラー',
+                            details: { req: config, res, deserialized },
+                        }).all,
                 );
             }
             return deserialized;
         } else {
-            void logger.errorAsync(logPrefix + `zipCloudのエラー ${JSON.stringify(res)}`);
+            void logger.errorAsync(
+                logPrefix +
+                    formatError({ description: 'zipcloudのエラー', details: { req: config, res } }).all,
+            );
             const deserialized: ZipCloudResponseError = { status: res.status, message: res.rawBody };
             return deserialized;
         }
