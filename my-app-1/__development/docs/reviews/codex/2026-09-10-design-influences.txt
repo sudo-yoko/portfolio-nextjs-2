@@ -1,0 +1,128 @@
+設計・実装の思想と、他言語・フレームワークとの類似性の評価
+評価日：2026-09-10
+
+この実装は、「Java／.NET 系の責務分離・共通基盤の設計を、React の関数と Elm 系の状態管理で組み立てたもの」に近いと評価します。
+
+テストコードと min・small・standard は対象外とし、MVVM 実装とその共通基盤を確認しました。以下はコードから判断した類似性であり、作者が実際に影響を受けた技術の断定ではありません。
+コードの参照パスは my-app-1 を基準としています。
+
+近い言語・フレームワーク／思想と近さ
+
+・Elm／MVU、Redux 系：非常に強い
+  State・Action・Reducer による一方向の状態更新。
+・Java／Spring・AspectJ：強い
+  Aspect・Advice による共通処理の集約。
+・C#／WPF・.NET MVVM：強い
+  表示、画面状態、操作処理の責務分離。
+・F#、Rust：強いが局所的
+  判別可能なユニオンによる結果の表現。
+・Java／.NET の層化設計、Ports and Adapters：中〜強
+  Interactor、通信インターフェース、実装の差し替え。
+・GoF の Decorator・Strategy・Factory：中程度
+  継承より合成による機能追加・実装選択。
+
+1. 状態管理の実体は、Elm／MVU に非常に近い
+
+contact.reducer.ts では、操作を Action のユニオン型で表し、Reducer が現在の状態と操作から新しい状態を返しています。contact.main.tsx は、その状態に応じて画面を描画します。
+
+対応関係は明確です。
+・State → Elm の Model
+・Action → Elm の Msg
+・reducer → Elm の update
+・React コンポーネント → Elm の view
+
+これは Elm の「Model・View・Update」という構造に強く対応します。
+Elm 公式解説：https://guide.elm-lang.org/architecture/
+
+特に、input → confirm → sending → complete のように画面を状態として表現する点から、UI を状態遷移として考える思想が読み取れます。
+
+ただし、非同期処理は usePagination の useEffect やイベントハンドラーが担っています。Elm のコマンド機構まで再現しているわけではなく、React 上で MVU 的な設計を行っています。
+
+コードの根拠：
+・src/presentation/contact/mvvm/view-models/contact.reducer.ts:81
+・src/presentation/contact/mvvm/views/contact.main.tsx:19
+・src/presentation/users/mvvm/view-models/users.use-pagination.2.ts:37
+
+2. 共通処理の設計には、Spring／AspectJ の色が濃い
+
+aspect.route-handler.ts は、処理本体を次の関数で包んでいます。
+
+Logging → Response変換 → ErrorHandling → Auth → 処理本体
+
+単にファイル名が似ているだけでなく、認証・ログ・例外処理という横断的な関心事を、業務処理の外側に集約しています。これは Spring／AspectJ の Around Advice と近い発想です。
+Spring 公式解説：https://docs.spring.io/spring/reference/core/aop.html
+
+相違点は、Spring のプロキシやポイントカットによる適用ではなく、withAdviceAsync(() => ...) を明示的に呼ぶことです。
+
+AOP の思想を、高階関数によるラッパーとして実装していると評価できます。この部分は、他言語の設計との類似性が特に強い箇所です。
+
+コードの根拠：
+・src/presentation/_system/aspect/aspect.route-handler.ts:18
+
+3. MVVM の責務分離は、C#／WPF 系に近い
+
+views・view-models・models を分け、表示から操作処理や入力検証を取り出す構成には、WPF などの MVVM と共通する思想があります。WPF 系では、画面と ViewModel をデータバインディングやコマンドで接続します。
+Microsoft 公式解説：https://learn.microsoft.com/en-us/windows/apps/develop/data-binding/data-binding-and-mvvm
+
+このリポジトリでは、それに相当する役割が分散しています。
+・画面状態：State と Reducer
+・操作：イベントハンドラー
+・状態と副作用の調整：カスタムフック
+・表示への接続：props と dispatch
+
+例えば users.component.main.tsx は、フックから状態を取得し、操作をハンドラーに委譲しています。
+
+したがって、WPF 的な責務分離を、関数ベースの ViewModel として React に適応した設計です。ViewModel のクラス、プロパティ変更通知、ICommand をそのまま移植した形ではありません。
+
+コードの根拠：
+・src/presentation/users/mvvm/views/users.component.main.tsx:20
+
+4. 結果型は F#／Rust に近く、特に F# 的な多分岐の表現
+
+result.types.ts は、処理結果を次の選択肢として表しています。
+
+type RESULT<T = unknown> =
+    OkEmpty | OkData<T> | Invalid<string> | Retryable | Aborted;
+
+成功、入力不正、再試行可能、処理中断を、データを持つ型の選択肢として扱う構造です。これは F# の判別共用体や Rust の Result と近い発想です。
+F# 公式解説：https://learn.microsoft.com/en-us/dotnet/fsharp/language-reference/discriminated-unions
+Rust 公式解説：https://doc.rust-lang.org/std/result/
+
+厳密には、成功／失敗の二択である Rust の標準 Result より、複数の業務上の結果を直接列挙する F# の判別共用体に、形が近いです。
+
+また、送信処理は入力不正や再試行を戻り値で処理し、想定外の結果を例外に変換しています。「結果を値で扱う関数型の発想」と「例外を境界で処理する業務アプリの発想」が共存しています。
+
+コードの根拠：
+・src/presentation/_system/result/result.types.ts:92
+・src/presentation/contact/mvvm/view-models/contact.event-handler.ts:90
+
+5. BFF と共通基盤は、Java／.NET の層化設計に近い
+
+contact.interactor.ts は、入力検証とバックエンド呼び出しを一つのユースケースとしてまとめています。その外側に Route Handler と Server Action があり、入口の形式と処理本体を分離しています。
+
+さらに、Client 型を共通契約とし、Factory が Axios・Fetch・Undici などを切り替えます。Logger 型にも同じ抽象化があります。
+
+ここには、外部ライブラリをアプリケーション固有のインターフェースで包み、交換可能にする思想があります。
+
+ただし、Interactor が具体的なクライアント関数を直接 import しているため、依存方向まで徹底した Clean Architecture と呼ぶには限定があります。Clean Architecture では、コアがインフラの具体実装に依存しないことが重要です。
+Microsoft のアーキテクチャ解説：https://learn.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/common-web-application-architectures
+
+評価としては、層化設計を中心に、Ports and Adapters の考え方を通信・ログ基盤へ取り入れているという表現が適切です。
+
+コードの根拠：
+・src/presentation/contact/mvvm/bff/contact.interactor.ts:19
+・src/presentation/_system/client/client.types.ts:6
+・src/presentation/_system/client/client.factory.s.ts:14
+・src/presentation/_system/logging/logging.types.ts:42
+
+6. UI 部品にも、合成を重視する設計がある
+
+ToastCore は表示内容を作り、ToastFade がアニメーションを追加します。
+
+これは Decorator 的な責務の分け方です。実現手段は React の render props ですが、「核となる機能に、外側から振る舞いを足す」という設計判断が、AOP や通信アダプターの構成とも一貫しています。
+
+コードの根拠：
+・src/presentation/_system/components/toast.core.tsx:9
+・src/presentation/_system/components/toast.core.decorator.fade.tsx:28
+
+全体から最も強く読み取れるのは、境界を明示し、共通処理を集約し、状態と結果を型で表現する思想です。責務の配置は Java／C# 系、状態更新とデータ表現は Elm／F# 系、実装手段は React／TypeScript という組み合わせになっています。
