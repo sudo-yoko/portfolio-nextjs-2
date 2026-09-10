@@ -1,0 +1,71 @@
+このリポジトリの見どころは、MVVM の画面設計と、業務アプリで繰り返し必要になる共通基盤を、一つの構成として実装している点です。特に、責務分離・エラー処理・外部 API との境界設計を評価できます。
+
+テストコードは評価対象から除外しました。複数の設計がある機能は MVVM のみを対象に、そこから利用される共通基盤も確認しています。以下はコードを読んだ評価で、実動作の検証は行っていません。
+
+※参照パスはリポジトリルートからの相対パスです。
+
+1. MVVM の分離が、実際の処理の分担に反映されている
+
+お問い合わせでは、View が表示、Reducer が状態更新、イベントハンドラーが入力検証と送信結果の解釈、Interactor がサーバー側の処理を担当しています。
+
+contact.main.tsx を見ると、親画面は状態に応じたコンポーネントの選択に集中しています。contact.interactor.ts も、検証とバックエンド呼び出しの順序を素直に読めます。
+
+参照：
+- my-app-1/src/presentation/contact/mvvm/views/contact.main.tsx:19
+- my-app-1/src/presentation/contact/mvvm/bff/contact.interactor.ts:19
+
+変更内容に応じて、修正すべき場所を判断しやすい設計です。React の関数・Hooks・Reducer でこの分離を実現している点もよいです。
+
+2. 正常・入力不備・再試行・異常終了を、共通の結果型として扱っている
+
+result.types.ts では、結果を判別可能なユニオン型で定義しています。お問い合わせの送信処理では、その分類を「完了へ進む」「入力へ戻す」「再試行メッセージを出す」という画面の振る舞いにつなげています。
+
+参照：
+- my-app-1/src/presentation/_system/result/result.types.ts:92
+- my-app-1/src/presentation/contact/mvvm/view-models/contact.event-handler.ts:90
+
+エラーを捕まえるだけでなく、利用者が次にどう行動できるかまで設計している点は、業務アプリのポートフォリオとして強い部分です。
+
+3. 横断的な処理を、アプリケーションの境界に集約している
+
+Route Handler の共通処理では、ログ・レスポンス変換・例外処理・認証呼び出しを合成しています。Server Actions にも対応する仕組みがあります。
+
+参照：
+- my-app-1/src/presentation/_system/aspect/aspect.route-handler.ts:18
+
+また、お問い合わせでは Route Handler と Server Action が同じ Interactor を呼んでいます。通信経路を変更するときに、ユースケースの処理を共有できる構造です。
+
+複数画面で処理方針をそろえることを意識した設計として評価できます。ただし、認証自体は現在、環境変数によるエラー発生用の実装であり、実際の認証機能が完成しているわけではありません。
+
+4. 外部データの構造検証と、業務上の入力検証を分けている
+
+お問い合わせのデシリアライザは、Zod で受信データの構造を検証し、スキーマから型を導出しています。一方、必須・メール形式・文字数は Validator が担当し、クライアントとサーバーの双方から利用されています。
+
+参照：
+- my-app-1/src/presentation/contact/mvvm/models/contact.deserializer.ts:11
+- my-app-1/src/presentation/contact/mvvm/models/contact.validator.ts:9
+
+「データとして扱えるか」と「入力内容として受け付けられるか」を分ける判断が適切です。検証ルールの重複や、フロントとサーバーの不一致を抑えられます。
+
+5. 共通化の対象が、実務で変更されやすい部分に向いている
+
+通信クライアントの Factory は、共通インターフェースの下で Axios・Fetch・Undici などを選択できる構成です。ページャーも、取得関数を受け取り、検索条件やページ位置を保持する形で汎用化されています。
+
+参照：
+- my-app-1/src/presentation/_system/client/client.factory.s.ts:14
+- my-app-1/src/presentation/_system/pagination/mvvm/models/pagination.pager.ts:29
+
+通信方式や一覧データの種類を画面から切り離す方向性はよいです。特にページャーには、データ件数の変化に応じて最終ページへ補正する配慮もあります。
+
+一方、設計の意図に比べて、実装の仕上がりにはまだ差があります。評価上、特に気になったのは次の点です。
+
+- 結果型の実行時検証が不十分です。result.deserializer.ts は tag のみを確認しています。例えば violations のない invalid も通るため、型が示す保証と実際の検証が一致していません。
+  参照：my-app-1/src/presentation/_system/result/result.deserializer.ts:10
+
+- 非同期処理の競合への対処が不足しています。実際に使用されるページネーションの Hook には、古いリクエスト結果を無視する仕組みがありません。また、サーバー側の入力エラーを反映する処理では検索中の状態を解除しておらず、処理中表示が残る経路があります。
+  参照：my-app-1/src/presentation/users/mvvm/view-models/users.use-pagination.2.ts:44
+
+- 通信抽象化の契約に未実装部分があります。共通インターフェースは headers を受け取りますが、現在選択されている Axios アダプターはそれを転送していません。交換可能な設計を成立させるには、各実装で契約をそろえる必要があります。
+  参照：my-app-1/src/presentation/_system/client/internal/axios-adapter.ts:37
+
+ポートフォリオとしては、「業務画面を継続的に追加・変更できるフロントエンド基盤を設計する力」が伝わるリポジトリです。特に MVVM、結果型、境界での共通処理の三つは、具体的な設計判断として説明する価値があります。README にその狙いと代表的な処理の流れを示すと、現在コードの中にある強みが、初見の評価者にも伝わりやすくなります。
