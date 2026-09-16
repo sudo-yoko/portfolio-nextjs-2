@@ -1,0 +1,53 @@
+//
+// お問い合わせフォーム バックエンド呼び出し
+//
+import 'client-only';
+
+import client from '@/presentation/_system/client/client.c';
+import { CONTENT_TYPE_APPLICATION_JSON_UTF8 } from '@/presentation/_system/client/client.constants';
+import { Method } from '@/presentation/_system/client/client.types';
+import { deserialize } from '@/presentation/_system/result/result.deserializer';
+import { FormData } from '@/presentation/_system/validation/validation.types';
+import { post } from '@/presentation/contact/mvva/bff/contact.action';
+import { ContactResult, FormKeys } from '@/presentation/contact/mvva/models/contact.types';
+
+/**
+ * バックエンド呼び出しのインターフェース型
+ */
+type Send = {
+    (formData: FormData<FormKeys>): Promise<ContactResult<FormKeys>>;
+};
+
+/**
+ * ServerActions経由バックエンド呼び出し
+ */
+const _viaAction: Send = async (formData) => {
+    const result = await post(formData);
+    // return parseFromResult<FormKeys>(result);
+    return result as ContactResult<FormKeys>;
+};
+
+/**
+ * RouteHandlers経由バックエンド呼び出し
+ */
+const viaRoute: Send = async (formData) => {
+    // const { name, email, body } = formData;
+    const res = await client.send({
+        url: '/api/bff/contact/mvva',
+        method: Method.POST,
+        headers: {
+            ...CONTENT_TYPE_APPLICATION_JSON_UTF8,
+        },
+        //body: { name, email, body }, // オブジェクトのまま（JSON.stringify不要）で渡す
+        body: formData,
+        // body: {}
+    });
+    // return parseFromText<FormKeys>(res.rawBody);
+    const result = deserialize(res.rawBody);
+    return result as ContactResult<FormKeys>;
+};
+
+/**
+ * お問い合わせを送信する
+ */
+export const send: Send = viaRoute;

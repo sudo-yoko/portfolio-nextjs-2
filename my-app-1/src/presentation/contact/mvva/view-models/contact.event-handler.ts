@@ -1,0 +1,124 @@
+//
+// お問い合わせフォーム イベントハンドラー
+//
+'use client';
+
+import { withAdviceAsync } from '@/presentation/_system/aspect/aspect.client';
+import { resultError } from '@/presentation/_system/error/error.factories';
+import { isInvalid, isOkEmpty, isRetryable } from '@/presentation/_system/result/result.helpers';
+import { hasError } from '@/presentation/_system/validation/validation.helpers';
+import { Violations } from '@/presentation/_system/validation/validation.types';
+import { requestAddress } from '@/presentation/backend-lib/zipcloud/zipcloud.client';
+import { ZipCloudRequest } from '@/presentation/backend-lib/zipcloud/zipcloud.types';
+import { send } from '@/presentation/contact/mvva/models/contact.client';
+import { FormKeys } from '@/presentation/contact/mvva/models/contact.types';
+import { validate } from '@/presentation/contact/mvva/models/contact.validator';
+import {
+    Action,
+    setRetryable,
+    setValue,
+    setViolations,
+    State,
+    toComplete,
+    toConfirm,
+    toInput,
+} from '@/presentation/contact/mvva/view-models/contact.reducer';
+
+/**
+ * バリデーションエラーが取得されている場合にUIに反映する。
+ */
+export const applyViolations = (
+    violations: Violations<FormKeys>,
+    dispatch: React.ActionDispatch<[action: Action]>,
+) => {
+    if (violations && hasError(violations)) {
+        setViolations(dispatch, violations);
+    }
+};
+
+/**
+ * 次へボタンを押したときの処理
+ */
+export function handleNext(state: State, dispatch: React.ActionDispatch<[action: Action]>) {
+    // バリデーション
+    ((violations: Violations<FormKeys>) => {
+        if (hasError(violations)) {
+            setViolations(dispatch, violations);
+            return;
+        }
+        toConfirm(dispatch);
+    })(validate(state.formData));
+}
+
+export async function handleSearch(
+    state: State,
+    dispatch: React.ActionDispatch<[action: Action]>,
+    onAbort: () => void,
+) {
+    await withAdviceAsync(() => _(), onAbort);
+
+    async function _() {
+        // const req: ZipCloudRequest = {
+        //     zipcode: state.formData.zipcode,
+        // };
+        // const result = await requestAddress(req);
+        // if (result.status === 200) {
+        //     if (result.results === null) {
+        //         setValue(dispatch, 'address1', '');
+        //     } else {
+        //         const add = result.results[0];
+        //         setValue(dispatch, 'address1', add.address1 + add.address2 + add.address3);
+        //     }
+        // }
+    }
+}
+
+/**
+ * 送信中が表示中の処理
+ */
+// TODO: handleSubmitにする
+export async function submit(
+    state: State,
+    dispatch: React.ActionDispatch<[action: Action]>,
+    onAbort: () => void,
+) {
+    const location = 'contact.handler.event.ts#submit';
+
+    // エラーハンドリングを追加して処理を実行する。
+    await withAdviceAsync(() => _(), onAbort);
+
+    async function _() {
+        // バックエンド呼び出し
+        const result = await send(state.formData);
+        // 正常
+        if (isOkEmpty(result)) {
+            toComplete(dispatch);
+            return;
+        }
+        // バリデーションエラーあり
+        if (isInvalid(result)) {
+            // if (isReject(result) && result.label === REJECTION_LABELS.VIOLATION) {
+            const violations = result.violations;
+            if (hasError(violations)) {
+                setViolations(dispatch, violations);
+                toInput(dispatch);
+                return;
+            }
+        }
+        // 再試行可能なエラー
+        if (isRetryable(result)) {
+            setRetryable(dispatch, result.retryMsg);
+            toInput(dispatch);
+            return;
+        }
+        throw resultError({ result, location });
+    }
+}
+
+/**
+ * リトライメッセージを閉じる
+ */
+export function dismissRetry(dispatch: React.ActionDispatch<[action: Action]>) {
+    setRetryable(dispatch, []);
+    toInput(dispatch);
+}

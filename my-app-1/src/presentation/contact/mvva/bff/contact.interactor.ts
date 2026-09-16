@@ -1,0 +1,41 @@
+//
+// お問い合わせの送信 バックエンド呼び出しのユースケース
+//
+import 'server-only';
+
+import logger from '@/presentation/_system/logging/logger.s';
+import { invalid, okEmpty } from '@/presentation/_system/result/result.factories';
+import { hasError } from '@/presentation/_system/validation/validation.helpers';
+import { FormData } from '@/presentation/_system/validation/validation.types';
+import { sendWebToCase } from '@/presentation/backend-lib/web-to-case/webToCase.client';
+import { ContactResult, FormKeys } from '@/presentation/contact/mvva/models/contact.types';
+import { validate } from '@/presentation/contact/mvva/models/contact.validator';
+
+const logPrefix = 'contact.interactor.ts: ';
+
+/**
+ * バックエンド呼び出しユースケースの実行
+ */
+export async function execute(formData: FormData<FormKeys>): Promise<ContactResult<FormKeys>> {
+    logger.info(logPrefix + `formData=${JSON.stringify(formData)}`);
+    //
+    // バリデーション
+    //
+    const violations = validate(formData);
+    if (hasError(violations)) {
+        logger.info(logPrefix + `validation error. ${JSON.stringify(violations)}`);
+        //return reject(REJECTION_LABELS.VIOLATION, violations);
+        return invalid(violations);
+    }
+    // 不正なRESULTを返すコード
+    // return {
+    // tag: Tag.Invalid,
+    // violations: [],
+    // };
+    //
+    // 送信
+    //
+    // await send({ ...formData });
+    await sendWebToCase(formData);
+    return okEmpty();
+}

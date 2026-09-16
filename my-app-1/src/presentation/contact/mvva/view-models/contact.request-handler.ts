@@ -1,0 +1,22 @@
+//
+// お問い合わせフォーム リクエストハンドラー
+//
+import 'server-only';
+
+// import debug from '@/presentation/_system/logging/debug';
+import logger from '@/presentation/_system/logging/logger.s';
+import { getStringParam, SearchParams } from '@/presentation/_system/types/search-params.next';
+import { ContactParams } from '@/presentation/contact/mvva/models/contact.types';
+
+const logPrefix = '/contact/mvva/view-models/request-handler.ts: ';
+
+export async function handleRequest(props: { searchParams?: SearchParams }): Promise<ContactParams> {
+    // クエリパラメータを取得する
+    // const params: ContactParams = await getSearchParams(props.searchParams, 'category', 'from');
+    const category = await getStringParam(props.searchParams, 'category');
+    const from = await getStringParam(props.searchParams, 'from');
+    const params: ContactParams = { category, from };
+    logger.debug('winston debug test');
+    logger.info(logPrefix + `category=${params.category}, from=${params.from}`);
+    return params;
+}

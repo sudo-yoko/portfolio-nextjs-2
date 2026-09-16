@@ -1,0 +1,24 @@
+//
+// お問い合わせの送信 サーバーアクション
+//
+'use server';
+
+import { withAdviceAsync } from '@/presentation/_system/aspect/aspect.server-action';
+import logger from '@/presentation/_system/logging/logger.s';
+import { RESULT } from '@/presentation/_system/result/result.types';
+import { FormData } from '@/presentation/_system/validation/validation.types';
+import { execute } from '@/presentation/contact/mvva/bff/contact.interactor';
+import { FormKeys } from '@/presentation/contact/mvva/models/contact.types';
+
+const logPrefix = 'contact.action.ts: ';
+
+export async function post(formData: FormData<FormKeys>): Promise<RESULT> {
+    return await withAdviceAsync(() => _());
+
+    async function _() {
+        logger.info(logPrefix + `formData=${JSON.stringify(formData)}`);
+        const result = await execute(formData);
+        // return JSON.stringify(result);
+        return result;
+    }
+}
