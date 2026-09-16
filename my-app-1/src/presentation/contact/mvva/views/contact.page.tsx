@@ -5,7 +5,7 @@ import 'server-only';
 
 import { withAdviceAsync } from '@/presentation/_system/aspect/aspect.server';
 import { SearchParams } from '@/presentation/_system/types/search-params.next';
-import { handleRequest } from '@/presentation/contact/mvva/view-models/contact.request-handler';
+import { handleRequest } from '@/presentation/contact/mvva/server/contact.request-handler';
 import Main from '@/presentation/contact/mvva/views/contact.main';
 
 export default async function Page(props: { searchParams?: SearchParams }) {

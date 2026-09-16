@@ -4,7 +4,7 @@ import { withAdviceAsync } from '@/presentation/_system/aspect/aspect.route-hand
 import { deserUtil } from '@/presentation/_system/io/deserialize.utils';
 import logger from '@/presentation/_system/logging/logger.s';
 import { execute } from '@/presentation/contact/mvva/bff/contact.interactor';
-import { deserialize } from '@/presentation/contact/mvva/models/contact.deserializer';
+import { deserialize } from '@/presentation/contact/mvva/bff/contact.deserializer';
 
 const logPrefix = 'contact.route.ts: ';
 

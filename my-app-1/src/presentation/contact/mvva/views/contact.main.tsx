@@ -6,7 +6,7 @@ import {
     reducer,
     reset,
     Status,
-} from '@/presentation/contact/mvva/view-models/contact.reducer';
+} from '@/presentation/contact/mvva/view-actions/contact.reducer';
 import Complete from '@/presentation/contact/mvva/views/contact.complete';
 import Confirm from '@/presentation/contact/mvva/views/contact.confirm';
 import Input from '@/presentation/contact/mvva/views/contact.input';

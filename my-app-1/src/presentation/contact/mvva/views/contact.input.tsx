@@ -10,8 +10,8 @@ import {
     dismissRetry,
     handleNext,
     handleSearch,
-} from '@/presentation/contact/mvva/view-models/contact.event-handler';
-import { Action, failed, setValue, State } from '@/presentation/contact/mvva/view-models/contact.reducer';
+} from '@/presentation/contact/mvva/view-actions/contact.event-handler';
+import { Action, failed, setValue, State } from '@/presentation/contact/mvva/view-actions/contact.reducer';
 
 /**
  * 入力フォームコンポーネント

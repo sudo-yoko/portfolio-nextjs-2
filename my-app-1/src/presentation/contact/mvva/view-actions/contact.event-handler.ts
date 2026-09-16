@@ -10,7 +10,7 @@ import { hasError } from '@/presentation/_system/validation/validation.helpers';
 import { Violations } from '@/presentation/_system/validation/validation.types';
 import { requestAddress } from '@/presentation/backend-lib/zipcloud/zipcloud.client';
 import { ZipCloudRequest } from '@/presentation/backend-lib/zipcloud/zipcloud.types';
-import { send } from '@/presentation/contact/mvva/models/contact.client';
+import { send } from '@/presentation/contact/mvva/bff/contact.client';
 import { FormKeys } from '@/presentation/contact/mvva/models/contact.types';
 import { validate } from '@/presentation/contact/mvva/models/contact.validator';
 import {
@@ -22,7 +22,7 @@ import {
     toComplete,
     toConfirm,
     toInput,
-} from '@/presentation/contact/mvva/view-models/contact.reducer';
+} from '@/presentation/contact/mvva/view-actions/contact.reducer';
 
 /**
  * バリデーションエラーが取得されている場合にUIに反映する。

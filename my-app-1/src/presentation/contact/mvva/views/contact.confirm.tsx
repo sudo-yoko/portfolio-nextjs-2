@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/presentation/_system/components/button.decorator.simple';
-import { Action, State, toInput, toSending } from '@/presentation/contact/mvva/view-models/contact.reducer';
+import { Action, State, toInput, toSending } from '@/presentation/contact/mvva/view-actions/contact.reducer';
 
 /**
  * 確認表示コンポーネント

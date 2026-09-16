@@ -1,8 +1,8 @@
 'use client';
 
 import { Processing } from '@/presentation/_system/components/processing';
-import { submit } from '@/presentation/contact/mvva/view-models/contact.event-handler';
-import { Action, State, failed } from '@/presentation/contact/mvva/view-models/contact.reducer';
+import { submit } from '@/presentation/contact/mvva/view-actions/contact.event-handler';
+import { Action, State, failed } from '@/presentation/contact/mvva/view-actions/contact.reducer';
 import React, { useEffect } from 'react';
 
 /**
