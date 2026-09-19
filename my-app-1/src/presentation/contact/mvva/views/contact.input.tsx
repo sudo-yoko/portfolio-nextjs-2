@@ -1,12 +1,9 @@
 'use client';
 
-import { useEffect } from 'react';
-
 import { AutoResizeTextAreaSimple } from '@/presentation/_system/components/autoResizeTextArea.decorator.simple';
 import { Button, ButtonMin } from '@/presentation/_system/components/button.decorator.simple';
 import { ToastError } from '@/presentation/_system/components/toast.feature.error';
 import {
-    applyViolations,
     dismissRetry,
     handleNext,
     handleSearch,
@@ -25,9 +22,10 @@ export default function Input({
 }) {
     // const violationsMap = getViolationsMap(state.violations);   // TODO: stateに追加すれば
 
-    useEffect(() => {
-        applyViolations(state.violations, dispatch);
-    }, [dispatch, state.violations]);
+    // TODO: ↓これ不要では
+    // useEffect(() => {
+    //     applyViolations(state.violations, dispatch);
+    // }, [dispatch, state.violations]);
 
     return (
         <>

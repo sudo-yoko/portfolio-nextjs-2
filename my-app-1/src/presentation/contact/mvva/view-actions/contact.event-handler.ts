@@ -7,16 +7,11 @@ import { withAdviceAsync } from '@/presentation/_system/aspect/aspect.client';
 import { resultError } from '@/presentation/_system/error/error.factories';
 import { isInvalid, isOkEmpty, isRetryable } from '@/presentation/_system/result/result.helpers';
 import { hasError } from '@/presentation/_system/validation/validation.helpers';
-import { Violations } from '@/presentation/_system/validation/validation.types';
-import { requestAddress } from '@/presentation/backend-lib/zipcloud/zipcloud.client';
-import { ZipCloudRequest } from '@/presentation/backend-lib/zipcloud/zipcloud.types';
 import { send } from '@/presentation/contact/mvva/bff/contact.client';
-import { FormKeys } from '@/presentation/contact/mvva/models/contact.types';
 import { validate } from '@/presentation/contact/mvva/models/contact.validator';
 import {
     Action,
     setRetryable,
-    setValue,
     setViolations,
     State,
     toComplete,
@@ -27,27 +22,34 @@ import {
 /**
  * バリデーションエラーが取得されている場合にUIに反映する。
  */
-export const applyViolations = (
-    violations: Violations<FormKeys>,
-    dispatch: React.ActionDispatch<[action: Action]>,
-) => {
-    if (violations && hasError(violations)) {
-        setViolations(dispatch, violations);
-    }
-};
+// TODO: これ不要では？
+// export const applyViolations = (
+//     violations: Violations<FormKeys>,
+//     dispatch: React.ActionDispatch<[action: Action]>,
+// ) => {
+//     if (violations && hasError(violations)) {
+//         setViolations(dispatch, violations);
+//     }
+// };
 
 /**
  * 次へボタンを押したときの処理
  */
 export function handleNext(state: State, dispatch: React.ActionDispatch<[action: Action]>) {
     // バリデーション
-    ((violations: Violations<FormKeys>) => {
-        if (hasError(violations)) {
-            setViolations(dispatch, violations);
-            return;
-        }
-        toConfirm(dispatch);
-    })(validate(state.formData));
+    const violations = validate(state.formData);
+    if (hasError(violations)) {
+        setViolations(dispatch, violations);
+        return;
+    }
+    toConfirm(dispatch);
+    // ((violations: Violations<FormKeys>) => {
+    //     if (hasError(violations)) {
+    //         setViolations(dispatch, violations);
+    //         return;
+    //     }
+    //     toConfirm(dispatch);
+    // })(validate(state.formData));
 }
 
 export async function handleSearch(
@@ -76,7 +78,7 @@ export async function handleSearch(
 /**
  * 送信中が表示中の処理
  */
-// TODO: handleSubmitにする
+// TODO: handleSubmitにする -> イベントハンドラーではないのでhandleにはしない
 export async function submit(
     state: State,
     dispatch: React.ActionDispatch<[action: Action]>,
