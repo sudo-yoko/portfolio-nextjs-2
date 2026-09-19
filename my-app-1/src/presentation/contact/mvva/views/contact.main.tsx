@@ -18,7 +18,7 @@ export default function Main() {
         <div className="flex h-screen w-screen flex-col items-center py-10">
             {state.status === Status.input && <Input state={state} dispatch={dispatch} />}
             {state.status === Status.confirm && <Confirm state={state} dispatch={dispatch} actions={actions} />}
-            {state.status === Status.sending && <Sending state={state} dispatch={dispatch} />}
+            {state.status === Status.sending && <Sending />}
             {state.status === Status.complete && <Complete />}
             {state.status === Status.abort && <ErrorModal onAction={() => reset(dispatch)} />}
         </div>
