@@ -1,59 +1,49 @@
-import { deserialize } from '@/presentation/contact/mvvm/models/contact.deserializer';
-import { printf } from '@/tests/test-logger';
+import { deserialize } from '@/presentation/contact/mvvm/bff/contact.deserializer';
 
-const print = printf({ logPrefix: '[contact.route.parser.test.ts]', stdout: true });
+const body = {
+    name: 'Test User',
+    email: 'test@example.com',
+    zipcode: '1234567',
+    address1: 'Address line 1',
+    address2: 'Address line 2',
+    body: 'Contact message',
+};
+const fields = Object.keys(body) as (keyof typeof body)[];
+const request = (value: unknown) =>
+    new Request('http://localhost:3000', { method: 'POST', body: JSON.stringify(value) });
 
-// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __development/tests/next-jest/presentation/contact/contact.route.parser.test.ts -t 'test1-1'
-test('test1-1', async () => {
-    const body = '{"name":"name-1","email":"email-1","body":"body-1"}';
-    const req = new Request('http://localhost:3000', { method: 'POST', body });
+describe('contact deserializer', () => {
+    test('returns all six required string fields', async () => {
+        await expect(deserialize(request(body))).resolves.toStrictEqual({ body });
+    });
 
-    const parsed = await deserialize(req);
-    print(`[${expect.getState().currentTestName}]`, 'result ->', parsed);
-});
+    test('strips extra fields', async () => {
+        await expect(deserialize(request({ ...body, detail: 'extra' }))).resolves.toStrictEqual({ body });
+    });
 
-// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __development/tests/next-jest/presentation/contact/contact.route.parser.test.ts -t 'test1-2'
-test('test1-2', async () => {
-    const body = '{"name":"name-1","email":"email-1","body":"body-1","detail":"detail-1"}';
-    const req = new Request('http://localhost:3000', { method: 'POST', body });
+    test.each(fields)('accepts an empty string for %s', async (field) => {
+        const input = { ...body, [field]: '' };
+        await expect(deserialize(request(input))).resolves.toStrictEqual({ body: input });
+    });
 
-    const parsed = await deserialize(req);
-    print(`[${expect.getState().currentTestName}]`, 'result ->', parsed);
-});
+    test.each(fields)('rejects a missing %s', async (field) => {
+        const input: Partial<typeof body> = { ...body };
+        delete input[field];
+        await expect(deserialize(request(input))).rejects.toThrow();
+    });
 
-// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __development/tests/next-jest/presentation/contact/contact.route.parser.test.ts -t 'test1-3'
-test('test1-3', async () => {
-    const body = '{"name":"name-1","email":"email-1"}';
-    const req = new Request('http://localhost:3000', { method: 'POST', body });
+    describe.each(fields)('%s must be a string', (field) => {
+        test.each([null, 42, true, [], {}])('rejects %j', async (value) => {
+            await expect(deserialize(request({ ...body, [field]: value }))).rejects.toThrow();
+        });
+    });
 
-    try {
-        await deserialize(req);
-    } catch (e) {
-        print(`[${expect.getState().currentTestName}]`, 'result ->', e);
-    }
-});
+    test.each([null, 5, 'text', []])('rejects a non-object JSON body: %j', async (value) => {
+        await expect(deserialize(request(value))).rejects.toThrow();
+    });
 
-// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __development/tests/next-jest/presentation/contact/contact.route.parser.test.ts -t 'test1-4'
-test('test1-4', async () => {
-    const body = 'name:name-1';
-    const req = new Request('http://localhost:3000', { method: 'POST', body });
-
-    try {
-        await deserialize(req);
-    } catch (e) {
-        print(`[${expect.getState().currentTestName}]`, 'result ->', e);
-    }
-});
-
-// npm exec -- cross-env NODE_OPTIONS=--experimental-vm-modules jest __development/tests/next-jest/presentation/contact/contact.route.parser.test.ts -t 'test1-5'
-test('test1-5', async () => {
-    const body = '5'; // NOTE: これもJSON.parse可能
-    const req = new Request('http://localhost:3000', { method: 'POST', body });
-
-    print(JSON.parse(body));
-    try {
-        await deserialize(req);
-    } catch (e) {
-        print(`[${expect.getState().currentTestName}]`, 'result ->', e);
-    }
+    test('rejects malformed JSON', async () => {
+        const req = new Request('http://localhost:3000', { method: 'POST', body: '{"name":' });
+        await expect(deserialize(req)).rejects.toMatchObject({ name: 'SyntaxError' });
+    });
 });

@@ -1,14 +1,4 @@
 import { Aborted, Invalid, OkEmpty, Retryable } from '@/presentation/_system/result/result.types';
-import { SearchParam } from '@/presentation/_system/types/search-params.next';
-
-/**
- * クエリパラメータ
- */
-export type ContactParams = {
-    category?: SearchParam;
-    from?: SearchParam;
-};
-
 /**
  * 入力フォームのキー
  * お名前、メールアドレス、お問い合わせ内容

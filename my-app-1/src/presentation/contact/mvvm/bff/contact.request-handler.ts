@@ -5,10 +5,10 @@ import 'server-only';
 
 // import debug from '@/presentation/_system/logging/debug';
 import logger from '@/presentation/_system/logging/logger.s';
-import { getStringParam, SearchParams } from '@/presentation/_system/types/search-params.next';
-import { ContactParams } from '@/presentation/contact/mvvm/models/contact.types';
+import { getStringParam, SearchParam, SearchParams } from '@/presentation/_system/types/search-params.next';
+type ContactParams = { category?: SearchParam; from?: SearchParam };
 
-const logPrefix = '/contact/mvvm/view-models/request-handler.ts: ';
+const logPrefix = '/contact/mvvm/bff/request-handler.ts: ';
 
 export async function handleRequest(props: { searchParams?: SearchParams }): Promise<ContactParams> {
     // クエリパラメータを取得する

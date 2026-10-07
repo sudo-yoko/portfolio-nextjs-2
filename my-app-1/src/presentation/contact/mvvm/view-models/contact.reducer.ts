@@ -1,12 +1,11 @@
 //
 // お問い合わせフォーム 状態モデル（ステートマシン）
 //
-'use client';
-
-import { getViolationsMap, initialFormDataCore } from '@/presentation/_system/validation/validation.helpers';
-import { FormData, Violations, ViolationsMap } from '@/presentation/_system/validation/validation.types';
+import { initialFormDataCore } from '@/presentation/_system/validation/validation.helpers';
+import { FormData, Violations } from '@/presentation/_system/validation/validation.types';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
-import React, { Reducer } from 'react';
+import type React from 'react';
+import type { Reducer } from 'react';
 
 /**
  * フォームの値を格納するオブジェクトの定義
@@ -35,7 +34,6 @@ export type State = {
     status: Status;
     formData: FormData<FormKeys>;
     violations: Violations<FormKeys>;
-    violationsMap: ViolationsMap<FormKeys>;
     retryMsg: string[];
 };
 
@@ -46,7 +44,6 @@ export const initialState: State = {
     status: Status.input,
     formData: initialFormData(),
     violations: [],
-    violationsMap: {},
     retryMsg: [],
 };
 
@@ -88,7 +85,6 @@ export type Action =
     | {
           type: typeof ActionType.setViolations;
           violations: Violations<FormKeys>;
-          violationsMap: ViolationsMap<FormKeys>;
       }
     | { type: typeof ActionType.setRetryable; retryMsg: string[] }
     | { type: typeof ActionType.reset };
@@ -146,7 +142,7 @@ export function setViolations(
     dispatch: React.ActionDispatch<[action: Action]>,
     violations: Violations<FormKeys>,
 ): void {
-    dispatch({ type: ActionType.setViolations, violations, violationsMap: getViolationsMap(violations) });
+    dispatch({ type: ActionType.setViolations, violations });
 }
 
 /**
@@ -178,7 +174,7 @@ export const reducer: Reducer<State, Action> = (state: State, action: Action): S
         case ActionType.toInput:
             return { ...state, status: Status.input };
         case ActionType.toConfirm:
-            return { ...state, status: Status.confirm, violations: [], violationsMap: {} };
+            return { ...state, status: Status.confirm, violations: [] };
         case ActionType.toSending:
             return { ...state, status: Status.sending };
         case ActionType.toComplete:
@@ -186,7 +182,7 @@ export const reducer: Reducer<State, Action> = (state: State, action: Action): S
         case ActionType.FAILED:
             return { ...state, status: Status.abort };
         case ActionType.setViolations:
-            return { ...state, violations: action.violations, violationsMap: action.violationsMap };
+            return { ...state, violations: action.violations };
         case ActionType.setRetryable:
             return { ...state, retryMsg: action.retryMsg };
         case ActionType.reset:

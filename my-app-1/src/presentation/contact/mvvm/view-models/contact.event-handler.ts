@@ -8,33 +8,18 @@ import { resultError } from '@/presentation/_system/error/error.factories';
 import { isInvalid, isOkEmpty, isRetryable } from '@/presentation/_system/result/result.helpers';
 import { hasError } from '@/presentation/_system/validation/validation.helpers';
 import { Violations } from '@/presentation/_system/validation/validation.types';
-import { requestAddress } from '@/presentation/backend-lib/zipcloud/zipcloud.client';
-import { ZipCloudRequest } from '@/presentation/backend-lib/zipcloud/zipcloud.types';
 import { send } from '@/presentation/contact/mvvm/models/contact.client';
 import { FormKeys } from '@/presentation/contact/mvvm/models/contact.types';
 import { validate } from '@/presentation/contact/mvvm/models/contact.validator';
 import {
     Action,
     setRetryable,
-    setValue,
     setViolations,
     State,
     toComplete,
     toConfirm,
     toInput,
 } from '@/presentation/contact/mvvm/view-models/contact.reducer';
-
-/**
- * バリデーションエラーが取得されている場合にUIに反映する。
- */
-export const applyViolations = (
-    violations: Violations<FormKeys>,
-    dispatch: React.ActionDispatch<[action: Action]>,
-) => {
-    if (violations && hasError(violations)) {
-        setViolations(dispatch, violations);
-    }
-};
 
 /**
  * 次へボタンを押したときの処理

@@ -1,30 +1,24 @@
 'use client';
 
 import { ErrorModal } from '@/presentation/_system/error/views/component.error-modal.feature.reset';
-import {
-    initialState,
-    reducer,
-    reset,
-    Status,
-} from '@/presentation/contact/mvvm/view-models/contact.reducer';
+import { Status, useContactViewModel } from '@/presentation/contact/mvvm/view-models/use-contact-view-model';
 import Complete from '@/presentation/contact/mvvm/views/contact.complete';
 import Confirm from '@/presentation/contact/mvvm/views/contact.confirm';
 import Input from '@/presentation/contact/mvvm/views/contact.input';
 import Sending from '@/presentation/contact/mvvm/views/contact.sending';
-import { useReducer } from 'react';
 
 /**
  * お問い合わせフォーム 親クライアントコンポーネント
  */
 export default function Main() {
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const { state, actions } = useContactViewModel();
     return (
         <div className="flex h-screen w-screen flex-col items-center py-10">
-            {state.status === Status.input && <Input state={state} dispatch={dispatch} />}
-            {state.status === Status.confirm && <Confirm state={state} dispatch={dispatch} />}
-            {state.status === Status.sending && <Sending state={state} dispatch={dispatch} />}
+            {state.status === Status.input && <Input state={state} actions={actions} />}
+            {state.status === Status.confirm && <Confirm state={state} actions={actions} />}
+            {state.status === Status.sending && <Sending />}
             {state.status === Status.complete && <Complete />}
-            {state.status === Status.abort && <ErrorModal onAction={() => reset(dispatch)} />}
+            {state.status === Status.abort && <ErrorModal onAction={actions.reset} />}
         </div>
     );
 }
