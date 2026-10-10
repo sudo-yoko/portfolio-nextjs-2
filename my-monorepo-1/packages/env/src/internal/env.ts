@@ -18,6 +18,7 @@ export const envByStaticKey = {
     /**
      * process.env.NEXT_PUBLIC_DEBUG_LOGGER
      */
+    // TODO: アプリ固有の名前のため、共通パッケージにしないほうが良いと思う
     get NEXT_PUBLIC_DEBUG_LOGGER() {
         return process.env.NEXT_PUBLIC_DEBUG_LOGGER;
     },
