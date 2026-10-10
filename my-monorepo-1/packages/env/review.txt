@@ -61,3 +61,60 @@ Next.js 環境変数:
 https://nextjs.org/docs/app/guides/environment-variables
 Next.js transpilePackages:
 https://nextjs.org/docs/app/api-reference/config/next-config-js/transpilePackages
+
+============================================================
+env パッケージ構成レビュー（追記）
+レビュー日: 2026-10-10
+
+対象
+index.s.ts へのリネーム後の公開入口、内部モジュールの分け方、依存関係。
+env.s.helper.ts はレビュー対象から除外。
+
+結論
+リネームは反映されており、現在の構成に重大な問題は見つかりませんでした。
+Next.js アプリ向けの内部共有パッケージとして、公開入口の分離は妥当です。
+
+公開入口と内部実装の評価
+・@my/env
+  クライアント・サーバー共通の静的参照用。
+  サーバー専用コードへの依存がなく適切です。
+・@my/env/server
+  動的参照と検証付き取得用。
+  server-only で保護されており適切です。
+・src/internal/*
+  内部実装用。
+  exports に公開しておらず適切です。
+
+改善を検討する点（いずれも必須修正ではありません）
+
+1. アプリ固有の環境変数の配置
+NEXT_PUBLIC_DEBUG_LOGGER はアプリ固有の名前です。
+複数アプリで同じ契約を共有するなら現在の配置でよいですが、
+アプリごとに異なるなら、その静的参照は利用アプリ側に置く方が
+パッケージを共用しやすくなります。
+
+2. 同名 API の違い
+両入口が公開する envByStaticKey は、共通入口では NODE_ENV と
+NEXT_PUBLIC_DEBUG_LOGGER、サーバー入口では NODE_ENV のみです。
+意図的なら問題ありませんが、import 元の変更で使えるプロパティが
+変わるため、利用例を明記すると分かりやすくなります。
+
+3. 型チェックの実行経路
+packages/env/package.json の scripts が空で、monorepo に TypeScript の
+依存宣言もありません。monorepo 単独で検証できるよう、ルートに
+TypeScript を宣言し、パッケージに typecheck スクリプトを設けると
+管理しやすくなります。
+
+TypeScript ソースの公開について
+TypeScript ソースを直接公開する設計も、利用アプリ側で変換する前提なら
+選択できます。Next.js には共有パッケージを変換する transpilePackages が
+あります。利用側への接続時にビルド確認が必要です。
+
+検証結果と範囲
+・公開先ファイルの存在と型チェックは確認済みです。
+・env.s.helper.ts のレビューと統合ビルドは実施していません。
+・レビュー時点ではファイルを変更していません。
+
+参照資料
+Next.js transpilePackages:
+https://nextjs.org/docs/app/api-reference/config/next-config-js/transpilePackages

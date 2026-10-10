@@ -3,7 +3,7 @@
 //
 import 'server-only';
 
-import { envByDynamicKey } from '../env.s';
+import { envByDynamicKey } from './env.s';
 // import logger from '@/presentation/_system/logging/logger.s';
 
 export function env(key: string): string {
