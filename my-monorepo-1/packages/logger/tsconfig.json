@@ -1,7 +1,7 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "lib": ["esnext"]
-  },
-  "include": ["src/**/*"]
+    "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+        "lib": ["esnext"]
+    },
+    "include": ["src/**/*"]
 }

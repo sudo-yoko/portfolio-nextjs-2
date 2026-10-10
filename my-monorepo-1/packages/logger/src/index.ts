@@ -1,3 +1,3 @@
-export { consoleHeader } from './logging.utils'
-export {Level, ExtraKeys} from './logging.types'
-export type {Logger, Extras} from './logging.types'
+export { ExtraKeys, Level } from './logging.types';
+export type { Extras, Logger } from './logging.types';
+export { consoleHeader } from './logging.utils';
