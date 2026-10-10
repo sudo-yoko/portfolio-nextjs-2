@@ -1,0 +1,140 @@
+logger パッケージ移行についての会話まとめ
+
+目的
+my-app-1/src/presentation/_system/logging を
+my-monorepo-1/packages/logger にパッケージとして移行する。
+以下は会話で提案した設計と注意点であり、移行完了を示すものではない。
+
+1. 公開 API と index.ts
+
+パッケージ名は @my/logger とする。
+index.ts ではサーバー・クライアント共通の型と定数を公開する。
+server-only と client-only に依存するロガー本体は、別々の入口にする。
+
+src/index.ts:
+
+export { Level, ExtraKeys } from './logging.types';
+export type { Logger, Extras } from './logging.types';
+
+Level と ExtraKeys は、同名の値と型を定義しているため、上記の export で
+両方を公開できる。Winston や adapter は内部実装として扱う。
+
+package.json の exports 設定例:
+（TypeScript ソースを直接参照する構成を前提とする。）
+
+"exports": {
+  ".": "./src/index.ts",
+  "./server": "./src/logger.s.ts",
+  "./client": "./src/logger.c.ts"
+}
+
+利用例:
+
+// 共通の型・定数
+import type { Logger, Extras } from '@my/logger';
+import { Level } from '@my/logger';
+
+// サーバー側のファイル
+import logger from '@my/logger/server';
+
+// クライアント側のファイル
+import logger from '@my/logger/client';
+
+Next.js 側では、既存の next.config に以下の設定を追加する案を提示した。
+
+transpilePackages: ['@my/logger'],
+
+2. フォルダ構成
+
+公開する入口と内部実装を区別するため、実装を internal/ にまとめる。
+公開する型を定義する logging.types.ts は src 直下に残すことを推奨する。
+
+src/
+├── index.ts
+├── logger.c.ts
+├── logger.s.ts
+├── logging.types.ts
+└── internal/
+    ├── logging.winston.ts
+    ├── logging.winston.adapter.ts
+    ├── logging.winston.action.ts
+    ├── logging.winston.action.adapter.ts
+    └── logging.utils.ts
+
+src/logger.s.ts の例:
+
+import 'server-only';
+
+import { winstonAdapter } from './internal/logging.winston.adapter';
+import type { Logger } from './logging.types';
+
+const logger: Logger = winstonAdapter;
+
+export default logger;
+
+internal/ 内から型を参照する例:
+
+import type { Logger } from '../logging.types';
+
+フォルダ分けはコードの整理、公開範囲の指定は package.json の exports が
+担当する。logging.types.ts を直下に置いても、exports に直接の入口を
+定義しなければ、そのファイルへのパッケージサブパスは公開されない。
+
+3. 相対パスとエイリアス
+
+相対パスの代わりにエイリアスを使用することは可能。
+logger の tsconfig.json に paths を追加する例:
+
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["esnext"],
+    "paths": {
+      "@logger-internal/*": ["./src/*"]
+    }
+  },
+  "include": ["src/**/*"]
+}
+
+使用例:
+
+import { winstonAdapter } from '@logger-internal/internal/logging.winston.adapter';
+import type { Logger } from '@logger-internal/logging.types';
+
+注意点:
+・TypeScript の paths は import 文を書き換えない。
+・利用アプリのビルド時や実行時にもエイリアスを解決できる必要がある。
+・logger 側の tsconfig.json だけで設定が完結するとは限らない。
+・アプリ側でも使う @/ は、どのパッケージのパスか曖昧になりやすい。
+
+今回の推奨:
+・パッケージ内部は ./ と ../ による相対パスを使う。
+・利用アプリからは @my/logger、@my/logger/server、@my/logger/client を使う。
+
+内部もエイリアスに統一したい場合は、package.json の imports による
+# で始まる指定も候補となる。会話では候補の紹介までで、具体的な設定は
+確定していない。
+
+4. 移行時の確認事項
+
+会話中の初回確認では、移行先に以下の課題があった。
+現在の修正状況を確認したうえで対応する。
+
+・アプリ側の @/presentation/_system/... 参照をパッケージ内の参照に直す。
+・envByStaticKey など、アプリ固有の設定モジュールへの依存を外す。
+・アプリ名、ログ出力先、デバッグ設定は、将来的に createLogger(options)
+  の引数で渡す設計が候補となる。
+・logging.utils.ts の不足を補う。
+・source-map-support の実行時依存を追加する。
+  @types/source-map-support だけでは実装は提供されない。
+
+5. 会話中に参照した公式ドキュメント
+
+Next.js: Preventing environment poisoning
+https://nextjs.org/docs/app/getting-started/server-and-client-components#preventing-environment-poisoning
+
+Next.js: transpilePackages
+https://nextjs.org/docs/app/api-reference/config/next-config-js/transpilePackages
+
+保存時の作業範囲
+このテキストへの会話結果の保存のみ。コミットは行わない。
