@@ -1,0 +1,63 @@
+env パッケージ移行レビュー
+レビュー日: 2026-10-10
+
+対象
+my-app-1/src/presentation/_system/env から
+my-monorepo-1/packages/env への移行。
+
+結論
+パッケージ化の方向性は妥当ですが、現状は移行途中です。
+以下の問題を解消し、利用側を接続したうえで統合ビルドを確認してください。
+
+1. 通常の env() の import にプロキシ設定が巻き込まれる
+対象: src/index.ts:1-2、src/internal/env.s.helper.ts:5-10
+
+index.ts が envProxy と proxyUrl も再 export しています。
+env.s.helper.ts はモジュール読み込み時に PROXY_PROTOCOL、PROXY_HOST、
+PROXY_PORT を取得・検証するため、import { env } from '@my/env' だけでも
+プロキシ未設定で例外になる構造です。
+プロキシ機能を @my/env/proxy など別の公開入口に分離し、通常の入口から
+プロキシ設定の初期化が実行されないようにすることを推奨します。
+
+2. server-only の依存宣言がない
+対象: package.json、src/env.s.ts:7、src/internal/*.ts
+
+サーバー用ファイルで server-only を import していますが、@my/env 自身の
+package.json には依存宣言がありません。
+同じ workspace の @my/logger に宣言されている依存へ暗黙に頼る状態です。
+@my/env の dependencies に server-only を追加してください。
+
+3. 利用側の切り替えが未完了
+対象: my-app-1/package.json、my-app-1/src 内の env 参照、
+      packages/logger/src/internal/logging.winston.ts:10、
+      packages/logger/src/internal/logging.winston.adapter.ts:6
+
+my-app-1 は旧 _system/env を引き続き参照しており、@my/env の依存宣言も
+ありません。移行先の logger パッケージにも旧アプリのパスが残っています。
+利用側に @my/env の依存を宣言し、公開入口への import に切り替えてください。
+旧パスを対象とするテストやモックも、切り替えに合わせて見直してください。
+
+妥当な点
+・アプリ固有のパスエイリアスをパッケージ内の相対 import に変更している。
+・サーバー用ファイルの server-only を維持している。
+・共通用の ./isomorphic とサーバー用の ./server を分けている。
+・NEXT_PUBLIC_DEBUG_LOGGER の静的参照を維持しており、Next.js の
+  環境変数置換に合う形になっている。
+
+補足
+・検証エラー時の logger 呼び出しを削除したため、ログ出力は従来と変わります。
+  logger への依存を切る判断は自然ですが、必要なログは呼び出し側で補ってください。
+・TypeScript ソースを直接公開する構成では、利用する Next.js アプリで
+  transpilePackages: ['@my/env'] を設定する方法があります。
+
+検証結果と範囲
+・移行元と移行先の実装、公開入口、依存宣言、利用側の参照を確認しました。
+・packages/env/tsconfig.json を対象とする TypeScript 型チェックは通りました。
+・アプリからの利用が未接続のため、統合ビルドの動作確認は実施していません。
+・レビュー時点では実装ファイルを変更していません。
+
+参照資料
+Next.js 環境変数:
+https://nextjs.org/docs/app/guides/environment-variables
+Next.js transpilePackages:
+https://nextjs.org/docs/app/api-reference/config/next-config-js/transpilePackages
