@@ -1,7 +1,6 @@
 //
 // バリデーション付きで安全に環境変数を取得する。
 //
-// TODO: パッケージ化に伴いloggerの依存を切り、サーバー／クライアント共用を検討
 import 'server-only';
 
 import { envByDynamicKey } from './env.s';
