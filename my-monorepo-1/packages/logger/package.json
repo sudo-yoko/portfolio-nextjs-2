@@ -1,24 +1,26 @@
 {
-  "name": "@my/logger",
-  "version": "1.0.0",
-  "private": true,
-  "type": "module",
-  "main": "./src/index.ts",
-  "types": "./src/index.ts",
-  "exports": {
-    ".": "./src/index.ts",
-    "./server": "./src/logger.s.ts",
-    "./client": "./src/logger/c.ts"
-  },
-  "scripts": {},
-  "dependencies": {
-    "client-only": "^0.0.1",
-    "server-only": "^0.0.1",
-    "winston": "^3.19.0",
-    "winston-daily-rotate-file": "^5.0.0"
-  },
-  "devDependencies": {
-    "@types/node": "^26.6.5",
-    "@types/source-map-support": "^0.5.10"
-  }
+    "name": "@my/logger",
+    "version": "1.0.0",
+    "private": true,
+    "type": "module",
+    "main": "./src/index.ts",
+    "types": "./src/index.ts",
+    "exports": {
+        ".": "./src/index.ts",
+        "./server": "./src/logger.s.ts",
+        "./client": "./src/logger/c.ts"
+    },
+    "scripts": {
+        "lint": "eslint"
+    },
+    "dependencies": {
+        "client-only": "^0.0.1",
+        "server-only": "^0.0.1",
+        "winston": "^3.19.0",
+        "winston-daily-rotate-file": "^5.0.0"
+    },
+    "devDependencies": {
+        "@types/node": "^26.6.5",
+        "@types/source-map-support": "^0.5.10"
+    }
 }
