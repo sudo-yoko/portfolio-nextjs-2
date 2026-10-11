@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { winstonAdapter } from './internal/logging.winston.adapter';
+import { winstonAdapter } from './logging.winston.adapter';
 import type { Logger } from './logging.types';
 
 /**

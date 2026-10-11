@@ -2,7 +2,7 @@ import 'server-only';
 
 // NOTE: デフォルトエクスポートは好きな名前でimportできる
 import winston from './logging.winston';
-import type { Logger } from '../logging.types';
+import type { Logger } from './logging.types';
 import { envByStaticKey as env } from '@/presentation/_system/env/env';
 
 /**

@@ -8,7 +8,7 @@ import 'winston-daily-rotate-file';
 import DailyRotateFile from 'winston-daily-rotate-file';
 
 import { envByStaticKey as env } from '@/presentation/_system/env/env.s';
-import { consoleHeader } from '../logging.utils';
+import { consoleHeader } from './logging.utils';
 
 // スタックトレースのソースマップサポート。productionでのみ効果がある
 sourceMapSupport.install({

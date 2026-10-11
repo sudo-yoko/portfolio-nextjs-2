@@ -5,7 +5,7 @@
 import 'client-only';
 
 import { logDebug, logError, logInfo } from './logging.winston.action';
-import type { Logger } from '../logging.types';
+import type { Logger } from './logging.types';
 
 /**
  * ServerActions によるロガー実装
