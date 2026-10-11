@@ -10,12 +10,11 @@
  * @returns 検証済みの値。文字列を保証
  */
 export function envRequiredStringValue(value: string | undefined, key: string): string {
-    const v = value?.trim();
-    if (!v || v.length === 0) {
-        const message = `環境変数 ${key} が設定されていません。`;
+    if (!value || value.length === 0) {
+        const message = `環境変数が設定されていません。key=[${key}], value=[${value}]`;
         throw new Error(message);
     }
-    return v;
+    return value;
 }
 
 /**
