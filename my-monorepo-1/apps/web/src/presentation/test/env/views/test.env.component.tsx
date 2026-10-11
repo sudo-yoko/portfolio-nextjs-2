@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import { nodeEnvNext } from '@my/env';
+import { envNodeEnvNext } from '@my/env';
 
 export default function Component() {
     const [env1, setEnv1] = useState('');
@@ -14,7 +14,7 @@ export default function Component() {
         async function _() {
             const e1 = process.env.NODE_ENV;
             setEnv1(e1);
-            const e2 = nodeEnvNext();
+            const e2 = envNodeEnvNext();
             setEnv2(e2);
             // const e3 = envByStaticKey.NEXT_PUBLIC_DEBUG_LOGGER;
             // setEnv3(e3 ?? 'undefined');

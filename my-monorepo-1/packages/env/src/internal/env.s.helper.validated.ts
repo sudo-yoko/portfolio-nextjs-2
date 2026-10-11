@@ -1,38 +1,40 @@
 //
-// バリデーション付きで安全に環境変数を取得する。
+// 環境変数をバリデーション付きで安全に取得するヘルパー。（サーバーサイド専用）
 //
 import 'server-only';
 
 import { env as rawEnv } from './env.s';
-// import logger from '@/presentation/_system/logging/logger.s';
+import { envRequiredNumValue, envRequiredProtocolValue, envRequiredStringValue } from './env.utils';
 
+/**
+ * 環境変数の検証済みの値を取得する
+ *
+ * @param key - 環境変数名
+ * @returns 検証済みの値。文字列を保証
+ */
 export function env(key: string): string {
-    const value = rawEnv(key)?.trim();
-    if (!value || value.length === 0) {
-        const message = `環境変数 ${key} が設定されていません。`;
-        // logger?.error(message);
-        throw new Error(message);
-    }
-    return value;
+    const value = rawEnv(key);
+    return envRequiredStringValue(value, key);
 }
 
+/**
+ * 環境変数の検証済みの値を取得する
+ *
+ * @param key - 環境変数名
+ * @returns 検証済みの値。数値を保証
+ */
 export function envNumber(key: string): number {
     const value = env(key);
-    const num = Number(value);
-    if (isNaN(num)) {
-        const message = `環境変数 ${key} の形式が不正です。`;
-        // logger?.error(message);
-        throw new Error(message);
-    }
-    return num;
+    return envRequiredNumValue(value, key);
 }
 
-export function envProtocol(key: string): 'http' | 'https' {
+/**
+ * 環境変数の検証済みの値を取得する
+ *
+ * @param key - 環境変数名
+ * @returns 検証済みの値。プロトコル（http or https）を保証
+ */
+export function envProtocol(key: string) {
     const value = env(key);
-    if (value === 'http' || value === 'https') {
-        return value;
-    }
-    const message = `不正なプロトコルです。[${value}]`;
-    // logger?.error(message);
-    throw new Error(message);
+    return envRequiredProtocolValue(value);
 }
