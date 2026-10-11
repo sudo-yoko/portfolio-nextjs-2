@@ -3,11 +3,11 @@
 //
 import 'server-only';
 
-import { envByDynamicKey } from './env.s';
+import { env as rawEnv } from './env.s';
 // import logger from '@/presentation/_system/logging/logger.s';
 
 export function env(key: string): string {
-    const value = envByDynamicKey(key)?.trim();
+    const value = rawEnv(key)?.trim();
     if (!value || value.length === 0) {
         const message = `環境変数 ${key} が設定されていません。`;
         // logger?.error(message);

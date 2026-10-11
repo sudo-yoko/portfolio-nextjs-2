@@ -1,0 +1,111 @@
+環境変数 NODE_ENV の型推論に関する質疑応答
+
+Q1. env.s.ts の process.env.NODE_ENV は string | undefined なのに、
+    test.env.component.tsx の envByStaticKey.NODE_ENV が文字列リテラルの
+    ユニオン型になるのはなぜですか？
+
+A1. 型チェックする TypeScript プロジェクトによって、読み込まれる
+    グローバル型定義が異なるためです。
+
+    packages/env/tsconfig.json は types: ["node"] を指定しています。
+    Node.js の型定義では、環境変数は基本的に string | undefined です。
+
+    apps/web では next-env.d.ts を通じて Next.js の型定義を読み込みます。
+    Next.js は NodeJS.ProcessEnv に次のプロパティを追加しています。
+
+        readonly NODE_ENV: 'development' | 'production' | 'test';
+
+    @my/env は生成済みの .d.ts ではなくソースの .ts を公開しています。
+    Web アプリから読み込むと、そのアプリの型定義を使って getter の
+    戻り値が推論されます。
+
+    なお、test.env.component.tsx が @my/env から読み込んでいるのは、
+    env.s.ts ではなく env.ts の envByStaticKey です。
+    型の違いの原因は getter や as const ではなく、型チェックの文脈です。
+
+Q2. 型推論を同じにするにはどうしたらよいですか？
+
+A2. env.ts と env.s.ts の getter に戻り値の型を明示します。
+
+        get NODE_ENV(): string | undefined {
+            return process.env.NODE_ENV;
+        }
+
+    これにより、利用側でも getter の型は string | undefined になります。
+    内部の process.env.NODE_ENV 自体の型は、各プロジェクトの型定義に
+    従います。
+
+    必ず文字列リテラルのユニオン型を返したい場合は、値を検証します。
+
+        type NodeEnv = 'development' | 'production' | 'test';
+
+        get NODE_ENV(): NodeEnv {
+            const value = process.env.NODE_ENV;
+            if (
+                value === 'development' ||
+                value === 'production' ||
+                value === 'test'
+            ) {
+                return value;
+            }
+            throw new Error(`Invalid NODE_ENV: ${value}`);
+        }
+
+Q3. process.env.NODE_ENV が undefined を返すことはあり得ますか？
+
+A3. はい。Node.js 単体では NODE_ENV を自動設定しないため、未設定なら
+    undefined になります。Linux/macOS では次のコマンドで確認できます。
+
+        env -u NODE_ENV node -p 'process.env.NODE_ENV'
+
+    一方、Next.js の通常の CLI 経由では、未設定の NODE_ENV は
+    next dev で development、next build / next start で production に
+    自動設定されます。
+
+    Next.js の型定義を読み込むだけでは、実行時の値は設定されません。
+    Next.js 以外のスクリプトや、NODE_ENV を設定しないテスト環境で
+    共通パッケージを使う場合には、undefined を考慮する必要があります。
+
+Q4. 生成済みの .d.ts を参照する構成にすると、型推論は変わりますか？
+
+A4. はい。生成時に確定した型が利用側で使われます。
+    Node.js の型定義だけで宣言を生成すると、例えば次の形になります。
+
+        export declare const envByStaticKey: {
+            readonly NODE_ENV: string | undefined;
+        };
+
+    Next.js アプリがこの宣言を参照しても、getter の型は
+    string | undefined のままです。戻り値は再推論されません。
+
+    Next.js の型定義を含む環境で宣言を生成すれば、戻り値として
+    'development' | 'production' | 'test' が記録されます。
+
+    ソースの .ts を参照する場合は利用側の型チェック時に、生成済みの
+    .d.ts を参照する場合はパッケージの宣言生成時に型が決まります。
+    戻り値を明示すれば、宣言生成環境による違いも防げます。
+
+Q5. env を Next.js 専用と決めて、Next.js の型定義を使うべきですか？
+
+A5. 現状のような環境変数取得の薄いラッパーなら、Node.js の型定義を
+    使い、getter の戻り値を string | undefined と明示する方針を
+    おすすめします。
+
+    Next.js で使う予定でも、パッケージ単体のテストや補助スクリプトでは
+    未設定になり得ます。取得する関数には、実際に返せる値を表す型を
+    指定するのが自然です。
+
+    アプリ側で必ず development / production / test として扱いたいなら、
+    既存の検証用ヘルパーで値を検証し、その型を返す設計が適しています。
+
+    Next.js 専用にすることと、Next.js のグローバル型定義に依存することは
+    別々に判断できます。型を揃える目的だけで Next.js の型定義を
+    取り込む必要はなく、まずは getter の戻り値の明示で十分です。
+
+参考資料
+    Next.js の型定義:
+    https://github.com/vercel/next.js/blob/canary/packages/next/types/global.d.ts
+    Next.js の環境変数仕様:
+    https://nextjs.org/docs/pages/guides/environment-variables
+    Node.js の環境変数仕様:
+    https://nodejs.org/api/environment_variables.html

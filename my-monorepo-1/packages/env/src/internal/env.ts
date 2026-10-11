@@ -8,18 +8,23 @@
 /**
  * 環境変数取得（静的プロパティ参照）
  */
-export const envByStaticKey = {
-    /**
-     * process.env.NODE_ENV
-     */
-    get NODE_ENV() {
-        return process.env.NODE_ENV;
-    },
-    /**
-     * process.env.NEXT_PUBLIC_DEBUG_LOGGER
-     */
-    // TODO: アプリ固有の名前のため、共通パッケージにしないほうが良いと思う
-    get NEXT_PUBLIC_DEBUG_LOGGER() {
-        return process.env.NEXT_PUBLIC_DEBUG_LOGGER;
-    },
-} as const;
+// export const envByStaticKey = {
+//     /**
+//      * process.env.NODE_ENV
+//      */
+//     get NODE_ENV() {
+//         return process.env.NODE_ENV;
+//     },
+//     /**
+//      * process.env.NEXT_PUBLIC_DEBUG_LOGGER
+//      */
+//     // TODO: アプリ固有の名前のため、共通パッケージにしないほうが良いと思う
+//     get NEXT_PUBLIC_DEBUG_LOGGER() {
+//         return process.env.NEXT_PUBLIC_DEBUG_LOGGER;
+//     },
+// } as const;
+
+/**
+ * 環境変数取得（アプリケーション実行環境）
+ */
+export const node_env = process.env.NODE_ENV;
