@@ -26,8 +26,8 @@ export function envRequiredStringValue(value: string | undefined, key: string): 
  */
 export function envRequiredNumValue(value: string, key: string): number {
     const num = Number(value);
-    if (isNaN(num)) {
-        const message = `環境変数 ${key} の形式が不正です。`;
+    if (value.trim() === '' || isNaN(num)) {
+        const message = `環境変数が数字ではありません。key=[${key}], value=[${value}]`;
         throw new Error(message);
     }
     return num;
