@@ -5,7 +5,8 @@
     "type": "module",
     "scripts": {
         "lint": "eslint",
-        "typecheck": "tsc --noEmit"
+        "typecheck": "tsc --noEmit",
+        "node:test": "node --test --experimental-test-module-mocks --import tsx"
     },
     "devDependencies": {
         "@types/node": "^26.6.5",

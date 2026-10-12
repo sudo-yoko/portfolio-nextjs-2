@@ -23,7 +23,7 @@ export function envNodeEnvNext() {
     if (isEnumValue(env, NodeEnvNext)) {
         return env;
     }
-    throw Error(`未定義の環境変数値です。process.env.NODE_ENV=${env}`);
+    throw Error(`未定義の環境変数値です。process.env.NODE_ENV=[${env}]`);
 }
 
 /**
@@ -33,7 +33,7 @@ export function envNodeEnvNext() {
  */
 export function envFwDebugLogger() {
     const debug = next_public_fw_debug_logger;
-    if (debug) {
+    if (debug === '1') {
         return true;
     }
     return false;
