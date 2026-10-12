@@ -5,10 +5,10 @@ import test from 'node:test';
 // envFwDebugLogger
 //
 // npm exec -- node --test --experimental-test-module-mocks --import tsx --test-name-pattern=test1-1 src/env/env.helper.validated.test.ts
-// npm run node:test -- --test-name-pattern=test1-1 src/env/env.helper.validated.test.ts
+// clear & npm run node:test -- --test-name-pattern=test1-1 src/env/env.helper.validated.test.ts
 void test('test1-1', async (t) => {
     // next_public_fw_debug_logger をモックする
-    t.mock.module('../../../env/src/internal/env.ts', {
+    t.mock.module('@/env/src/internal/env.ts', {
         namedExports: {
             node_env: 'test',
             next_public_fw_debug_logger: undefined,
@@ -19,10 +19,10 @@ void test('test1-1', async (t) => {
     assert.equal(envFwDebugLogger(), false);
 });
 
-// npm run node:test -- --test-name-pattern=test1-2 src/env/env.helper.validated.test.ts
+// clear & npm run node:test -- --test-name-pattern=test1-2 src/env/env.helper.validated.test.ts
 void test('test1-2', async (t) => {
     // next_public_fw_debug_logger をモックする
-    t.mock.module('../../../env/src/internal/env.ts', {
+    t.mock.module('@/env/src/internal/env.ts', {
         namedExports: {
             node_env: 'test',
             next_public_fw_debug_logger: '',
@@ -36,7 +36,7 @@ void test('test1-2', async (t) => {
 // clear & npm run node:test -- --test-name-pattern=test1-3 src/env/env.helper.validated.test.ts
 void test('test1-3', async (t) => {
     // next_public_fw_debug_logger をモックする
-    t.mock.module('../../../env/src/internal/env.ts', {
+    t.mock.module('@/env/src/internal/env.ts', {
         namedExports: {
             node_env: 'test',
             next_public_fw_debug_logger: '1 ',
@@ -50,7 +50,7 @@ void test('test1-3', async (t) => {
 // clear & npm run node:test -- --test-name-pattern=test1-4 src/env/env.helper.validated.test.ts
 void test('test1-4', async (t) => {
     // next_public_fw_debug_logger をモックする
-    t.mock.module('../../../env/src/internal/env.ts', {
+    t.mock.module('@/env/src/internal/env.ts', {
         namedExports: {
             node_env: 'test',
             next_public_fw_debug_logger: '1',
@@ -78,7 +78,7 @@ void test('test2-1', async () => {
 // clear & npm run node:test -- --test-name-pattern=test2-2 src/env/env.helper.validated.test.ts
 void test('test2-2', async (t) => {
     // node_env をモックする
-    t.mock.module('../../../env/src/internal/env.ts', {
+    t.mock.module('@/env/src/internal/env.ts', {
         namedExports: {
             node_env: 'abc',
             next_public_fw_debug_logger: '',
@@ -96,9 +96,9 @@ void test('test2-2', async (t) => {
 // clear & npm run node:test -- --test-name-pattern=test2-3 src/env/env.helper.validated.test.ts
 void test('test2-3', async (t) => {
     // node_env をモックする
-    t.mock.module('../../../env/src/internal/env.ts', {
+    t.mock.module('@/env/src/internal/env.ts', {
         namedExports: {
-            node_env: 'test',
+            node_env: 'production',
             next_public_fw_debug_logger: '',
         },
     });
@@ -106,5 +106,5 @@ void test('test2-3', async (t) => {
     const { envNodeEnvNext } = await import('@/env/src/internal/env.helper.validated');
     const result = envNodeEnvNext();
     console.log(`result=${result}`);
-    assert.strictEqual(result, 'test');
+    assert.strictEqual(result, 'production');
 });

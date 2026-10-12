@@ -1,8 +1,8 @@
 //
 // 環境変数をバリデーション付きで安全に取得するヘルパー
 //
-import { next_public_fw_debug_logger, node_env } from './env';
-import { isEnumValue } from './env.utils';
+import { next_public_fw_debug_logger, node_env } from '#env/internal/env';
+import { isEnumValue } from '#env/internal/env.utils';
 
 /**
  * 環境変数 NODE_ENV 定義

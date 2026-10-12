@@ -3,8 +3,12 @@
 //
 import 'server-only';
 
-import { env as rawEnv } from './env.s';
-import { envRequiredNumValue, envRequiredProtocolValue, envRequiredStringValue } from './env.utils';
+import { env as rawEnv } from '#env/internal/env.s';
+import {
+    envRequiredNumValue,
+    envRequiredProtocolValue,
+    envRequiredStringValue,
+} from '#env/internal/env.utils';
 
 /**
  * 環境変数の検証済みの値を取得する
