@@ -5,6 +5,9 @@
     "type": "module",
     "main": "./src/index.ts",
     "types": "./src/index.ts",
+    "imports": {
+        "#logger/*": "./src/*.ts"
+    },
     "exports": {
         ".": {
             "types": "./src/index.ts",
@@ -13,17 +16,18 @@
         "./server": {
             "types": "./src/index.s.ts",
             "default": "./src/index.s.ts"
-        }
-        ,
+        },
         "./client": {
             "types": "./src/index.c.ts",
             "default": "./src/index.c.ts"
         }
     },
     "scripts": {
-        "lint": "eslint"
+        "lint": "eslint",
+        "typecheck": "tsc --noEmit"
     },
     "dependencies": {
+        "@my/env": "*",
         "client-only": "^0.0.1",
         "server-only": "^0.0.1",
         "winston": "^3.19.0",

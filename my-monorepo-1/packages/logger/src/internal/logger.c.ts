@@ -1,7 +1,7 @@
 import 'client-only';
 
-import { actionAdapter } from './logging.winston.action.adapter';
-import type { Logger } from './logging.types';
+import type { Logger } from '#logger/internal/logging.types';
+import { actionAdapter } from '#logger/internal/logging.winston.action.adapter';
 
 /**
  * クライアントサイド専用ロガー

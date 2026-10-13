@@ -1,5 +1,5 @@
 import 'server-only';
 
-import logger from './internal/logger.s';
+import logger from '#logger/internal/logger.s';
 
 export default logger;

@@ -7,8 +7,9 @@ import winston, { createLogger, format, transports } from 'winston';
 import 'winston-daily-rotate-file';
 import DailyRotateFile from 'winston-daily-rotate-file';
 
-import { envByStaticKey as env } from '@/presentation/_system/env/env.s';
-import { consoleHeader } from './logging.utils';
+import { envNodeEnvNext } from '@my/env';
+
+import { consoleHeader } from '#logger/internal/logging.utils';
 
 // スタックトレースのソースマップサポート。productionでのみ効果がある
 sourceMapSupport.install({
@@ -68,7 +69,7 @@ const transport = new winston.transports.DailyRotateFile(options);
 // ログをファイルに出力
 logger.add(transport);
 // 開発時はコンソールにも出力
-if (env.NODE_ENV != 'production') {
+if (envNodeEnvNext() != 'production') {
     logger.add(new transports.Console());
 }
 // デバッグログON。productionで出力しないはadapterで制御する
