@@ -16,7 +16,7 @@ import {
  * @param key - 環境変数名
  * @returns 検証済みの値。文字列を保証
  */
-export function env(key: string): string {
+export function envString(key: string): string {
     const value = rawEnv(key);
     return envRequiredStringValue(value, key);
 }
@@ -28,7 +28,7 @@ export function env(key: string): string {
  * @returns 検証済みの値。数値を保証
  */
 export function envNumber(key: string): number {
-    const value = env(key);
+    const value = envString(key);
     return envRequiredNumValue(value, key);
 }
 
@@ -39,6 +39,6 @@ export function envNumber(key: string): number {
  * @returns 検証済みの値。プロトコル（http or https）を保証
  */
 export function envProtocol(key: string) {
-    const value = env(key);
+    const value = envString(key);
     return envRequiredProtocolValue(value);
 }

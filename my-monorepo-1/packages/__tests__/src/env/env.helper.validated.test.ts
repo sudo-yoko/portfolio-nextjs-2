@@ -10,8 +10,10 @@ void test('test1-1', async (t) => {
     // next_public_fw_debug_logger をモックする
     t.mock.module('@/env/src/internal/env.ts', {
         namedExports: {
-            node_env: 'test',
-            next_public_fw_debug_logger: undefined,
+            env: {
+                node_env: 'test',
+                next_public_fw_debug_logger: undefined,
+            },
         },
     });
     // モックしてからモジュールを読み込む

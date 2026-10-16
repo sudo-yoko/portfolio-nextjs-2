@@ -8,13 +8,13 @@
 //
 
 /**
- * 環境変数 NODE_ENV
- * アプリケーション実行環境
+ * 環境変数オブジェクト
  */
-export const node_env = process.env.NODE_ENV;
-
-/**
- * 環境変数 NEXT_PUBLIC_FW_DEBUG_LOGGER
- * デバッグログの強制出力（基盤用）
- */
-export const next_public_fw_debug_logger = process.env.NEXT_PUBLIC_FW_DEBUG_LOGGER;
+export const env = {
+    get node_env() {
+        return process.env.NODE_ENV;
+    },
+    get next_public_fw_debug_logger() {
+        return process.env.NEXT_PUBLIC_FW_DEBUG_LOGGER;
+    },
+};

@@ -1,12 +1,12 @@
 import 'server-only';
 
-import { env, envNumber, envProtocol } from './env.s.helper.validated';
+import { envString, envNumber, envProtocol } from './env.s.helper.validated';
 
 // TODO: 即時実行のため、importしただけで実行されるが、そのとき環境変数が設定されていない場合にエラーになる。
 // import時にこのエラーになるのは作りとしてあまり良くない？
 export const envProxy: { protocol: string; host: string; port: number } = (() => {
     const protocol = envProtocol('PROXY_PROTOCOL');
-    const host = env('PROXY_HOST');
+    const host = envString('PROXY_HOST');
     const port = envNumber('PROXY_PORT');
     return { protocol, host, port };
 })();

@@ -1,7 +1,7 @@
 //
 // 環境変数をバリデーション付きで安全に取得するヘルパー
 //
-import { next_public_fw_debug_logger, node_env } from '#env/internal/env';
+import { env } from '#env/internal/env';
 import { isEnumValue } from '#env/internal/env.utils';
 
 /**
@@ -19,8 +19,7 @@ export type NodeEnvNext = (typeof NodeEnvNext)[keyof typeof NodeEnvNext];
  * - "test"
  */
 export function envNodeEnvNext() {
-    const env = node_env;
-    if (isEnumValue(env, NodeEnvNext)) {
+    if (isEnumValue(env.node_env, NodeEnvNext)) {
         return env;
     }
     throw Error(`未定義の環境変数値です。process.env.NODE_ENV=[${env}]`);
@@ -32,8 +31,7 @@ export function envNodeEnvNext() {
  * @returns 検証済みの値。真偽値を保証。環境変数がない場合はfalse
  */
 export function envFwDebugLogger() {
-    const debug = next_public_fw_debug_logger;
-    if (debug === '1') {
+    if (env.next_public_fw_debug_logger === '1') {
         return true;
     }
     return false;
