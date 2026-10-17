@@ -19,10 +19,11 @@ export type NodeEnvNext = (typeof NodeEnvNext)[keyof typeof NodeEnvNext];
  * - "test"
  */
 export function envNodeEnvNext() {
-    if (isEnumValue(env.node_env, NodeEnvNext)) {
-        return env;
+    const value = env.node_env;
+    if (isEnumValue(value, NodeEnvNext)) {
+        return value;
     }
-    throw Error(`未定義の環境変数値です。process.env.NODE_ENV=[${env}]`);
+    throw Error(`未定義の環境変数値です。process.env.NODE_ENV=[${value}]`);
 }
 
 /**
