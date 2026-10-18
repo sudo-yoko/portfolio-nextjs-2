@@ -3,7 +3,7 @@
 //
 import 'server-only';
 
-import { env as rawEnv } from '#env/internal/env.s';
+import { env } from '#env/internal/env.s';
 import {
     envRequiredNumValue,
     envRequiredProtocolValue,
@@ -17,7 +17,7 @@ import {
  * @returns 検証済みの値。文字列を保証
  */
 export function envString(key: string): string {
-    const value = rawEnv(key);
+    const value = env.get(key);
     return envRequiredStringValue(value, key);
 }
 

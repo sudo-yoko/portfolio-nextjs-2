@@ -14,4 +14,19 @@ import 'server-only';
  * @param key - 環境変数名
  * @returns 環境変数値
  */
-export const env = (key: string) => process.env[key];
+// export const env = (key: string) => process.env[key];
+
+/**
+ * 環境変数オブジェクト
+ */
+export const env = {
+    get node_env() {
+        return process.env.NODE_ENV;
+    },
+    get next_runtime() {
+        return process.env.NEXT_RUNTIME;
+    },
+    get(key: string) {
+        return process.env[key];
+    },
+};

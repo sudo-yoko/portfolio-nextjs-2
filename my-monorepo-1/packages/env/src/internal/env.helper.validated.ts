@@ -2,13 +2,8 @@
 // 環境変数をバリデーション付きで安全に取得するヘルパー
 //
 import { env } from '#env/internal/env';
+import { NodeEnvNext } from '#env/internal/env.types';
 import { isEnumValue } from '#env/internal/env.utils';
-
-/**
- * 環境変数 NODE_ENV 定義
- */
-export const NodeEnvNext = { Dev: 'development', Prod: 'production', Test: 'test' } as const;
-export type NodeEnvNext = (typeof NodeEnvNext)[keyof typeof NodeEnvNext];
 
 /**
  * 環境変数 NODE_ENV の検証済み値を取得する

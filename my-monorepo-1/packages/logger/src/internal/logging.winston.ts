@@ -7,9 +7,8 @@ import winston, { createLogger, format, transports } from 'winston';
 import 'winston-daily-rotate-file';
 import DailyRotateFile from 'winston-daily-rotate-file';
 
-import { envNodeEnvNext } from '@my/env';
-
 import { consoleHeader } from '#logger/internal/logging.utils';
+import { env } from '@my/env/server';
 
 // スタックトレースのソースマップサポート。productionでのみ効果がある
 sourceMapSupport.install({
@@ -51,11 +50,6 @@ const timeStampFormat = format.timestamp({
         }).format(new Date()),
 });
 
-// ロガーの作成
-const logger = createLogger({
-    format: format.combine(timeStampFormat, logFormat),
-});
-
 // ログローテーションの設定
 const options: DailyRotateFile.DailyRotateFileTransportOptions = {
     filename: logName,
@@ -64,20 +58,30 @@ const options: DailyRotateFile.DailyRotateFileTransportOptions = {
 };
 options.maxSize = '1000k'; // ローテーションの最大ファイルサイズ：1000KB
 options.maxFiles = '1d'; // ログの保管期間：1日
-const transport = new winston.transports.DailyRotateFile(options);
 
-// ログをファイルに出力
-logger.add(transport);
-// 開発時はコンソールにも出力
-if (envNodeEnvNext() != 'production') {
-    logger.add(new transports.Console());
+export type TCreateAppLogger = () => winston.Logger;
+let logger: ReturnType<TCreateAppLogger> | undefined;
+
+export const createAppLogger: TCreateAppLogger = () => {
+    // ロガーの作成
+    logger = createLogger({
+        format: format.combine(timeStampFormat, logFormat),
+    });
+    // ログをファイルに出力
+    logger.add(new winston.transports.DailyRotateFile(options));
+    // 開発時はコンソールにも出力
+    if (env.node_env != 'production') {
+        logger.add(new transports.Console());
+    }
+    // デバッグログON。productionで出力しないはadapterで制御する
+    logger.level = 'debug';
+    // ロガーの設定完了メッセージ
+    console.log(
+        `${consoleHeader} Logger setup complete. Log directory=${logDir}, Rotation max size=${options.maxSize}, Rotation max files=${options.maxFiles}`,
+    );
+    return logger;
+};
+
+export function getLogger() {
+    return (logger ??= createAppLogger());
 }
-// デバッグログON。productionで出力しないはadapterで制御する
-logger.level = 'debug';
-
-// ロガーの設定完了メッセージ
-console.log(
-    `${consoleHeader} Logger setup complete. Log directory=${logDir}, Rotation max size=${options.maxSize}, Rotation max files=${options.maxFiles}`,
-);
-
-export default logger;

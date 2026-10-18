@@ -1,6 +1,23 @@
 //
 // 環境変数ユーティリティ
 //
+import { Protocol } from '#env/internal/env.types';
+
+/**
+ *
+ * @param value - 判定する値
+ * @param enumObj - 文字列のキーと値を持つオブジェクト
+ * @returns
+ */
+export function isEnumValue<T extends Record<string, string>>(
+    value: string | undefined,
+    enumObj: T,
+): value is T[keyof T] {
+    if (value !== undefined) {
+        return (Object.values(enumObj) as string[]).includes(value);
+    }
+    return false;
+}
 
 /**
  * 環境変数の検証済みの値を取得する
@@ -32,28 +49,6 @@ export function envRequiredNumValue(value: string, key: string): number {
     }
     return num;
 }
-
-/**
- *
- * @param value - 判定する値
- * @param enumObj - 文字列のキーと値を持つオブジェクト
- * @returns
- */
-export function isEnumValue<T extends Record<string, string>>(
-    value: string | undefined,
-    enumObj: T,
-): value is T[keyof T] {
-    if (value !== undefined) {
-        return (Object.values(enumObj) as string[]).includes(value);
-    }
-    return false;
-}
-
-/**
- * 環境変数 プロトコル値の定義
- */
-export const Protocol = { Http: 'http', Https: 'https' } as const;
-export type Protocol = (typeof Protocol)[keyof typeof Protocol];
 
 /**
  * 環境変数の検証済みの値を取得する

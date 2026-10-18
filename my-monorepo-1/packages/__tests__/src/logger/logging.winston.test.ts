@@ -1,15 +1,44 @@
-import test from 'node:test';
+import test, { afterEach, before, describe, mock } from 'node:test';
 
-// clear & npm run node:test -- --test-name-pattern=test1-1 src/logger/logging.winston.test.ts
-void test('test1-1', async (t) => {
-    t.mock.module('server-only', { defaultExport: {}, namedExports: {} });
-    t.mock.module('@/env/src/internal/env.helper.validated.ts', {
-        namedExports: {
-            envNodeEnvNext: () => 'test',
-            envFwDebugLogger: () => true,
-            NodeEnvNext: {},
-        },
+import type { TCreateAppLogger } from '@/logger/src/internal/logging.winston';
+
+// clear & npm run node:test -- src/logger/logging.winston.test.ts
+void describe('logging.winston.test.ts の実行', async () => {
+    const mockedEnv = {
+        node_env: 'mock',
+    };
+    // type TargetModule = typeof import('@/logger/src/internal/logging.winston');
+    // let mockedCreateAppLogger: TargetModule['createAppLogger'];
+    let mockedCreateAppLogger: TCreateAppLogger;
+    let logger: ReturnType<TCreateAppLogger> | undefined;
+
+    before(async () => {
+        mock.module('server-only', { defaultExport: {}, namedExports: {} });
+        mock.module('@/env/src/internal/env.s', {
+            namedExports: {
+                env: mockedEnv,
+            },
+        });
+        mockedCreateAppLogger = (await import('@/logger/src/internal/logging.winston')).createAppLogger;
     });
-    const logger = (await import('@/logger/src/internal/logging.winston')).default;
-    logger.info(t.name);
+
+    afterEach(() => {
+        logger?.close();
+    });
+
+    void test('test1-1', async (t) => {
+        mockedEnv.node_env = 'production';
+        logger = mockedCreateAppLogger();
+        console.log(`${t.name} logging start.`);
+        logger.info(t.name);
+        console.log(`${t.name} logging end.`);
+    });
+
+    void test('test1-2', async (t) => {
+        mockedEnv.node_env = 'development';
+        logger = mockedCreateAppLogger();
+        console.log(`${t.name} logging start.`);
+        logger.info(t.name);
+        console.log(`${t.name} logging end.`);
+    });
 });

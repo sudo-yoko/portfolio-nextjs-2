@@ -1,0 +1,199 @@
+logger 初期化に関する質疑応答
+記録日: 2026-10-17
+対象: 「テストケースを実行するたびにloggerの初期化を走らせることは可能ですか」からの質疑応答
+
+【ユーザー】
+テストケースを実行するたびにloggerの初期化を走らせることは可能ですか
+
+【回答】
+はい、可能です。ただし、beforeEach() で同じモジュールを import() するだけでは、モジュールがキャッシュされるため再初期化されません。
+
+このコードなら、logger の生成処理を関数に切り出し、各テストで呼び出す方法が扱いやすいです。
+
+```ts
+// logging.winston.ts
+export function createAppLogger(nodeEnv = env.node_env) {
+    const logger = createLogger({
+        format: format.combine(timeStampFormat, logFormat),
+    });
+
+    // transport も呼び出しごとに生成する
+    logger.add(new winston.transports.DailyRotateFile(options));
+
+    if (nodeEnv !== 'production') {
+        logger.add(new transports.Console());
+    }
+
+    logger.level = 'debug';
+    return logger;
+}
+
+// アプリケーション用
+export default createAppLogger();
+```
+
+テストでは、環境ごとに新しい logger を作ります。
+
+```ts
+afterEach(() => {
+    logger.close();
+});
+
+test('production の場合', () => {
+    logger = createAppLogger('production');
+    // Console transport がないことを検証
+});
+
+test('development の場合', () => {
+    logger = createAppLogger('development');
+    // Console transport があることを検証
+});
+```
+
+生成関数を副作用のない別モジュールに分けると、テストで import した際にアプリケーション用の logger が生成されることも避けられます。各テストの終了時には logger.close() でファイルなどのリソースを解放してください。
+
+【ユーザー】
+loggerは現状はimportで初期化されるようになっていますが、アプケーション側で明示的にcreateを呼ぶような作りのほうがよいでしょうか。アプリケーションはNext.jsですがそれは可能でしょうか
+
+【回答】
+はい、Next.js でも可能です。今回のように環境ごとの初期化をテストするなら、logger を生成する関数と、アプリケーションで共有する仕組みを分けることをおすすめします。
+
+ただし、各ページや Server Action が毎回 create する必要はありません。次の構成が扱いやすいです。
+
+- createAppLogger()：呼ぶたびに新しい logger を生成。テストで使う。
+- getLogger()：初回に生成し、以降は同じ logger を返す。アプリケーションで使う。
+
+```ts
+// logger.s.ts
+import 'server-only';
+import { createAppLogger } from './create-app-logger';
+
+let logger: ReturnType<typeof createAppLogger> | undefined;
+
+export function getLogger() {
+    return (logger ??= createAppLogger({
+        nodeEnv: process.env.NODE_ENV,
+    }));
+}
+```
+
+利用側は次のようになります。
+
+```ts
+getLogger().info('処理を開始');
+```
+
+この方式なら、初期化の副作用を import 時から切り離せて、初期化の呼び忘れも防げます。テストでは共有インスタンスを使わず、createAppLogger({ nodeEnv: 'production' }) を直接呼べます。
+
+サーバー起動時に明示的に初期化したい場合は、Next.js の instrumentation.ts が使えます。register() は新しいサーバーインスタンスの起動時に呼ばれ、リクエストの受付前に完了します。
+Next.js 公式ドキュメント: https://nextjs.org/docs/app/guides/instrumentation
+
+```ts
+// apps/web/src/instrumentation.ts
+// src を使わない構成なら apps/web/instrumentation.ts
+export async function register() {
+    if (process.env.NEXT_RUNTIME === 'nodejs') {
+        // getLogger を公開するようにした場合の例
+        const { getLogger } = await import('@my/logger/server');
+        getLogger();
+    }
+}
+```
+
+現在の logger は fs を使っているので、公式の案内に沿って Node.js ランタイムの分岐内で import します。
+同ドキュメント: https://nextjs.org/docs/app/guides/instrumentation
+
+私なら、まず createAppLogger() と getLogger() に分離します。起動時にログ出力先の準備まで済ませたい場合に、instrumentation.ts からも getLogger() を呼びます。なお、共有される範囲は実行環境内であり、複数のサーバーインスタンス全体で一つの logger になるわけではありません。
+
+【ユーザー】
+next_runtimeの判定もloggerの中に入れるのはどうでしょうか
+
+【回答】
+可能ですが、NEXT_RUNTIME の判定は Next.js アプリ側に置くことをおすすめします。logger は nodeEnv などの設定を受け取り、ログの生成と出力を担当させると、Next.js への依存が減り、Node.js のテストでも使いやすくなります。
+
+また、現在の logger では、関数内に判定を追加するだけでは不十分です。
+
+```ts
+import fs from 'fs';
+import winston from 'winston';
+
+export function getLogger() {
+    if (process.env.NEXT_RUNTIME !== 'nodejs') {
+        // この時点では上の依存モジュールは読み込み済み
+    }
+}
+```
+
+Edge 向けの読み込みを避けるには、Node.js 専用モジュールを import する前の分岐が必要です。そのため、前述の instrumentation.ts に置く形が自然です。
+
+```ts
+export async function register() {
+    if (process.env.NEXT_RUNTIME === 'nodejs') {
+        const { getLogger } = await import('@my/logger/server');
+        getLogger();
+    }
+}
+```
+
+logger パッケージ内にまとめたいなら、Next.js 用の入り口を別に設ける設計も可能です。
+
+```ts
+// Next.js 用の初期化モジュール
+// トップレベルで Winston や fs を import しない
+export async function initializeNextLogger() {
+    if (process.env.NEXT_RUNTIME === 'nodejs') {
+        const { getLogger } = await import('./logger.s');
+        getLogger();
+    }
+}
+```
+
+ただ、現状では分岐が数行なので、instrumentation.ts に残すほうが構成はシンプルです。NEXT_RUNTIME が未設定の通常の Node.js テストでも、logger 本体をそのまま利用できます。
+
+【ユーザー】
+利用側はgetLogger().info('....')ではなくlogger.info('...')のように利用できるようにしたいです
+
+【回答】
+はい。logger.info() の内部で getLogger() を呼ぶ窓口を用意すると、初回利用時の初期化と、希望する呼び出し方を両立できます。
+
+```ts
+// logger.s.ts
+import 'server-only';
+import type { Logger } from 'winston';
+
+import { createAppLogger } from './create-app-logger';
+
+let instance: Logger | undefined;
+
+function getLogger(): Logger {
+    return (instance ??= createAppLogger({
+        nodeEnv: process.env.NODE_ENV,
+    }));
+}
+
+export const logger = {
+    info: (...args: Parameters<Logger['info']>) =>
+        getLogger().info(...args),
+
+    error: (...args: Parameters<Logger['error']>) =>
+        getLogger().error(...args),
+
+    warn: (...args: Parameters<Logger['warn']>) =>
+        getLogger().warn(...args),
+
+    debug: (...args: Parameters<Logger['debug']>) =>
+        getLogger().debug(...args),
+};
+```
+
+利用側は希望どおりになります。
+
+```ts
+import { logger } from '@my/logger/server';
+
+logger.info('処理を開始');
+```
+
+この構成では、import 時には logger を生成せず、最初のログ出力時に生成して以降は再利用します。テストでは createAppLogger() を直接呼び、ケースごとに独立した logger を作れます。
+
+なお、この例の公開 API は4種類のログ出力メソッドです。現在の adapter が使うメソッドに合わせて用意すれば、Winston 全体を公開する必要もありません。
