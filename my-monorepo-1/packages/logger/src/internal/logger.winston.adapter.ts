@@ -3,8 +3,8 @@ import 'server-only';
 import { envFwDebugLogger, envNodeEnvNext } from '@my/env';
 
 // NOTE: デフォルトエクスポートは好きな名前でimportできる
-import type { Logger } from '#logger/internal/logging.types';
-import { getLogger } from '#logger/internal/logging.winston';
+import type { Logger } from '#logger/internal/logger.types';
+import { getLogger } from '#logger/internal/logger.winston';
 
 /**
  * winston によるロガー実装

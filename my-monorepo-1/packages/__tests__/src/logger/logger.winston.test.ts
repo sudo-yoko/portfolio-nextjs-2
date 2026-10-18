@@ -1,8 +1,8 @@
 import test, { afterEach, before, describe, mock } from 'node:test';
 
-import type { TCreateAppLogger } from '@/logger/src/internal/logging.winston';
+import type { TCreateAppLogger } from '@/logger/src/internal/logger.winston';
 
-// clear & npm run node:test -- src/logger/logging.winston.test.ts
+// clear & npm run node:test -- src/logger/logger.winston.test.ts
 void describe('logging.winston.test.ts の実行', async () => {
     const mockedEnv = {
         node_env: 'mock',
@@ -19,7 +19,7 @@ void describe('logging.winston.test.ts の実行', async () => {
                 env: mockedEnv,
             },
         });
-        mockedCreateAppLogger = (await import('@/logger/src/internal/logging.winston')).createAppLogger;
+        mockedCreateAppLogger = (await import('@/logger/src/internal/logger.winston')).createAppLogger;
     });
 
     afterEach(() => {

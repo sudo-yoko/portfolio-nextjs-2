@@ -1,7 +1,7 @@
 import 'server-only';
 
-import type { Logger } from '#logger/internal/logging.types';
-import { winstonAdapter } from '#logger/internal/logging.winston.adapter';
+import type { Logger } from '#logger/internal/logger.types';
+import { winstonAdapter } from '#logger/internal/logger.winston.adapter';
 
 /**
  * サーバーサイド専用ロガー

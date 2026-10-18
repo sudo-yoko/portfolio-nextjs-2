@@ -5,8 +5,8 @@
 
 // TODO: 依存関係の方向がおかしいので再検討
 // import logger from '@/presentation/_system/logging/logger.s';
-import { Extras } from '#logger/internal/logging.types';
-import { winstonAdapter } from '#logger/internal/logging.winston.adapter';
+import { Extras } from '#logger/internal/logger.types';
+import { winstonAdapter } from '#logger/internal/logger.winston.adapter';
 
 export async function logInfo(message: string, extras?: Extras) {
     winstonAdapter.info(message, extras);
