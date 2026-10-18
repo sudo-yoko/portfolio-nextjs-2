@@ -3,24 +3,27 @@ import 'server-only';
 import { envFwDebugLogger, envNodeEnvNext } from '@my/env';
 
 // NOTE: デフォルトエクスポートは好きな名前でimportできる
-import type { Logger } from '#logger/internal/logger.types';
-import { getLogger } from '#logger/internal/logger.winston';
+import type { ServerLogger } from '#logger/internal/logger.types';
+import { getOrCreateLogger } from '#logger/internal/logger.winston';
 
 /**
  * winston によるロガー実装
  */
-export const winstonAdapter: Logger = {
+export const winstonAdapter: ServerLogger = {
+    initialize: () => {
+        getOrCreateLogger();
+    },
     log: (level, message, extras) => {
-        getLogger().log(level, message, { ...extras });
+        getOrCreateLogger().log(level, message, { ...extras });
     },
     info: (message, extras) => {
-        getLogger().info(message, { ...extras });
+        getOrCreateLogger().info(message, { ...extras });
     },
     warn: (message, extras) => {
-        getLogger().warn(message, { ...extras });
+        getOrCreateLogger().warn(message, { ...extras });
     },
     error: (message, extras) => {
-        getLogger().error(message, { ...extras });
+        getOrCreateLogger().error(message, { ...extras });
     },
     debug: (message, extras) => {
         if (envNodeEnvNext() === 'production') {
@@ -28,7 +31,7 @@ export const winstonAdapter: Logger = {
                 return;
             }
         }
-        getLogger().debug(message, { ...extras });
+        getOrCreateLogger().debug(message, { ...extras });
     },
     logAsync: async () => {}, // Not implemented
     infoAsync: async () => {}, // Not implemented

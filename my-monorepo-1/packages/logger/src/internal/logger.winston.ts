@@ -59,12 +59,16 @@ const options: DailyRotateFile.DailyRotateFileTransportOptions = {
 options.maxSize = '1000k'; // ローテーションの最大ファイルサイズ：1000KB
 options.maxFiles = '1d'; // ログの保管期間：1日
 
-export type TCreateAppLogger = () => winston.Logger;
-let logger: ReturnType<TCreateAppLogger> | undefined;
+let gLogger: ReturnType<TCreateAppLogger> | undefined;
 
-export const createAppLogger: TCreateAppLogger = () => {
+export function getOrCreateLogger() {
+    return (gLogger ??= createAppLogger());
+}
+
+// キャッシュを更新せず、独立したロガーを生成する。
+export function createAppLogger() {
     // ロガーの作成
-    logger = createLogger({
+    const logger = createLogger({
         format: format.combine(timeStampFormat, logFormat),
     });
     // ログをファイルに出力
@@ -80,8 +84,5 @@ export const createAppLogger: TCreateAppLogger = () => {
         `${consoleHeader} Logger setup complete. Log directory=${logDir}, Rotation max size=${options.maxSize}, Rotation max files=${options.maxFiles}`,
     );
     return logger;
-};
-
-export function getLogger() {
-    return (logger ??= createAppLogger());
 }
+export type TCreateAppLogger = typeof createAppLogger;

@@ -51,3 +51,7 @@ export type Logger = {
     errorAsync(message: string, extras?: Extras): Promise<void>;
     debugAsync(message: string, extras?: Extras): Promise<void>;
 };
+
+export type ServerLogger = Logger & {
+    initialize(): void;
+};
