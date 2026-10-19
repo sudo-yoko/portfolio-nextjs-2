@@ -3,7 +3,7 @@
 //
 import { env } from '#env/internal/env';
 import { envBoolString, NextRuntime, NodeEnv, NodeEnvNext } from '#env/internal/env.types';
-import { envValidateBooleanValue, isEnumValue } from '#env/internal/env.utils';
+import { envValidateBooleanValue, isEnumValue } from '#env/internal/env.validator';
 
 export function envNodeEnv() {
     const value = env.node_env;

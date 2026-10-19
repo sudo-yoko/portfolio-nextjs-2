@@ -9,7 +9,7 @@ import {
     envValidateNumValue,
     envValidateProtocolValue,
     envValidateStringValue,
-} from '#env/internal/env.utils';
+} from '#env/internal/env.validator';
 import { envBoolString } from './env.types';
 
 /**

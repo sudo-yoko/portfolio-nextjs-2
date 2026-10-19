@@ -2,7 +2,7 @@ import assert from 'node:assert';
 import test from 'node:test';
 
 import { NodeEnv } from '@/env/src/internal/env.types';
-import { envValidateNumValue, envValidateStringValue, isEnumValue } from '@/env/src/internal/env.utils';
+import { envValidateNumValue, envValidateStringValue, isEnumValue } from '@/env/src/internal/env.validator';
 
 // clear & npm exec -- node --test --import tsx src/env/env.utils.test.ts
 
