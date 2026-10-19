@@ -1,7 +1,7 @@
 import assert from 'node:assert';
 import test from 'node:test';
 
-import { envRequiredNumValue, envRequiredStringValue } from '@/env/src/internal/env.utils';
+import { envValidateNumValue, envValidateStringValue } from '@/env/src/internal/env.utils';
 
 //
 // envRequiredStringValue
@@ -10,7 +10,7 @@ import { envRequiredNumValue, envRequiredStringValue } from '@/env/src/internal/
 void test('test1-1', () => {
     const value = undefined;
     try {
-        envRequiredStringValue(value, 'testKey');
+        envValidateStringValue(value, 'testKey');
         assert.fail();
     } catch (e) {
         console.log(e);
@@ -21,7 +21,7 @@ void test('test1-1', () => {
 void test('test1-2', () => {
     const value = '　';
     try {
-        envRequiredStringValue(value, 'testKey');
+        envValidateStringValue(value, 'testKey');
         assert.fail();
     } catch (e) {
         console.log(e);
@@ -32,7 +32,7 @@ void test('test1-2', () => {
 void test('test1-3', () => {
     const value = '';
     try {
-        envRequiredStringValue(value, 'testKey');
+        envValidateStringValue(value, 'testKey');
         assert.fail();
     } catch (e) {
         console.log(e);
@@ -42,14 +42,14 @@ void test('test1-3', () => {
 // npm exec -- node --test --import tsx --test-name-pattern=test1-4 src/env/env.utils.test.ts
 void test('test1-4', () => {
     const value = 'ABC';
-    const result = envRequiredStringValue(value, 'testKey');
+    const result = envValidateStringValue(value, 'testKey');
     console.log(`result=[${result}]`);
 });
 
 // npm exec -- node --test --import tsx --test-name-pattern=test1-5 src/env/env.utils.test.ts
 void test('test1-5', () => {
     const value = ' A BC ';
-    const result = envRequiredStringValue(value, 'testKey');
+    const result = envValidateStringValue(value, 'testKey');
     console.log(`result=[${result}]`);
 });
 
@@ -60,7 +60,7 @@ void test('test1-5', () => {
 void test('test2-1', () => {
     const value = '';
     try {
-        const result = envRequiredNumValue(value, 'testKey');
+        const result = envValidateNumValue(value, 'testKey');
         console.log(`result=${result}`);
         assert.fail();
     } catch (e) {
@@ -72,7 +72,7 @@ void test('test2-1', () => {
 void test('test2-2', () => {
     const value = '12 3';
     try {
-        const result = envRequiredNumValue(value, 'testKey');
+        const result = envValidateNumValue(value, 'testKey');
         console.log(`result=${result}`);
         assert.fail();
     } catch (e) {
@@ -83,6 +83,6 @@ void test('test2-2', () => {
 // npm exec -- node --test --import tsx --test-name-pattern=test2-3 src/env/env.utils.test.ts
 void test('test2-3', () => {
     const value = ' 123 ';
-    const result = envRequiredNumValue(value, 'testKey');
+    const result = envValidateNumValue(value, 'testKey');
     console.log(`result=${result}`);
 });

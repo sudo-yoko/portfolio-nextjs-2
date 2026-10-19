@@ -9,7 +9,7 @@ import { Protocol } from '#env/internal/env.types';
  * @param enumObj - 文字列のキーと値を持つオブジェクト
  * @returns
  */
-export function isEnumValue<T extends Record<string, string>>(
+export function isEnumValue<T extends Record<string, string | undefined>>(
     value: string | undefined,
     enumObj: T,
 ): value is T[keyof T] {
@@ -26,7 +26,7 @@ export function isEnumValue<T extends Record<string, string>>(
  * @param key - 環境変数名を設定する
  * @returns 検証済みの値。文字列を保証
  */
-export function envRequiredStringValue(value: string | undefined, key: string): string {
+export function envValidateStringValue(value: string | undefined, key: string): string {
     if (!value || value.length === 0) {
         const message = `環境変数が設定されていません。key=[${key}], value=[${value}]`;
         throw new Error(message);
@@ -41,7 +41,7 @@ export function envRequiredStringValue(value: string | undefined, key: string): 
  * @param key - 環境変数名を設定する
  * @returns 検証済みの値。数値を保証
  */
-export function envRequiredNumValue(value: string, key: string): number {
+export function envValidateNumValue(value: string, key: string): number {
     const num = Number(value);
     if (value.trim() === '' || isNaN(num)) {
         const message = `環境変数が数字ではありません。key=[${key}], value=[${value}]`;
@@ -56,11 +56,23 @@ export function envRequiredNumValue(value: string, key: string): number {
  * @param value - 環境変数の値を設定する
  * @returns 検証済みの値。プロトコル（http or https）を保証
  */
-export function envRequiredProtocolValue(value: string) {
+export function envValidateProtocolValue(value: string) {
     const v = value.trim();
     if (isEnumValue(v, Protocol)) {
         return v;
     }
     const message = `不正なプロトコルです。[${value}]`;
     throw new Error(message);
+}
+
+export function envBooleanValue(value: string | undefined) {
+    if (value === '1') {
+        return true;
+    }
+    return false;
+}
+
+export function envValidateBooleanValue(value: string | undefined, key: string) {
+    const validated = envValidateStringValue(value, key);
+    return envBooleanValue(validated);
 }

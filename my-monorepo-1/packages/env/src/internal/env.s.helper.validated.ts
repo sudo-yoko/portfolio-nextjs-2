@@ -3,12 +3,22 @@
 //
 import 'server-only';
 
-import { env } from '#env/internal/env.s';
+import { env_s } from '#env/internal/env.s';
 import {
-    envRequiredNumValue,
-    envRequiredProtocolValue,
-    envRequiredStringValue,
+    envBooleanValue,
+    envValidateNumValue,
+    envValidateProtocolValue,
+    envValidateStringValue,
 } from '#env/internal/env.utils';
+
+/**
+ * 環境変数 process.env.ENABLE_LOGGER_INITIALIZATION の検証済みの値を取得する
+ *
+ * @returns 検証済みの値。真偽値を保証。環境変数がない場合はfalse
+ */
+export function envEnableLoggerInitialization() {
+    return envBooleanValue(env_s.enable_logger_initialization);
+}
 
 /**
  * 環境変数の検証済みの値を取得する
@@ -17,8 +27,13 @@ import {
  * @returns 検証済みの値。文字列を保証
  */
 export function envString(key: string): string {
-    const value = env.get(key);
-    return envRequiredStringValue(value, key);
+    const value = env_s.get(key);
+    return envValidateStringValue(value, key);
+}
+
+export function envStringOrDefault(key: string, defaultValue: string): string {
+    const value = env_s.get(key);
+    return envValidateStringValue(value ?? defaultValue, key);
 }
 
 /**
@@ -29,7 +44,12 @@ export function envString(key: string): string {
  */
 export function envNumber(key: string): number {
     const value = envString(key);
-    return envRequiredNumValue(value, key);
+    return envValidateNumValue(value, key);
+}
+
+export function envNumberOrDefault(key: string, defaultValue: number): number {
+    const value = env_s.get(key);
+    return envValidateNumValue(value ?? String(defaultValue), key);
 }
 
 /**
@@ -40,5 +60,5 @@ export function envNumber(key: string): number {
  */
 export function envProtocol(key: string) {
     const value = envString(key);
-    return envRequiredProtocolValue(value);
+    return envValidateProtocolValue(value);
 }

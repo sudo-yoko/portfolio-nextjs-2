@@ -1,10 +1,9 @@
 import 'server-only';
 
-import { envFwDebugLogger, envNodeEnvNext } from '@my/env';
-
 // NOTE: デフォルトエクスポートは好きな名前でimportできる
 import type { ServerLogger } from '#logger/internal/logger.types';
 import { getOrCreateLogger } from '#logger/internal/logger.winston';
+import { envNextPublicFwDebugLogger, envNodeEnvNext, NodeEnvNext } from '@my/env';
 
 /**
  * winston によるロガー実装
@@ -26,8 +25,8 @@ export const winstonAdapter: ServerLogger = {
         getOrCreateLogger().error(message, { ...extras });
     },
     debug: (message, extras) => {
-        if (envNodeEnvNext() === 'production') {
-            if (!envFwDebugLogger()) {
+        if (envNodeEnvNext() === NodeEnvNext.Prod) {
+            if (!envNextPublicFwDebugLogger()) {
                 return;
             }
         }
