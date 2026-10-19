@@ -5,4 +5,4 @@ export {
     envNodeEnv,
     envNodeEnvNext,
 } from '#env/internal/env.helper.validated';
-export { NextRuntime, NodeEnvNext, Protocol } from '#env/internal/env.types';
+export { NextRuntime, NodeEnvNext, envProtocol as Protocol } from '#env/internal/env.types';

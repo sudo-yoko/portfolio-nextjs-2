@@ -4,6 +4,7 @@
 import test from 'node:test';
 
 import {
+    envValidateBooleanValue,
     envValidateNumValue,
     envValidateProtocolValue,
     envValidateStringValue,
@@ -18,6 +19,7 @@ import {
     NodeEnvNext,
     Protocol,
 } from '@my/env';
+import { envBoolString } from '@/env/src/internal/env.types';
 
 void test('test1-1', () => {
     // process.env.NODE_ENV
@@ -64,15 +66,18 @@ void test('test1-5', () => {
     console.log(value1);
 
     // 検証済みの値
-    const value2 = envValidateStringValue(value1, 'USER');
+    const value2 = envValidateStringValue(value1, { key: 'USER' });
     console.log(value2);
 
     const defaultStringValue: string = '';
-    const value3 = envValidateStringValue(value1 ?? defaultStringValue, 'USER');
+    const value3 = envValidateStringValue(value1 ?? defaultStringValue, { key: 'USER' });
     console.log(value3);
 
+    const value3_1 = value1 ?? defaultStringValue;
+    console.log(value3_1);
+
     const defaultNumValue: string = '0';
-    const value4 = envValidateNumValue(value1 ?? defaultNumValue, 'USER');
+    const value4 = envValidateNumValue(value1 ?? defaultNumValue, { key: 'USER' });
     console.log(value4);
 
     const defaultProtocolValue: string = 'http';
@@ -80,4 +85,8 @@ void test('test1-5', () => {
     console.log(value5);
     if (value5 === Protocol.Http) {
     }
+
+    const defaultBoolValue: envBoolString = envBoolString.False;
+    const value6 = envValidateBooleanValue(value1 ?? defaultBoolValue);
+    console.log(value6);
 });

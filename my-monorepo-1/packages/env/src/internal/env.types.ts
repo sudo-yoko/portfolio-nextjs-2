@@ -32,8 +32,14 @@ export type NextRuntime = (typeof NextRuntime)[keyof typeof NextRuntime];
 /**
  * 環境変数 プロトコル値の定義
  */
-export const Protocol = {
+export const envProtocol = {
     Http: 'http',
     Https: 'https',
 } as const;
-export type Protocol = (typeof Protocol)[keyof typeof Protocol];
+export type envProtocol = (typeof envProtocol)[keyof typeof envProtocol];
+
+export const envBoolString = {
+    True: '1',
+    False: '0',
+} as const;
+export type envBoolString = (typeof envBoolString)[keyof typeof envBoolString];
