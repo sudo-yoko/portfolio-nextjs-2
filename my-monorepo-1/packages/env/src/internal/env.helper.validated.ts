@@ -2,7 +2,7 @@
 // 環境変数をバリデーション付きで安全に取得するヘルパー
 //
 import { env } from '#env/internal/env';
-import { envBoolString, NextRuntime, NodeEnv, NodeEnvNext } from '#env/internal/env.types';
+import { envBooleanString, NextRuntime, NodeEnv, NodeEnvNext } from '#env/internal/env.types';
 import { envValidateBooleanValue, isEnumValue } from '#env/internal/env.validator';
 
 export function envNodeEnv() {
@@ -44,6 +44,6 @@ export function envNextRuntime() {
  */
 export function envNextPublicFwDebugLogger() {
     const value = env.next_public_fw_debug_logger;
-    return envValidateBooleanValue(value ?? envBoolString.False);
+    return envValidateBooleanValue(value ?? envBooleanString.False);
     // return envBooleanValue(value);
 }

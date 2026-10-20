@@ -4,22 +4,20 @@
 import test from 'node:test';
 
 import {
-    envValidateBooleanValue,
-    envValidateNumValue,
-    envValidateProtocolValue,
-    envValidateStringValue,
-} from '@/env/src/internal/env.utils';
-import {
     env,
+    envBooleanString,
     envNextPublicFwDebugLogger,
     envNextRuntime,
     envNodeEnv,
     envNodeEnvNext,
+    envProtocolString,
+    envValidateBooleanValue,
+    envValidateNumValue,
+    envValidateProtocolValue,
+    envValidateStringValue,
     NextRuntime,
     NodeEnvNext,
-    Protocol,
 } from '@my/env';
-import { envBoolString } from '@/env/src/internal/env.types';
 
 void test('test1-1', () => {
     // process.env.NODE_ENV
@@ -73,6 +71,7 @@ void test('test1-5', () => {
     const value3 = envValidateStringValue(value1 ?? defaultStringValue, { key: 'USER' });
     console.log(value3);
 
+    // 環境変数が未設定の場合に空文字で欲しければenvのバリデーターは使わないように実装する。
     const value3_1 = value1 ?? defaultStringValue;
     console.log(value3_1);
 
@@ -83,10 +82,10 @@ void test('test1-5', () => {
     const defaultProtocolValue: string = 'http';
     const value5 = envValidateProtocolValue(value1 ?? defaultProtocolValue);
     console.log(value5);
-    if (value5 === Protocol.Http) {
+    if (value5 === envProtocolString.Http) {
     }
 
-    const defaultBoolValue: envBoolString = envBoolString.False;
+    const defaultBoolValue: envBooleanString = envBooleanString.False;
     const value6 = envValidateBooleanValue(value1 ?? defaultBoolValue);
     console.log(value6);
 });

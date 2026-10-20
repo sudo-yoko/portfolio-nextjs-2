@@ -4,13 +4,13 @@
 import 'server-only';
 
 import { env_s } from '#env/internal/env.s';
+import { envBooleanString } from '#env/internal/env.types';
 import {
     envValidateBooleanValue,
     envValidateNumValue,
     envValidateProtocolValue,
     envValidateStringValue,
 } from '#env/internal/env.validator';
-import { envBoolString } from './env.types';
 
 /**
  * 環境変数 process.env.ENABLE_LOGGER_INITIALIZATION の検証済みの値を取得する
@@ -19,7 +19,7 @@ import { envBoolString } from './env.types';
  */
 export function envEnableLoggerInitialization() {
     const value = env_s.enable_logger_initialization;
-    return envValidateBooleanValue(value ?? envBoolString.False);
+    return envValidateBooleanValue(value ?? envBooleanString.False);
 }
 
 /**

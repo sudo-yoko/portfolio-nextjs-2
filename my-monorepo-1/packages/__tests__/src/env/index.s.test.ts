@@ -9,9 +9,9 @@ import {
     envNextRuntime,
     envNodeEnv,
     envNodeEnvNext,
+    envProtocolString,
     NextRuntime,
     NodeEnvNext,
-    Protocol,
 } from '@my/env';
 import {
     env_s,
@@ -90,7 +90,7 @@ void test('test1-5', () => {
     console.log(value5);
 
     const value6 = envProtocol('USER');
-    if (value6 === Protocol.Http) {
+    if (value6 === envProtocolString.Http) {
     }
     console.log(value6);
 });

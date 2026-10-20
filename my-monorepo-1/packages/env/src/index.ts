@@ -5,4 +5,10 @@ export {
     envNodeEnv,
     envNodeEnvNext,
 } from '#env/internal/env.helper.validated';
-export { NextRuntime, NodeEnvNext, envProtocol as Protocol } from '#env/internal/env.types';
+export { envBooleanString, envProtocolString, NextRuntime, NodeEnvNext } from '#env/internal/env.types';
+export {
+    envValidateBooleanValue,
+    envValidateNumValue,
+    envValidateProtocolValue,
+    envValidateStringValue,
+} from '#env/internal/env.validator';

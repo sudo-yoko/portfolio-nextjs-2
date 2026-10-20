@@ -1,7 +1,7 @@
 //
 // 環境変数ユーティリティ
 //
-import { envBoolString, envProtocol } from '#env/internal/env.types';
+import { envBooleanString, envProtocolString } from '#env/internal/env.types';
 
 /**
  *
@@ -18,14 +18,14 @@ export function isEnumValue<T extends Record<string, string | undefined>>(
 }
 
 /**
- * 環境変数の検証済みの値を取得する
+ * 環境変数の検証済みの値を返す。
  *
  * @param value - 環境変数の値を設定する
- * @param key - 環境変数名を設定する
- * @returns 検証済みの値。文字列を保証
+ * @param key - 環境変数名を設定する。ログ出力で使用する。
+ * @returns 検証済みの値。文字列を保証。ただし空文字はエラーとする。
  */
 export function envValidateStringValue(value: string | undefined, option?: { key?: string }): string {
-    if (!value || value.length === 0) {
+    if (!value || value.length === 0 || value.trim().length === 0) {
         let message = `環境変数が設定されていません。value=[${value}]`;
         if (option?.key !== undefined) {
             message += `, key=[${option.key}]`;
@@ -36,16 +36,16 @@ export function envValidateStringValue(value: string | undefined, option?: { key
 }
 
 /**
- * 環境変数の検証済みの値を取得する
+ * 環境変数の検証済みの値を返す。
  *
  * @param value - 環境変数の値を設定する
- * @param key - 環境変数名を設定する
- * @returns 検証済みの値。数値を保証
+ * @param key - 環境変数名を設定する。ログ出力で使用する。
+ * @returns 検証済みの値。数値を保証。環境変数の値が空文字ならエラーとする。
  */
 export function envValidateNumValue(value: string | undefined, option?: { key?: string }): number {
     const validated = envValidateStringValue(value, { key: option?.key });
     const num = Number(validated);
-    if (validated.trim() === '' || isNaN(num)) {
+    if (isNaN(num)) {
         let message = `環境変数が数値ではありません。value=[${value}]`;
         if (option?.key !== undefined) {
             message += `, key=[${option.key}]`;
@@ -56,35 +56,16 @@ export function envValidateNumValue(value: string | undefined, option?: { key?: 
 }
 
 /**
- * 環境変数の検証済みの値を取得する
+ * 環境変数の検証済みの値を返す。
  *
  * @param value - 環境変数の値を設定する
- * @returns 検証済みの値。プロトコル（http or https）を保証
+ * @param key - 環境変数名を設定する。ログ出力で使用する。
+ * @returns 検証済みの値。真偽値を保証。環境変数の値が空文字ならエラーとする。
  */
-export function envValidateProtocolValue(value: string | undefined, option?: { key?: string }) {
+export function envValidateBooleanValue(value: string | undefined, option?: { key?: string }): boolean {
     const validated = envValidateStringValue(value, { key: option?.key });
-    const v = validated.trim();
-    if (isEnumValue(v, envProtocol)) {
-        return v;
-    }
-    let message = `不正なプロトコルです。value=[${value}]`;
-    if (option?.key !== undefined) {
-        message += `, key=[${option.key}]`;
-    }
-    throw new Error(message);
-}
-
-// export function envBooleanValue(value: string | undefined) {
-//     if (value === '1') {
-//         return true;
-//     }
-//     return false;
-// }
-
-export function envValidateBooleanValue(value: string | undefined, option?: { key?: string }) {
-    const validated = envValidateStringValue(value, { key: option?.key });
-    if (isEnumValue(validated, envBoolString)) {
-        if (validated === envBoolString.True) {
+    if (isEnumValue(validated, envBooleanString)) {
+        if (validated === envBooleanString.True) {
             return true;
         }
         return false;
@@ -94,4 +75,24 @@ export function envValidateBooleanValue(value: string | undefined, option?: { ke
         message += `, key=[${option.key}]`;
     }
     throw Error(message);
+}
+
+/**
+ * 環境変数の検証済みの値を返す。
+ *
+ * @param value - 環境変数の値を設定する
+ * @param key - 環境変数名を設定する。ログ出力で使用する。
+ * @returns 検証済みの値。プロトコル値（http or https）を保証。環境変数の値が空文字ならエラーとする。
+ */
+export function envValidateProtocolValue(value: string | undefined, option?: { key?: string }) {
+    const validated = envValidateStringValue(value, { key: option?.key });
+    const v = validated.trim();
+    if (isEnumValue(v, envProtocolString)) {
+        return v;
+    }
+    let message = `不正なプロトコルです。value=[${value}]`;
+    if (option?.key !== undefined) {
+        message += `, key=[${option.key}]`;
+    }
+    throw new Error(message);
 }
