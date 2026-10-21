@@ -38,6 +38,9 @@ export const envProtocolString = {
 } as const;
 export type envProtocolString = (typeof envProtocolString)[keyof typeof envProtocolString];
 
+/**
+ * 環境変数 真偽値の定義
+ */
 export const envBooleanString = {
     True: '1',
     False: '0',

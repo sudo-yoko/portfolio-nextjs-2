@@ -1,6 +1,7 @@
 //
-// 環境変数ユーティリティ
+// 環境変数バリデーター
 //
+import { isEnvSet } from '#env/internal/env.strategy';
 import { envBooleanString, envProtocolString } from '#env/internal/env.types';
 
 /**
@@ -21,26 +22,27 @@ export function isEnumValue<T extends Record<string, string | undefined>>(
  * 環境変数の検証済みの値を返す。
  *
  * @param value - 環境変数の値を設定する
- * @param key - 環境変数名を設定する。ログ出力で使用する。
- * @returns 検証済みの値。文字列を保証。ただし空文字はエラーとする。
+ * @param key - 環境変数名を設定する。エラー時のログメッセージに出力する。
+ * @returns 検証済みの値。文字列を保証。ただし空白文字列はエラーとする。
  */
 export function envValidateStringValue(value: string | undefined, option?: { key?: string }): string {
-    if (!value || value.length === 0 || value.trim().length === 0) {
-        let message = `環境変数が設定されていません。value=[${value}]`;
-        if (option?.key !== undefined) {
-            message += `, key=[${option.key}]`;
-        }
-        throw new Error(message);
+    // if (!value || value.length === 0 || value.trim().length === 0) {
+    if (isEnvSet(value)) {
+        return value;
     }
-    return value;
+    let message = `環境変数が設定されていません。value=[${value}]`;
+    if (option?.key !== undefined) {
+        message += `, key=[${option.key}]`;
+    }
+    throw new Error(message);
 }
 
 /**
  * 環境変数の検証済みの値を返す。
  *
  * @param value - 環境変数の値を設定する
- * @param key - 環境変数名を設定する。ログ出力で使用する。
- * @returns 検証済みの値。数値を保証。環境変数の値が空文字ならエラーとする。
+ * @param key - 環境変数名を設定する。エラー時のログメッセージに出力する。
+ * @returns 検証済みの値。数値を保証。環境変数の値が空白文字列ならエラーとする。
  */
 export function envValidateNumValue(value: string | undefined, option?: { key?: string }): number {
     const validated = envValidateStringValue(value, { key: option?.key });
@@ -59,8 +61,8 @@ export function envValidateNumValue(value: string | undefined, option?: { key?: 
  * 環境変数の検証済みの値を返す。
  *
  * @param value - 環境変数の値を設定する
- * @param key - 環境変数名を設定する。ログ出力で使用する。
- * @returns 検証済みの値。真偽値を保証。環境変数の値が空文字ならエラーとする。
+ * @param key - 環境変数名を設定する。エラー時のログメッセージに出力する。
+ * @returns 検証済みの値。真偽値を保証。環境変数の値が空白文字列ならエラーとする。
  */
 export function envValidateBooleanValue(value: string | undefined, option?: { key?: string }): boolean {
     const validated = envValidateStringValue(value, { key: option?.key });
@@ -81,8 +83,8 @@ export function envValidateBooleanValue(value: string | undefined, option?: { ke
  * 環境変数の検証済みの値を返す。
  *
  * @param value - 環境変数の値を設定する
- * @param key - 環境変数名を設定する。ログ出力で使用する。
- * @returns 検証済みの値。プロトコル値（http or https）を保証。環境変数の値が空文字ならエラーとする。
+ * @param key - 環境変数名を設定する。エラー時のログメッセージに出力する。
+ * @returns 検証済みの値。プロトコル値（http or https）を保証。環境変数の値が空白文字列ならエラーとする。
  */
 export function envValidateProtocolValue(value: string | undefined, option?: { key?: string }) {
     const validated = envValidateStringValue(value, { key: option?.key });
