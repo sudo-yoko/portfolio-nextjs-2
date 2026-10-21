@@ -1,8 +1,8 @@
 //
 // 環境変数バリデーター
 //
-import { isEnvSet } from '#env/internal/env.strategy';
-import { envBooleanString, envProtocolString } from '#env/internal/env.types';
+import { isEnvSet } from '#env/internal/isomophic/env.strategy';
+import { envBooleanString, envProtocolString } from '#env/internal/isomophic/env.types';
 
 /**
  *

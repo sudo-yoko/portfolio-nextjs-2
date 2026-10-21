@@ -26,5 +26,8 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "window.zoomLevel": 1,
   "editor.detectIndentation": false,
-  "editor.tabSize": 4
+"editor.tabSize": 4,
+"cSpell.words": [
+    "isomophic"
+]
 }

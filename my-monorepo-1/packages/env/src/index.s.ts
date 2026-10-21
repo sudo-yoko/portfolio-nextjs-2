@@ -1,6 +1,6 @@
 import 'server-only';
 
-export { env_s } from '#env/internal/env.s';
+export { env_s } from '#env/internal/server/env.s';
 export {
     envEnableLoggerInitialization,
     envNumber,
@@ -8,4 +8,4 @@ export {
     envProtocol,
     envString,
     envStringOrDefault,
-} from '#env/internal/env.s.helper.validated';
+} from '#env/internal/server/env.s.helper.validated';

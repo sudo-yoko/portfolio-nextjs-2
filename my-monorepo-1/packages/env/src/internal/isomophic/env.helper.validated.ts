@@ -1,10 +1,10 @@
 //
 // 環境変数をバリデーション付きで安全に取得するヘルパー
 //
-import { env } from '#env/internal/env';
-import { envValueOrDefault } from '#env/internal/env.strategy';
-import { envBooleanString, NextRuntime, NodeEnv, NodeEnvNext } from '#env/internal/env.types';
-import { envValidateBooleanValue, isEnumValue } from '#env/internal/env.validator';
+import { env } from '#env/internal/isomophic/env';
+import { envValueOrDefault } from '#env/internal/isomophic/env.strategy';
+import { envBooleanString, NextRuntime, NodeEnv, NodeEnvNext } from '#env/internal/isomophic/env.types';
+import { envValidateBooleanValue, isEnumValue } from '#env/internal/isomophic/env.validator';
 
 export function envNodeEnv() {
     const value = env.node_env;
