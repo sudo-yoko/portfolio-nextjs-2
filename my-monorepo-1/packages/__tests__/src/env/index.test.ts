@@ -12,9 +12,13 @@ import {
     envNodeEnvNext,
     envProtocolString,
     envValidateBooleanValue,
+    envValidateBooleanValueOrDefault,
     envValidateNumValue,
+    envValidateNumValueOrDefault,
     envValidateProtocolValue,
+    envValidateProtocolValueOrDefault,
     envValidateStringValue,
+    envValidateStringValueOrDefault,
     NextRuntime,
     NodeEnvNext,
 } from '@my/env';
@@ -63,29 +67,41 @@ void test('test1-5', () => {
     const value1 = process.env.USER;
     console.log(value1);
 
-    // 検証済みの値
+    // 環境変数：文字列　未設定の場合はエラーにしたいとき
     const value2 = envValidateStringValue(value1, { key: 'USER' });
     console.log(value2);
 
+    // 環境変数：文字列　未設定の場合はデフォルト値が欲しいとき
     const defaultStringValue: string = '';
-    const value3 = envValidateStringValue(value1 ?? defaultStringValue, { key: 'USER' });
+    const value3 = envValidateStringValueOrDefault(value1, defaultStringValue);
     console.log(value3);
 
-    // 環境変数が未設定の場合に空文字で欲しければenvのバリデーターは使わないように実装する。
-    const value3_1 = value1 ?? defaultStringValue;
-    console.log(value3_1);
-
-    const defaultNumValue: string = '0';
-    const value4 = envValidateNumValue(value1 ?? defaultNumValue, { key: 'USER' });
+    // 環境変数：数値　未設定の場合はエラーにしたいとき
+    const value4 = envValidateNumValue(value1, { key: 'USER' });
     console.log(value4);
 
-    const defaultProtocolValue: string = 'http';
-    const value5 = envValidateProtocolValue(value1 ?? defaultProtocolValue);
+    // 環境変数：数値　未設定の場合はデフォルト値が欲しいとき
+    const defaultNumValue: string = '0';
+    const value5 = envValidateNumValueOrDefault(value1, defaultNumValue, { key: 'USER' });
     console.log(value5);
-    if (value5 === envProtocolString.Http) {
-    }
 
-    const defaultBoolValue: envBooleanString = envBooleanString.False;
-    const value6 = envValidateBooleanValue(value1 ?? defaultBoolValue);
+    // 環境変数：真偽値　未設定の場合はエラーにしたいとき
+    const value6 = envValidateBooleanValue(value1, { key: 'USER' });
     console.log(value6);
+
+    // 環境変数：真偽値　未設定の場合はデフォルト値が欲しいとき
+    const defaultBoolValue = envBooleanString.False;
+    const value7 = envValidateBooleanValueOrDefault(value1, defaultBoolValue, { key: 'USER' });
+    console.log(value7);
+
+    // 環境変数：プロトコル値　未設定の場合はエラーにしたいとき
+    const value8 = envValidateProtocolValue(value1, { key: 'USER' });
+    console.log(value8);
+
+    // 環境変数：プロトコル値　未設定の場合はデフォルト値が欲しいとき
+    const defaultProtocolValue = envProtocolString.Http;
+    const value9 = envValidateProtocolValueOrDefault(value1, defaultProtocolValue, { key: 'USER' });
+    console.log(value9);
+    if (value9 === envProtocolString.Http) {
+    }
 });
