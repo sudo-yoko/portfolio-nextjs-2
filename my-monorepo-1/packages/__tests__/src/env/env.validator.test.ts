@@ -2,15 +2,15 @@ import assert from 'node:assert';
 import test, { before, describe, mock } from 'node:test';
 
 import { NodeEnv } from '@/env/src/internal/isomophic/env.types';
-import { assertThrows } from '@/tests/test-utils';
+import { assertThrows, definedAndNotBlankMock } from '@/tests/test-utils';
 
 // clean & npm exec -- node --test --experimental-test-module-mocks --import tsx src/env/env.validator.test.ts
 // clear & npm run node:test -- src/env/env.validator.test.ts
 void describe('', () => {
     // const mockedIsEnvSet = (value: string | undefined): value is string => value !== undefined;
-    const mockedIsEnvSet = (value: string | undefined): value is string => {
-        return value !== undefined && value.trim().length > 0;
-    };
+    // const mockedIsEnvSet = (value: string | undefined): value is string => {
+    //     return value !== undefined && value.trim().length > 0;
+    // };
     type moduleType = typeof import('@/env/src/internal/isomophic/env.validator');
     let isEnumValue: moduleType['isEnumValue'];
     let envValidateStringValue: moduleType['envValidateStringValue'];
@@ -20,7 +20,7 @@ void describe('', () => {
     before(async () => {
         mock.module('@/env/src/internal/isomophic/env.strategy.ts', {
             namedExports: {
-                isEnvSet: mockedIsEnvSet,
+                isEnvSet: definedAndNotBlankMock,
             },
         });
         const moduleName = '@/env/src/internal/isomophic/env.validator';

@@ -3,8 +3,7 @@
 //
 import 'server-only';
 
-import { env_s } from '#env/internal/server/env.s';
-import { envValueOrDefault } from '#env/internal/isomophic/env.strategy';
+import { envValueOrDefault } from '#env/internal/isomophic/env.helper.validated';
 import { envBooleanString } from '#env/internal/isomophic/env.types';
 import {
     envValidateBooleanValue,
@@ -12,6 +11,7 @@ import {
     envValidateProtocolValue,
     envValidateStringValue,
 } from '#env/internal/isomophic/env.validator';
+import { env_s } from '#env/internal/server/env.s';
 
 /**
  * 環境変数 process.env.ENABLE_LOGGER_INITIALIZATION の検証済みの値を取得する

@@ -2,7 +2,7 @@
 // 環境変数をバリデーション付きで安全に取得するヘルパー
 //
 import { env } from '#env/internal/isomophic/env';
-import { envValueOrDefault } from '#env/internal/isomophic/env.strategy';
+import { isEnvSet } from '#env/internal/isomophic/env.strategy';
 import { envBooleanString, NextRuntime, NodeEnv, NodeEnvNext } from '#env/internal/isomophic/env.types';
 import { envValidateBooleanValue, isEnumValue } from '#env/internal/isomophic/env.validator';
 
@@ -46,4 +46,14 @@ export function envNextRuntime() {
 export function envNextPublicFwDebugLogger() {
     const value = env.next_public_fw_debug_logger;
     return envValidateBooleanValue(envValueOrDefault(value, envBooleanString.False));
+}
+
+/**
+ * 環境変数が未設定の場合はデフォルト値を返す
+ */
+export function envValueOrDefault(value: string | undefined, defaultValue: string): string {
+    if (isEnvSet(value)) {
+        return value;
+    }
+    return defaultValue;
 }

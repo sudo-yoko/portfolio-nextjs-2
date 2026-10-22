@@ -22,13 +22,3 @@ const definedAndNotBlank: EnvSet = (value): value is string => {
  * 環境変数が設定されているかを判定する関数
  */
 export const isEnvSet: EnvSet = definedAndNotBlank;
-
-/**
- * 環境変数が未設定の場合はデフォルト値を返す
- */
-export function envValueOrDefault(value: string | undefined, defaultValue: string): string {
-    if (isEnvSet(value)) {
-        return value;
-    }
-    return defaultValue;
-}
