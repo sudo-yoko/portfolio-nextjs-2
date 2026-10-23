@@ -3,10 +3,12 @@
 //
 import 'server-only';
 
-import { envValueOrDefault } from '#env/internal/isomophic/env.helper.validated';
-import { envBooleanString } from '#env/internal/isomophic/env.types';
 import {
-    envValidateBooleanValue,
+    envStringValueOrDefault,
+    envValidateBooleanValueOrDefault,
+    envValidateNumValueOrDefault,
+} from '#env/internal/isomophic/env.helper.default';
+import {
     envValidateNumValue,
     envValidateProtocolValue,
     envValidateStringValue,
@@ -20,14 +22,14 @@ import { env_s } from '#env/internal/server/env.s';
  */
 export function envEnableLoggerInitialization() {
     const value = env_s.enable_logger_initialization;
-    return envValidateBooleanValue(envValueOrDefault(value, envBooleanString.False));
+    return envValidateBooleanValueOrDefault(value, false);
 }
 
 /**
  * 環境変数の検証済みの値を取得する
  *
  * @param key - 環境変数名
- * @returns 検証済みの値。文字列を保証。ただし空文字はエラーとする。
+ * @returns 検証済みの値。文字列を保証。環境変数が未設定の場合はエラーとする。
  */
 export function envString(key: string): string {
     const value = env_s.get(key);
@@ -42,7 +44,7 @@ export function envString(key: string): string {
  */
 export function envStringOrDefault(key: string, defaultValue: string): string {
     const value = env_s.get(key);
-    return envValueOrDefault(value, defaultValue);
+    return envStringValueOrDefault(value, defaultValue);
 }
 
 /**
@@ -58,7 +60,7 @@ export function envNumber(key: string): number {
 
 export function envNumberOrDefault(key: string, defaultValue: number): number {
     const value = env_s.get(key);
-    return envValidateNumValue(envValueOrDefault(value, String(defaultValue)), { key });
+    return envValidateNumValueOrDefault(value, defaultValue, { key });
 }
 
 /**
@@ -69,5 +71,5 @@ export function envNumberOrDefault(key: string, defaultValue: number): number {
  */
 export function envProtocol(key: string) {
     const value = envString(key);
-    return envValidateProtocolValue(value);
+    return envValidateProtocolValue(value, { key });
 }

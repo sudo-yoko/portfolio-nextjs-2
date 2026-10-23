@@ -2,20 +2,9 @@
 // 環境変数をバリデーション付きで安全に取得するヘルパー
 //
 import { env } from '#env/internal/isomophic/env';
-import { isEnvSet } from '#env/internal/isomophic/env.strategy';
-import {
-    envBooleanString,
-    envProtocolString,
-    NextRuntime,
-    NodeEnv,
-    NodeEnvNext,
-} from '#env/internal/isomophic/env.types';
-import {
-    envValidateBooleanValue,
-    envValidateNumValue,
-    envValidateProtocolValue,
-    isEnumValue,
-} from '#env/internal/isomophic/env.validator';
+import { envValidateBooleanValueOrDefault } from '#env/internal/isomophic/env.helper.default';
+import { NextRuntime, NodeEnv, NodeEnvNext } from '#env/internal/isomophic/env.types';
+import { isEnumValue } from '#env/internal/isomophic/env.validator';
 
 export function envNodeEnv() {
     const value = env.node_env;
@@ -56,43 +45,5 @@ export function envNextRuntime() {
  */
 export function envNextPublicFwDebugLogger() {
     const value = env.next_public_fw_debug_logger;
-    return envValidateBooleanValue(envValueOrDefault(value, envBooleanString.False));
-}
-
-/**
- * 環境変数が未設定の場合はデフォルト値を返す
- */
-export function envValueOrDefault(value: string | undefined, defaultValue: string): string {
-    if (isEnvSet(value)) {
-        return value;
-    }
-    return defaultValue;
-}
-
-export function envValidateStringValueOrDefault(value: string | undefined, defaultValue: string): string {
-    return envValueOrDefault(value, defaultValue);
-}
-
-export function envValidateNumValueOrDefault(
-    value: string | undefined,
-    defaultValue: string,
-    option?: { key?: string },
-): number {
-    return envValidateNumValue(envValueOrDefault(value, defaultValue), option);
-}
-
-export function envValidateBooleanValueOrDefault(
-    value: string | undefined,
-    defaultValue: envBooleanString,
-    option?: { key?: string },
-): boolean {
-    return envValidateBooleanValue(envValueOrDefault(value, defaultValue), option);
-}
-
-export function envValidateProtocolValueOrDefault(
-    value: string | undefined,
-    defaultValue: envProtocolString,
-    option?: { key?: string },
-) {
-    return envValidateProtocolValue(envValueOrDefault(value, defaultValue), option);
+    return envValidateBooleanValueOrDefault(value, false);
 }

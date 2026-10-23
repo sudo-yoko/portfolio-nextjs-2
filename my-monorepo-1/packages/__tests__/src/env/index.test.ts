@@ -18,7 +18,7 @@ import {
     envValidateProtocolValue,
     envValidateProtocolValueOrDefault,
     envValidateStringValue,
-    envValidateStringValueOrDefault,
+    envStringValueOrDefault,
     NextRuntime,
     NodeEnvNext,
 } from '@my/env';
@@ -73,7 +73,7 @@ void test('test1-5', () => {
 
     // 環境変数：文字列　未設定の場合はデフォルト値が欲しいとき
     const defaultStringValue: string = '';
-    const value3 = envValidateStringValueOrDefault(value1, defaultStringValue);
+    const value3 = envStringValueOrDefault(value1, defaultStringValue);
     console.log(value3);
 
     // 環境変数：数値　未設定の場合はエラーにしたいとき

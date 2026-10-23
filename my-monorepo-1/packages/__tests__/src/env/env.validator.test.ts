@@ -1,8 +1,9 @@
 import assert from 'node:assert';
 import test, { before, describe, mock } from 'node:test';
 
+import { definedAndNotBlank } from '@/env/src/internal/isomophic/env.strategy';
 import { NodeEnv } from '@/env/src/internal/isomophic/env.types';
-import { assertThrows, definedAndNotBlankMock } from '@/tests/test-utils';
+import { assertThrows } from '@/tests/test-utils';
 
 // clean & npm exec -- node --test --experimental-test-module-mocks --import tsx src/env/env.validator.test.ts
 // clear & npm run node:test -- src/env/env.validator.test.ts
@@ -18,9 +19,14 @@ void describe('', () => {
     let envValidateBooleanValue: moduleType['envValidateBooleanValue'];
 
     before(async () => {
-        mock.module('@/env/src/internal/isomophic/env.strategy.ts', {
+        // mock.module('@/env/src/internal/isomophic/env.strategy.ts', {
+        //     namedExports: {
+        //         isEnvSet: definedAndNotBlank,
+        //     },
+        // });
+        mock.module('@/env/src/internal/isomophic/env.ts', {
             namedExports: {
-                isEnvSet: definedAndNotBlankMock,
+                isEnvSet: definedAndNotBlank,
             },
         });
         const moduleName = '@/env/src/internal/isomophic/env.validator';

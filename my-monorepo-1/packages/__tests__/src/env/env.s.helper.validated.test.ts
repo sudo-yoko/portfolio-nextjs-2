@@ -1,6 +1,6 @@
 import test, { before, describe, mock } from 'node:test';
 
-import { definedAndNotBlankMock } from '@/tests/test-utils';
+import { definedAndNotBlank } from '@/env/src/internal/isomophic/env.strategy';
 
 ///////////////////////////
 // envNumberOrDefault
@@ -16,9 +16,14 @@ void describe('env.s.helper.validated.ts#envNumberOrDefault のテスト', () =>
 
     before(async () => {
         mock.module('server-only', { defaultExport: {}, namedExports: {} });
-        mock.module('@/env/src/internal/isomophic/env.strategy.ts', {
+        // mock.module('@/env/src/internal/isomophic/env.strategy.ts', {
+        //     namedExports: {
+        //         isEnvSet: definedAndNotBlank,
+        //     },
+        // });
+        mock.module('@/env/src/internal/isomophic/env.ts', {
             namedExports: {
-                isEnvSet: definedAndNotBlankMock,
+                isEnvSet: definedAndNotBlank,
             },
         });
         mock.module('@/env/src/internal/server/env.s.ts', {
@@ -31,8 +36,8 @@ void describe('env.s.helper.validated.ts#envNumberOrDefault のテスト', () =>
     });
 
     void test('test1-1', () => {
-        mockedEnv.get = () => '';   // 環境変数未設定
-        const result = mockedEnvNumberOrDefault('key', 1);
+        mockedEnv.get = () => ''; // 環境変数未設定
+        const result = mockedEnvNumberOrDefault('key', '1');
         console.log(result);
     });
 });
