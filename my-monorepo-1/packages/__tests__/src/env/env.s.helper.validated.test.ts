@@ -14,11 +14,6 @@ void describe('env.s.helper.validated.ts#envNumberOrDefault のテスト', () =>
 
     before(async () => {
         mock.module('server-only', { defaultExport: {}, namedExports: {} });
-        // mock.module('@/env/src/internal/isomophic/env.strategy.ts', {
-        //     namedExports: {
-        //         isEnvSet: definedAndNotBlank,
-        //     },
-        // });
         mock.module('@/env/src/internal/server/env.s.ts', {
             namedExports: {
                 env_s: mockedEnv,

@@ -1,25 +1,18 @@
 import assert from 'node:assert';
-import test, { before, describe } from 'node:test';
+import test, { describe } from 'node:test';
 
 import { NodeEnv } from '@/env/src/internal/isomophic/env.types';
+import {
+    envValidateBooleanValue,
+    envValidateNumValue,
+    envValidateStringValue,
+    isEnumValue,
+} from '@/env/src/internal/isomophic/env.validator';
 import { assertThrows } from '@/tests/test-utils';
 
 // clean & npm exec -- node --test --experimental-test-module-mocks --import tsx src/env/env.validator.test.ts
 // clear & npm run node:test -- src/env/env.validator.test.ts
 void describe('', () => {
-    type moduleType = typeof import('@/env/src/internal/isomophic/env.validator');
-    let isEnumValue: moduleType['isEnumValue'];
-    let envValidateStringValue: moduleType['envValidateStringValue'];
-    let envValidateNumValue: moduleType['envValidateNumValue'];
-    let envValidateBooleanValue: moduleType['envValidateBooleanValue'];
-
-    before(async () => {
-        const moduleName = '@/env/src/internal/isomophic/env.validator';
-        isEnumValue = (await import(moduleName)).isEnumValue;
-        envValidateStringValue = (await import(moduleName)).envValidateStringValue;
-        envValidateNumValue = (await import(moduleName)).envValidateNumValue;
-        envValidateBooleanValue = (await import(moduleName)).envValidateBooleanValue;
-    });
 
     ////////////////////////////////
     // 1. isEnumValue

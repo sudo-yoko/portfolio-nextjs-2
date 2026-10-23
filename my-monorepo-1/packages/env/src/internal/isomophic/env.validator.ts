@@ -4,7 +4,7 @@
 import { envBooleanString, envProtocolString } from '#env/internal/isomophic/env.types';
 
 export function isEnvSet(value: string | undefined): value is string  {
-    //TODO: 改行コードのみの場合もtrueになる。
+    //TODO: 改行コードのみの場合もtrueになる？
     return value !== undefined && value.trim().length > 0;
 };
 
@@ -69,10 +69,6 @@ export function envValidateNumValue(value: string | undefined, option?: { key?: 
  */
 export function envValidateBooleanValue(value: string | undefined, option?: { key?: string }): boolean {
     const validated = envValidateStringValue(value, { key: option?.key });
-    // ブランクが許容されている場合(バリデーションエラーにならない場合)
-    if (validated.trim().length === 0){
-        return false;
-    }
     if (isEnumValue(validated, envBooleanString)) {
         if (validated === envBooleanString.True) {
             return true;
