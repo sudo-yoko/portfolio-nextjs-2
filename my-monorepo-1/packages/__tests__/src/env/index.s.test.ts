@@ -86,7 +86,7 @@ void test('test1-5', () => {
     const value4 = envNumber('USER');
     console.log(value4);
 
-    const value5 = envNumberOrDefault('USER', '0');
+    const value5 = envNumberOrDefault('USER', 0);
     console.log(value5);
 
     const value6 = envProtocol('USER');

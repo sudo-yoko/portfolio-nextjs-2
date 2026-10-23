@@ -4,7 +4,6 @@
 // テストで環境変数取得をモックしやすいようにするためのラッパー。
 // クライアントサイドとサーバーサイドの両方で使用されるもの
 //
-import { definedAndNotBlank, EnvSet } from '#env/internal/isomophic/env.strategy';
 
 /**
  * 環境変数定義オブジェクト
@@ -20,8 +19,3 @@ export const env = {
         return process.env.NEXT_PUBLIC_FW_DEBUG_LOGGER;
     },
 };
-
-/**
- * 環境変数が設定されているかを判定する関数
- */
-export const isEnvSet: EnvSet = definedAndNotBlank;

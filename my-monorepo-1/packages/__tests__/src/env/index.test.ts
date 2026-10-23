@@ -5,12 +5,12 @@ import test from 'node:test';
 
 import {
     env,
-    envBooleanString,
     envNextPublicFwDebugLogger,
     envNextRuntime,
     envNodeEnv,
     envNodeEnvNext,
     envProtocolString,
+    envStringValueOrDefault,
     envValidateBooleanValue,
     envValidateBooleanValueOrDefault,
     envValidateNumValue,
@@ -18,7 +18,6 @@ import {
     envValidateProtocolValue,
     envValidateProtocolValueOrDefault,
     envValidateStringValue,
-    envStringValueOrDefault,
     NextRuntime,
     NodeEnvNext,
 } from '@my/env';
@@ -81,7 +80,7 @@ void test('test1-5', () => {
     console.log(value4);
 
     // 環境変数：数値　未設定の場合はデフォルト値が欲しいとき
-    const defaultNumValue: string = '0';
+    const defaultNumValue: number = 0;
     const value5 = envValidateNumValueOrDefault(value1, defaultNumValue, { key: 'USER' });
     console.log(value5);
 
@@ -90,7 +89,7 @@ void test('test1-5', () => {
     console.log(value6);
 
     // 環境変数：真偽値　未設定の場合はデフォルト値が欲しいとき
-    const defaultBoolValue = envBooleanString.False;
+    const defaultBoolValue: boolean = false;
     const value7 = envValidateBooleanValueOrDefault(value1, defaultBoolValue, { key: 'USER' });
     console.log(value7);
 
