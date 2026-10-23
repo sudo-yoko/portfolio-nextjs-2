@@ -4,8 +4,8 @@
 //
 import 'client-only';
 
-import type { Logger } from '#logger/internal/logger.types';
-import { logDebug, logError, logInfo } from '#logger/internal/logger.winston.action';
+import type { Logger } from '#logger/internal/isomophic/logger.types';
+import { logDebug, logError, logInfo } from '#logger/internal/server/logger.winston.action';
 
 /**
  * ServerActions によるロガー実装

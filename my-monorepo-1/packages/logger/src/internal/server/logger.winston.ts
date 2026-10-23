@@ -7,7 +7,7 @@ import winston, { createLogger, format, transports } from 'winston';
 import 'winston-daily-rotate-file';
 import DailyRotateFile from 'winston-daily-rotate-file';
 
-import { consoleHeader } from '#logger/internal/logger.utils';
+import { consoleHeader } from '#logger/internal/isomophic/logger.utils';
 import { env } from '@my/env';
 
 // スタックトレースのソースマップサポート。productionでのみ効果がある

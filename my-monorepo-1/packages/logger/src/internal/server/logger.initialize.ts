@@ -1,6 +1,6 @@
 import 'server-only';
 
-import logger from '#logger/internal/logger.s';
+import logger from '#logger/internal/server/logger.s';
 import { envEnableLoggerInitialization } from '@my/env/server';
 
 export function initializeLogger() {
