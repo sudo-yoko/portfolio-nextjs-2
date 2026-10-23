@@ -1,25 +1,24 @@
 import test, { afterEach, before, describe, mock } from 'node:test';
 
-import type { TCreateAppLogger } from '@/logger/src/internal/logger.winston';
-
 // clear & npm run node:test -- src/logger/logger.winston.test.ts
 void describe('logging.winston.test.ts の実行', async () => {
+    const { env } = await import('@/env/src/internal/isomophic/env');
     const mockedEnv = {
-        node_env: 'mock',
+        node_env: env.node_env,
+        next_public_fw_debug_logger: env.next_public_fw_debug_logger,
     };
-    // type TargetModule = typeof import('@/logger/src/internal/logging.winston');
-    // let mockedCreateAppLogger: TargetModule['createAppLogger'];
-    let mockedCreateAppLogger: TCreateAppLogger;
-    let logger: ReturnType<TCreateAppLogger> | undefined;
+    type moduleType = typeof import('@/logger/src/internal/server/logger.winston');
+    let createAppLogger: moduleType['createAppLogger'];
+    let logger: ReturnType<moduleType['createAppLogger']> | undefined;
 
     before(async () => {
         mock.module('server-only', { defaultExport: {}, namedExports: {} });
-        mock.module('@/env/src/internal/env.s', {
+        mock.module('@/env/src/internal/isomophic/env.ts', {
             namedExports: {
                 env: mockedEnv,
             },
         });
-        mockedCreateAppLogger = (await import('@/logger/src/internal/logger.winston')).createAppLogger;
+        createAppLogger = (await import('@/logger/src/internal/server/logger.winston')).createAppLogger;
     });
 
     afterEach(() => {
@@ -28,7 +27,7 @@ void describe('logging.winston.test.ts の実行', async () => {
 
     void test('test1-1', async (t) => {
         mockedEnv.node_env = 'production';
-        logger = mockedCreateAppLogger();
+        logger = createAppLogger();
         console.log(`${t.name} logging start.`);
         logger.info(t.name);
         console.log(`${t.name} logging end.`);
@@ -36,7 +35,7 @@ void describe('logging.winston.test.ts の実行', async () => {
 
     void test('test1-2', async (t) => {
         mockedEnv.node_env = 'development';
-        logger = mockedCreateAppLogger();
+        logger = createAppLogger();
         console.log(`${t.name} logging start.`);
         logger.info(t.name);
         console.log(`${t.name} logging end.`);
