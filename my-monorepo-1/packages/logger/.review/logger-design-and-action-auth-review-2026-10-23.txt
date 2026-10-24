@@ -1,0 +1,176 @@
+logger パッケージの構成・設計レビューと Server Actions 認証の検討
+記録日: 2026-10-23
+対象: my-monorepo-1/packages/logger
+
+このファイルは今回の会話の要約です。設計案は未実装です。
+
+1. レビューの依頼と総評
+
+依頼: packages/logger の全体的な構成と設計をレビューする。
+
+共通の型、サーバー実装、クライアント実装を分離する方針は良い。
+ただし、公開 API と実際の動作に不一致があり、ログの欠落を防ぐ修正を
+優先する必要がある。レビューでは実装コードの変更を行っていない。
+
+公開入口:
+・@my/logger: 共通の型、ログレベル、補助定数
+・@my/logger/server: サーバーロガーと initializeLogger
+・@my/logger/client: Server Actions を呼ぶクライアントロガー
+
+2. 主な指摘
+
+【高】公開メソッドの一部が未実装
+サーバー adapter の *Async 全メソッドと、クライアント adapter の
+log、warn、logAsync、warnAsync が何も出力せず正常終了する。
+利用側では成功したように見え、必要なログが欠落する。
+実装するか、対応するまで公開インターフェースから外すことを推奨。
+参照:
+  src/internal/server/logger.winston.adapter.ts:35
+  src/internal/client/logger.winston.action.adapter.ts:13
+
+【高】非同期 API の完了と失敗の扱いが不整合
+クライアントの infoAsync などは void logInfo(...) としているため、
+await しても送信完了を待てず、送信失敗が返却 Promise に伝わらない。
+一方で、戻り値が void の info などには async 関数が割り当てられている。
+完了が「送信要求の受付」「サーバーへの到達」「出力完了」のどれを意味するか
+定義し、戻り値とエラー処理を統一する必要がある。
+参照:
+  src/internal/client/logger.winston.action.adapter.ts:17
+  src/internal/isomophic/logger.types.ts:42
+
+【高】クライアント入力に実行時の制限がない
+Server Actions は message と extras をそのまま出力する。
+TypeScript の型だけでは、外部からの入力の長さや内容を制限できない。
+大量送信によるディスク消費や、改行によるログ形式の崩れが起こり得る。
+入力検証、サイズ制限、送信頻度の制御、クライアント由来の明示を推奨。
+参照:
+  src/internal/action/logger.winston.action.ts:11
+  src/internal/server/logger.winston.ts:34
+
+【中】import 時の副作用
+Winston モジュールの読み込み時に、ログディレクトリ作成と
+sourceMapSupport.install() が実行される。
+initializeLogger() の条件が false でも、この処理は実行される。
+ディレクトリ作成はロガー生成時へ移し、プロセス全体への設定は
+アプリの起動処理に置くことで、初期化の責任を明確にできる。
+参照:
+  src/internal/server/logger.winston.ts:14
+  src/internal/server/logger.initialize.ts:6
+
+【中】アプリ固有の運用設定と依存宣言
+アプリ名、相対ログディレクトリ、ファイル出力、保持期間が固定されている。
+複数アプリで利用すると、識別や出力先の管理が難しくなる。
+createLogger(config) に設定を渡し、アプリで環境変数を解釈する構成を推奨。
+また、実行時に import する source-map-support が logger 自身の依存に
+宣言されていない。
+参照:
+  src/internal/server/logger.winston.ts:19
+  package.json:34
+
+【中】テストによる動作保証が不足
+既存テストにはアサーションがなく、ログ内容、レベル、送信失敗、
+公開 API の動作を検証していない。
+環境変数のモックも、実装が import する @my/env と異なる指定である。
+メモリ上の出力先を使い、公開メソッドの出力と非同期の失敗伝播を
+検証するテストを優先する。
+参照:
+  ../__tests__/src/logger/logger.winston.test.ts:14
+
+3. 構成の改善案
+
+公開入口 @my/logger、/server、/client は維持し、内部を次の責務に整理する。
+・共通のロギング契約
+・設定可能な Winston 実装
+・ブラウザーからの送信処理
+
+Server Actions の受付ポリシーはアプリ側に置くことで、共有パッケージの
+Next.js 固有の責務を減らせる。
+Extras は extra1〜extra5 よりも、requestId や component など意味のある
+名前にすると追跡しやすくなる。
+
+4. 実行した検証と限界
+
+my-monorepo-1 で次のコマンドを実行した。
+・npm run typecheck --workspace=@my/logger: 成功
+・npm run lint --workspace=@my/logger: 成功
+・npm run node:test --workspace=@my/tests -- src/logger/logger.winston.test.ts: 成功
+・上記テストを --test-reporter=tap 付きでも確認
+
+テスト結果はファイル単位の 1 件のみで、テストファイルに定義された
+2 ケースの実行は確認できていない。コマンドの成功と動作保証は区別する。
+
+5. Server Actions に認証を付ける方法
+
+追加の質問:
+パッケージ化された logger.winston.action に認証を付けるにはどうするか。
+
+基本方針:
+パッケージ内にあっても、Server Action 実行時にサーバー側でセッションを
+検証する。画面やレイアウトの認証だけに頼らず、各 Action 内で必要な
+認証・認可を確認する。
+
+方法①: Action をアプリ側に置く（今回の推奨）
+アプリで認証し、@my/logger/server を呼ぶ。
+アプリごとに認証方式やログの受付条件が異なる場合に適している。
+logger は出力を担当し、アプリはログ送信の受付を担当する。
+
+例（requireSession はアプリで実装する認証ヘルパー。未認証時は例外）:
+
+  // apps/web/src/actions/client-log.ts
+  'use server';
+
+  import logger from '@my/logger/server';
+  import { requireSession } from '@/auth/session';
+
+  export async function logInfo(message: string) {
+      const session = await requireSession();
+
+      if (typeof message !== 'string' || message.length > 2000) {
+          throw new Error('Invalid log message');
+      }
+
+      logger.info(message, {
+          extra1: session.user.id,
+          extra2: 'client',
+      });
+  }
+
+ユーザー ID はクライアント引数を信用せず、検証済みセッションから取得する。
+上の例は認証と簡単なサイズ検証を示すものであり、送信頻度制限などを
+含む完成実装ではない。
+
+現状の @my/logger/client はパッケージ内の Action を直接 import するため、
+この方式に変える場合はアプリ側のクライアント adapter に置き換えるか、
+送信関数を渡せる構成へ変更する。
+既存の認証なし Action も削除するか、同じ認証を適用する必要がある。
+
+方法②: 共通認証パッケージを使う
+logger の Action が @my/auth/server などの共通認証処理を呼ぶ。
+全アプリで認証基盤を統一している場合に適している。
+logger パッケージが認証パッケージに依存する設計になる。
+
+方法③: 認証処理を注入する
+アプリが認証関数を渡し、共通のサーバー処理から呼ぶ。
+認証への直接依存を避けつつ、受付処理を共通化したい場合に適している。
+グローバルな configureAuth() より、アプリの Action から共通の
+サーバー処理へ認証関数を渡す形が扱いやすい。
+認証関数はブラウザーから渡す引数にせず、サーバー側で結び付ける。
+
+ログイン前のログ:
+認証必須にすると、ログイン前の画面からログを収集できなくなる。
+必要な場合は匿名用の受付を別に設計し、入力サイズや送信頻度を制限する。
+
+確認した公式資料:
+Next.js Authentication
+https://nextjs.org/docs/app/guides/authentication
+
+Next.js use server
+https://nextjs.org/docs/app/api-reference/directives/use-server
+
+6. 現時点の結論と作業範囲
+
+優先事項は、未実装 API によるログ欠落と、非同期 API の契約の修正。
+認証の設計案は、Action をアプリ側に置き、認証後に共有ロガーを呼ぶ方法。
+この方法を採用する実装変更はまだ行っていない。
+今回の保存依頼では、このテキストファイルを新規作成する。
+ユーザーの指示に従い、コミットは行わない。
