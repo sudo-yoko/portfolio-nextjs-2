@@ -15,7 +15,7 @@ import {
 /**
  * カスタムエラー 型ガード関数
  */
-export function isCustomError(e: unknown): e is CustomErrorBase<ErrType> {
+export function isCustomError(e: unknown): e is CustomErrorBase<string> {
     if (e instanceof Error) {
         if (ERR_TYPE in e) {
             return true;

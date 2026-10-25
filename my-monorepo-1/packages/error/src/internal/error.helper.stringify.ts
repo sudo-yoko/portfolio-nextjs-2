@@ -1,13 +1,5 @@
 import { isCustomError } from '#error/internal/error.helpers';
-import {
-    CAUSES,
-    CustomErrorProperties,
-    ERR_CODE,
-    ERR_TYPE,
-    EXTRA,
-    LOCATION,
-} from '#error/internal/error.types';
-import { RESULT_TYPE } from './result.error';
+import { CAUSES, ERR_CODE, ERR_TYPE, EXTRA, LOCATION } from '#error/internal/error.types';
 
 /**
  * Errorオブジェクトの文字列表現を作成する
@@ -147,20 +139,19 @@ export function getNodeErrorProperties(err: Error): object {
 /**
  * Errorオブジェクトの中からカスタムエラー固有のプロパティを取得する
  */
-export function getCustomErrorProperties(err: unknown): CustomErrorProperties {
-    const option: CustomErrorProperties = {};
+export function getCustomErrorProperties(err: unknown): object {
+    const option: Record<string, unknown> = {};
     if (isCustomError(err)) {
-        option.errType = err[ERR_TYPE]; // TODO: ログにERR_TYPE出さない方がよいかもしれない
-        option.location = err[LOCATION];
-        option.extra = err[EXTRA];
-        option.causes = err[CAUSES];
+        option['ERR_TYPE'] = err[ERR_TYPE]; // TODO: ログにERR_TYPE出さない方がよいかもしれない
+        option['LOCATION'] = err[LOCATION];
+        option['EXTRA'] = err[EXTRA];
+        option['CAUSES'] = err[CAUSES];
         if (ERR_CODE in err) {
-            const e = err[ERR_CODE]
-            option.code = err[ERR_CODE];
+            option['ERR_CODE'] = err[ERR_CODE];
         }
-        if (RESULT_TYPE in err) {
-            option.result = err[RESULT_TYPE];
-        }
+        // if (RESULT_TYPE in err) {
+        //     option.result = err[RESULT_TYPE];
+        // }
     }
     // NOTE: シンボル（ERR_TYPE]、[ERR_CODE]、[RESULT_TYPE]）はJSON.stringifyでシリアライズできない（無視される）？
     // const text = isEmpty(option) ? undefined : JSON.stringify(option, null, 2);

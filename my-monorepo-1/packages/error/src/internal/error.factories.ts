@@ -16,7 +16,7 @@ import {
     RetryableError,
 } from '#error/internal/error.types';
 
-export function customError<T extends ErrType>(props: {
+export function customError<T extends string>(props: {
     message?: string;
     cause?: unknown;
     errType: T;
