@@ -6,7 +6,7 @@ import {
     ApplicationError,
     AuthError,
     CAUSES,
-    CustomErrorBase,
+    CustomError,
     ERR_CODE,
     ERR_TYPE,
     ErrType,
@@ -22,7 +22,7 @@ export function customError<T extends string>(props: {
     errType: T;
     location?: string;
     extra?: object;
-}): CustomErrorBase<T> {
+}): CustomError<T> {
     const { message, cause, errType, location, extra } = props;
     const base = new Error(message, { cause });
     const causes: object[] = [];
@@ -95,4 +95,3 @@ export function applicationError(
     const base = customError({ message, cause, errType: ErrType.ApplicationError, location, extra });
     return Object.assign(base, { [ERR_CODE]: code });
 }
-

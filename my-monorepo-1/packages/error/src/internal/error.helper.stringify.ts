@@ -159,7 +159,7 @@ export function getCustomErrorProperties(err: unknown): object {
     return option;
 }
 
-function isEmpty(obj: Record<string, unknown>): boolean {
-    const values = Object.values(obj);
-    return values.length === 0 || values.every((v) => v === undefined);
-}
+// function isEmpty(obj: Record<string, unknown>): boolean {
+//     const values = Object.values(obj);
+//     return values.length === 0 || values.every((v) => v === undefined);
+// }

@@ -4,18 +4,16 @@
 import {
     ApplicationError,
     AuthError,
-    CustomErrorBase,
-    //CustomError,
+    CustomError,
     ERR_TYPE,
     ErrType,
-    //ResultError,
     RetryableError,
 } from '#error/internal/error.types';
 
 /**
  * カスタムエラー 型ガード関数
  */
-export function isCustomError(e: unknown): e is CustomErrorBase<string> {
+export function isCustomError(e: unknown): e is CustomError<string> {
     if (e instanceof Error) {
         if (ERR_TYPE in e) {
             return true;

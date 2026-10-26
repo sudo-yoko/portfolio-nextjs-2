@@ -12,7 +12,9 @@ import { isCustomError } from '@/error/src/internal/error.helpers';
 void test('test1-1', () => {
     const e = authError({ location: 'error.factories.test.ts' });
     if (isCustomError(e)) {
+        console.log('e=', JSON.stringify(e));
         const result = getCustomErrorProperties(e);
         console.log('result=', result);
+        console.log('result(json.stringify)=', JSON.stringify(result));
     }
 });

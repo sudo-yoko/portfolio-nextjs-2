@@ -39,7 +39,7 @@ export type ErrType = (typeof ErrType)[keyof typeof ErrType]; // 型
 /**
  * カスタムエラー基本型
  */
-export type CustomErrorBase<T extends string> = Error & {
+export type CustomError<T extends string> = Error & {
     [ERR_TYPE]: T;
     [LOCATION]?: string;
     [EXTRA]?: object;
@@ -48,10 +48,10 @@ export type CustomErrorBase<T extends string> = Error & {
 }; // NOTE: 型の合成
 
 // 種類別カスタムエラー // NOTE: 交差型
-export type AuthError = CustomErrorBase<typeof ErrType.AuthError>;
-export type InvalidStatusError = CustomErrorBase<typeof ErrType.InvalidStatusError>;
-export type RetryableError = CustomErrorBase<typeof ErrType.RetryableError>;
-export type ApplicationError = CustomErrorBase<typeof ErrType.ApplicationError>;
+export type AuthError = CustomError<typeof ErrType.AuthError>;
+export type InvalidStatusError = CustomError<typeof ErrType.InvalidStatusError>;
+export type RetryableError = CustomError<typeof ErrType.RetryableError>;
+export type ApplicationError = CustomError<typeof ErrType.ApplicationError>;
 // export type ApplicationError = CustomErrorBase<typeof ErrType.ApplicationError> & {
 //     [ERR_CODE]?: string;
 // };
