@@ -1,0 +1,65 @@
+import { QueryParams } from '#client/internal/isomophic/client.params';
+
+/**
+ * REST API クライアントのインターフェース型
+ */
+export type Client = {
+    /**
+     * リクエストを送信する
+     */
+    send<BODY = never>(req: RequestConfig<BODY>): Promise<RawResponse>;
+
+    // TODO: AbortControllerを使ったリクエストキャンセルの機能
+};
+
+/**
+ * HTTP メソッド定義
+ */
+export const Method = {
+    GET: 'GET',
+    POST: 'POST',
+} as const;
+export type Method = (typeof Method)[keyof typeof Method];
+
+/**
+ * リクエスト設定オブジェクト
+ */
+export type RequestConfig<BODY = never> = {
+    method: Method;
+    url: string;
+    body?: BODY;
+    // query?: QueryParam;
+    query?: QueryParams;
+    // path?: string; // TODO: BFFではパスパラメータを使用しない方針
+    headers?: Record<string, string>;
+    timeout?: number;
+    /**
+     * どのステータスをエラーとするか指定可能
+     */
+    validateStatus?: ValidateStatus;
+};
+
+/**
+ * HTTPステータスの検証関数。
+ * 正常な応答とみなすステータスコードを判定する
+ */
+export type ValidateStatus = (status: number) => boolean;
+
+/**
+ * 返却オブジェクト
+ */
+// TODO: RESULT型と型名が似ているため、ClientResult、RawResponseなどにする
+export type RawResponse = {
+    status: number;
+    /**
+     * BFFのリクエストの場合は、RESULT型の値が格納される。
+     * BEのリクエストの場合は、結果のレスポンスボディが格納される。
+     */
+    rawBody: string; // TODO: 名前をdataにするか
+};
+
+/**
+ * 送信用クエリパラメーター型
+ */
+// export type QueryParam<K extends string> = Partial<Record<K, string | string[]>>;
+// export type QueryParam = { key: string; value: string }[];
