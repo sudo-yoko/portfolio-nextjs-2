@@ -8,9 +8,29 @@
     "imports": {
         "#client/*": "./src/*.ts"
     },
+    "exports": {
+        ".": {
+            "types": "./src/index.ts",
+            "default": "./src/index.ts"
+        },
+        "./client": {
+            "types": "./src/index.c.ts",
+            "default": "./src/index.c.ts"
+        },
+        "./server": {
+            "types": "./src/index.s.ts",
+            "default": "./src/index.s.ts"
+        }
+    },
     "scripts": {
         "lint": "eslint",
         "typecheck": "tsc --noEmit"
     },
-    "devDependencies": {}
+    "dependencies": {
+        "@my/error": "*",
+        "@my/logger": "*",
+        "axios": "^1.21.0",
+        "client-only": "^0.0.1",
+        "server-only": "^0.0.1"
+    }
 }

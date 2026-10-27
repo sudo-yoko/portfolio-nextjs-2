@@ -1,4 +1,4 @@
-import { ValidateStatus } from '#client/internal/isomophic/client.types';
+import { Headers, ValidateStatus } from '#client/internal/isomophic/client.types';
 
 // headers
 const CONTENT_TYPE = 'Content-Type';
@@ -10,19 +10,23 @@ const CHARSET_UTF8 = 'charset=utf-8';
 
 export const CONTENT_TYPE_APPLICATION_JSON_UTF8 = {
     [CONTENT_TYPE]: `${APPLICATION_JSON}; ${CHARSET_UTF8}`,
-} as const satisfies HeadersInit;
+} as const satisfies Headers;
+// } as const satisfies HeadersInit
 
 export const CONTENT_TYPE_APPLICATION_FORM = {
     [CONTENT_TYPE]: APPLICATION_FORM,
-} as const satisfies HeadersInit;
+} as const satisfies Headers;
+// } as const satisfies HeadersInit
 
 export const CONTENT_TYPE_TEXT_EVENT_STREAM_UTF8 = {
     [CONTENT_TYPE]: `${TEXT_EVENT_STREAM}; ${CHARSET_UTF8}`,
-} as const satisfies HeadersInit;
+} as const satisfies Headers;
+// } as const satisfies HeadersInit
 
 export const ACCEPT_APPLICATION_JSON = {
     [ACCEPT]: APPLICATION_JSON,
-} as const satisfies HeadersInit;
+} as const satisfies Headers;
+// } as const satisfies HeadersInit
 
 /**
  * レスポンスステータスの検証。

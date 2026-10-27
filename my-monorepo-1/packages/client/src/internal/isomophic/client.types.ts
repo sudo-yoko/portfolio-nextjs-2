@@ -31,13 +31,16 @@ export type RequestConfig<BODY = never> = {
     // query?: QueryParam;
     query?: QueryParams;
     // path?: string; // TODO: BFFではパスパラメータを使用しない方針
-    headers?: Record<string, string>;
+    headers?: Headers;
     timeout?: number;
     /**
      * どのステータスをエラーとするか指定可能
      */
     validateStatus?: ValidateStatus;
 };
+
+export type Headers = Record<string, string>;
+// export type HeadersInit = Headers | string[][] | Record<string, string>; // NOTE:
 
 /**
  * HTTPステータスの検証関数。
