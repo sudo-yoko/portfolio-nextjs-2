@@ -6,7 +6,7 @@ import 'client-only';
 import { defaultValidateStatusClient } from '#client/internal/isomophic/client.constants';
 import { Client, RawResponse } from '#client/internal/isomophic/client.types';
 import { applicationError, formatError, getCustomErrorProperties, invalidStatusError } from '@my/error';
-import logger from '@my/logger/server';
+import logger from '@my/logger/client';
 
 const logPrefix = 'fetch-adapter.ts: ';
 

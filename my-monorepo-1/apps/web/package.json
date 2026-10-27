@@ -14,7 +14,8 @@
         "react": "19.2.4",
         "react-dom": "19.2.4",
         "@my/env": "*",
-        "@my/logger": "*"
+        "@my/logger": "*",
+        "@my/client": "*"
     },
     "devDependencies": {
         "@tailwindcss/postcss": "^4",
