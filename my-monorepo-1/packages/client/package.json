@@ -29,6 +29,7 @@
     "dependencies": {
         "@my/error": "*",
         "@my/logger": "*",
+        "@my/env": "*",
         "axios": "^1.21.0",
         "client-only": "^0.0.1",
         "server-only": "^0.0.1"

@@ -10,8 +10,8 @@ import { Client } from '#client/internal/isomophic/client.types';
 /**
  * BFFリクエスト用クライアント（クライアントサイド専用）
  */
-const client: Client = bffFetchClient();
-export default client;
+const bffClient: Client = bffFetchClient();
+export default bffClient;
 
 /**
  * 外部リクエスト用クライアント（クライアントサイド専用）

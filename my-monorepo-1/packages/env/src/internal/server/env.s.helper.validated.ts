@@ -73,3 +73,10 @@ export function envProtocol(key: string) {
     const value = envString(key);
     return envValidateProtocolValue(value, { key });
 }
+
+export function envProxySettings(): { protocol: string; host: string; port: number } {
+    const protocol = envProtocol('PROXY_PROTOCOL');
+    const host = envString('PROXY_HOST');
+    const port = envNumber('PROXY_PORT');
+    return { protocol, host, port };
+}
