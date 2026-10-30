@@ -1,6 +1,3 @@
-//
-// Fetch API を Client インターフェースに適合させるアダプター
-//
 import 'client-only';
 
 import { defaultValidateStatusClient } from '#client/internal/isomophic/client.constants';
@@ -8,9 +5,9 @@ import { Client, RawResponse } from '#client/internal/isomophic/client.types';
 import { applicationError, formatError, getCustomErrorProperties, invalidStatusError } from '@my/error';
 import logger from '@my/logger/client';
 
-const logPrefix = 'fetch-adapter.ts: ';
+const logPrefix = 'fetch-adapter.external.ts: ';
 
-export const fetchClient = (): Client => ({
+export const externalFetchClient = (): Client => ({
     send: async (config) => {
         // TODO: ログ出力を抑止する機能
         logger.info(logPrefix + `Request -> config=${JSON.stringify(config)}`);
@@ -29,14 +26,16 @@ export const fetchClient = (): Client => ({
                 fetchConfig.signal = AbortSignal.timeout(config.timeout);
             }
             // TODO: URLが相対パスの形式だと失敗する。相対パスの場合は第二引数にwindow.location.originを指定すること
-            // const url = new URL(config.url);
-            const url = URL.canParse(config.url)
-                ? new URL(config.url)
-                : new URL(config.url, window.location.origin); // TODO: window.はnode環境だと動かないので、fetchはCL/SV共用しない
+            const url = new URL(config.url);
+            // const url = config.url;
+            // const url = URL.canParse(config.url)
+            //     ? new URL(config.url)
+            //     : new URL(config.url, window.location.origin); // TODO: window.はnode環境だと動かないので、fetchはCL/SV共用しない
             config.query?.forEach(({ key, value }) => url.searchParams.append(key, value));
             //
             // リクエスト実行
             //
+            // logger.info(logPrefix + 'url=' + url.href)
             const res = await fetch(url, fetchConfig);
             //
             // レスポンス

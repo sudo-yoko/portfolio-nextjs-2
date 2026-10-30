@@ -28,9 +28,8 @@ export type RequestConfig<BODY = never> = {
     method: Method;
     url: string;
     body?: BODY;
-    // query?: QueryParam;
     query?: QueryParams;
-    // path?: string; // TODO: BFFではパスパラメータを使用しない方針
+    path?: string; // TODO: BFFではパスパラメータを使用しない方針
     headers?: Headers;
     timeout?: number;
     /**

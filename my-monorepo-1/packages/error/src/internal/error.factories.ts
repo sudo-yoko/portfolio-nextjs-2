@@ -11,6 +11,7 @@ import {
     ERR_TYPE,
     ErrType,
     EXTRA,
+    IllegalStateError,
     InvalidStatusError,
     LOCATION,
     RetryableError,
@@ -94,4 +95,10 @@ export function applicationError(
     const { cause, code, location, message, extra } = props;
     const base = customError({ message, cause, errType: ErrType.ApplicationError, location, extra });
     return Object.assign(base, { [ERR_CODE]: code });
+}
+
+export function illegalStateError(props: { message?: string } = {}): IllegalStateError {
+    const { message } = props;
+    const base = customError({ message, errType: ErrType.IllegalStateError });
+    return Object.assign(base);
 }

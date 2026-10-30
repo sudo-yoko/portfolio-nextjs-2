@@ -30,10 +30,10 @@ export const fetchClient = (): Client => ({
                 fetchConfig.signal = AbortSignal.timeout(config.timeout);
             }
             // TODO: URLが相対パスの形式だと失敗する。相対パスの場合は第二引数にwindow.location.originを指定すること
-            // const url = new URL(config.url);
-            const url = URL.canParse(config.url)
-                ? new URL(config.url)
-                : new URL(config.url, window.location.origin); // TODO: window.はnode環境だと動かないので、fetchはCL/SV共用しない
+            const url = new URL(config.url);
+            // const url = URL.canParse(config.url)
+                // ? new URL(config.url)
+                // : new URL(config.url, window.location.origin); // TODO: window.はnode環境だと動かないので、fetchはCL/SV共用しない
             config.query?.forEach(({ key, value }) => url.searchParams.append(key, value));
             //
             // リクエスト実行

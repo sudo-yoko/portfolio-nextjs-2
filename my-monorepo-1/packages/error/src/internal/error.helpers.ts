@@ -7,6 +7,7 @@ import {
     CustomError,
     ERR_TYPE,
     ErrType,
+    IllegalStateError,
     RetryableError,
 } from '#error/internal/error.types';
 
@@ -42,4 +43,11 @@ export const isRetryableError = (e: unknown): e is RetryableError => {
  */
 export const isApplicationError = (e: unknown): e is ApplicationError => {
     return isCustomError(e) && e[ERR_TYPE] === ErrType.ApplicationError;
+};
+
+/**
+ * 状態不正エラー 型ガード関数
+ */
+export const isIllegalStateError = (e: unknown): e is IllegalStateError => {
+    return isCustomError(e) && e[ERR_TYPE] === ErrType.IllegalStateError;
 };

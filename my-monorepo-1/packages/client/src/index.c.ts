@@ -1,5 +1,6 @@
-import 'client-only'
+import 'client-only';
 
-import client from '#client/internal/client/client.c'
+import client from '#client/internal/client/client.c';
+export default client;
 
-export default client
+export { externalClient } from '#client/internal/client/client.c';

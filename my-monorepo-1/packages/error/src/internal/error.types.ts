@@ -32,6 +32,7 @@ export const ErrType = {
     RetryableError: 'RetryableError',
     InvalidStatusError: 'InvalidStatusError',
     CodeError: 'CodeError', // TODO: 任意のエラーコードを設定できるエラー
+    IllegalStateError: 'IllegalStateError',
     // TODO: validationErrorは？
 } as const; // 定数オブジェクト
 export type ErrType = (typeof ErrType)[keyof typeof ErrType]; // 型
@@ -52,6 +53,7 @@ export type AuthError = CustomError<typeof ErrType.AuthError>;
 export type InvalidStatusError = CustomError<typeof ErrType.InvalidStatusError>;
 export type RetryableError = CustomError<typeof ErrType.RetryableError>;
 export type ApplicationError = CustomError<typeof ErrType.ApplicationError>;
+export type IllegalStateError = CustomError<typeof ErrType.IllegalStateError>;
 // export type ApplicationError = CustomErrorBase<typeof ErrType.ApplicationError> & {
 //     [ERR_CODE]?: string;
 // };

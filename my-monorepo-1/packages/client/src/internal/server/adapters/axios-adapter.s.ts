@@ -1,19 +1,18 @@
 //
-// Axios インスタンスを Client インターフェースに適合させるアダプター
+// axios アダプター
 //
-
-// プロキシも利用可なのでserver-only。クライアントサイド不可
-import 'server-only';
+import 'server-only'; // プロキシも利用可能とするのでserver-only。クライアントサイド不可
 
 import axios, { AxiosProxyConfig, AxiosRequestConfig } from 'axios';
+
+import { applicationError, formatError } from '@my/error';
+import logger from '@my/logger/server';
 
 import { defaultValidateStatusServer } from '#client/internal/isomophic/client.constants';
 import { toURLSearchParams } from '#client/internal/isomophic/client.params';
 import { Client, RawResponse } from '#client/internal/isomophic/client.types';
-import { applicationError, formatError } from '@my/error';
-import logger from '@my/logger/server';
 
-const logPrefix = 'axios-adapter.ts: ';
+const logPrefix = 'axios-adapter.s.ts: ';
 
 // Axios インスタンスはアプリケーション内で一意
 // NOTE: 即時実行関数 (() => { ... })();
@@ -74,6 +73,7 @@ export const axiosClient = (proxy?: AxiosProxyConfig): Client => ({
             // 発生したエラーをApplicationErrorにラップして再スロー
             // TODO: formatErrorに渡すのと同じ情報をわたせるようにする
             // TODO: ApplicationErrorにリクエスト情報も渡せるようにする
+            // TODO: バックエンドと外部リクエストで共用のため、エラーメッセージは再検討
             throw applicationError({
                 message: 'バックエンドAPIのリクエストで失敗しました。',
                 cause: error,
