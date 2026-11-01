@@ -1,4 +1,4 @@
-import { Headers, ValidateStatus } from '#client/internal/isomophic/client.types';
+import { Headers, ValidateStatus } from '#client/internal/isomorphic/client.types';
 
 // headers
 const CONTENT_TYPE = 'Content-Type';

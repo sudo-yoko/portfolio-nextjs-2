@@ -1,4 +1,4 @@
-import { QueryParams } from '#client/internal/isomophic/client.params';
+import { QueryParams } from '#client/internal/isomorphic/client.params';
 
 /**
  * REST API クライアントのインターフェース型

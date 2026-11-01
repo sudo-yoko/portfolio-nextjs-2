@@ -4,8 +4,8 @@
 import { applicationError, formatError, getCustomErrorProperties, invalidStatusError } from '@my/error';
 import { Logger } from '@my/logger';
 
-import { defaultValidateStatus } from '#client/internal/isomophic/client.constants';
-import { Client, RawResponse } from '#client/internal/isomophic/client.types';
+import { defaultValidateStatus } from '#client/internal/isomorphic/client.constants';
+import { Client, RawResponse } from '#client/internal/isomorphic/client.types';
 
 const logPrefix = 'fetch-adapter.ts ';
 

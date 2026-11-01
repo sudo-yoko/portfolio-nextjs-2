@@ -6,8 +6,8 @@ import 'server-only';
 import { envProxySettings } from '@my/env/server';
 import logger from '@my/logger/server';
 
-import { createFetchClient } from '#client/internal/isomophic/adapters/fetch-adapter';
-import { Client } from '#client/internal/isomophic/client.types';
+import { createFetchClient } from '#client/internal/isomorphic/adapters/fetch-adapter';
+import { Client } from '#client/internal/isomorphic/client.types';
 import { createAxiosClient } from '#client/internal/server/adapters/axios-adapter.s';
 
 /**

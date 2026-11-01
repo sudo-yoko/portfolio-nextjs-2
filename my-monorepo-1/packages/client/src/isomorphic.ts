@@ -5,19 +5,19 @@ export {
     CONTENT_TYPE_TEXT_EVENT_STREAM_UTF8,
     defaultValidateStatusClient,
     defaultValidateStatusServer,
-} from '#client/internal/isomophic/client.constants';
+} from '#client/internal/isomorphic/client.constants';
 export {
     toMultiValuedMap,
     toQueryParams,
     toQueryString,
     toURLSearchParams,
-} from '#client/internal/isomophic/client.params';
-export type { MultiValuedMap, QueryParam, QueryParams } from '#client/internal/isomophic/client.params';
+} from '#client/internal/isomorphic/client.params';
+export type { MultiValuedMap, QueryParam, QueryParams } from '#client/internal/isomorphic/client.params';
 export type {
     Client,
     Headers,
     RawResponse,
     RequestConfig,
     ValidateStatus,
-} from '#client/internal/isomophic/client.types';
-export { Method } from '#client/internal/isomophic/client.types';
+} from '#client/internal/isomorphic/client.types';
+export { Method } from '#client/internal/isomorphic/client.types';

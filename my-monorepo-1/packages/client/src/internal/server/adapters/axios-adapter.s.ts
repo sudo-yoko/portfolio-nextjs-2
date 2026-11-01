@@ -8,9 +8,9 @@ import axios, { AxiosProxyConfig, AxiosRequestConfig } from 'axios';
 import { applicationError, formatError } from '@my/error';
 import logger from '@my/logger/server';
 
-import { defaultValidateStatus } from '#client/internal/isomophic/client.constants';
-import { toURLSearchParams } from '#client/internal/isomophic/client.params';
-import { Client, RawResponse } from '#client/internal/isomophic/client.types';
+import { defaultValidateStatus } from '#client/internal/isomorphic/client.constants';
+import { toURLSearchParams } from '#client/internal/isomorphic/client.params';
+import { Client, RawResponse } from '#client/internal/isomorphic/client.types';
 
 const logPrefix = 'axios-adapter.s.ts: ';
 

@@ -5,8 +5,8 @@ import 'server-only';
 
 import logger from '@my/logger/server';
 
-import { createFetchClient } from '#client/internal/isomophic/adapters/fetch-adapter';
-import { Client } from '#client/internal/isomophic/client.types';
+import { createFetchClient } from '#client/internal/isomorphic/adapters/fetch-adapter';
+import { Client } from '#client/internal/isomorphic/client.types';
 
 /**
  * バックエンドリクエスト用クライアント（サーバーサイド専用）
