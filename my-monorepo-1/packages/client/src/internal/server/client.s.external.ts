@@ -16,7 +16,7 @@ import { createAxiosClient } from '#client/internal/server/adapters/axios-adapte
  * @param proxy - プロキシ設定されたクライアントを取得する場合true、プロキシ設定無しクライアントを取得する場合false
  * @returns
  */
-export function getExternalClient(proxy: boolean): Client {
+export function createExternalClient(proxy: boolean): Client {
     return proxy ? proxiedClient() : nonProxiedClient();
 }
 

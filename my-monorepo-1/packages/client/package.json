@@ -13,9 +13,9 @@
             "types": "./src/index.ts",
             "default": "./src/index.ts"
         },
-        "./client": {
-            "types": "./src/index.c.ts",
-            "default": "./src/index.c.ts"
+        "./browser": {
+            "types": "./src/index.b.ts",
+            "default": "./src/index.b.ts"
         },
         "./server": {
             "types": "./src/index.s.ts",

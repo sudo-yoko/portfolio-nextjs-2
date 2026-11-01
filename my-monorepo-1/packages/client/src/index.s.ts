@@ -3,4 +3,4 @@ export { getAxiosErrorProperties } from '#client/internal/server/adapters/axios-
 import backendClient from '#client/internal/server/client.s';
 export default backendClient;
 
-export { externalClient } from '#client/internal/server/client.s';
+export { createExternalClient } from '#client/internal/server/client.s.external';
