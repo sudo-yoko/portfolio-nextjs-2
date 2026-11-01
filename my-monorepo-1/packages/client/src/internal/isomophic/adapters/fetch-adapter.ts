@@ -1,17 +1,17 @@
-import 'client-only';
-
-import { defaultValidateStatusClient } from '#client/internal/isomophic/client.constants';
-import { Client, RawResponse } from '#client/internal/isomophic/client.types';
+//
+// fetch API アダプター
+//
 import { applicationError, formatError, getCustomErrorProperties, invalidStatusError } from '@my/error';
-import logger from '@my/logger/client';
+import { Logger } from '@my/logger';
 
-const logPrefix = 'fetch-adapter.external.ts: ';
+import { Client, RawResponse } from '#client/internal/isomophic/client.types';
 
-export const externalFetchClient = (): Client => ({
+const logPrefix = 'fetch-adapter.ts ';
+
+export const fetchClient = (logger: Logger): Client => ({
     send: async (config) => {
-        // TODO: ログ出力を抑止する機能
         logger.info(logPrefix + `Request -> config=${JSON.stringify(config)}`);
-        const validateStatus = config.validateStatus ?? defaultValidateStatusClient;
+
         try {
             //
             // リクエスト設定
@@ -26,16 +26,16 @@ export const externalFetchClient = (): Client => ({
                 fetchConfig.signal = AbortSignal.timeout(config.timeout);
             }
             // TODO: URLが相対パスの形式だと失敗する。相対パスの場合は第二引数にwindow.location.originを指定すること
-            const url = new URL(config.url);
-            // const url = config.url;
-            // const url = URL.canParse(config.url)
-            //     ? new URL(config.url)
-            //     : new URL(config.url, window.location.origin); // TODO: window.はnode環境だと動かないので、fetchはCL/SV共用しない
-            config.query?.forEach(({ key, value }) => url.searchParams.append(key, value));
+            let url: URL | string = config.url;
+            if (config.query) {
+                // クエリパラメーターが指定されている場合は、urlは絶対URLであること。相対URLだとエラーになるので注意
+                const parsed = new URL(config.url);
+                config.query.forEach(({ key, value }) => parsed.searchParams.append(key, value));
+                url = parsed;
+            }
             //
             // リクエスト実行
             //
-            // logger.info(logPrefix + 'url=' + url.href)
             const res = await fetch(url, fetchConfig);
             //
             // レスポンス
@@ -49,7 +49,7 @@ export const externalFetchClient = (): Client => ({
             //
             // ステータスコードの検証
             //
-            if (!validateStatus(result.status)) {
+            if (config.validateStatus && !config.validateStatus(result.status)) {
                 throw invalidStatusError({ status: result.status, body: result.rawBody }); // TODO: ボディは100文字くらいでカットする?
             }
             return result;
@@ -64,7 +64,7 @@ export const externalFetchClient = (): Client => ({
 
             // エラーログ出力
             const { all, message, name } = formatError({ error, location, details });
-            logger.error(logPrefix + all);
+            // logger.error(logPrefix + all);
 
             // 発生したエラーをApplicationErrorにラップして再スロー
             throw applicationError({

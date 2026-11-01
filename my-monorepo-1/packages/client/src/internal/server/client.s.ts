@@ -1,20 +1,15 @@
 //
-// サーバーサイド専用 Client
+// バックエンドリクエスト用クライアント（サーバーサイド専用）
 //
 import 'server-only';
 
-import { envProxySettings } from '@my/env/server';
+import logger from '@my/logger/server';
 
+import { fetchClient } from '#client/internal/isomophic/adapters/fetch-adapter';
 import { Client } from '#client/internal/isomophic/client.types';
-import { axiosClient } from '#client/internal/server/adapters/axios-adapter.s';
 
 /**
  * バックエンドリクエスト用クライアント（サーバーサイド専用）
  */
-const backendClient: Client = axiosClient();
+const backendClient: Client = fetchClient(logger);
 export default backendClient;
-
-/**
- * 外部リクエスト用クライアント（サーバーサイド専用、プロキシ設定あり）
- */
-export const externalClient: Client = axiosClient(envProxySettings());

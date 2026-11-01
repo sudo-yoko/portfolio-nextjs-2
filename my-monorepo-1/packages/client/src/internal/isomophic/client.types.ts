@@ -12,6 +12,10 @@ export type Client = {
     // TODO: AbortControllerを使ったリクエストキャンセルの機能
 };
 
+export type BffClient = {
+    send<BODY = never>(req: BffRequestConfig<BODY>): Promise<RawResponse>;
+};
+
 /**
  * HTTP メソッド定義
  */
@@ -36,6 +40,11 @@ export type RequestConfig<BODY = never> = {
      * どのステータスをエラーとするか指定可能
      */
     validateStatus?: ValidateStatus;
+};
+
+export type BffRequestConfig<BODY = never> = {
+    url: string;
+    body?: BODY;
 };
 
 export type Headers = Record<string, string>;

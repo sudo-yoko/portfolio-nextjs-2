@@ -45,7 +45,7 @@ export const axiosClient = (proxy?: AxiosProxyConfig): Client => ({
         axiosConfig.validateStatus = config.validateStatus ?? defaultValidateStatusServer;
         axiosConfig.data = config.body;
         axiosConfig.timeout = config.timeout;
-        axiosConfig.proxy = proxy;
+        axiosConfig.proxy = proxy ?? false;
         //
         // リクエスト実行
         //
