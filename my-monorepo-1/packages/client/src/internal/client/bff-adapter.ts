@@ -3,36 +3,38 @@
 //
 import 'client-only';
 
-import { illegalStateError } from '@my/error';
 import logger from '@my/logger/client';
 
+import {
+    ACCEPT_APPLICATION_JSON,
+    CONTENT_TYPE_APPLICATION_JSON_UTF8,
+} from '#client/internal/isomophic/client.constants';
 import { BffClient, Client, Method, RequestConfig } from '#client/internal/isomophic/client.types';
-import { ACCEPT_APPLICATION_JSON, CONTENT_TYPE_APPLICATION_JSON_UTF8 } from '../isomophic/client.constants';
 
-const logPrefix = 'bff-client.ts: ';
+const logPrefix = 'bff-adapter.ts: ';
 
 /**
- * 引数に渡されたREST API クライアントに、BFFクライアントの仕様を付加したBFFクライアント仕様のクライアントを返す。
+ * 引数に渡されたHTTPクライアントに、BFFクライアント固有のルールを適用する。
  *
- * @param client - REST API クライアント
+ * @param client - HTTPクライアント
  * @returns BFFリクエスト用クライアントを返す
  */
-export const withBffClientSpec = (client: Client): BffClient => ({
+export const createBffClient = (client: Client): BffClient => ({
     send: async (config) => {
         logger.info(logPrefix + `Request -> config=${JSON.stringify(config)}`);
 
         const c: RequestConfig = {
             method: Method.POST,
             url: config.url,
-        };
-        // c.body = config.body // TODO
-        c.headers = {
-            ...CONTENT_TYPE_APPLICATION_JSON_UTF8,
-            ...ACCEPT_APPLICATION_JSON,
+            // body:config.body, // TODO
+            headers: {
+                ...CONTENT_TYPE_APPLICATION_JSON_UTF8,
+                ...ACCEPT_APPLICATION_JSON,
+            },
         };
 
         // const result = fetchClient(logger).send(config);
-        const result = client.send(c);
+        const result = await client.send(c);
         logger.info(logPrefix + `Response -> ${JSON.stringify(result)}`);
         return result;
 
