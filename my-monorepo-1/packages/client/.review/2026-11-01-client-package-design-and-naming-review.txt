@@ -1,0 +1,141 @@
+clientパッケージ全体設計・命名レビューに関する追加の会話
+記録日: 2026-11-01
+形式: 会話の要点の整理（逐語録ではない）
+先行記録: 2026-11-01-bff-client-adapter-design.txt
+
+ユーザー:
+clientパッケージの全体設計と命名をレビューする。
+
+回答:
+責務分離の方向は妥当。ただし、アダプターを安全に切り替えるには、
+公開APIと共通契約の整備が必要。
+全ソースと利用箇所を確認した。実装の変更はしていない。
+
+1. 公開エントリーのexportが壊れている
+
+src/index.c.ts:6は、externalClientを定義していないclient.c.tsからexportしている。
+実際の定義先はinternal/client/client.c.external.ts。
+
+src/index.s.ts:6も、externalClientを定義していないclient.s.tsからexportしている。
+さらに、internal/server/client.s.external.tsが提供するのは、
+externalClientではなくgetExternalClient(proxy)。
+
+インスタンスを公開するか、生成・取得関数を公開するか決めて揃える必要がある。
+
+確認コマンド:
+npm run typecheck --workspace=@my/client
+
+結果:
+上記2件のTS2614エラーで失敗。
+
+2. FetchとAxiosで共通Clientの挙動が揃っていない
+
+項目                         Fetch                    Axios
+headers                      転送する                 転送していない
+validateStatus省略時         全ステータスを返す       500以上で失敗
+body                         JSON文字列化             Axiosへ渡す
+レスポンス                   取得したテキスト         res.dataを文字列へ変換
+
+Axiosのヘッダー未転送は、認証ヘッダーなども失われるため優先して修正すべき。
+対象: internal/server/adapters/axios-adapter.s.ts:38
+
+ステータス判定は、アダプターの選択によって業務上の成功・失敗が変わる状態。
+提案:
+・通信アダプターは、指定されたvalidateStatusだけを適用する。
+・BFFやバックエンド固有の既定値は、各用途のクライアントで設定する。
+
+defaultValidateStatusClientはBFFアダプターで使われていない。
+「200以外をエラーにする」というコメントと実際の動作が一致していない。
+
+3. bodyの契約が汎用HTTPなのかJSON専用なのか曖昧
+
+FetchアダプターはボディをJSON.stringifyで変換する。
+一方、公開定数にはフォーム送信用Content-Typeも存在する。
+ヘッダーだけフォーム形式にしてもボディはJSONのまま。
+
+if (config.body)では、false、0、空文字、nullが送信されない。
+これらを許可するならconfig.body !== undefinedで判定する。
+対象: internal/isomophic/adapters/fetch-adapter.ts:22
+
+提案:
+まずは現在の用途に合わせてJSON送信用の共通クライアントと明記する。
+フォームやバイナリーが必要になった時点でボディ形式の指定を追加する。
+BODYのジェネリックは維持してよい。
+
+4. rawBodyの契約とAxios側の変換が一致していない
+
+AxiosアダプターのtoStringSafeは数値、真偽値、nullを受け取ると例外になる。
+対象: internal/server/adapters/axios-adapter.s.ts:108
+
+解析後のデータをJSON文字列へ戻しても、受信した元のテキストとは限らない。
+rawBodyを契約とするなら、Axios側もテキストとして取得する構成に揃える。
+
+5. URLとパラメーターの契約に未実装部分がある
+
+・Fetchはqueryがある場合だけnew URL(config.url)を使うため、
+  相対URLにクエリを追加すると失敗する。空の配列でも同様。
+・RequestConfig.pathは両アダプターとも使用していない。
+  対応予定だけなら、一旦型から外すほうが利用側の誤解を防げる。
+・toMultiValuedMapは通常のオブジェクトに対してkey in mapを使うため、
+  toStringなどのキーを既存値と誤認する。
+  所有プロパティの判定へ変更する必要がある。
+
+6. 命名の提案
+
+clientがブラウザー側とHTTPクライアントの両方を意味している。
+実行環境と接続先を分けると読みやすくなる。
+
+現在                     提案                     理由
+Client                   HttpClient               BFFクライアントと区別する
+RequestConfig            HttpRequest              共通の送信入力と分かる
+Headers                  HttpHeaders              標準のHeadersとの混同を避ける
+Method                   HttpMethod               公開名の意味を明確にする
+fetchClient              createFetchClient        生成関数と分かる
+axiosClient              createAxiosClient        生成関数と分かる
+getExternalClient        createExternalClient     呼ぶたびにラッパーを生成する実装に合う
+isomophic                shared                   綴りの誤りを解消し、環境共通と表す
+
+BffClient、createBffClient、bff-adapter.tsは現在のままで自然。
+
+ファイル構成の例:
+
+src/
+  index.ts
+  browser.ts
+  server.ts
+  internal/
+    shared/
+      http-client.types.ts
+      http-headers.ts
+      query-params.ts
+      adapters/
+        fetch-adapter.ts
+    browser/
+      bff-client.ts
+      external-client.ts
+      adapters/
+        bff-adapter.ts
+    server/
+      backend-client.ts
+      external-client.ts
+      adapters/
+        axios-adapter.ts
+
+公開パスも@my/client/clientより@my/client/browserのほうが環境を明確に表せる。
+ただし利用側の変更を伴うため、内部の不具合修正より優先度は低い。
+
+7. Axios固有のエラー処理の公開
+
+getAxiosErrorPropertiesを公開APIに含めると、利用側がAxiosへ依存しやすい。
+差し替えを重視するなら、外部に必要なエラー情報は共通形式として公開し、
+Axios固有の抽出処理は内部へ閉じる。
+
+推奨する順序:
+まずexportの修正とアダプター間の挙動統一を優先し、その後に命名を整理する。
+現在の「共通HTTP契約 → アダプター → 用途別クライアント → 公開エントリー」
+という構造は維持できる。
+
+記録について:
+このファイルは追加の会話内容の保存のみを目的として作成した。
+レビュー時の指摘・提案を記録しており、実装修正の完了を示すものではない。
+コミットは行わない。

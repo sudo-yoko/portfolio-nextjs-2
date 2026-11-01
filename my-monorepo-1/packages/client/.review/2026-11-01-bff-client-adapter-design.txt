@@ -1,0 +1,242 @@
+HTTPクライアントとBFFアダプターの設計に関する会話
+記録日: 2026-11-01
+形式: 会話の要点とコード例の整理（逐語録ではない）
+
+1. ラップを重ねる設計は冗長か
+
+ユーザー:
+my-monorepo-1/packagesのfetch-adapter.ts、bff-client.ts、client.c.tsについて、
+Fetch APIアダプターにBFFクライアントの仕様を付加する設計は冗長か、妥当か。
+
+回答:
+設計は妥当。各ファイルは次の責務を持つ。
+
+・fetch-adapter.ts:
+  共通のClientからFetch APIへの変換、通信、レスポンス取得を担当する。
+・bff-client.ts:
+  POST固定やJSONヘッダーなど、BFF固有のルールを適用する。
+・client.c.ts:
+  loggerと実装を組み立て、利用側へ公開する。
+
+client.c.tsはsendをさらにラップしていない。
+実行時の呼び出しは「BFF層 → Fetch層」の2段。
+Fetch層はサーバー用・外部API用からも利用されており、分離による再利用がある。
+
+確認した実装の改善点:
+・client.c.tsでBffClientをClientとして公開し直しており、BFF用の入力制約が失われている。
+・BFF層でbodyが転送されていない。
+・BFF層のレスポンスログはawait前のPromiseを記録している。
+・重複ログと、大量のコメントアウトされた旧コードを整理できる。
+・一度しか呼ばないgetBffClient()は省略して直接組み立ててもよい。
+
+推奨する公開方法:
+
+const bffClient = createBffClient(fetchClient(logger));
+export default bffClient;
+
+2. withBffClientSpecという命名
+
+ユーザー:
+withBffClientSpecは適切か。よりふさわしい名前はあるか。
+
+回答:
+意味は伝わるが、createBffClientを推奨する。
+Clientを受け取り、入力を限定したBffClientを生成することが明確になる。
+Specは仕様書、型定義、設定値なども連想させる。
+
+候補:
+・createBffClient: 通信クライアントを受け取り、BFFクライアントを作る。今回の推奨。
+・withBffDefaults: 呼び出し側で上書きできる既定値を付加する場合。
+・withBffPolicy: 既存クライアントへBFFの制約を適用する点を強調する場合。
+
+3. 将来、別のHTTPクライアントへ切り替える設計
+
+ユーザー:
+将来的に別のHTTPクライアントのアダプターを追加したい。
+切り替えはコード変更でよいが、差分を少なくしたい。
+
+回答:
+現在の依存方向は目的に合っている。
+BFF層が具体的なFetch実装ではなく共通のClientを受け取るため、
+client.c.tsでアダプターの選択とBFFクライアントの生成を分ければよい。
+
+例:
+
+import 'client-only';
+import logger from '@my/logger/client';
+import { createBffClient } from '#client/internal/client/bff-client';
+import { fetchClient } from '#client/internal/isomophic/adapters/fetch-adapter';
+import type { Client } from '#client/internal/isomophic/client.types';
+
+const transport: Client = fetchClient(logger);
+const bffClient = createBffClient(transport);
+export default bffClient;
+
+切り替え時はimportとtransportの生成部分を変更する。
+
+const transport: Client = axiosClient(logger);
+
+留意点:
+・アダプターは型だけでなく、ステータス、タイムアウト、レスポンス形式などの挙動も揃える。
+・BFF層にはFetchやAxios固有の設定を持ち込まない。
+・公開型はBffClientを維持する。
+・既存のaxios-adapter.s.tsはサーバー用なので、ブラウザーで使うには対応する実装が必要。
+・コード変更での切り替えなら、選択用Factoryや設定分岐を追加する必要はない。
+
+4. BFFのラップはどのパターンか
+
+ユーザー:
+Fetch APIのラップをAdapterとすると、BFFClientのラップは何に該当するか。
+
+回答:
+今回の実装はAdapterと捉えるのが適切。
+
+・Fetchアダプター: 共通のClientとFetch APIの間を変換する。
+・BFFアダプター: BFF専用のBffClientと共通のClientの間を変換する。
+
+BFF層はインターフェースを変換している。
+
+bffClient.send({ url, body });
+
+内部では次のように共通Clientの入力へ変換する。
+
+client.send({
+    method: Method.POST,
+    url,
+    body,
+    headers: { /* BFF用ヘッダー */ },
+});
+
+Decoratorは通常、同じインターフェースを維持してログやリトライなどを追加する。
+今回は指定できる項目を絞ったBffClientへ変換するため、Adapterの説明が合う。
+生成関数名には必ずしもAdapterを含めず、createBffClientでよい。
+
+5. bff-adapter.tsでbodyの型を維持して転送する例
+
+ユーザー:
+bodyの型を保ちながら転送するコード例を見たい。
+
+回答:
+sendに型引数BODYを宣言し、RequestConfig<BODY>へ引き継ぐ。
+
+import type {
+    BffClient,
+    BffRequestConfig,
+    Client,
+    RequestConfig,
+} from '#client/internal/isomophic/client.types';
+import { Method } from '#client/internal/isomophic/client.types';
+import {
+    ACCEPT_APPLICATION_JSON,
+    CONTENT_TYPE_APPLICATION_JSON_UTF8,
+} from '../isomophic/client.constants';
+
+export const createBffClient = (client: Client): BffClient => ({
+    send: async <BODY = never>(config: BffRequestConfig<BODY>) => {
+        const request: RequestConfig<BODY> = {
+            method: Method.POST,
+            url: config.url,
+            body: config.body,
+            headers: {
+                ...CONTENT_TYPE_APPLICATION_JSON_UTF8,
+                ...ACCEPT_APPLICATION_JSON,
+            },
+        };
+        return client.send<BODY>(request);
+    },
+});
+
+利用例:
+
+type CreateUserBody = {
+    name: string;
+    age: number;
+};
+
+await bffClient.send<CreateUserBody>({
+    url: '/api/users',
+    body: { name: 'Alice', age: 30 },
+});
+
+型引数を省略してもbodyから推論でき、anyや型アサーションは不要。
+
+6. Fetchアダプターでは型引数を明示していない理由
+
+ユーザー:
+Fetchアダプターではbodyの型を渡していないのに、fetchConfig.bodyへ転送できるのはなぜか。
+
+回答:
+JSON.stringify(config.body)で文字列へ変換しているため。
+Fetch APIへ渡す時点ではJSON文字列であり、元のBODY型を引き継ぐ必要がない。
+
+fetchConfig.body = JSON.stringify(config.body);
+
+また、fetchClientの戻り値をClientにしているため、オブジェクトのsendは
+Clientに定義されたジェネリックメソッドとして文脈的に型付けされる。
+
+export const fetchClient = (logger: Logger): Client => ({
+    send: async (config) => {
+        // ...
+    },
+});
+
+BFF層も、中間変数にRequestConfig<BODY>を明示しなければ簡潔に書ける。
+
+export const createBffClient = (client: Client): BffClient => ({
+    send: async (config) => {
+        return client.send({
+            method: Method.POST,
+            url: config.url,
+            body: config.body,
+            headers: {
+                ...CONTENT_TYPE_APPLICATION_JSON_UTF8,
+                ...ACCEPT_APPLICATION_JSON,
+            },
+        });
+    },
+});
+
+7. RequestConfigのbodyをobjectにするべきか
+
+ユーザー:
+bodyを型パラメーターではなくobjectなどにしたほうがよいか。
+
+回答:
+現在の設計なら型パラメーターを維持することを推奨する。
+アダプター内で具体的な型を使わなくても、呼び出し側で送信データを検査できる。
+
+client.send<CreateUserBody>({
+    method: Method.POST,
+    url: '/api/users',
+    body: { name: 'Alice', age: '30' }, // 型エラー
+});
+
+各型の意味:
+・BODY: リクエストごとに送信データの型を指定できる。
+・object: プリミティブを除く型。配列、関数、Dateなども含む。
+・unknown: どの値も受け取る。
+
+objectはJSONオブジェクトを意味しないため、JSONとして適切なデータである保証にはならない。
+
+型パラメーターにも限界がある。
+型引数を省略すると入力から推論されるだけなので、API仕様との一致までは検査しない。
+
+client.send({
+    method: Method.POST,
+    url: '/api/users',
+    body: { unexpected: true }, // この呼び出し自体は通る
+});
+
+APIごとの契約は専用関数で決めると明確になる。
+
+const createUser = (body: CreateUserBody) =>
+    bffClient.send({
+        url: '/api/users',
+        body,
+    });
+
+推奨構成は、共通のRequestConfig<BODY>を維持し、APIごとの関数で具体的な型を決めること。
+
+記録について:
+このファイルは会話内容の保存のみを目的として作成した。
+会話中のコード例は提案であり、クライアント実装への変更を示すものではない。
