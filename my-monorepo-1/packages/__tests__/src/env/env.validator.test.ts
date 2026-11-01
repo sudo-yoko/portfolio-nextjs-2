@@ -1,13 +1,13 @@
 import assert from 'node:assert';
 import test, { describe } from 'node:test';
 
-import { NodeEnv } from '@/env/src/internal/isomophic/env.types';
+import { NodeEnv } from '@/env/src/internal/isomorphic/env.types';
 import {
     envValidateBooleanValue,
     envValidateNumValue,
     envValidateStringValue,
     isEnumValue,
-} from '@/env/src/internal/isomophic/env.validator';
+} from '@/env/src/internal/isomorphic/env.validator';
 import { assertThrows } from '@/tests/test-utils';
 
 // clean & npm exec -- node --test --experimental-test-module-mocks --import tsx src/env/env.validator.test.ts

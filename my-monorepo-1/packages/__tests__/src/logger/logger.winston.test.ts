@@ -2,7 +2,7 @@ import test, { afterEach, before, describe, mock } from 'node:test';
 
 // clear & npm run node:test -- src/logger/logger.winston.test.ts
 void describe('logging.winston.test.ts の実行', async () => {
-    const { env } = await import('@/env/src/internal/isomophic/env');
+    const { env } = await import('@/env/src/internal/isomorphic/env');
     const mockedEnv = {
         node_env: env.node_env,
         next_public_fw_debug_logger: env.next_public_fw_debug_logger,
@@ -13,7 +13,7 @@ void describe('logging.winston.test.ts の実行', async () => {
 
     before(async () => {
         mock.module('server-only', { defaultExport: {}, namedExports: {} });
-        mock.module('@/env/src/internal/isomophic/env.ts', {
+        mock.module('@/env/src/internal/isomorphic/env.ts', {
             namedExports: {
                 env: mockedEnv,
             },

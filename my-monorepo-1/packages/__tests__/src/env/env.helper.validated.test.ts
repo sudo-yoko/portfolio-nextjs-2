@@ -5,27 +5,27 @@ import { assertThrows } from '@/tests/test-utils';
 
 // clear & npm run node:test -- src/env/env.helper.validated.test.ts
 void describe('env.helper.validated.test.ts の実行', async () => {
-    const { env } = await import('@/env/src/internal/isomophic/env');
+    const { env } = await import('@/env/src/internal/isomorphic/env');
     // NOTE: typeof envにすると読み取り専用プロパティのためモックで値を設定できなくなるので注意
     const mockedEnv = {
         node_env: env.node_env,
         next_public_fw_debug_logger: env.next_public_fw_debug_logger,
     };
 
-    type moduleType = typeof import('@/env/src/internal/isomophic/env.helper.validated');
+    type moduleType = typeof import('@/env/src/internal/isomorphic/env.helper.validated');
     let envNodeEnvNext: moduleType['envNodeEnvNext'];
     let envNextPublicFwDebugLogger: moduleType['envNextPublicFwDebugLogger'];
 
     // NOTE: モジュールキャッシュがあるため、各テストでモジュールをimportしても最初にimportされたモジュールが参照され続ける。
     // モックを作成→テスト対象モジュールをimport→各テストでモックに値を設定の順にすること
     before(async () => {
-        mock.module('@/env/src/internal/isomophic/env.ts', {
+        mock.module('@/env/src/internal/isomorphic/env.ts', {
             namedExports: {
                 env: mockedEnv,
             },
         });
         // モックしてからモジュールを読み込む
-        const moduleName = '@/env/src/internal/isomophic/env.helper.validated';
+        const moduleName = '@/env/src/internal/isomorphic/env.helper.validated';
         envNodeEnvNext = (await import(moduleName)).envNodeEnvNext;
         envNextPublicFwDebugLogger = (await import(moduleName)).envNextPublicFwDebugLogger;
     });

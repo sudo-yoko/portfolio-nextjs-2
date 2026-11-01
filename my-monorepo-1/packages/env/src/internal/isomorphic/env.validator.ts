@@ -1,7 +1,7 @@
 //
 // 環境変数バリデーター
 //
-import { envBooleanString, envProtocolString } from '#env/internal/isomophic/env.types';
+import { envBooleanString, envProtocolString } from '#env/internal/isomorphic/env.types';
 
 export function isEnvSet(value: string | undefined): value is string  {
     //TODO: 改行コードのみの場合もtrueになる？

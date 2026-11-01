@@ -1,7 +1,7 @@
 import 'server-only';
 
 // NOTE: デフォルトエクスポートは好きな名前でimportできる
-import type { ServerLogger } from '#logger/internal/isomophic/logger.types';
+import type { ServerLogger } from '#logger/internal/isomorphic/logger.types';
 import { getOrCreateLogger } from '#logger/internal/server/logger.winston';
 import { envNextPublicFwDebugLogger, envNodeEnvNext, NodeEnvNext } from '@my/env';
 

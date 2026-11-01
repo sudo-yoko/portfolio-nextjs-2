@@ -1,13 +1,13 @@
 //
 // 環境変数が未設定の場合にデフォルト値を指定するヘルパー
 //
-import { envBooleanString, envProtocolString } from '#env/internal/isomophic/env.types';
+import { envBooleanString, envProtocolString } from '#env/internal/isomorphic/env.types';
 import {
     envValidateBooleanValue,
     envValidateNumValue,
     envValidateProtocolValue,
     isEnvSet,
-} from '#env/internal/isomophic/env.validator';
+} from '#env/internal/isomorphic/env.validator';
 
 function envValueOrDefault(value: string | undefined, defaultValue: string): string {
     if (isEnvSet(value)) {

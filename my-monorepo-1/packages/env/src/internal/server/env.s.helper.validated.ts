@@ -7,12 +7,12 @@ import {
     envStringValueOrDefault,
     envValidateBooleanValueOrDefault,
     envValidateNumValueOrDefault,
-} from '#env/internal/isomophic/env.helper.default';
+} from '#env/internal/isomorphic/env.helper.default';
 import {
     envValidateNumValue,
     envValidateProtocolValue,
     envValidateStringValue,
-} from '#env/internal/isomophic/env.validator';
+} from '#env/internal/isomorphic/env.validator';
 import { env_s } from '#env/internal/server/env.s';
 
 /**
