@@ -3,11 +3,11 @@ import 'client-only';
 import logger from '@my/logger/client';
 
 import { createBffClient } from '#client/internal/client/adapters/bff-adapter';
-import { fetchClient } from '#client/internal/isomophic/adapters/fetch-adapter';
+import { createFetchClient } from '#client/internal/isomophic/adapters/fetch-adapter';
 import { BffClient, Client } from '#client/internal/isomophic/client.types';
 
 // 使用するHTTPクライアント
-const transport: Client = fetchClient(logger);
+const transport: Client = createFetchClient(logger);
 
 /**
  * BFFリクエスト用クライアント（クライアントサイド専用）

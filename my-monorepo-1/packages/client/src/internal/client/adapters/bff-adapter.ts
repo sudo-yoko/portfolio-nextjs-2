@@ -8,6 +8,7 @@ import logger from '@my/logger/client';
 import {
     ACCEPT_APPLICATION_JSON,
     CONTENT_TYPE_APPLICATION_JSON_UTF8,
+    defaultValidateStatusClient,
 } from '#client/internal/isomophic/client.constants';
 import { BffClient, Client, Method } from '#client/internal/isomophic/client.types';
 
@@ -30,6 +31,7 @@ export const createBffClient = (client: Client): BffClient => ({
                 ...CONTENT_TYPE_APPLICATION_JSON_UTF8,
                 ...ACCEPT_APPLICATION_JSON,
             },
+            validateStatus: defaultValidateStatusClient,
         });
         logger.info(logPrefix + `Response -> ${JSON.stringify(result)}`);
         return result;

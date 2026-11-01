@@ -8,7 +8,7 @@ import axios, { AxiosProxyConfig, AxiosRequestConfig } from 'axios';
 import { applicationError, formatError } from '@my/error';
 import logger from '@my/logger/server';
 
-import { defaultValidateStatusServer } from '#client/internal/isomophic/client.constants';
+import { defaultValidateStatus } from '#client/internal/isomophic/client.constants';
 import { toURLSearchParams } from '#client/internal/isomophic/client.params';
 import { Client, RawResponse } from '#client/internal/isomophic/client.types';
 
@@ -22,7 +22,7 @@ const axiosInstance = (() => {
 })();
 
 // NOTE: オブジェクトの暗黙的返却 const func = (arg) => ({ ... });
-export const axiosClient = (proxy?: AxiosProxyConfig): Client => ({
+export const createAxiosClient = (proxy?: AxiosProxyConfig): Client => ({
     send: async (config) => {
         // const location = 'client.adapter.axios.ts#send';
 
@@ -35,6 +35,7 @@ export const axiosClient = (proxy?: AxiosProxyConfig): Client => ({
         const axiosConfig: AxiosRequestConfig = {};
         axiosConfig.url = config.url;
         axiosConfig.method = config.method;
+        axiosConfig.headers = config.headers;
         // TODO: リクエストヘッダー
         if (config.query) {
             // const searchParams = new URLSearchParams();
@@ -42,7 +43,8 @@ export const axiosClient = (proxy?: AxiosProxyConfig): Client => ({
             // axiosConfig.params = searchParams;
             axiosConfig.params = toURLSearchParams(config.query);
         }
-        axiosConfig.validateStatus = config.validateStatus ?? defaultValidateStatusServer;
+        // axiosのデフォルト動作としてステータスコード200以外の場合はエラーをスローするため、アプリケーション既定の動作を上書きする
+        axiosConfig.validateStatus = config.validateStatus ?? defaultValidateStatus;
         axiosConfig.data = config.body;
         axiosConfig.timeout = config.timeout;
         axiosConfig.proxy = proxy ?? false;

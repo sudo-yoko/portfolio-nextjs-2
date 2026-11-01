@@ -5,11 +5,11 @@ import 'server-only';
 
 import logger from '@my/logger/server';
 
-import { fetchClient } from '#client/internal/isomophic/adapters/fetch-adapter';
+import { createFetchClient } from '#client/internal/isomophic/adapters/fetch-adapter';
 import { Client } from '#client/internal/isomophic/client.types';
 
 /**
  * バックエンドリクエスト用クライアント（サーバーサイド専用）
  */
-const backendClient: Client = fetchClient(logger);
+const backendClient: Client = createFetchClient(logger);
 export default backendClient;

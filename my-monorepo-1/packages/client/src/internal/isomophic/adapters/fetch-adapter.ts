@@ -4,11 +4,12 @@
 import { applicationError, formatError, getCustomErrorProperties, invalidStatusError } from '@my/error';
 import { Logger } from '@my/logger';
 
+import { defaultValidateStatus } from '#client/internal/isomophic/client.constants';
 import { Client, RawResponse } from '#client/internal/isomophic/client.types';
 
 const logPrefix = 'fetch-adapter.ts ';
 
-export const fetchClient = (logger: Logger): Client => ({
+export const createFetchClient = (logger: Logger): Client => ({
     send: async (config) => {
         logger.info(logPrefix + `Request -> config=${JSON.stringify(config)}`);
 
@@ -49,7 +50,8 @@ export const fetchClient = (logger: Logger): Client => ({
             //
             // ステータスコードの検証
             //
-            if (config.validateStatus && !config.validateStatus(result.status)) {
+            const validateStatus = config.validateStatus ?? defaultValidateStatus;
+            if (!validateStatus(result.status)) {
                 throw invalidStatusError({ status: result.status, body: result.rawBody }); // TODO: ボディは100文字くらいでカットする?
             }
             return result;

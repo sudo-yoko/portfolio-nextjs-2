@@ -6,9 +6,9 @@ import 'server-only';
 import { envProxySettings } from '@my/env/server';
 import logger from '@my/logger/server';
 
-import { fetchClient } from '#client/internal/isomophic/adapters/fetch-adapter';
+import { createFetchClient } from '#client/internal/isomophic/adapters/fetch-adapter';
 import { Client } from '#client/internal/isomophic/client.types';
-import { axiosClient } from '#client/internal/server/adapters/axios-adapter.s';
+import { createAxiosClient } from '#client/internal/server/adapters/axios-adapter.s';
 
 /**
  * 外部リクエスト用クライアントを取得する（サーバーサイド専用）
@@ -22,9 +22,9 @@ export function getExternalClient(proxy: boolean): Client {
 
 function proxiedClient(): Client {
     const { protocol, host, port } = envProxySettings();
-    return axiosClient({ protocol, host, port });
+    return createAxiosClient({ protocol, host, port });
 }
 
 function nonProxiedClient(): Client {
-    return fetchClient(logger);
+    return createFetchClient(logger);
 }

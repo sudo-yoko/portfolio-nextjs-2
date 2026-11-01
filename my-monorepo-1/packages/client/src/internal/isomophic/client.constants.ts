@@ -39,3 +39,9 @@ export const defaultValidateStatusServer: ValidateStatus = (status) => status < 
  * クライアントサイド（クライアントサイド　ー＞　BFF呼び出し時）は、ステータス200以外をエラー扱いとする。エラーがあればリクエストボディに返すこと。
  */
 export const defaultValidateStatusClient: ValidateStatus = (status) => status === 200;
+
+/**
+ * レスポンスステータスの検証。
+ * アプリケーション既定の動作。ステータス500以上をエラー扱いとする
+ */
+export const defaultValidateStatus: ValidateStatus = (status) => status < 500;
