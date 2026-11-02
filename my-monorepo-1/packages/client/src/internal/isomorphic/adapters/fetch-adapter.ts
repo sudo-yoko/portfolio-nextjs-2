@@ -1,26 +1,40 @@
 //
 // fetch API アダプター
 //
-import {
-    applicationError,
-    formatError,
-    getCustomErrorProperties,
-    illegalStateError,
-    invalidStatusError,
-} from '@my/error';
+import { applicationError, formatError, getCustomErrorProperties, invalidStatusError } from '@my/error';
 import { Logger } from '@my/logger';
 
 import { defaultValidateStatus } from '#client/internal/isomorphic/client.constants';
-import { BodyType, Client, RawResponse, RequestConfig } from '#client/internal/isomorphic/client.types';
+import { validateRequestConfig } from '#client/internal/isomorphic/client.helper';
+import { Client, RawResponse } from '#client/internal/isomorphic/client.types';
 
 const logPrefix = 'fetch-adapter.ts ';
 
 export const createFetchClient = (logger: Logger): Client => ({
     send: async (config) => {
         logger.info(logPrefix + `Request -> config=${JSON.stringify(config)}`);
+        validateRequestConfig(config);
+
         try {
             // リクエスト設定
-            const { url, fetchConfig } = createFetchConfig(config);
+            const fetchConfig: RequestInit = {};
+            fetchConfig.method = config.method;
+
+            let url: URL | string = config.url;
+            if (config.query) {
+                // NOTE: クエリパラメーターが指定されている場合は、urlは絶対URLであること。相対URLだとエラーになるので注意
+                const parsed = new URL(config.url);
+                config.query.forEach(({ key, value }) => parsed.searchParams.append(key, value));
+                url = parsed;
+            }
+            if (config.timeout) {
+                fetchConfig.signal = AbortSignal.timeout(config.timeout);
+            }
+            if (config.bodyJson !== undefined) {
+                fetchConfig.body = JSON.stringify(config.bodyJson); // オブジェクトをJSON.stringifyして渡す
+            } else if (config.bodyUrlEncoded !== undefined) {
+                fetchConfig.body = config.bodyUrlEncoded;
+            }
 
             // リクエスト実行
             const res = await fetch(url, fetchConfig);
@@ -62,57 +76,3 @@ export const createFetchClient = (logger: Logger): Client => ({
         }
     },
 });
-
-function createFetchConfig<BODY = never>(
-    config: RequestConfig<BODY>,
-): { url: string | URL; fetchConfig: RequestInit } {
-    const fetchConfig: RequestInit = {};
-
-    fetchConfig.method = config.method;
-
-    // TODO: URLが相対パスの形式だと失敗する。相対パスの場合は第二引数にwindow.location.originを指定すること
-    let url: URL | string = config.url;
-    if (config.query) {
-        // クエリパラメーターが指定されている場合は、urlは絶対URLであること。相対URLだとエラーになるので注意
-        const parsed = new URL(config.url);
-        config.query.forEach(({ key, value }) => parsed.searchParams.append(key, value));
-        url = parsed;
-    }
-
-    if (config.timeout) {
-        fetchConfig.signal = AbortSignal.timeout(config.timeout);
-    }
-
-    if (config.bodyType === BodyType.JSON) {
-        jsonConfig(config, fetchConfig);
-        return { url, fetchConfig };
-    } else if (config.bodyType === BodyType.UrlEncoded) {
-        urlEncodedConfig(config, fetchConfig);
-        return { url, fetchConfig };
-    }
-    return { url: '', fetchConfig: {} };
-}
-
-/**
- * Content-Type:application/jsonのリクエスト設定
- */
-function jsonConfig<BODY = never>(config: RequestConfig<BODY>, fetchConfig: RequestInit) {
-    // TODO: エラーチェック：ヘッダー
-    fetchConfig.headers = config.headers;
-    if (config.bodyJson === undefined) {
-        throw illegalStateError({ message: 'リクエストボディが未設定です。' });
-    }
-    fetchConfig.body = JSON.stringify(config.bodyJson); // オブジェクトをJSON.stringifyして渡す
-}
-
-function urlEncodedConfig<BODY = never>(config: RequestConfig<BODY>, fetchConfig: RequestInit) {
-    // TODO: エラーチェック：ヘッダー
-    fetchConfig.headers = config.headers;
-    if (config.bodyUrlEncoded === undefined) {
-        throw illegalStateError({ message: 'リクエストボディが未設定です。' });
-    }
-    if (config.bodyUrlEncoded instanceof URLSearchParams) {
-        throw illegalStateError({ message: 'リクエストボディの形式が不正です。' });
-    }
-    fetchConfig.body = config.bodyUrlEncoded;
-}

@@ -1,12 +1,12 @@
 import { Headers, ValidateStatus } from '#client/internal/isomorphic/client.types';
 
 // headers
-const CONTENT_TYPE = 'Content-Type';
-const ACCEPT = 'Accept';
-const APPLICATION_JSON = 'application/json';
-const APPLICATION_FORM = 'application/x-www-form-urlencoded';
-const TEXT_EVENT_STREAM = 'text/event-stream';
-const CHARSET_UTF8 = 'charset=utf-8';
+export const CONTENT_TYPE = 'Content-Type';
+export const ACCEPT = 'Accept';
+export const APPLICATION_JSON = 'application/json';
+export const APPLICATION_FORM = 'application/x-www-form-urlencoded';
+export const TEXT_EVENT_STREAM = 'text/event-stream';
+export const CHARSET_UTF8 = 'charset=utf-8';
 
 export const CONTENT_TYPE_APPLICATION_JSON_UTF8 = {
     [CONTENT_TYPE]: `${APPLICATION_JSON}; ${CHARSET_UTF8}`,

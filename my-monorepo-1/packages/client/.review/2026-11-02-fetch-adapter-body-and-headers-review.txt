@@ -1,0 +1,377 @@
+fetch-adapterのボディ形式・ヘッダー設計レビュー
+日付: 2026-11-02
+対象: packages/client
+
+【ユーザー】
+my-monorepo-1のpackages/clientのfetch-adapter.tsを見る。
+fetchAPIを使ったリクエスト処理を共通化しました。レスポンスをテキストで取得するのとエラー時の処理は共通です。
+JSONやフォームなどの形式に対応させたいです。
+まだ作成途中ですが、ここまででの方向性をレビューする。
+
+【回答】
+方向性はよいです。送信・テキスト取得・ステータス検証・例外処理を共通化し、ボディ形式ごとの変換だけを分ける構成は、
+JSONやフォームへの拡張に向いています。
+
+作成途中の箇所も含め、先に整理するとよい点は次の4つです。ファイルは変更していません。
+
+1. ボディなしのリクエストを正常な経路にする
+
+fetch-adapter.ts:86では、bodyType未指定時に { url: '', fetchConfig: {} } を返しています。これではGETなどで、
+本来のURLやメソッドが失われます。
+URL・メソッド・ヘッダー・タイムアウトは共通で設定し、形式別の処理ではボディに関する設定だけを追加する形がおすすめです。
+最後は共通の return { url, fetchConfig } にできます。
+
+2. URLエンコードの型チェックが逆になっている
+
+fetch-adapter.ts:114では、正しいURLSearchParamsが渡されたときに例外になります。
+実行時チェックを残すなら !(... instanceof URLSearchParams) です。ただし、型付きの内部呼び出しだけを想定するなら、
+このチェック自体を省く判断もできます。
+
+3. 形式とボディの組み合わせを型で表す
+
+client.types.ts:31の現在の型は、bodyType: JSONなのにbodyUrlEncodedだけ指定する、といった矛盾を許します。
+形式を増やす前に、判別可能なユニオン型にすると扱いやすくなります。
+
+type RequestBody<T> =
+    | { bodyType?: undefined; body?: never }
+    | { bodyType: 'json'; body: T }
+    | { bodyType: 'urlEncoded'; body: URLSearchParams }
+    | { bodyType: 'formData'; body: FormData };
+
+type RequestConfig<T = never> = CommonRequestConfig & RequestBody<T>;
+
+また、現在のBodyType定数にはas constがないため、値から作ったBodyType型がstringに広がっています。
+ここも合わせて直すと、形式の指定ミスを検出できます。
+
+4. Content-Typeの責任を形式別処理にまとめる
+
+fetch-adapter.ts:99では、JSONへの変換とヘッダー指定が呼び出し側の判断に分かれています。
+形式をアダプターが認識しているので、対応するContent-Typeの設定もここに集めると、呼び出し側の指定漏れを減らせます。
+ヘッダー全体のコピーは共通処理に置き、形式別処理で必要な調整をする構成が自然です。既存ヘッダーと形式が矛盾する場合に、
+上書きするか例外にするかも決めておくとよいです。
+
+エラー処理では、fetch-adapter.ts:20のJSON.stringify(config)がtryの外にある点も気になります。
+循環参照などでここが失敗すると、共通の例外処理を通りません。また、ヘッダーやボディ全体をログと例外のextraに含めているため、
+認証情報などのマスクは共通化の段階で入れたいところです。
+
+現時点では、形式ごとのクライアントやクラスを増やす必要は感じません。
+今の関数分割を保ち、共通設定 → 形式別のボディ設定 → 共通送信処理という境界を明確にすれば、無理なく拡張できます。
+
+【ユーザー】
+RequestConfigでbodyJson,bodyUrlEncodedなどのようにボディを別プロパティで管理していますが、この設計はどうですか
+
+【回答】
+別プロパティで管理する設計も十分ありです。bodyJsonにはJSON用の値、bodyUrlEncodedにはURLSearchParamsと、
+名前から用途と型が分かる利点があります。
+
+気になるのは、プロパティを分けることより、現在の型が次のような矛盾を許す点です。
+
+{
+    bodyType: 'json',
+    bodyJson: { name: 'Alice' },
+    bodyUrlEncoded: new URLSearchParams(),
+}
+
+今の命名を維持するなら、ユニオン型で「どれか一つだけ」を表すのがおすすめです。
+
+type RequestBody<T> =
+    | {
+          bodyType?: undefined;
+          bodyJson?: never;
+          bodyUrlEncoded?: never;
+      }
+    | {
+          bodyType: 'json';
+          bodyJson: T;
+          bodyUrlEncoded?: never;
+      }
+    | {
+          bodyType: 'urlEncoded';
+          bodyJson?: never;
+          bodyUrlEncoded: URLSearchParams;
+      };
+
+type RequestConfig<T = never> =
+    CommonRequestConfig & RequestBody<T>;
+
+body一つに統一する設計と比べると、形式を追加するたびに ?: never の記述が増えるのが欠点です。
+一方、呼び出し側ではbodyJsonなどの名前で意図が伝わります。
+
+JSON・URLエンコード・FormData程度なら、今の別プロパティ方式を維持して問題ありません。
+私なら、現状の分かりやすさを残しつつ、型で併用や指定漏れを防ぎます。bodyへの統一は必須の改善ではありません。
+
+【ユーザー】
+ヘッダーの指定とbodyTYpe, BodyJson, bodyUrlEncodedの内容が矛盾する問題もあります。これについてはどう設計したらよいでしょうか
+
+【回答】
+ボディ形式に関する指定を一か所に集め、Content-Typeはアダプターが決める設計がおすすめです。
+
+今の構造なら、責任を次のように分けます。
+
+- 呼び出し側：bodyTypeと、それに対応するボディを指定する
+- アダプター：ボディを変換し、Content-Typeを設定する
+- headers：認証やAcceptなど、それ以外のヘッダーを指定する
+
+bodyTypeとボディの矛盾は、前述のユニオン型で防ぎます。ヘッダーとの矛盾は、実行時に制御します。
+
+例えばJSON用の設定は、次のようにできます。
+
+const headers = new Headers(config.headers);
+
+switch (config.bodyType) {
+    case 'json':
+        headers.set('Content-Type', 'application/json');
+        fetchConfig.body = JSON.stringify(config.bodyJson);
+        break;
+
+    case 'urlEncoded':
+        // URLSearchParamsからfetchがContent-Typeを設定する
+        headers.delete('Content-Type');
+        fetchConfig.body = config.bodyUrlEncoded;
+        break;
+
+    case 'formData':
+        // boundaryを含めてfetchに任せる
+        headers.delete('Content-Type');
+        fetchConfig.body = config.bodyFormData;
+        break;
+}
+
+fetchConfig.headers = headers;
+
+この例は、Content-Typeについてはボディ形式の指定を優先する方針です。呼び出し側の誤指定を見逃したくない場合は、
+上書き・削除の代わりに、Content-Typeが指定されていたら設定エラーにする方法もあります。
+共通クライアントとしては、私は後者を選びます。ルール違反が呼び出し元ですぐ分かるためです。
+
+なお、headersをRecord<string, string>にしたまま、型だけでContent-Typeを完全に禁止するのは難しいです。
+大文字・小文字の違いもあるため、new Headers(config.headers)で正規化して検証するのが扱いやすいです。
+
+将来application/problem+jsonなども送る必要が出たら、汎用のheadersで上書きするのではなく、
+JSON用の設定にcontentTypeを追加すると、形式に関する責任を一か所に保てます。
+
+【ユーザー】
+会話の内容をテキストファイルにしてclient/.reviewフォルダに新しいファイルで保存する。コミットはしない
+
+【回答】
+会話内容をテキストファイルに保存しました。コミットはしていません。
+
+【ユーザー】
+ヘッダーが独自のHeaders型を使用していますが、標準のHeadersにしたほうが扱いやすいですか
+
+【回答】
+はい。今回のようにContent-Typeを検証・調整するなら、内部処理では標準のHeadersが扱いやすいです。
+ヘッダー名の大文字・小文字を意識せず、has・get・set・deleteで操作できます。
+
+ただし、呼び出し側に毎回new Headers()を要求する必要はありません。
+おすすめは、入力を標準のHeadersInit型で受け取り、内部でHeadersに変換する形です。
+
+type CommonRequestConfig = {
+    // その他の設定
+    headers?: HeadersInit;
+};
+
+function createFetchConfig<T>(config: RequestConfig<T>) {
+    const headers = new Headers(config.headers);
+
+    if (headers.has('Content-Type')) {
+        throw illegalStateError({
+            message: 'Content-Typeはボディ形式から自動設定されます。',
+        });
+    }
+
+    // bodyTypeに応じてheadersとbodyを設定する
+}
+
+呼び出し側では、今と同じオブジェクト形式も使えます。
+
+headers: {
+    Authorization: `Bearer ${token}`,
+    Accept: 'application/json',
+}
+
+現在の独自型Headers = Record<string, string>は、標準のHeadersと名前が重なるので、
+削除するかHeaderRecordなどに改名すると混乱を減らせます。
+
+なお、RequestConfigをAxiosアダプターとも共有するなら、HeadersInitをそのままAxiosへ渡すのではなく、
+アダプター側で変換が必要です。Fetch中心の現在の構成なら、HeadersInitで受ける方針が自然です。
+
+【ユーザー】
+RequestConfigのHeadersをaxiosなどの他のHTTPクライアントでも使用することを視野に入れた場合、
+現在の独自Headersと標準のHeadersのどちらがよいですか
+
+【回答】
+Axiosなどとの共用を前提にするなら、RequestConfigは現在の独自型を使い、各アダプターの内部で変換する設計がおすすめです。
+
+export type RequestHeaders = Record<string, string>;
+
+export type RequestConfig<BODY = never> = {
+    // ...
+    headers?: RequestHeaders;
+};
+
+独自型なら、呼び出し側がFetchのHeadersに依存せず、各HTTPクライアントへ渡しやすくなります。
+標準型との混同を避けるため、名前はHeadersからRequestHeadersに変えるとよいです。
+
+Fetchアダプターでは、標準のHeadersに変換して検証・調整します。
+
+const headers = new Headers(config.headers);
+
+// 大文字・小文字を意識せず検証できる
+if (headers.has('Content-Type')) {
+    // ボディ形式との整合性を検証する
+}
+
+fetchConfig.headers = headers;
+
+つまり、共通インターフェースには単純な独自型、アダプター内部には各ライブラリの型という分担です。
+前の回答のHeadersInitはFetch中心の場合には便利ですが、今回のように複数のHTTPクライアントを想定するなら、独自型のほうが意図に合っています。
+
+【ユーザー】
+現在の独自Headersはnew Headersで正規化するのに問題ない設計になっていますか
+
+【回答】
+はい。現在の定義は、標準のnew Headers()にそのまま渡せる設計です。
+
+// 現在の独自型
+export type Headers = Record<string, string>;
+
+// 標準のHeadersへ変換できる
+const headers = new Headers(config.headers);
+
+ただし、独自型と標準クラスの名前が同じ点に注意が必要です。独自型をRequestHeadersに改名すると、混同を避けられます。
+
+また、次のような大文字・小文字だけが違うキーは、独自型では同時に指定できてしまいます。
+
+{
+    'Content-Type': 'application/json',
+    'content-type': 'text/plain',
+}
+
+new Headers()はこれを同じヘッダーとして扱いますが、矛盾する指定をエラーにはしてくれません。
+したがって、正規化には適した型ですが、内容の整合性まで保証する型ではありません。
+Content-Typeの指定を禁止する方針なら、変換後にheaders.has('Content-Type')で検証すれば対応できます。
+
+【ユーザー】
+CONTENT_TYPE_APPLICATION_JSON_UTF8 であってもnew Headersで正規化できますか
+
+【回答】
+はい。現在のCONTENT_TYPE_APPLICATION_JSON_UTF8も、そのまま渡せます。
+
+const headers = new Headers(CONTENT_TYPE_APPLICATION_JSON_UTF8);
+
+headers.get('content-type');
+// 'application/json; charset=utf-8'
+
+headers.has('Content-Type');
+// true
+
+as const satisfies Headersで定義されていても問題ありません。ヘッダー名は小文字に正規化され、
+getやhasでは大文字・小文字を区別せず扱えます。元の定数は変更されません。
+
+【ユーザー】
+;charset=utf-8 と言う指定もついていますが問題になりませんか
+
+【回答】
+問題ありません。; charset=utf-8はContent-Typeの値の一部で、new Headers()はそのまま保持します。
+
+const headers = new Headers(CONTENT_TYPE_APPLICATION_JSON_UTF8);
+
+headers.get('Content-Type');
+// 'application/json; charset=utf-8'
+
+ただし、形式を検証するときに次のような完全一致で比較すると、falseになります。
+
+headers.get('Content-Type') === 'application/json'
+
+JSON形式かを確認したい場合は、;より前のメディアタイプを取り出して比較します。
+
+const mediaType = headers
+    .get('Content-Type')
+    ?.split(';')[0]
+    ?.trim()
+    .toLowerCase();
+
+const isJson = mediaType === 'application/json';
+
+【ユーザー】
+独自型Headersの設計を変えて、正規化など扱いやすい設計にするのはありですか
+
+【回答】
+ありです。ただ、独自型そのものに正規化の仕組みを持たせるより、入力の型とヘッダー操作を分ける設計がおすすめです。
+型だけでは、キーの小文字化や重複の検出は実行できません。
+
+現在の用途なら、次の構成で十分です。
+
+// HTTPクライアント間で共有する入力型
+export type RequestHeaders = Readonly<Record<string, string>>;
+
+// 正規化した新しいオブジェクトを返す
+export function normalizeHeaders(
+    input: RequestHeaders = {},
+): Record<string, string> {
+    const result: Record<string, string> = Object.create(null);
+
+    for (const [name, value] of Object.entries(input)) {
+        const key = name.toLowerCase();
+
+        if (Object.hasOwn(result, key)) {
+            throw new Error(`ヘッダーが重複しています: ${name}`);
+        }
+
+        result[key] = value;
+    }
+
+    return result;
+}
+
+これなら、各アダプターが同じルールで検証できます。
+
+const headers = normalizeHeaders(config.headers);
+
+if (Object.hasOwn(headers, 'content-type')) {
+    // Content-Typeの指定禁止や整合性を検証する
+}
+
+ここで行う正規化はヘッダー名の小文字化です。値のapplication/json; charset=utf-8の解析は別の処理にします。
+
+クラスにしてget・setなどを用意する設計も可能ですが、標準のHeadersと似た機能を自前で管理することになります。
+今の段階では、RequestHeadersという単純な型と、必要な共通関数を組み合わせる形が、Fetch・Axios両対応とのバランスがよいと思います。
+
+【ユーザー】
+ヘッダーがapplication/jsonかどうかを判定する際に; charset=utf-8が邪魔になると思い、そこをうまく解決できる設計はありませんか
+
+【回答】
+はい。Content-Typeの値を直接比較せず、メディアタイプを取り出す共通関数を用意すると解決できます。
+; charset=utf-8は正しい付加情報なので、送信する値には残します。
+
+export function getMediaType(
+    contentType: string | null | undefined,
+): string | undefined {
+    return contentType?.split(';', 1)[0]?.trim().toLowerCase();
+}
+
+export function isJsonContentType(
+    contentType: string | null | undefined,
+): boolean {
+    return getMediaType(contentType) === 'application/json';
+}
+
+標準のHeadersで名前を正規化した後に使います。
+
+const headers = new Headers(config.headers);
+
+isJsonContentType(headers.get('Content-Type'));
+// application/json                  → true
+// application/json; charset=utf-8   → true
+
+この設計なら、責任が明確になります。
+
+- RequestHeaders：送信用の値を保持する
+- Headers：ヘッダー名の大文字・小文字を吸収する
+- getMediaType：値から形式判定に必要な部分を取り出す
+
+現在の独自型やCONTENT_TYPE_APPLICATION_JSON_UTF8の定義を変更する必要はありません。
+今回の問題には、独自のヘッダークラスを作るより、この小さな共通関数で対応するのが自然です。
+
+【ユーザー】
+追加の会話を先程のファイルに追記する。コミットはしない

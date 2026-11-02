@@ -31,7 +31,6 @@ export type Method = (typeof Method)[keyof typeof Method];
 export type RequestConfig<BODY = never> = {
     method: Method;
     url: string;
-    bodyType?: BodyType;
     bodyJson?: BODY;
     bodyUrlEncoded?: URLSearchParams;
     query?: QueryParams;
@@ -52,7 +51,7 @@ export type BffRequestConfig<DATA = never> = {
 export const BodyType = {
     JSON: 'json',
     UrlEncoded: 'urlEncoded',
-};
+} as const;
 export type BodyType = (typeof BodyType)[keyof typeof BodyType];
 
 export type Headers = Record<string, string>;
