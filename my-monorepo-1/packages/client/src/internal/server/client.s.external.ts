@@ -16,9 +16,10 @@ import { createAxiosClient } from '#client/internal/server/adapters/axios-adapte
  * @param proxy - プロキシ設定されたクライアントを取得する場合true、プロキシ設定無しクライアントを取得する場合false
  * @returns
  */
-export function createExternalClient(proxy: boolean): Client {
+function createExternalClient(proxy: boolean): Client {
     return proxy ? proxiedClient() : nonProxiedClient();
 }
+export default createExternalClient;
 
 function proxiedClient(): Client {
     const { protocol, host, port } = envProxySettings();

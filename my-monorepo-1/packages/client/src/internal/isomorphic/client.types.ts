@@ -31,7 +31,9 @@ export type Method = (typeof Method)[keyof typeof Method];
 export type RequestConfig<BODY = never> = {
     method: Method;
     url: string;
-    body?: BODY;
+    bodyType?: BodyType;
+    bodyJson?: BODY;
+    bodyUrlEncoded?: URLSearchParams;
     query?: QueryParams;
     path?: string; // TODO: BFFではパスパラメータを使用しない方針
     headers?: Headers;
@@ -42,10 +44,16 @@ export type RequestConfig<BODY = never> = {
     validateStatus?: ValidateStatus;
 };
 
-export type BffRequestConfig<BODY = never> = {
+export type BffRequestConfig<DATA = never> = {
     url: string;
-    body?: BODY;
+    data?: DATA;
 };
+
+export const BodyType = {
+    JSON: 'json',
+    UrlEncoded: 'urlEncoded',
+};
+export type BodyType = (typeof BodyType)[keyof typeof BodyType];
 
 export type Headers = Record<string, string>;
 // export type HeadersInit = Headers | string[][] | Record<string, string>; // NOTE:

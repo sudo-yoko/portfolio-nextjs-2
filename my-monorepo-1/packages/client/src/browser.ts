@@ -1,6 +1,7 @@
 import 'client-only';
 
 import bffClient from '#client/internal/browser/client.b';
-export default bffClient;
+export { bffClient };
 
-export { externalClient } from '#client/internal/browser/client.b.external';
+import externalClient from '#client/internal/browser/client.b.external';
+export { externalClient };

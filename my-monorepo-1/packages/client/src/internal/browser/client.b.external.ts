@@ -8,4 +8,5 @@ import { Client } from '#client/internal/isomorphic/client.types';
 /**
  * 外部リクエスト用クライアント（クライアントサイド専用）
  */
-export const externalClient: Client = createFetchClient(logger);
+const externalClient: Client = createFetchClient(logger);
+export default externalClient;

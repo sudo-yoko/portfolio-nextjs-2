@@ -10,7 +10,7 @@ import {
     CONTENT_TYPE_APPLICATION_JSON_UTF8,
     defaultValidateStatusClient,
 } from '#client/internal/isomorphic/client.constants';
-import { BffClient, Client, Method } from '#client/internal/isomorphic/client.types';
+import { BffClient, BodyType, Client, Method } from '#client/internal/isomorphic/client.types';
 
 const logPrefix = 'bff-adapter.ts: ';
 
@@ -26,7 +26,8 @@ export const createBffClient = (client: Client): BffClient => ({
         const result = await client.send({
             method: Method.POST,
             url: config.url,
-            body: config.body,
+            bodyJson: config.data,
+            bodyType: BodyType.JSON,
             headers: {
                 ...CONTENT_TYPE_APPLICATION_JSON_UTF8,
                 ...ACCEPT_APPLICATION_JSON,
