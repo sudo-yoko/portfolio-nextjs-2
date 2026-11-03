@@ -101,3 +101,51 @@ BODY は未確定の型パラメータなので、TypeScript は具体的な型�
 
 対応:
 このファイルに会話内容を保存。コミットは実施しない。
+
+
+fetch API アダプターの分離・命名に関する会話
+日付: 2026-11-03
+
+ユーザー:
+my-monorepo-1のpackages/clientの、fetch-adapter.tsとfetch-adapter.fetch.tsを見る
+fetchAPIをラップして単体テストしやすくしました。どうででしょうか。またfetch-adapter.fetch.tsと言うファイル名についても意見ください
+
+回答:
+良い分離だと思います。fetch-adapter.ts にリクエスト設定・ステータス検証・エラー変換を残し、
+executeFetch に通信とレスポンスの読み取りをまとめているので、責務が明確です。
+
+テストで executeFetch をモックすれば { status, rawBody } を返すだけで済み、
+Response のモックを毎回作る必要がなくなる点が良いです。
+
+改善候補:
+- 戻り値を Promise<RawResponse> と明示すると、通信部分が返す型を保証でき、変更時にも意図が伝わります。
+- 必要なら createFetchClient(logger, fetchExecutor = executeFetch) のように引数で差し替え可能にすると、
+  モジュールモックなしでテストできます。現在のテスト方針で困っていなければ必須ではありません。
+
+fetch-adapter.fetch.ts は関連ファイルだと分かるので十分ありです。
+ただ、fetch が繰り返され、後半の .fetch が何を担当するかは少し曖昧です。
+推奨は fetch-adapter.transport.ts です。「fetch アダプターの通信処理」という役割が伝わり、
+今回切り出した境界にも合います。関数名に合わせるなら fetch-adapter.execute.ts も候補です。
+
+単体テストでは、正常系・HTTPエラーに加えて、通信失敗と res.text() の失敗も扱うと、
+この分離が有効に働いていることを確認できます。
+この回答時点ではコード確認のみで、変更・テスト実行はしていません。
+
+ユーザー:
+executeFecthと言う関数名はどうですか
+
+回答:
+executeFetch は自然で、今の用途に合っています。
+ただし executeFecth はスペルミスで、正しくは executeFetch です。
+
+実際には fetch の実行だけでなく、本文をテキストとして読み取り、
+{ status, rawBody } に変換しているため、その処理まで名前に表すなら fetchRawResponse も良い候補です。
+
+戻り値の RawResponse と対応する fetchRawResponse を推奨します。
+ただ、内部の小さな関数なので、現在の executeFetch でも十分分かりやすいです。
+
+ユーザー:
+会話の内容をclient/.review/2026-11-03-request-config-body-type-review.txtに追記してください。コミットはしない
+
+対応:
+既存の内容を保持して、このファイルに今回の会話内容を追記。コミットは実施しない。

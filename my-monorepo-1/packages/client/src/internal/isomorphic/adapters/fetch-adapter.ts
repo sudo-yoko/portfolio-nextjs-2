@@ -4,9 +4,10 @@
 import { applicationError, formatError, getCustomErrorProperties, invalidStatusError } from '@my/error';
 import { Logger } from '@my/logger';
 
+import { executeFetch } from '#client/internal/isomorphic/adapters/fetch-adapter.transport';
 import { defaultValidateStatus } from '#client/internal/isomorphic/client.constants';
+import { Client } from '#client/internal/isomorphic/client.types';
 import { validateBodyConfig } from '#client/internal/isomorphic/client.validator';
-import { Client, RawResponse } from '#client/internal/isomorphic/client.types';
 
 const logPrefix = 'fetch-adapter.ts ';
 
@@ -36,17 +37,10 @@ export const createFetchClient = (logger: Logger): Client => ({
             } else if (config.bodyUrlEncoded !== undefined) {
                 fetchConfig.body = config.bodyUrlEncoded;
             }
+            logger.info(logPrefix + JSON.stringify(fetchConfig));
 
             // リクエスト実行
-            logger.info(logPrefix + JSON.stringify(fetchConfig));
-            const res = await fetch(url, fetchConfig);
-
-            // レスポンス
-            const rawBody = await res.text(); // bodyがjsonとは限らないのでtextで取得する。エラーの場合はhtmlが返ってくることもある
-            const result: RawResponse = {
-                status: res.status,
-                rawBody,
-            };
+            const result = await executeFetch(url, fetchConfig);
             logger.info(logPrefix + `Response -> ${JSON.stringify(result)}`);
 
             // ステータスコードの検証
