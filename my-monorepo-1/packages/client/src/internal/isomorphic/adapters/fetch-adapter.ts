@@ -38,6 +38,7 @@ export const createFetchClient = (logger: Logger): Client => ({
             }
 
             // リクエスト実行
+            logger.info(logPrefix + JSON.stringify(fetchConfig));
             const res = await fetch(url, fetchConfig);
 
             // レスポンス

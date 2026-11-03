@@ -35,6 +35,7 @@ export const createBffClient = (client: Client): BffClient => ({
             headers = { ...headers, ...CONTENT_TYPE_APPLICATION_JSON_UTF8 };
             props.bodyJson = config.data;
         }
+        props.headers = headers;
 
         const result = await client.send(props);
         logger.info(logPrefix + `Response -> ${JSON.stringify(result)}`);
