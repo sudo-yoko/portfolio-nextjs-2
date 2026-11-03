@@ -1,16 +1,14 @@
 import 'client-only';
 
-import { Method } from '@my/client';
-import client from '@my/client/client';
+import { bffClient } from '@my/client/browser';
 
 type Send = {
     (): Promise<void>;
 };
 
 const viaRoute: Send = async () => {
-    await client.send({
+    await bffClient.send({
         url: '/api/bff/test/client',
-        method: Method.GET,
     });
 };
 

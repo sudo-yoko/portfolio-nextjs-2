@@ -1,0 +1,103 @@
+RequestConfig の BODY 型パラメータに関する会話
+日付: 2026-11-03
+
+ユーザー:
+my-monorepo-1のpackages/clientのclient.type.tsで、type RequestConfigに型パラメータBODYがあるが、
+この型パラメータは使用されるのでしょうか。
+
+回答:
+実際のファイルは src/internal/isomorphic/client.types.ts で、BODY は bodyJson の型として使われています。
+
+export type RequestConfig<BODY = never> = {
+    method: Method;
+    url: string;
+    bodyJson?: BODY;
+    // ...
+};
+
+例えば RequestConfig<{ name: string }> とすれば、bodyJson に渡せる値を { name: string } に制限できます。
+また、Client.send にも引き継がれています。
+
+send<BODY = never>(req: RequestConfig<BODY>): Promise<RawResponse>;
+
+型引数を明示する例:
+
+await client.send<{ name: string }>({
+    method: Method.POST,
+    url: '/users',
+    bodyJson: { name: 'Taro' },
+});
+
+send の型引数を省略した場合は、渡した bodyJson から BODY が推論されます。
+一方、変数の型を単に RequestConfig と書いた場合は既定値の never が使われるため、bodyJson に具体的な値を設定できません。
+BODY はコンパイル時にリクエスト本文の型を検査するために使われます。実行時には型情報は残りません。
+
+ユーザー:
+bff-adapter.tsで
+props.bodyJson = config.data;
+のように値を渡すだけなのですが、ここで型情報は必要なのでしょうか
+
+回答:
+その箇所では、具体的な BODY の型情報は必要ありません。config.data をそのまま渡していて、中身のプロパティを参照していないためです。
+
+type RequestConfigProps = Parameters<typeof client.send>[0];
+
+この定義では、ジェネリック関数から引数の型を取り出すため、bodyJson は unknown になります。
+元の BODY の具体的な型は保持されていませんが、値の代入には問題ありません。
+このアダプターの用途なら、次のように明示しても十分です。
+
+const props: RequestConfig<unknown> = {
+    method: Method.POST,
+    url: config.url,
+    validateStatus: defaultValidateStatusClient,
+};
+
+RequestConfig の BODY は、呼び出し側で本文の型を検査したい場合には役立ちます。
+一方、このアダプター内では unknown で扱えます。
+
+ユーザー:
+このケースでは型情報はunknownにするのが正しい対応ですか
+
+回答:
+はい。このアダプターでは本文の中身を操作せず、そのまま転送するので、RequestConfig<unknown> と明示するのは妥当です。
+
+const props: RequestConfig<unknown> = {
+    method: Method.POST,
+    url: config.url,
+    validateStatus: defaultValidateStatusClient,
+};
+
+props.bodyJson = config.data;
+
+unknown は「どんな値も受け取れるが、中身を使うには型の確認が必要」という型なので、この用途に合っています。
+現在の Parameters<typeof client.send>[0] でも bodyJson は unknown になるため、変更は必須ではありません。
+ただ、RequestConfig<unknown> と書くほうが、ここでは本文の具体的な型を扱わないという意図が伝わりやすくなります。
+
+ユーザー:
+config.dataの方推論が「(property) data?: BODY & ({} | null)」になるのですが、これはどういうことですか
+
+回答:
+これは、if (config.data !== undefined) によって、BODY から undefined の可能性が除かれた型です。
+
+if (config.data !== undefined) {
+    props.bodyJson = config.data;
+}
+
+BODY & ({} | null) は、次の意味です。
+
+- &: 両方の型を満たす値（交差型）
+- {}: null と undefined 以外のすべての値。文字列や数値も含みます
+- {} | null: undefined 以外のすべての値
+
+つまり、「BODY に属し、かつ undefined ではない値」を表しています。
+例えば、BODY が string | undefined なら、この条件内では実質的に string になります。
+BODY は未確定の型パラメータなので、TypeScript は具体的な型名に置き換えず、この交差型で絞り込みを表現しています。
+表示にある data? は元のプロパティが省略可能であることを示しています。
+条件内で値に undefined が残っているという意味ではありません。
+正常な型推論なので、修正や型アサーションは不要です。
+
+ユーザー:
+会話の内容をclient/.reviewフォルダに新しいテキストファイルで保存する。コミットはしない
+
+対応:
+このファイルに会話内容を保存。コミットは実施しない。
