@@ -10,7 +10,7 @@ import {
     CONTENT_TYPE_APPLICATION_JSON_UTF8,
     defaultValidateStatusClient,
 } from '#client/internal/isomorphic/client.constants';
-import { BffClient, BodyType, Client, Method } from '#client/internal/isomorphic/client.types';
+import { BffClient, Client, Headers, Method } from '#client/internal/isomorphic/client.types';
 
 const logPrefix = 'bff-adapter.ts: ';
 
@@ -23,17 +23,21 @@ const logPrefix = 'bff-adapter.ts: ';
 export const createBffClient = (client: Client): BffClient => ({
     send: async (config) => {
         logger.info(logPrefix + `Request -> config=${JSON.stringify(config)}`);
-        const result = await client.send({
+
+        type RequestConfigProps = Parameters<typeof client.send>[0];
+        const props: RequestConfigProps = {
             method: Method.POST,
             url: config.url,
-            bodyJson: config.data,
-            bodyType: BodyType.JSON,
-            headers: {
-                ...CONTENT_TYPE_APPLICATION_JSON_UTF8,
-                ...ACCEPT_APPLICATION_JSON,
-            },
             validateStatus: defaultValidateStatusClient,
-        });
+        };
+
+        let headers: Headers = { ...ACCEPT_APPLICATION_JSON };
+        if (config.data !== undefined) {
+            headers = { ...headers, ...CONTENT_TYPE_APPLICATION_JSON_UTF8 };
+            props.bodyJson = config.data;
+        }
+
+        const result = await client.send(props);
         logger.info(logPrefix + `Response -> ${JSON.stringify(result)}`);
         return result;
     },

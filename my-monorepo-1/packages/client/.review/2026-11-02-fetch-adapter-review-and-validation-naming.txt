@@ -1,0 +1,112 @@
+fetchアダプターのレビューと検証処理の命名に関する会話記録
+日付: 2026-11-02
+対象: my-monorepo-1/packages/client
+形式: ユーザーの依頼と回答の要点を会話順に記録。ツール出力は確認結果として記載。
+
+1. 初回レビュー
+
+ユーザー:
+my-monorepo-1のpackages/clientのfetch-adapter.tsを見る。
+fetchAPIを使ったリクエスト処理を共通化しました。レスポンスをテキストで取得するのとエラー時の処理は共通です。
+JSONやフォームなどの形式に対応させたいです。
+まだ作成途中ですが、ここまでの方向性をレビューする。
+
+回答:
+方向性はよい。リクエストの形式だけを切り替え、テキストでのレスポンス取得・ステータス判定・例外のラップを共通化する構成は、
+JSON・フォーム対応を広げやすい。JSONのパースを上位の責務にする点も自然。
+
+指摘:
+・[高] fetch-adapter.tsでconfig.headersをfetchConfig.headersに設定していない。
+    JSONのContent-Type、認証ヘッダー、Acceptなどが送信されない。
+・[中] client.helper.tsの検証ではbodyJsonをtruthy判定し、送信側ではundefinedとの比較を使っている。
+    false、0、空文字、nullで検証と送信が食い違う。フォーム指定でbodyJson: falseとbodyUrlEncodedを両方渡すと、
+    検証を通過してJSON側が送信される。存在判定を!== undefinedに統一し、両方の指定は拒否したい。
+    未対応のContent-Typeも検証を素通りしている。
+・[中] validateRequestConfigがtryの外にあり、検証エラーがApplicationErrorにラップされない。
+    例外を統一する方針ならtry内に置く。設定エラーを区別する意図なら、その契約を明示する。
+・[中] bff-adapter.tsにRequestConfigには存在しないbodyTypeの指定が残っている。
+
+設計案:
+ボディの指定を主にして、対応するContent-Typeをアダプターで組み立てる形を提案。
+呼び出し側でbodyJsonとJSON用ヘッダーを重複して指定する必要がなくなり、検証も単純になる。
+bodyJsonとbodyUrlEncodedを別プロパティにする形は読みやすい。union型にして同時指定を禁止する案もある。
+今後FormDataに対応する場合、Content-Typeを手動設定せず、boundaryの生成をfetchに任せる。
+レスポンスの共通化は今のままで進めてよい。次に、ヘッダーの反映、ボディ指定の排他性、ヘッダーを誰が決めるかを固める。
+
+確認結果:
+npm run typecheck --workspace=@my/clientを実行。bff-adapter.tsのbodyType指定によりTS2353で失敗。
+レビュー時のコード変更なし。
+
+2. 修正後の再レビュー
+
+ユーザー:
+コードを修正しました。もう一度見てください
+
+回答:
+前回の主な指摘は解消されている。ヘッダーの送信、undefinedによる存在判定、検証処理のtry内への移動、
+旧bodyType指定の削除を確認。@my/clientの型チェックも通過。
+
+残る指摘:
+・[中] BffRequestConfig.dataは省略可能だが、BFFクライアントはJSONのContent-Typeを常に設定する。
+    そのためsend({ url })は検証エラーになる。ボディなしを許可するならdataがある場合だけJSONヘッダーを付ける。必須にするなら型も必須に揃える。
+・[低] client.helper.tsのメディアタイプ比較は完全一致であり、Application/JSONなどの大文字・小文字の異なる指定が拒否される。
+    trim().toLowerCase()で正規化してから比較するとよい。
+・軽微な整理として、bff-adapter.tsに残ったBodyTypeの未使用importを削除できる。
+
+設計について:
+呼び出し側がContent-Typeを指定し、アダプターで整合性を検証する現在の方針で進めて問題ない。
+ヘッダーの自動設定やunion型への変更は、現段階で必須ではない。今回の検証ではJSON・URLエンコード・ボディなしの組み合わせが明確になっている。
+
+確認結果:
+npm run typecheck --workspace=@my/clientが成功。
+確認はコードレビューと型チェック。実通信テストとコード変更は行っていない。
+
+3. 検証関数の名前
+
+ユーザー:
+validateRequestConfigの関数名について、もっと適切な命名はありますか
+
+回答:
+現在の処理内容ならvalidateRequestBodyが適切。
+validateRequestConfigだとURL・メソッド・タイムアウトなども含めた設定全体の検証に見えるが、
+実際の検証対象はボディの指定とContent-Typeの整合性。
+
+候補:
+・validateRequestBody: ボディに関する検証。簡潔で、今後も拡張しやすい。
+・validateRequestBodyConfig: ボディの内容ではなく、指定方法を検証すると明示。
+・validateContentTypeAndBody: 現在の検証対象を最も具体的に表す。
+
+ボディのデータ内容まで検証する関数との混同を避けたいなら、validateRequestBodyConfigをおすすめする。
+
+4. ファイルの名前
+
+ユーザー:
+client.helper.tsと言うファイル名ももっと適切な名前はありますか
+
+回答:
+関数名をvalidateRequestBodyConfigにするなら、ファイル名はclient.validation.tsをおすすめする。
+helperより役割が明確で、今後URLやタイムアウトなどの検証を追加しても自然に収まる。
+既存のclient.types.ts・client.constants.tsとも揃う。
+ボディ設定の検証だけを独立させるならrequest-body.validation.tsも適切だが、現状の規模ならclient.validation.tsで十分。
+
+5. validatorとvalidationの比較
+
+ユーザー:
+validatorよりもvalidationのほうが適切なのですか
+
+回答:
+どちらも適切であり、validationのほうが常に優れているわけではない。
+・client.validator.ts: 検証する関数・オブジェクトという「検証役」に着目した名前。
+・client.validation.ts: 検証処理やルールという「機能」に着目した名前。
+
+今回のように検証関数を置くファイルならclient.validator.tsも自然。
+既存のclient.types.ts・client.constants.tsに合わせて機能別に分類する意図でvalidationを提案した。
+プロジェクト内に命名規則がなければ、好みで選んで問題ない。回答者の選好としては、検証関数をまとめる用途ならclient.validation.ts。
+
+6. 会話の保存
+
+ユーザー:
+会話の内容を、client/.reviewフォルダに新しいテキストファイルで保存する。コミットはしない
+
+対応:
+このファイルを新規作成。既存のレビュー記録は変更せず、コミットは行わない。

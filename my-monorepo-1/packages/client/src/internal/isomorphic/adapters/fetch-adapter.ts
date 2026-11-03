@@ -5,7 +5,7 @@ import { applicationError, formatError, getCustomErrorProperties, invalidStatusE
 import { Logger } from '@my/logger';
 
 import { defaultValidateStatus } from '#client/internal/isomorphic/client.constants';
-import { validateRequestConfig } from '#client/internal/isomorphic/client.helper';
+import { validateBodyConfig } from '#client/internal/isomorphic/client.validator';
 import { Client, RawResponse } from '#client/internal/isomorphic/client.types';
 
 const logPrefix = 'fetch-adapter.ts ';
@@ -13,12 +13,13 @@ const logPrefix = 'fetch-adapter.ts ';
 export const createFetchClient = (logger: Logger): Client => ({
     send: async (config) => {
         logger.info(logPrefix + `Request -> config=${JSON.stringify(config)}`);
-        validateRequestConfig(config);
-
         try {
+            validateBodyConfig(config);
+
             // リクエスト設定
             const fetchConfig: RequestInit = {};
             fetchConfig.method = config.method;
+            fetchConfig.headers = config.headers;
 
             let url: URL | string = config.url;
             if (config.query) {
