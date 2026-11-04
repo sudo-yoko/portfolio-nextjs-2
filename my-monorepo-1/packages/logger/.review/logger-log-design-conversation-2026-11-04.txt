@@ -1,0 +1,66 @@
+Logger.log の設計に関する会話
+日付: 2026-11-04
+
+【ユーザー】
+my-monorepo-1のpackaged/loggerのlogger.types.tsのtype Loggerとlogger.winston.adapter.tsを見る。
+log関数はオブジェクトを整形して出力できる機能です。サーバーサイドのログ実装ではnode:util.formatを使います。
+クライアントサイドロガーでは、整形が難しければ簡易的な実装でも良いかもしれないと考えています。
+このlog関数の設計について意見ください
+
+【アシスタント】
+確認しました。整形をアダプターに任せ、サーバーでは node:util.format を使う方針は妥当だと思います。
+ただし、クライアントで簡易実装にする場合も、呼び出し側が頼れる最低限の仕様は揃えたいです。
+
+現在の Logger 型（src/internal/isomorphic/logger.types.ts:42）について、主に次の点が気になります。
+
+1. format は必須にするのがおすすめです。
+   現状は log(level, {}) も許されます。また、現在の実装（src/internal/server/logger.winston.adapter.ts:17）では、
+   省略された format を undefined として util.format に渡すので、params だけを指定するとログの先頭に undefined が入ります。
+
+2. 共通で保証する書式を明確にしたいです。
+   例えば「%s と %o をサポートし、オブジェクトの細かな表示形式は環境依存」とすれば、クライアントは簡易実装でも成立します。
+   一方、サーバーで使えるすべての書式を暗黙に公開すると、クライアントとの挙動差が呼び出し側に漏れます。
+   util.format には書式置換のほか、余った引数を文字列化して追記する挙動もあります。
+   Node.js公式ドキュメント:
+   https://nodejs.org/download/release/v26.8.2/docs/api/util.html#utilformatformat-args
+
+3. log と logAsync は同じ入力型にしたいです。
+   現状は log だけが整形に対応しているので、送信完了を待ちたいときに同じ内容を渡せません。
+
+最小限なら、次の形が扱いやすいと思います。
+
+export type LogMessage = {
+    format: string;
+    params?: readonly unknown[];
+    extras?: Extras;
+};
+
+export type Logger = {
+    log(level: Level, message: LogMessage): void;
+    logAsync(level: Level, message: LogMessage): Promise<void>;
+    // info / warn / error / debug など
+};
+
+使用例:
+
+logger.log(Level.Info, {
+    format: 'ユーザー取得: %o',
+    params: [user],
+    extras: { extra1: requestId },
+});
+
+オブジェクトだけを出したい場合も、まずは format: '%o' で十分です。書式省略のために型を複雑にする必要は薄いと思います。
+
+クライアントについては、現在の actionAdapter が Server Actions 経由でサーバーに送る設計なので、
+送信可能な値であればサーバー側で同じ整形処理を使う選択肢があります。
+ただし、unknown[] は送信可能であることを保証しません。任意のオブジェクトを受け取りたいなら、
+クライアントで文字列化してから送る方が扱いやすいです。その場合、循環参照・BigInt・Error をどう表示するかは決めておきたいです。
+
+私なら、まず format 必須・入力型の共通化を行い、クライアントは最低限の書式とオブジェクト表示を保証する設計にします。
+表示の完全一致までは求めません。
+
+なお、関連して Level に debug がないことと、クライアント側の infoAsync などが void logInfo(...) により
+送信完了を待たずに解決する点も、インターフェースを整理する際に合わせて直したいです。コード変更はしていません。
+
+【ユーザー】
+会話の内容をテキストファイルにして、logger/.reviewフォルダに新しいファイルで保存してください。コミットはしない

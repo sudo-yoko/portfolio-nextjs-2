@@ -11,7 +11,7 @@ export function stringify(config: RequestConfig<unknown>): string {
         str.push(`bodyUrlEncoded=${config.bodyUrlEncoded.toString()}`);
     }
     if (config.query) {
-        str.push(`query=${config.query}`);
+        str.push(`query=${JSON.stringify(config.query)}`);
     }
     if (config.headers) {
         str.push(`headers=${JSON.stringify(config.headers)}`);

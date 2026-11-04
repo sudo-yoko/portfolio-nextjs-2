@@ -6,6 +6,7 @@ import {
     CONTENT_TYPE_APPLICATION_JSON_UTF8,
 } from '@/client/src/internal/isomorphic/client.constants';
 import { Method, RequestConfig } from '@/client/src/internal/isomorphic/client.types';
+import { Level } from '@/logger/src';
 import { logger, logPrefix } from '@/tests/test-logger';
 
 void describe('', () => {
@@ -66,6 +67,7 @@ void describe('', () => {
 
     // clear & npm run node:test -- --test-name-pattern=test1-3 src/client/fetch-adapter.test.ts
     void test('test1-3', async () => {
+        logger.log(Level.Info, { format: 'test=%s, %s', params: ['test', 'test'] });
         const client = createFetchClient(logger);
 
         const searchParams = new URLSearchParams();

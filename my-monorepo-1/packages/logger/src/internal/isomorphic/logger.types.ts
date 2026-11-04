@@ -40,12 +40,20 @@ export type Extras = {
  * ロギングのインターフェース型
  */
 export type Logger = {
-    log(level: Level, message: { format?: string; params?: unknown[]; extras?: Extras }): void;
+    /**
+     * フォーマット指定子を使ったログ出力
+     *
+     * @param level - ログレベル
+     * @param format - フォーマット文字列。%s 文字列、%o オブジェクト
+     * @param params - 埋め込みパラメーター
+     * @param extras -
+     */
+    log(level: Level, message: { format: string; params?: unknown[]; extras?: Extras }): void;
     info(message: string, extras?: Extras): void;
     warn(message: string, extras?: Extras): void;
     error(message: string, extras?: Extras): void;
     debug(message: string, extras?: Extras): void;
-    logAsync(level: Level, message: string, extras?: Extras): Promise<void>;
+    logAsync(level: Level, message: { format: string; params?: unknown[]; extras?: Extras }): Promise<void>;
     infoAsync(message: string, extras?: Extras): Promise<void>;
     warnAsync(message: string, extras?: Extras): Promise<void>;
     errorAsync(message: string, extras?: Extras): Promise<void>;

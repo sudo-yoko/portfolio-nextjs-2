@@ -3,8 +3,8 @@ import { Logger } from '@/logger/src';
 export const logPrefix = '#############';
 
 export const logger: Logger = {
-    log: (_level, message, _extras) => {
-        console.log(logPrefix, message);
+    log: (_level, { format, params = [], extras: _extras }) => {
+        console.log(logPrefix + format, ...params);
     },
     info: (message, _extras) => {
         console.log(logPrefix, message);

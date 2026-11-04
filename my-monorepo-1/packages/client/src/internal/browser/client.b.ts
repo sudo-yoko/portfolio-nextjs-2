@@ -7,10 +7,10 @@ import { createFetchClient } from '#client/internal/isomorphic/adapters/fetch-ad
 import { BffClient, Client } from '#client/internal/isomorphic/client.types';
 
 // 使用するHTTPクライアント
-const transport: Client = createFetchClient(logger);
+const client: Client = createFetchClient(logger);
 
 /**
  * BFFリクエスト用クライアント（クライアントサイド専用）
  */
-const bffClient: BffClient = createBffClient(transport);
+const bffClient: BffClient = createBffClient(client);
 export default bffClient;
