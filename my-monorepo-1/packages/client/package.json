@@ -17,9 +17,17 @@
             "types": "./src/browser.ts",
             "default": "./src/browser.ts"
         },
+        "./browser/external": {
+            "types": "./src/browser.external.ts",
+            "default": "./src/browser.external.ts"
+        },
         "./server": {
             "types": "./src/server.ts",
             "default": "./src/server.ts"
+        },
+        "./server/external": {
+            "types": "./src/server.external.ts",
+            "default": "./src/server.external.ts"
         }
     },
     "scripts": {

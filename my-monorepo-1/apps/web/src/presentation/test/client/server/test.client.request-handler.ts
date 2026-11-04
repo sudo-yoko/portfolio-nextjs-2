@@ -1,7 +1,7 @@
 import 'server-only';
 
 import { ACCEPT_APPLICATION_JSON, Method, RequestConfig, toQueryParams } from '@my/client';
-import { createExternalClient } from '@my/client/server';
+import { createExternalClient } from '@my/client/server/external';
 import { Level } from '@my/logger';
 import logger from '@my/logger/server';
 
