@@ -34,7 +34,6 @@ export type RequestConfig<BODY = never> = {
     bodyJson?: BODY;
     bodyUrlEncoded?: URLSearchParams;
     query?: QueryParams;
-    path?: string; // TODO: BFFではパスパラメータを使用しない方針
     headers?: Headers;
     timeout?: number;
     /**

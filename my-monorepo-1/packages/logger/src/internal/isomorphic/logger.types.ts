@@ -40,7 +40,7 @@ export type Extras = {
  * ロギングのインターフェース型
  */
 export type Logger = {
-    log(level: Level, message: string, extras?: Extras): void;
+    log(level: Level, message: { format?: string; params?: unknown[]; extras?: Extras }): void;
     info(message: string, extras?: Extras): void;
     warn(message: string, extras?: Extras): void;
     error(message: string, extras?: Extras): void;

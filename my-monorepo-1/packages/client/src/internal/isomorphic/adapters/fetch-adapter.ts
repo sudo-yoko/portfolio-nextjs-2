@@ -6,14 +6,15 @@ import { Logger } from '@my/logger';
 
 import { executeFetch } from '#client/internal/isomorphic/adapters/fetch-adapter.transport';
 import { defaultValidateStatus } from '#client/internal/isomorphic/client.constants';
+import { stringify } from '#client/internal/isomorphic/client.helper';
 import { Client } from '#client/internal/isomorphic/client.types';
 import { validateBodyConfig } from '#client/internal/isomorphic/client.validator';
 
-const logPrefix = 'fetch-adapter.ts ';
+const logPrefix = 'fetch-adapter.ts: ';
 
 export const createFetchClient = (logger: Logger): Client => ({
     send: async (config) => {
-        logger.info(logPrefix + `Request -> config=${JSON.stringify(config)}`);
+        logger.info(logPrefix + `Request -> ${stringify(config)}`);
         try {
             validateBodyConfig(config);
 
@@ -37,7 +38,7 @@ export const createFetchClient = (logger: Logger): Client => ({
             } else if (config.bodyUrlEncoded !== undefined) {
                 fetchConfig.body = config.bodyUrlEncoded;
             }
-            logger.info(logPrefix + JSON.stringify(fetchConfig));
+            // logger.info(logPrefix + `fetchConfig=${JSON.stringify(fetchConfig)}`);
 
             // リクエスト実行
             const result = await executeFetch(url, fetchConfig);

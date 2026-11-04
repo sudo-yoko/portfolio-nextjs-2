@@ -4,6 +4,7 @@
 import 'server-only'; // プロキシも利用可能とするのでserver-only。クライアントサイド不可
 
 import axios, { AxiosProxyConfig, AxiosRequestConfig } from 'axios';
+import util from 'node:util';
 
 import { applicationError, formatError } from '@my/error';
 import logger from '@my/logger/server';
@@ -11,6 +12,7 @@ import logger from '@my/logger/server';
 import { defaultValidateStatus } from '#client/internal/isomorphic/client.constants';
 import { toURLSearchParams } from '#client/internal/isomorphic/client.params';
 import { Client, RawResponse } from '#client/internal/isomorphic/client.types';
+import { stringify } from '#client/internal/isomorphic/client.helper';
 
 const logPrefix = 'axios-adapter.s.ts: ';
 
@@ -26,9 +28,7 @@ export const createAxiosClient = (proxy?: AxiosProxyConfig): Client => ({
     send: async (config) => {
         // const location = 'client.adapter.axios.ts#send';
 
-        logger.info(
-            logPrefix + `Request -> config=${JSON.stringify(config)}, proxy=${JSON.stringify(proxy)}`,
-        );
+        logger.info(logPrefix + `Request -> config=${stringify(config)}, proxy=${JSON.stringify(proxy)}`);
         //
         // リクエスト設定
         //

@@ -1,5 +1,7 @@
 import 'server-only';
 
+import util from 'node:util';
+
 // NOTE: デフォルトエクスポートは好きな名前でimportできる
 import type { ServerLogger } from '#logger/internal/isomorphic/logger.types';
 import { getOrCreateLogger } from '#logger/internal/server/logger.winston';
@@ -12,8 +14,9 @@ export const winstonAdapter: ServerLogger = {
     initialize: () => {
         getOrCreateLogger();
     },
-    log: (level, message, extras) => {
-        getOrCreateLogger().log(level, message, { ...extras });
+    log: (level, { format, params = [], extras }) => {
+        getOrCreateLogger().log(level, util.format(format, ...params), { ...extras });
+        // getOrCreateLogger().log(level, message, { ...extras });
     },
     info: (message, extras) => {
         getOrCreateLogger().info(message, { ...extras });

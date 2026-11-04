@@ -1,0 +1,239 @@
+RequestConfig.bodyJson の型制約についての会話記録
+日付: 2026-11-03
+
+このファイルは会話の論点と回答を発言順にまとめた記録です。
+コード変更の実施や最終的な型の採用を示すものではありません。
+
+1. RequestConfig の BODY をJSONオブジェクトに制限すべきか
+
+ユーザー:
+my-monorepo-1 の packages/client の client.types.ts にある RequestConfig を確認してほしい。
+bodyJson はJSONオブジェクトである必要があるのに、無制約の型パラメータ BODY になっている。
+厳密にJSONオブジェクトであることを縛るべきではないか。
+
+回答:
+JSONオブジェクトに限定する設計なら、BODY に制約を付けることが適切。
+BODY = never は省略時の既定値であり、制約ではない。
+再帰的な JsonValue と JsonObject を定義し、BODY extends JsonObject とする案を提示した。
+object だけでは配列、Date、関数なども許可する。
+ただし、JSON自体はオブジェクト以外の値も許可するため、クライアントの設計方針による。
+Client.send、validateBodyConfig、BFF側の型も整合させる必要がある。
+確認時のBFFアダプターには RequestConfig<unknown> があった。
+
+2. Content-Type が application/json のリクエストボディという前提
+
+ユーザー:
+content-type が json のときのリクエストボディである。それを踏まえるとどんな型制約がよいか。
+
+回答:
+application/json なら、オブジェクトに限定せず JsonValue を許可するのが基本。
+配列、文字列、数値、真偽値、null もJSONとして有効。
+
+例:
+type JsonValue =
+    | string
+    | number
+    | boolean
+    | null
+    | { [key: string]: JsonValue }
+    | JsonValue[];
+
+type RequestConfig<BODY extends JsonValue = never> = {
+    method: Method;
+    url: string;
+    bodyJson?: BODY;
+};
+
+この型は bigint、関数、Date、値に undefined を含むオブジェクトなどを拒否する。
+Date は送信用の文字列へ変換する設計になる。
+interface のDTOや省略可能なプロパティとの互換性には注意が必要。
+
+3. Fetch や Axios もこれらのJSONボディを許容するのか
+
+ユーザー:
+fetch や axios などの一般的なHTTPクライアントは、そのようなリクエストボディを許容しているのか。
+
+回答:
+JSONとして配列、文字列、数値、真偽値、null を送信できる。
+ただし、Fetch と Axios では渡し方が異なる。
+Fetch は呼び出し側で JSON.stringify して body に渡す。
+Content-Type を指定するだけでJSONに変換されるわけではない。
+Axios はオブジェクトなどのJSON変換に対応し、シリアライズ済み文字列も渡せる。
+送信できることと、受信側APIがその値を受け付けることは別。
+汎用クライアントの許容範囲と、個々のAPIのDTOを分けて考える。
+
+参照:
+https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+https://github.com/axios/axios-docs/blob/master/posts/en/req_config.md
+
+4. REST APIとしてリクエストボディの決まりはあるか
+
+ユーザー:
+RestAPIとして、リクエストボディの決まりはあるか。
+
+回答:
+REST APIだからJSONオブジェクトでなければならない、という決まりはない。
+以下を分けて考える。
+・HTTP: メソッドごとのボディの意味、Content-Type による形式の指定。
+・JSON: JSONとして表現できる値。
+・個々のAPI: 必須項目、型、トップレベルをオブジェクトに限定するか。
+JSON以外にフォームや画像なども扱える。
+GET のボディには一般的な意味が定義されていない。
+オブジェクトへの限定は、RESTの要件ではなくプロジェクトのAPI設計ルールとなる。
+
+参照:
+https://www.rfc-editor.org/rfc/rfc9110.html
+https://www.rfc-editor.org/rfc/rfc8259.html
+
+5. Record<string, unknown> を制約にする案
+
+ユーザー:
+任意のJSONオブジェクトを受け入れる型として Record<string, unknown> とするのはどうか。
+
+回答:
+トップレベルをオブジェクトに限定し、各プロパティの型はDTOに任せるなら実用的。
+ただし、JSONへの変換可否を保証する型ではない。
+
+例:
+{ value: 1n } は型を満たすが JSON.stringify でエラーになる。
+{ callback: () => {} } は関数プロパティが省略される。
+{ value: undefined } は undefined のプロパティが省略される。
+
+また、interface で定義したDTOはインデックスシグネチャがないため制約を満たさない場合がある。
+Record<string, unknown> は「任意のJSONオブジェクト」そのものではなく、
+文字列キーで値の型を問わないオブジェクトを表す。
+
+6. 型でJSONに変換可能であることを要求する場合
+
+ユーザー:
+呼び出し側に対して「JSONに変換可能な型であること」という制約を設ける前提では、どんな型にできるか。
+
+回答:
+JSONの値を直接表現する再帰型を提示した。
+
+type JsonPrimitive = string | number | boolean | null;
+type JsonValue = JsonPrimitive | JsonObject | readonly JsonValue[];
+type JsonObject = {
+    readonly [key: string]: JsonValue;
+};
+
+トップレベルをオブジェクトに限定するなら BODY extends JsonObject。
+配列やプリミティブも許可するなら BODY extends JsonValue。
+この型は「JSONの値を直接表現する型」であり、Date のように toJSON などで
+変換可能なすべてのJavaScript値を表す型ではない。
+循環参照、NaN、Infinity までは型だけでは防げない。
+完全な保証には実行時検証も必要。
+
+7. JSON変換の保証を呼び出し側の契約にする場合
+
+ユーザー:
+呼び出し側に「JSONに変換可能であること」という制約を設け、型は Record<string, unknown> とするのはどうか。
+
+回答:
+妥当。型ではオブジェクトであることを制約し、JSONに変換可能であることは
+呼び出し側が保証する契約として整理できる。
+
+例:
+export type RequestConfig<
+    BODY extends Record<string, unknown> = never,
+> = {
+    method: Method;
+    url: string;
+    /**
+     * JSONとして送信するオブジェクト。
+     * 呼び出し側は、JSONに変換可能であり、
+     * シリアライズによって意図した内容になることを保証する。
+     */
+    bodyJson?: BODY;
+};
+
+「変換可能」だけだと、関数や undefined が黙って省略されるケースも含まれるため、
+意図した内容で送信できることまで契約に明記するとよい。
+
+8. interface のDTOが制約を満たさないケース
+
+ユーザー:
+interface で定義したDTOが Record<string, unknown> の制約を満たさないのはどんなケースか。
+
+回答:
+通常の名前付きプロパティだけを持つ interface でも該当する。
+
+type AcceptBody<T extends Record<string, unknown>> = T;
+
+interface UserDto {
+    name: string;
+    age: number;
+}
+
+type Body = AcceptBody<UserDto>;
+// 文字列のインデックスシグネチャがないためエラー。
+
+同じ形をオブジェクト型エイリアスで定義すると通常は通る。
+
+type UserDto = {
+    name: string;
+    age: number;
+};
+
+interface に [key: string]: unknown を明示しても通るが、任意のキーを許可する型になる。
+BODY extends object なら interface のDTOも自然に使える一方、配列や関数も許可する。
+JSONに変換可能かどうかと、Record への代入互換性は別問題。
+
+9. 最初は Record<string, unknown> とし、要件に応じて広げる案
+
+ユーザー:
+最初は Record<string, unknown> とし、要件に応じて型を広げていくアプローチはどうか。
+
+回答:
+妥当。現時点の契約を以下として整理できる。
+・トップレベルはオブジェクト。
+・JSONへの変換で意図した内容になることは呼び出し側が保証。
+・interface のDTOや配列などへの対応は必要になった段階で検討。
+導入時は Client.send、validateBodyConfig、BFF側の型も整合させる必要がある。
+
+10. 将来の変更で既存の型が弾かれる可能性
+
+ユーザー:
+要件に応じて制約を変えたとき、もともと Record<string, unknown> であったものが弾かれる可能性はあるか。
+
+回答:
+ある。Record<string, unknown> から JsonObject に変更する場合は制約が厳しくなる。
+例えば Date を持つDTOは前者を満たしても後者を満たさない。
+Record<string, unknown> 自体も、unknown がJSON値と保証されないため JsonObject を満たさない。
+
+既存の許容範囲を残して追加するなら制約上の互換性を保てる。
+例:
+変更前: BODY extends Record<string, unknown>
+変更後: BODY extends Record<string, unknown> | readonly unknown[]
+
+JSONとしての厳密さを後から求める変更は「広げる」変更ではない。
+
+11. 広げても互換性を保てる初期の型
+
+ユーザー:
+広げていっても互換性を保てる初期の型はあるか。
+
+回答:
+将来どんな制約に変えても互換性を保てる初期の型はない。
+変更後も、以前に許可していた型をすべて受け入れる必要がある。
+・Record<string, unknown> から、ユニオンで配列やプリミティブを追加する。
+・JsonObject から JsonValue に広げる。
+これらは制約上の許容範囲を維持する例。
+将来JSONとしての型制約を求めるなら、最初から JsonObject にする方針が一貫している。
+JSON変換の保証を呼び出し側に置き続けるなら、Record<string, unknown> から始めてよい。
+
+12. JSON変換可能という前提では Record<string, unknown> が最も広い型か
+
+ユーザー:
+JSONに変換可能であるという制約がある前提では、Record<string, unknown> は一番広い型といえるか。
+
+回答:
+トップレベルをオブジェクトに限定しても、最も広い型とはいえない。
+JSONに変換可能なプロパティしか持たない interface のDTOでも、Record の制約を満たさないため。
+トップレベルの配列やプリミティブも対象外。
+正確には「JSON変換の責任は呼び出し側に置き、文字列キーのオブジェクトを
+受け付けるための実用的な制約」であり、JSONに変換可能なすべての型を受け付ける制約ではない。
+
+保存依頼:
+会話の内容を client/.review フォルダの下に新しいテキストファイルで保存する。
+コミットはしない。
