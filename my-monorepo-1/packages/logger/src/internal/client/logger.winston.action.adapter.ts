@@ -10,7 +10,7 @@ import type { Logger } from '#logger/internal/isomorphic/logger.types';
 /**
  * ServerActions によるロガー実装
  */
-export const actionAdapter: Logger = {
+export const winstonActionAdapter: Logger = {
     log: () => {
         // Not implemented
     },
