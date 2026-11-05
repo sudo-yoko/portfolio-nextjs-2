@@ -6,21 +6,23 @@ import 'server-only'; // プロキシも利用可能とするのでserver-only�
 import axios, { AxiosProxyConfig, AxiosRequestConfig } from 'axios';
 
 import { applicationError, formatError } from '@my/error';
+import { Level } from '@my/logger';
 import logger from '@my/logger/server';
 
 import { defaultValidateStatus } from '#client/internal/isomorphic/client.constants';
 import { toURLSearchParams } from '#client/internal/isomorphic/client.params';
-import { Client, RawResponse } from '#client/internal/isomorphic/client.types';
-import { Level } from '@my/logger';
+import { Client } from '#client/internal/isomorphic/client.types';
+import { validateBodyConfig } from '#client/internal/isomorphic/client.validator';
+import { executeAxios } from '#client/internal/server/adapters/axios-adapter.s.transport';
 
 const logPrefix = 'axios-adapter.s.ts: ';
 
-// Axios インスタンスはアプリケーション内で一意
-// NOTE: 即時実行関数 (() => { ... })();
-const axiosInstance = (() => {
-    logger.info(logPrefix + 'Initializing axios instance...');
-    return axios.create();
-})();
+// // Axios インスタンスはアプリケーション内で一意
+// // NOTE: 即時実行関数 (() => { ... })();
+// const axiosInstance = (() => {
+//     logger.info(logPrefix + 'Initializing axios instance...');
+//     return axios.create();
+// })();
 
 // NOTE: オブジェクトの暗黙的返却 const func = (arg) => ({ ... });
 export const createAxiosClient = (proxy?: AxiosProxyConfig): Client => ({
@@ -28,39 +30,41 @@ export const createAxiosClient = (proxy?: AxiosProxyConfig): Client => ({
         // const location = 'client.adapter.axios.ts#send';
         // logger.info(logPrefix + `Request -> config=${stringify(config)}, proxy=${JSON.stringify(proxy)}`);
         logger.log(Level.Info, {
-            format: logPrefix + 'Request -> config=%o, proxy=%o',
+            logPrefix,
+            format: 'Request -> config=%o, proxy=%o',
             params: [config, proxy],
         });
-
-        //
-        // リクエスト設定
-        //
-        const axiosConfig: AxiosRequestConfig = {};
-        axiosConfig.url = config.url;
-        axiosConfig.method = config.method;
-        axiosConfig.headers = config.headers;
-        // TODO: リクエストヘッダー
-        if (config.query) {
-            // const searchParams = new URLSearchParams();
-            // config.query.forEach(({ key, value }) => searchParams.append(key, value));
-            // axiosConfig.params = searchParams;
-            axiosConfig.params = toURLSearchParams(config.query);
-        }
-        // axiosのデフォルト動作としてステータスコード200以外の場合はエラーをスローするため、アプリケーション既定の動作を上書きする
-        axiosConfig.validateStatus = config.validateStatus ?? defaultValidateStatus;
-        axiosConfig.data = config.bodyJson;
-        axiosConfig.timeout = config.timeout;
-        axiosConfig.proxy = proxy ?? false;
-        axiosConfig.responseType = 'text';
-        //
-        // リクエスト実行
-        //
         try {
-            const res = await axiosInstance.request(axiosConfig);
-            const result: RawResponse = {
-                status: res.status,
-                rawBody: toStringSafe(res.data), // bodyがjsonとは限らないのでtextで取得する。エラーの場合はhtmlが返ってくることもある
-            };
+            validateBodyConfig(config);
+            //
+            // リクエスト設定
+            //
+            const axiosConfig: AxiosRequestConfig = {};
+            axiosConfig.url = config.url;
+            axiosConfig.method = config.method;
+            axiosConfig.headers = config.headers;
+            // TODO: リクエストヘッダー
+            if (config.query) {
+                // const searchParams = new URLSearchParams();
+                // config.query.forEach(({ key, value }) => searchParams.append(key, value));
+                // axiosConfig.params = searchParams;
+                axiosConfig.params = toURLSearchParams(config.query);
+            }
+            // axiosのデフォルト動作としてステータスコード200以外の場合はエラーをスローするため、アプリケーション既定の動作を上書きする
+            axiosConfig.validateStatus = config.validateStatus ?? defaultValidateStatus;
+            axiosConfig.data = config.bodyJson;
+            axiosConfig.timeout = config.timeout;
+            axiosConfig.proxy = proxy ?? false;
+            axiosConfig.responseType = 'text';
+            //
+            // リクエスト実行
+            //
+            // const res = await axiosInstance.request(axiosConfig);
+            // const result: RawResponse = {
+            //     status: res.status,
+            //     rawBody: toStringSafe(res.data), // bodyがjsonとは限らないのでtextで取得する。エラーの場合はhtmlが返ってくることもある
+            // };
+            const result = await executeAxios(axiosConfig);
             logger.info(logPrefix + `Response -> ${JSON.stringify(result)}`);
             return result;
         } catch (error) {
@@ -106,18 +110,4 @@ export function getAxiosErrorProperties(err: unknown): object {
     }
     // return { str: JSON.stringify(option, null, 2), obj: option };
     return option;
-}
-
-/**
- * 型不明なオブジェクトを安全にstringにする
- */
-function toStringSafe(value: unknown): string {
-    if (typeof value === 'string') {
-        return value;
-    }
-    if (value != null && typeof value === 'object') {
-        return JSON.stringify(value);
-    }
-    // TODO: カスタムエラー
-    throw Error();
 }

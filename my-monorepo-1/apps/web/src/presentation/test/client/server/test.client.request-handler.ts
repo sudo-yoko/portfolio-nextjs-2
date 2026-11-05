@@ -23,8 +23,8 @@ export async function handleRequest() {
     };
     logger.log(Level.Info, { format: logPrefix + 'config=%o', params: [config] });
 
-    const externalClient = createExternalClient(false);
-    const result = await externalClient.send(config);
+    const proxy = true;
+    const result = await createExternalClient(proxy).send(config);
     logger.info(logPrefix + `result=${JSON.stringify(result)}`);
 
     const json = JSON.parse(result.rawBody);

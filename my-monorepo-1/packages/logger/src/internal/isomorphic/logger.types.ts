@@ -48,7 +48,10 @@ export type Logger = {
      * @param params - 埋め込みパラメーター
      * @param extras -
      */
-    log(level: Level, message: { format: string; params?: unknown[]; extras?: Extras }): void;
+    log(
+        level: Level,
+        message: { logPrefix?: string; format: string; params?: unknown[]; extras?: Extras },
+    ): void;
     info(message: string, extras?: Extras): void;
     warn(message: string, extras?: Extras): void;
     error(message: string, extras?: Extras): void;

@@ -59,7 +59,7 @@ const options: DailyRotateFile.DailyRotateFileTransportOptions = {
 options.maxSize = '1000k'; // ローテーションの最大ファイルサイズ：1000KB
 options.maxFiles = '1d'; // ログの保管期間：1日
 
-let gLogger: ReturnType<TCreateAppLogger> | undefined;
+let gLogger: ReturnType<typeof createAppLogger> | undefined;
 
 export function getOrCreateLogger() {
     return (gLogger ??= createAppLogger());
@@ -85,4 +85,3 @@ export function createAppLogger() {
     );
     return logger;
 }
-export type TCreateAppLogger = typeof createAppLogger;

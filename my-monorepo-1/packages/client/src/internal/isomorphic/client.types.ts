@@ -47,12 +47,6 @@ export type BffRequestConfig<DATA = never> = {
     data?: DATA;
 };
 
-export const BodyType = {
-    JSON: 'json',
-    UrlEncoded: 'urlEncoded',
-} as const;
-export type BodyType = (typeof BodyType)[keyof typeof BodyType];
-
 export type Headers = Record<string, string>;
 // export type HeadersInit = Headers | string[][] | Record<string, string>; // NOTE:
 
