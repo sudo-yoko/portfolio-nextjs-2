@@ -95,3 +95,53 @@ export async function executeAxios(
 備考:
 本ファイルは会話内容の保存のみを目的とする。
 会話で提示した実装変更は適用していない。コミットは行わない。
+
+
+4. axios-adapter.s.ts の RequestConfig → AxiosRequestConfig の設定確認
+
+対象:
+packages/client/src/internal/server/adapters/axios-adapter.s.ts
+（最初に指定された fetch-adapter.ts から対象を訂正）
+
+確認結果:
+各項目の対応に漏れはないが、bodyJson の変換に問題が1点ある。
+
+bodyJson をそのまま axiosConfig.data に渡すと、Axios は JSON として
+解釈できる文字列を再シリアライズしない。
+インストール済み Axios 1.21.0 のカスタムアダプターで、ネットワーク通信を
+行わず、送信直前の config.data を確認して再現した。
+
+例（Content-Type: application/json）:
+- bodyJson が文字列 '123': 実際は 123（数値）、期待は "123"（文字列）。
+- bodyJson が文字列 'true': 実際は true（真偽値）、期待は "true"（文字列）。
+- bodyJson がオブジェクト { a: 1 }: 実際・期待ともに {"a":1}。
+- bodyJson が null: 実際・期待ともに null。
+
+RequestConfig<BODY> は文字列も許容するため、Fetch アダプターと同様に
+明示的に JSON に変換するのが適切。
+
+修正案（未適用）:
+if (config.bodyJson !== undefined) {
+    axiosConfig.data = JSON.stringify(config.bodyJson);
+}
+
+その他の設定:
+- url / method / headers / timeout: そのまま対応しており適切。
+- query → params: toURLSearchParams で変換。同名キーの複数値も保持。
+- bodyUrlEncoded → data: URLSearchParams を Axios がフォーム形式に変換。
+- validateStatus: 指定値を優先。省略時は defaultValidateStatus（status < 500）。
+- responseType: 'text' は rawBody を文字列で取得する設定として適切。
+- proxy: proxy ?? false により、省略時は環境変数のプロキシも無効になる。
+  これが意図どおりであれば問題ない。
+
+コメントの訂正候補:
+53行目の「axiosのデフォルト動作としてステータスコード200以外の場合は
+エラー」は不正確。Axios の既定は 200〜299 を成功扱いとする。
+
+参照:
+Axios 公式 Request config
+https://axios-http.com/docs/req_config
+ローカルの Axios 1.21.0 の lib/defaults/index.js も確認した。
+
+備考:
+今回も確認結果の追記のみ。ソースコードの修正・コミットは行わない。

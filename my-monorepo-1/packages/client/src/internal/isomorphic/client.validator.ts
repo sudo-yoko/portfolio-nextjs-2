@@ -7,7 +7,7 @@ import {
 } from '#client/internal/isomorphic/client.constants';
 import { RequestConfig } from '#client/internal/isomorphic/client.types';
 
-export function validateBodyConfig<BODY = never>(config: RequestConfig<BODY>) {
+export function validateBodyConfig(config: RequestConfig) {
     const headers = new Headers(config.headers);
     const contentType = headers.get(CONTENT_TYPE) ?? undefined;
     const mediaType = contentType?.split(';')[0].trim();

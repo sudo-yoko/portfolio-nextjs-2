@@ -24,7 +24,7 @@ export const createBffClient = (client: Client): BffClient => ({
     send: async (config) => {
         logger.info(logPrefix + `Request -> config=${JSON.stringify(config)}`);
 
-        const props: RequestConfig<unknown> = {
+        const props: RequestConfig = {
             method: Method.POST,
             url: config.url,
             validateStatus: defaultValidateStatusClient,

@@ -1,6 +1,6 @@
 import { RequestConfig } from '#client/internal/isomorphic/client.types';
 
-export function stringify(config: RequestConfig<unknown>): string {
+export function stringify(config: RequestConfig): string {
     const str: string[] = [];
     str.push(`method=${config.method}`);
     str.push(`url=${config.url}`);

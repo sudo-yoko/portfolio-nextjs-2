@@ -52,7 +52,7 @@ void describe('', () => {
             userName: 'test',
         };
 
-        const config: RequestConfig<BodyType> = {
+        const config: RequestConfig = {
             method: Method.POST,
             url: 'http://api/bff/test',
             bodyJson: body,

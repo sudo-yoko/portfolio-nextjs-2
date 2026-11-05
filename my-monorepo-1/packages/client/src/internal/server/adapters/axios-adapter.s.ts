@@ -50,7 +50,7 @@ export const createAxiosClient = (proxy?: AxiosProxyConfig): Client => ({
                 // axiosConfig.params = searchParams;
                 axiosConfig.params = toURLSearchParams(config.query);
             }
-            // axiosのデフォルト動作としてステータスコード200以外の場合はエラーをスローするため、アプリケーション既定の動作を上書きする
+            // axiosのデフォルト動作としてステータスコード2xx以外の場合はエラーをスローするため、アプリケーション既定の動作を上書きする
             axiosConfig.validateStatus = config.validateStatus ?? defaultValidateStatus;
             if (config.bodyJson !== undefined) {
                 axiosConfig.data = config.bodyJson;

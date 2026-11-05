@@ -1,3 +1,5 @@
+import { JsonObject } from 'type-fest';
+
 import { QueryParams } from '#client/internal/isomorphic/client.params';
 
 /**
@@ -7,13 +9,13 @@ export type Client = {
     /**
      * リクエストを送信する
      */
-    send<BODY = never>(req: RequestConfig<BODY>): Promise<RawResponse>;
+    send(req: RequestConfig): Promise<RawResponse>;
 
     // TODO: AbortControllerを使ったリクエストキャンセルの機能
 };
 
 export type BffClient = {
-    send<BODY = never>(req: BffRequestConfig<BODY>): Promise<RawResponse>;
+    send(req: BffRequestConfig): Promise<RawResponse>;
 };
 
 /**
@@ -28,10 +30,10 @@ export type Method = (typeof Method)[keyof typeof Method];
 /**
  * リクエスト設定オブジェクト
  */
-export type RequestConfig<BODY = never> = {
+export type RequestConfig = {
     method: Method;
     url: string;
-    bodyJson?: BODY;
+    bodyJson?: JsonObject;
     bodyUrlEncoded?: URLSearchParams;
     query?: QueryParams;
     headers?: Headers;
@@ -42,9 +44,9 @@ export type RequestConfig<BODY = never> = {
     validateStatus?: ValidateStatus;
 };
 
-export type BffRequestConfig<DATA = never> = {
+export type BffRequestConfig = {
     url: string;
-    data?: DATA;
+    data?: JsonObject;
 };
 
 export type Headers = Record<string, string>;

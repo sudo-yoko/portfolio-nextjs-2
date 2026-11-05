@@ -1,9 +1,9 @@
 import 'server-only';
 
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 
-import logger from '@my/logger/server';
 import { Level } from '@my/logger';
+import logger from '@my/logger/server';
 
 const logPrefix = 'axios-adapter.transport.ts: ';
 
@@ -14,7 +14,7 @@ const axiosInstance = (() => {
     return axios.create();
 })();
 
-export async function executeAxios(config: Parameters<typeof axiosInstance.request>[0]) {
+export async function executeAxios(config: AxiosRequestConfig) {
     logger.log(Level.Info, { logPrefix, format: 'AxiosRequestConfig: %o', params: [config] });
     // const rawBody = toStringSafe(res.data);
     const res = await axiosInstance.request<string>(config);
