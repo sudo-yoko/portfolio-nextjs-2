@@ -1,0 +1,97 @@
+Axios の引数と logger の params に関する会話
+日付: 2026-11-05
+
+対象ファイル:
+- packages/client/src/internal/server/adapters/axios-adapter.s.transport.ts
+- packages/logger/src/internal/server/logger.winston.adapter.ts
+
+1. executeAxios の ...args を logger.log の params に渡す方法
+
+質問:
+params: [...args] と params: [args] のどちらが正しいか。
+
+回答:
+現在の用途では [...args] が正しい。
+executeAxios(config) と呼ぶと、残余引数 args は [config] になる。
+
+- params: [...args] は [config] となり、%o は config を出力する。
+- params: [args] は [[config]] となり、%o は [config] という配列を出力する。
+
+ロガー内部で params を展開するため、この違いが生じる。
+args はすでに配列なので、コピーが不要なら params: args でよい。
+
+例:
+logger.log(Level.Info, {
+    logPrefix,
+    format: 'AxiosRequestConfig: %o',
+    params: args,
+});
+
+2. ロガー内部の util.format(logPrefix + format, ...params) は妥当か
+
+回答:
+params を ...params で展開する実装は妥当。
+util.format はフォーマット文字列に続く引数を順番に埋め込む。
+
+例:
+util.format('%s: %o', ...['request', config]);
+は util.format('%s: %o', 'request', config) と同じ。
+
+現在の実装は params = [] としているため、省略時も問題ない。
+
+ただし、logPrefix + format をまとめて util.format に渡すと、
+logPrefix 内の %s などもフォーマット指定子として解釈される。
+プレフィックスを単なる文字列として扱うなら、次の形がより適切。
+
+log: (level, { logPrefix = '', format, params = [], extras }) => {
+    getOrCreateLogger().log(
+        level,
+        logPrefix + util.format(format, ...params),
+        { ...extras },
+    );
+},
+
+現在の 'axios-adapter.transport.ts: ' のようなプレフィックスなら、
+どちらも同じ結果になる。
+
+3. executeAxios の引数は ...args と args のどちらがよいか
+
+回答:
+Axios の引数型をそのまま引き継ぐなら ...args が適切。
+
+export async function executeAxios(
+    ...args: Parameters<typeof axiosInstance.request>
+) {
+    logger.log(Level.Info, {
+        logPrefix,
+        format: 'AxiosRequestConfig: %o',
+        params: args,
+    });
+    const res = await axiosInstance.request<string>(...args);
+    // 後続処理
+}
+
+この形なら executeAxios(config) と呼べる。
+args: Parameters<typeof axiosInstance.request> にすると、
+引数自体がタプルになるため executeAxios([config]) と渡す必要がある。
+
+Axios の request は設定オブジェクトを1つ受け取るため、
+読みやすさを優先するなら config と明示する形を推奨。
+
+export async function executeAxios(
+    config: Parameters<typeof axiosInstance.request>[0]
+) {
+    logger.log(Level.Info, {
+        logPrefix,
+        format: 'AxiosRequestConfig: %o',
+        params: [config],
+    });
+    const res = await axiosInstance.request<string>(config);
+    // 後続処理
+}
+
+この関数では config 形式が引数の意味を伝えやすい。
+
+備考:
+本ファイルは会話内容の保存のみを目的とする。
+会話で提示した実装変更は適用していない。コミットは行わない。

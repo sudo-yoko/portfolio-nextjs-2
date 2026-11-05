@@ -14,10 +14,10 @@ const axiosInstance = (() => {
     return axios.create();
 })();
 
-export async function executeAxios(...args: Parameters<typeof axiosInstance.request>) {
-    logger.log(Level.Info, { logPrefix, format: 'AxiosRequestConfig: %o', params: [...args] });
-    const res = await axiosInstance.request<string>(...args);
+export async function executeAxios(config: Parameters<typeof axiosInstance.request>[0]) {
+    logger.log(Level.Info, { logPrefix, format: 'AxiosRequestConfig: %o', params: [config] });
     // const rawBody = toStringSafe(res.data);
+    const res = await axiosInstance.request<string>(config);
     const rawBody = res.data;
     const status = res.status;
     return { status, rawBody };

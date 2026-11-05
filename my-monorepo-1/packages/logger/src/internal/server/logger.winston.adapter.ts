@@ -14,8 +14,8 @@ export const winstonAdapter: ServerLogger = {
     initialize: () => {
         getOrCreateLogger();
     },
-    log: (level, { logPrefix = "", format, params = [], extras }) => {
-        getOrCreateLogger().log(level, util.format(logPrefix + format, ...params), { ...extras });
+    log: (level, { logPrefix = '', format, params = [], extras }) => {
+        getOrCreateLogger().log(level, logPrefix + util.format(format, ...params), { ...extras });
     },
     info: (message, extras) => {
         getOrCreateLogger().info(message, { ...extras });

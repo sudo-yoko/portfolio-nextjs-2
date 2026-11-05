@@ -52,7 +52,11 @@ export const createAxiosClient = (proxy?: AxiosProxyConfig): Client => ({
             }
             // axiosのデフォルト動作としてステータスコード200以外の場合はエラーをスローするため、アプリケーション既定の動作を上書きする
             axiosConfig.validateStatus = config.validateStatus ?? defaultValidateStatus;
-            axiosConfig.data = config.bodyJson;
+            if (config.bodyJson !== undefined) {
+                axiosConfig.data = config.bodyJson;
+            } else if (config.bodyUrlEncoded !== undefined) {
+                axiosConfig.data = config.bodyUrlEncoded;
+            }
             axiosConfig.timeout = config.timeout;
             axiosConfig.proxy = proxy ?? false;
             axiosConfig.responseType = 'text';
