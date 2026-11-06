@@ -4,7 +4,7 @@ import util from 'node:util';
 
 // NOTE: デフォルトエクスポートは好きな名前でimportできる
 import type { ServerLogger } from '#logger/internal/isomorphic/logger.types';
-import { getOrCreateLogger } from '#logger/internal/server/logger.winston';
+import { getOrCreateLogger } from '#logger/internal/server/adapters/logger.winston';
 import { envNextPublicFwDebugLogger, envNodeEnvNext, NodeEnvNext } from '@my/env';
 
 /**

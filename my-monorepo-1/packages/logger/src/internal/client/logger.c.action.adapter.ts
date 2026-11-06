@@ -4,13 +4,13 @@
 //
 import 'client-only';
 
-import { logDebug, logError, logInfo } from '#logger/internal/action/logger.winston.action';
+import { logDebug, logError, logInfo } from '#logger/internal/client/logger.c.action';
 import type { Logger } from '#logger/internal/isomorphic/logger.types';
 
 /**
  * ServerActions によるロガー実装
  */
-export const winstonActionAdapter: Logger = {
+export const loggerActionAdapter: Logger = {
     log: () => {
         // Not implemented
     },

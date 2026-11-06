@@ -64,7 +64,7 @@ let gLogger: winston.Logger | undefined;
 export function getOrCreateLogger() {
     // return (gLogger ??= createAppLogger());
     if (!gLogger) {
-        return createAppLogger();
+        gLogger = createAppLogger();
     }
     return gLogger;
 }

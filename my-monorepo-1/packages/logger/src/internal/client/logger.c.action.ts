@@ -6,16 +6,16 @@
 // TODO: 依存関係の方向がおかしいので再検討
 // import logger from '@/presentation/_system/logging/logger.s';
 import { Extras } from '#logger/internal/isomorphic/logger.types';
-import { winstonAdapter } from '#logger/internal/server/logger.winston.adapter';
+import logger from '#logger/internal/server/logger.s';
 
 export async function logInfo(message: string, extras?: Extras) {
-    winstonAdapter.info(message, extras);
+    logger.info(message, extras);
 }
 
 export async function logError(message: string, extras?: Extras) {
-    winstonAdapter.error(message, extras);
+    logger.error(message, extras);
 }
 
 export async function logDebug(message: string, extras?: Extras) {
-    winstonAdapter.debug(message, extras);
+    logger.debug(message, extras);
 }
