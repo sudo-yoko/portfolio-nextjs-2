@@ -59,10 +59,14 @@ const options: DailyRotateFile.DailyRotateFileTransportOptions = {
 options.maxSize = '1000k'; // ローテーションの最大ファイルサイズ：1000KB
 options.maxFiles = '1d'; // ログの保管期間：1日
 
-let gLogger: ReturnType<typeof createAppLogger> | undefined;
+let gLogger: winston.Logger | undefined;
 
 export function getOrCreateLogger() {
-    return (gLogger ??= createAppLogger());
+    // return (gLogger ??= createAppLogger());
+    if (!gLogger) {
+        return createAppLogger();
+    }
+    return gLogger;
 }
 
 // キャッシュを更新せず、独立したロガーを生成する。

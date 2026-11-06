@@ -1,0 +1,83 @@
+会話記録: Axios インスタンスの遅延初期化
+日付: 2026-11-05
+
+ユーザー:
+my-monorepo-1/packages/clientのclient.s.external.tsを見る
+プロキシを使わない場合でもcreateExternalClientによってcreateAxiosClient がインポートされるため
+axiosインスタンスが作成されてしまいます。これを回避する設計方法はありますか
+
+アシスタント:
+はい。今回なら、transport 内の Axios インスタンスを遅延初期化する設計が適しています。
+
+原因は createAxiosClient() の呼び出しではなく、静的 import によって
+src/internal/server/adapters/axios-adapter.s.transport.ts が評価され、
+トップレベルの即時実行関数が動くことです。
+
+client.s.external.ts
+  → axios-adapter.s.ts
+    → axios-adapter.s.transport.ts
+      → axios.create() が実行される
+
+このファイルを次のようにすると、初回の Axios リクエスト時にだけ生成し、
+その後は再利用できます。createExternalClient() の同期 API も維持できます。
+
+```ts
+import 'server-only';
+
+import axios, { type AxiosInstance, type AxiosRequestConfig } from 'axios';
+
+import { Level } from '@my/logger';
+import logger from '@my/logger/server';
+
+const logPrefix = 'axios-adapter.transport.ts: ';
+
+let axiosInstance: AxiosInstance | undefined;
+
+function getAxiosInstance(): AxiosInstance {
+    if (!axiosInstance) {
+        logger.info(logPrefix + 'Initializing axios instance...');
+        axiosInstance = axios.create();
+    }
+    return axiosInstance;
+}
+
+export async function executeAxios(config: AxiosRequestConfig) {
+    logger.log(Level.Info, {
+        logPrefix,
+        format: 'AxiosRequestConfig: %o',
+        params: [config],
+    });
+
+    const res = await getAxiosInstance().request<string>(config);
+    return { status: res.status, rawBody: res.data };
+}
+```
+
+ただし、これは自前の axios.create() を遅らせる方法です。
+Axios モジュール自体の読み込み・評価も避けたい場合は、
+src/internal/server/client.s.external.ts の静的 import を削除し、
+プロキシ側で動的 import します。
+
+```ts
+async function createExternalClient(proxy: boolean): Promise<Client> {
+    if (!proxy) {
+        return createFetchClient(logger);
+    }
+
+    const { createAxiosClient } = await import(
+        '#client/internal/server/adapters/axios-adapter.s'
+    );
+    const { protocol, host, port } = envProxySettings();
+    return createAxiosClient({ protocol, host, port });
+}
+```
+
+この場合は呼び出し側に await が必要です。
+また、別の経路で Axios を静的 import していれば、そちらから読み込まれます。
+
+今回の「使わないのに自前のインスタンスが作られる」を解消する目的なら、
+最初の遅延初期化で十分です。共有範囲はモジュール単位なので、
+サーバープロセスや実行環境が複数あれば、それぞれで生成されます。
+
+ユーザー:
+会話の内容をclient/.reviewフォルダに新しいテキストファイルで保存してください。コミットはしない
