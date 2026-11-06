@@ -1,6 +1,6 @@
 import 'client-only';
 
-import logger from '@my/logger/client';
+import logger from '@my/logger/browser';
 
 import { createBffClient } from '#client/internal/browser/adapters/bff-adapter';
 import { createFetchClient } from '#client/internal/isomorphic/adapters/fetch-adapter';

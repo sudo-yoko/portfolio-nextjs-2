@@ -1,6 +1,6 @@
 import 'client-only';
 
-import { loggerActionAdapter } from '#logger/internal/client/logger.c.action.adapter';
+import { loggerActionAdapter } from '#logger/internal/browser/logger.b.action.adapter';
 import type { Logger } from '#logger/internal/isomorphic/logger.types';
 
 /**

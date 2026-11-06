@@ -4,7 +4,7 @@
 //
 import 'client-only';
 
-import { logDebug, logError, logInfo } from '#logger/internal/client/logger.c.action';
+import { logDebug, logError, logInfo } from '#logger/internal/browser/logger.b.action';
 import type { Logger } from '#logger/internal/isomorphic/logger.types';
 
 /**

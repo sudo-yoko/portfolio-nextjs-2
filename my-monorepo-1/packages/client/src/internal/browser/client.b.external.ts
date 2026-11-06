@@ -1,6 +1,6 @@
 import 'client-only';
 
-import logger from '@my/logger/client';
+import logger from '@my/logger/browser';
 
 import { createFetchClient } from '#client/internal/isomorphic/adapters/fetch-adapter';
 import { Client } from '#client/internal/isomorphic/client.types';

@@ -3,7 +3,7 @@
 //
 import 'client-only';
 
-import logger from '@my/logger/client';
+import logger from '@my/logger/browser';
 
 import {
     ACCEPT_APPLICATION_JSON,
