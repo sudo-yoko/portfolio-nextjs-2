@@ -56,11 +56,11 @@ export type Logger = {
     warn(message: string, extras?: Extras): void;
     error(message: string, extras?: Extras): void;
     debug(message: string, extras?: Extras): void;
-    logAsync(level: Level, message: { format: string; params?: unknown[]; extras?: Extras }): Promise<void>;
-    infoAsync(message: string, extras?: Extras): Promise<void>;
-    warnAsync(message: string, extras?: Extras): Promise<void>;
-    errorAsync(message: string, extras?: Extras): Promise<void>;
-    debugAsync(message: string, extras?: Extras): Promise<void>;
+    // logAsync(level: Level, message: { format: string; params?: unknown[]; extras?: Extras }): Promise<void>;
+    // infoAsync(message: string, extras?: Extras): Promise<void>;
+    // warnAsync(message: string, extras?: Extras): Promise<void>;
+    // errorAsync(message: string, extras?: Extras): Promise<void>;
+    // debugAsync(message: string, extras?: Extras): Promise<void>;
 };
 
 export type ServerLogger = Logger & {

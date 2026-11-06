@@ -241,7 +241,8 @@ packages/client/src/internal/browser/adapters/bff-adapter.ts:25 と41行目で�
 
 2. 未対応メソッドを型に残すための処理が増えています。
 
-src/internal/client/logger.c.action.adapter.ts:14 と src/internal/server/adapters/logger.winston.adapter.ts:37 に、警告だけのメソッドがそれぞれ5個あります。
+src/internal/client/logger.c.action.adapter.ts:14 と src/internal/server/adapters/logger.winston.adapter.ts:37 に、
+警告だけのメソッドがそれぞれ5個あります。
 
 移行途中の対策としては使えますが、「シンプルにしたい」「呼び出し側に違いを意識させたい」という目的には、次の形が合っています。
 

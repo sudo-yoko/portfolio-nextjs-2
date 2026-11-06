@@ -14,31 +14,31 @@ export const loggerActionAdapter: Logger = {
     log: () => {
         // Not implemented
     },
-    info: async (message, extras) => {
-        await logInfo(message, extras);
+    info: (message, extras) => {
+        void logInfo(message, extras).catch(() => {});
     },
     warn: () => {
         // Not implemented
     },
-    error: async (message, extras) => {
-        await logError(message, extras);
+    error: (message, extras) => {
+        void logError(message, extras).catch(() => {});
     },
-    debug: async (message, extras) => {
-        await logDebug(message, extras);
+    debug: (message, extras) => {
+        void logDebug(message, extras).catch(() => {});
     },
-    logAsync: async () => {
-        // Not implemented
-    },
-    infoAsync: async (message, extras) => {
-        void logInfo(message, extras);
-    },
-    warnAsync: async () => {
-        // Not implemented
-    },
-    errorAsync: async (message, extras) => {
-        void logError(message, extras);
-    },
-    debugAsync: async (message, extras) => {
-        void logDebug(message, extras);
-    },
+    // logAsync: async () => {
+    //     // Not implemented
+    // },
+    // infoAsync: async (message, extras) => {
+    //     void logInfo(message, extras);
+    // },
+    // warnAsync: async () => {
+    //     // Not implemented
+    // },
+    // errorAsync: async (message, extras) => {
+    //     void logError(message, extras);
+    // },
+    // debugAsync: async (message, extras) => {
+    //     void logDebug(message, extras);
+    // },
 };

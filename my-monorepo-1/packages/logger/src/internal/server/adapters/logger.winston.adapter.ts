@@ -34,9 +34,9 @@ export const winstonAdapter: ServerLogger = {
         }
         getOrCreateLogger().debug(message, { ...extras });
     },
-    logAsync: async () => {}, // Not implemented
-    infoAsync: async () => {}, // Not implemented
-    warnAsync: async () => {}, // Not implemented
-    errorAsync: async () => {}, // Not implemented
-    debugAsync: async () => {}, // Not implemented
+    // logAsync: async () => {}, // Not implemented
+    // infoAsync: async () => {}, // Not implemented
+    // warnAsync: async () => {}, // Not implemented
+    // errorAsync: async () => {}, // Not implemented
+    // debugAsync: async () => {}, // Not implemented
 };

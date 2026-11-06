@@ -3,8 +3,6 @@
 //
 'use server';
 
-// TODO: 依存関係の方向がおかしいので再検討
-// import logger from '@/presentation/_system/logging/logger.s';
 import { Extras } from '#logger/internal/isomorphic/logger.types';
 import logger from '#logger/internal/server/logger.s';
 
