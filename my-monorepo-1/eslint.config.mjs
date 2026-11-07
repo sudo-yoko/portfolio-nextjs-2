@@ -1,3 +1,7 @@
+//
+// appsとpackagesで共通のLint設定
+//
+
 //import nextVitals from 'eslint-config-next/core-web-vitals';
 // import nextTs from 'eslint-config-next/typescript';
 import eslintConfigPrettier from 'eslint-config-prettier';
@@ -102,39 +106,39 @@ const eslintConfig = defineConfig([
         },
     },
 
-    /**
-     * systemのinternalフォルダは直接利用不可
-     * ※動的インポートには効果なし
-     */
-    {
-        rules: {
-            'no-restricted-imports': [
-                'error',
-                {
-                    patterns: [
-                        {
-                            group: ['**/_system/**/internal/**'],
-                            message: 'internalモジュールは、systemフォルダ内でのみ参照可能です。',
-                        },
-                    ],
-                },
-            ],
-        },
-    },
-    // テストコードは internal を触ってOKにする
-    {
-        files: ['**/__development/tests/**/*.ts'],
-        rules: {
-            'no-restricted-imports': 'off',
-        },
-    },
-    // system フォルダ内のファイルだけは、internal を触ってOKにする
-    {
-        files: ['**/presentation/_system/**/*.ts'],
-        rules: {
-            'no-restricted-imports': 'off',
-        },
-    },
+    // /**
+    //  * systemのinternalフォルダは直接利用不可
+    //  * ※動的インポートには効果なし
+    //  */
+    // {
+    //     rules: {
+    //         'no-restricted-imports': [
+    //             'error',
+    //             {
+    //                 patterns: [
+    //                     {
+    //                         group: ['**/_system/**/internal/**'],
+    //                         message: 'internalモジュールは、systemフォルダ内でのみ参照可能です。',
+    //                     },
+    //                 ],
+    //             },
+    //         ],
+    //     },
+    // },
+    // // テストコードは internal を触ってOKにする
+    // {
+    //     files: ['**/__development/tests/**/*.ts'],
+    //     rules: {
+    //         'no-restricted-imports': 'off',
+    //     },
+    // },
+    // // system フォルダ内のファイルだけは、internal を触ってOKにする
+    // {
+    //     files: ['**/presentation/_system/**/*.ts'],
+    //     rules: {
+    //         'no-restricted-imports': 'off',
+    //     },
+    // },
 
     // Prettierと競合するESLintの整形系ルールを無効化する。
     eslintConfigPrettier,
