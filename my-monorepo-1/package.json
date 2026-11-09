@@ -5,6 +5,10 @@
         "apps/*",
         "packages/*"
     ],
+    "scripts": {
+        "typecheck": "npm run typecheck --workspaces --if-present",
+        "build:web": "npm run typecheck && npm run build --workspace=apps/web"
+    },
     "devDependencies": {
         "eslint": "^9",
         "eslint-config-prettier": "^10.1.8",
