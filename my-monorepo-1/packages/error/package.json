@@ -17,6 +17,5 @@
     "scripts": {
         "lint": "eslint",
         "typecheck": "tsc --noEmit"
-    },
-    "devDependencies": {}
+    }
 }

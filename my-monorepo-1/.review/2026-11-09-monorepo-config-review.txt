@@ -1,0 +1,106 @@
+モノレポ設定レビューに関する会話記録
+記録日: 2026-11-09
+
+この記録は会話時点の調査結果であり、保存時点のファイルを再レビューしたものではありません。
+
+【ユーザーの依頼】
+my-monorepo-1でappsとpackagesのpackage.jsonやtsconfig.jsonなどを確認し、モノレポ構成の設定が正しくできているか調べる。
+なお、apps -> packagesはソースの直接参照とし、appsのNext.jsアプリケーションのビルド時に関連するpackageもトランスパイルすることとする。
+
+【回答：設定レビュー】
+ソース直接参照の構成は成立しており、Next.jsの本番ビルドも成功する。ただし、以下の改善点がある。調査ではファイルを変更していない。
+
+1. @my/errorをtranspilePackagesに追加
+apps/web/next.config.tsには@my/env、@my/logger、@my/clientのみが指定されていた。
+@my/clientが依存する@my/errorも、関連packageを明示的にトランスパイルする方針に合わせて追加する。
+
+推奨例:
+transpilePackages: ['@my/env', '@my/error', '@my/logger', '@my/client'],
+
+現状でもTurbopackのビルドは成功したため、ビルドエラーではなく設定の網羅性の指摘。
+公式仕様: https://nextjs.org/docs/app/api-reference/config/next-config-js/transpilePackages
+
+2. loggerの実行時依存が宣言されていない
+loggerはsource-map-supportを実行時にimportしているが、packages/logger/package.jsonのdependenciesに宣言がなかった。
+テスト用packageの依存が共有されて解決していたが、logger自身のdependenciesに追加すべき。
+
+3. ルートの型チェックがwebとテストをスキップする
+ルートのtypecheckは「npm run typecheck --workspaces --if-present」。
+webにはtypecheck scriptがなく、テスト側はtypecheck:testなので対象外だった。
+webとテストにも「typecheck: tsc --noEmit」を用意すると統一できる。
+なお、webはnext build内でも型チェックされる。
+
+4. テストに古い参照先が残っている
+テストの型チェックは失敗した。
+例: packages/__tests__/src/test-logger.tsの@/logger/srcは、現在存在しないpackages/logger/src/index.tsを参照する。
+公開型は@my/logger、内部実装のテストは現在のファイル配置に合わせる必要がある。
+logger.winston、logger.winston.adapterの参照先にも古いパスが残っていた。
+
+正常に設定されている点:
+- npm workspacesのローカルpackageリンクとpackage間の依存関係。
+- 各実装packageのexports / typesがsrc/*.tsを直接参照する構成。
+- moduleResolution: bundlerとpackage内のimports（#env/*など）の組み合わせ。
+- package側のnoEmit: true。今回の方式ではpackage単体のビルド、dist、Project Referencesは必須ではない。
+- webは共通tsconfigを継承していないが、必要な設定が揃っているため問題ない。
+
+TypeScript公式仕様: https://www.typescriptlang.org/tsconfig/moduleResolution
+
+検証結果:
+- npm run typecheck: 実装4 packageの型チェック成功。
+- web単独のtsc --noEmit --incremental false: 成功。
+- テストのtypecheck:test: 古い参照先などにより失敗。
+- Next.js本番ビルド: 成功。
+  初回はGoogle Fontsの通信制限で失敗したが、制限外での再実行は成功。
+
+＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊
+
+【ユーザーの追加質問】
+設定に、無駄な設定や冗長な設定はありませんか
+
+【回答：冗長な設定】
+削除しても動作が変わらない重複と、意図を明示するために残してよい設定がある。
+
+・各実装packageのpackage.jsonにあるmainとトップレベルのtypes
+  現在のNext.js / TypeScriptではexportsが優先されるため冗長。
+  古いツールへの互換性が不要なら削除可能。
+
+・各実装packageのexportsでtypesとdefaultが同じ.tsを指定する形式
+  今回のソース直接参照方式では文字列形式に簡略化可能。
+
+・共通tsconfigのinclude: []
+  各packageがincludeを上書きし、共通設定自体を直接チェックしていない現状では省略可能。
+
+・各packageのscriptにあるtsc --noEmit
+  tsconfigにnoEmit: trueがあるため、tscだけで同じ動作。
+
+・errorのpackage.jsonにあるdevDependencies: {}
+  空なので削除可能。
+
+・webのdevDependenciesにあるeslintとtypescript
+  ルートにもあるため集約可能。
+  workspaceごとに必要なツールを宣言する運用なら残してよい。
+
+@my/envのエントリーポイント設定の簡略化例:
+{
+  "exports": {
+    ".": "./src/index.ts",
+    "./server": "./src/index.s.ts"
+  }
+}
+
+main、トップレベルのtypes、条件ごとのtypesを省略しても、参照先が.tsなので型も同じソースから解決できる。
+現在の明示的な書き方を残しても問題ない。
+
+重複に見えても役割がある設定:
+- types: []は自動で取り込む@typesを制限する。削除すると型チェックの環境が変わる。
+- webと共通設定のlibには違いがあり、webはDOM型を必要とする。
+- package間のdependenciesは、ルートのnode_modulesで解決できても利用するpackage自身での宣言が必要。
+- importsはpackage内部の別名、exportsは外部への公開範囲なので重複ではない。
+
+webのtsconfigは共通設定と多くが重複している。
+extends: ../../tsconfig.base.jsonを追加し、共通項目を削除する整理は可能。
+web固有のtarget、lib、jsx、plugins、paths、includeなどは残す。
+共通設定の変更をwebにも反映したい場合に有効。
+
+【ユーザーの保存依頼】
+会話の内容をmy-monorepo-1/.reviewにテキストファイルで保存する。コミットはしない。
