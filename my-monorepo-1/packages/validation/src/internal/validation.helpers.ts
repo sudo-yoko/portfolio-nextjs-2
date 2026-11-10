@@ -1,0 +1,90 @@
+//
+// バリデーションのヘルパー関数
+//
+import { FormData, Violations, ViolationsMap } from '#validation/internal/validation.types';
+
+/**
+ * バリデーションエラーの有無を調べる
+ */
+export function hasError<FIELD extends string>(violations: Violations<FIELD>): boolean {
+    return violations.some((vio) => vio.violation.some((str) => str.trim() !== ''));
+}
+// export function hasError(errors: Violations<string>): boolean {
+// export function hasError<T extends string>(errors: Violations<T>): boolean {
+// return Object.values(errors).some((err) => (err as string[]).length > 0);
+// }
+
+/**
+ * Violationsをマップド型に変換する
+ */
+export function getViolationsMap<FIELD extends string>(input: Violations<FIELD>): ViolationsMap<FIELD> {
+    // TODO: 同じキーのオブジェクトが複数ある場合は、上書きされて最後のものだけが残る
+    const out: ViolationsMap<FIELD> = {};
+    for (const v of input) {
+        out[v.field] = v.violation;
+    }
+    return out;
+}
+
+/**
+ *
+ */
+export function initialFormDataCore<FIELD extends string>(
+    keyObj: Readonly<Record<string, FIELD>>,
+): FormData<FIELD> {
+    const result = Object.fromEntries(Object.values(keyObj).map((key) => [key, ''])) as FormData<FIELD>;
+    return result;
+}
+
+/**
+ * Violations型に適合するか調べる
+ */
+// export function isViolations(text: string, ...keys: string[]): boolean {
+// try {
+// JSONにパースできること
+// const parsed = JSON.parse(text);
+// for (const [key, value] of Object.entries(parsed)) {
+// 値がstring[]であること
+// if (!Array.isArray(value)) {
+// return false;
+// }
+// キーの配列も渡せる場合はキーのチェックも行う
+// if (keys.length > 0 && !keys.includes(key)) {
+// return false;
+// }
+// }
+// return true;
+// } catch (e) {
+// logger.debug(stringify(e).message);
+// return false;
+// }
+// }
+
+// /**
+//  * 先頭から検証し、最初に見つかった違反だけを返す
+//  */
+// export function validateFirst(value: string, label: string) {
+//     return (validators: Validator[]) => {
+//         for (const validator of validators) {
+//             const violation = validator(value, label);
+//             if (violation.length > 0) {
+//                 return violation;
+//             }
+//         }
+//         return [];
+//     };
+// }
+
+// /**
+//  * すべてのバリデーションを実行してエラーを集約する
+//  */
+// export function validateAll(value: string, label: string) {
+//     return (validators: Validator[]) => {
+//         let violations: Violation = [];
+//         for (const validator of validators) {
+//             const violation = validator(value, label);
+//             violations.push(...violation);
+//         }
+//         return violations;
+//     };
+// }

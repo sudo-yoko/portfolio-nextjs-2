@@ -1,0 +1,48 @@
+//
+// メールアドレスのバリデーター
+//
+import { z } from 'zod';
+
+import { Validator } from '#validation/internal/validation.types';
+import { isBlank } from '#validation/internal/validators.presence';
+
+/**
+ * 必須のメールアドレス
+ */
+// export const requiredEmail: Validator = (value, label) => {
+//     // バリデーション実行
+//     const violation = validateFirst(
+//         value,
+//         label,
+//     )([
+//         // 必須チェック
+//         required,
+//         // 形式チェック
+//         validateEmail,
+//     ]);
+//     return violation;
+//     // const errors: string[] = [];
+//     // // 必須チェック
+//     // errors.push(...required(value, label));
+//     // if (errors.length > 0) {
+//     //     return errors;
+//     // }
+//     // // 形式チェック
+//     // errors.push(...validateEmail(value, label));
+//     // if (errors.length > 0) {
+//     //     return errors;
+//     // }
+//     // return errors;
+// };
+
+/**
+ * メールアドレスの形式チェック
+ */
+export const validateEmail: Validator = (value, label) => {
+    // 未入力の場合はチェックしない
+    if (isBlank(value)) {
+        return [];
+    }
+    const result = z.email(`${label}の形式が不正です。`).safeParse(value);
+    return result.success ? [] : result.error.issues.map((issue) => issue.message);
+};
