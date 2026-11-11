@@ -1,0 +1,15 @@
+{
+    "name": "@my/result",
+    "version": "1.0.0",
+    "private": true,
+    "type": "module",
+    "main": "./src/index.ts",
+    "types": "./src/index.ts",
+    "imports": {
+        "#result/*": "./src/*.ts"
+    },
+    "scripts": {
+        "lint": "eslint",
+        "typecheck": "tsc --noEmit"
+    }
+}
