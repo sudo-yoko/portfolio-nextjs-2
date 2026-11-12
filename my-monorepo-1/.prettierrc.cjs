@@ -17,5 +17,5 @@ module.exports = {
 
     // Next.jsアプリ側の設定
     // Tailwind CSS のクラス順を自動で整形
-    //plugins: ['prettier-plugin-tailwindcss'],
+    // plugins: ['prettier-plugin-tailwindcss'],
 };
