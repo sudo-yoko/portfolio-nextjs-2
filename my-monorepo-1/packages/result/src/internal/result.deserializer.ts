@@ -1,6 +1,5 @@
-import { applicationError } from '@/presentation/_system/error/error.factories';
-import { formatError } from '@/presentation/_system/error/error.helper.stringify';
 import { RESULT, Tag } from '#result/internal/result.types';
+import { applicationError, formatError } from '@my/error';
 
 type ResultDeserializer = (text: string) => RESULT;
 

@@ -1,16 +1,8 @@
 //
 // RESULT型 生成ファクトリ―
 //
-import { ErrType } from '@/presentation/_system/error/error.types';
-import {
-    Aborted,
-    Invalid,
-    OkData,
-    OkEmpty,
-    Retryable,
-    Tag,
-} from '#result/internal/result.types';
-import { Violations } from '@/presentation/_system/validation/validation.types';
+import { Aborted, Invalid, OkData, OkEmpty, Retryable, Tag } from '#result/internal/result.types';
+import { Violations } from '@my/validation';
 
 // export function ok(): OkEmpty;
 // export function ok<DATA>(data: DATA): OkData<DATA>;
@@ -51,6 +43,6 @@ export function retry(retryMsg?: string[]): Retryable {
  * @param cause - 失敗の原因
  * @returns
  */
-export function abort({ type, code, message }: { type?: ErrType; code?: string; message?: string }): Aborted {
+export function abort({ type, code, message }: { type?: string; code?: string; message?: string }): Aborted {
     return { tag: Tag.Aborted, errType: type, code, message };
 }

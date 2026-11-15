@@ -2,9 +2,8 @@
 // RESULT型
 // - BFFからクライアントに返す戻り値の型を標準化する
 //
-import { AopResult } from '@/presentation/_system/aspect/aspect.types';
-import { ErrType } from '@/presentation/_system/error/error.types';
-import { Violations } from '@/presentation/_system/validation/validation.types';
+// import { AopResult } from '@/presentation/_system/aspect/aspect.types';
+import { Violations } from '@my/validation';
 
 /**
  * 返却値の分類
@@ -96,7 +95,7 @@ export type OkEmpty = { tag: typeof Tag.OkEmpty };
 export type OkData<DATA> = { tag: typeof Tag.OkData; data: DATA };
 export type Invalid<FIELD extends string> = { tag: typeof Tag.Invalid; violations: Violations<FIELD> };
 export type Retryable = { tag: typeof Tag.Retryable; retryMsg: string[] };
-export type Aborted = { tag: typeof Tag.Aborted; errType?: ErrType; code?: string; message?: string };
+export type Aborted = { tag: typeof Tag.Aborted; errType?: string; code?: string; message?: string };
 //TODO: 認証エラーを追加
 
-export type BffResult<T extends RESULT> = T | AopResult;
+// export type BffResult<T extends RESULT> = T | AopResult;
