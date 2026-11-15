@@ -3,7 +3,14 @@
 import 'server-only';
 
 import { AopResult } from '#aspect/aspect.types';
-import { formatError, getCustomErrorProperties, isCustomError, isRetryableError } from '@my/error';
+import {
+    ERR_CODE,
+    ERR_TYPE,
+    formatError,
+    getCustomErrorProperties,
+    isCustomError,
+    isRetryableError,
+} from '@my/error';
 import logger from '@my/logger/server';
 import { abort, RESULT, retry } from '@my/result';
 
@@ -28,7 +35,7 @@ export function withErrorHandling(subject: () => RESULT): RESULT {
 /**
  * エラーハンドリングを追加して実行する
  *
- * @param subject 実行する非同期関数（RESULT型を返す関数であること）
+ * @param subject - 実行する非同期関数（RESULT型を返す関数であること）
  * @returns 正常時：関数の戻り値をそのまま返す、エラー時：エラー系のRESULT型を返す
  */
 export async function withErrorHandlingAsync(subject: () => Promise<RESULT>): Promise<RESULT> {
@@ -50,8 +57,8 @@ function handleError(location: string, e: unknown): AopResult {
     if (isCustomError(e)) {
         const option = getCustomErrorProperties(e);
         errProps.details = option;
-        abortProps.type = option.errType;
-        abortProps.code = option.code;
+        abortProps.type = e[ERR_TYPE];
+        abortProps.code = e[ERR_CODE];
     }
     // ログ出力
     const { message, all } = formatError(errProps);

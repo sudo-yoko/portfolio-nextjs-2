@@ -3,10 +3,10 @@
 //
 import 'server-only';
 
+import { withAuthAsync } from '#aspect/internal/aspect.auth';
 import { withErrorHandlingAsync } from '#aspect/internal/aspect.error-handling.bff';
 import { Ctx, withLoggingAsync } from '#aspect/internal/aspect.logging';
 import { withResponseAsync } from '#aspect/internal/aspect.result.route';
-import { withAuthAsync } from '@/presentation/_system/aspect/internal/aspect.auth';
 import logger from '@my/logger/server';
 import { RESULT } from '@my/result';
 

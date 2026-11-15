@@ -55,6 +55,6 @@ async function handleError(location: string, e: unknown): Promise<void> {
     }
     // ログ出力
     const { all } = formatError(errProps);
-    void logger.errorAsync(logPrefix + all);
+    logger.error(logPrefix + all);
     throw e;
 }
