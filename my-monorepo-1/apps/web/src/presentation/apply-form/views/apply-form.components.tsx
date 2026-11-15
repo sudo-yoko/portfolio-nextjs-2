@@ -3,11 +3,7 @@
 //
 'use client';
 
-import { ActionDispatch, ReactNode } from 'react';
-
-import { FormKeys } from '@/presentation/apply-form/models//apply-form.types';
-import { State } from '@/presentation/apply-form/models/apply-form.state';
-import { Action, setValue } from '@/presentation/apply-form/view-actions/apply-form.control-reducer';
+import { ReactNode } from 'react';
 
 /**
  * 表示／非表示を指定可能なdiv
@@ -32,10 +28,8 @@ export function MyLabel(props: { disabled?: boolean; children: ReactNode }) {
  */
 export function MySelect(props: {
     disabled?: boolean;
-    state: State;
-    formKey: FormKeys;
     value: string;
-    dispatch: ActionDispatch<[action: Action]>;
+    onChange: (value: string) => void;
     children: ReactNode;
 }) {
     const commonProps = {
@@ -52,9 +46,8 @@ export function MySelect(props: {
     ) : (
         <select
             {...commonProps}
-            onChange={(e) => setValue(props.dispatch, props.formKey, e.target.value)}
+            onChange={(e) => props.onChange(e.target.value)}
             className="w-full rounded-lg border border-gray-300 bg-white p-2.5 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            // className="w-full rounded-lg border border-gray-300 p-2.5 focus:ring-2 focus:ring-blue-500 focus:outline-none"
         >
             {props.children}
         </select>
@@ -66,11 +59,9 @@ export function MySelect(props: {
  */
 export function MyInputText(props: {
     disabled?: boolean;
-    state: State;
-    formKey: FormKeys;
     value: string;
+    onChange: (value: string) => void;
     placeholder: string;
-    dispatch: ActionDispatch<[action: Action]>;
 }) {
     const commonProps = {
         type: 'text' as const,
@@ -86,8 +77,7 @@ export function MyInputText(props: {
     ) : (
         <input
             {...commonProps}
-            onChange={(e) => setValue(props.dispatch, props.formKey, e.target.value)}
-            // className="w-full rounded-lg border border-gray-300 bg-white p-2.5 text-gray-700"
+            onChange={(e) => props.onChange(e.target.value)}
             className="w-full rounded-lg border border-gray-300 bg-white p-2.5 focus:ring-2 focus:ring-blue-500 focus:outline-none"
         />
     );

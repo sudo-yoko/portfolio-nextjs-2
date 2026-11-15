@@ -1,14 +1,8 @@
 'use client';
 
-import { useReducer } from 'react';
-
 import { HotelRank, NeedHotel, TripType } from '@/presentation/apply-form/models/apply-form.const';
 import { FormKeys } from '@/presentation/apply-form/models/apply-form.types';
-import {
-    initialState,
-    reducer,
-    setValue,
-} from '@/presentation/apply-form/view-actions/apply-form.control-reducer';
+import { useControlAction } from '@/presentation/apply-form/view-actions/apply-form.useControlAction';
 import {
     MyButton,
     MyDiv,
@@ -16,12 +10,13 @@ import {
     MyLabel,
     MySelect,
 } from '@/presentation/apply-form/views/apply-form.components';
+import { CheckBox } from '@my/validation';
 
 /**
  * 申請フォーム コンポーネント
  */
 export function ApplyForm() {
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const { state, updateValue } = useControlAction();
 
     return (
         <div className="mx-auto my-8 max-w-xl rounded-2xl border border-gray-100 bg-white p-8 shadow-lg">
@@ -33,10 +28,8 @@ export function ApplyForm() {
                 <div>
                     <MyLabel>1. 申請種別</MyLabel>
                     <MySelect
-                        dispatch={dispatch}
-                        formKey={FormKeys.tripType}
-                        state={state}
                         value={state.formData.tripType}
+                        onChange={(value) => updateValue(FormKeys.tripType, value)}
                     >
                         <option value={TripType.DOMESTIC}>国内出張</option>
                         <option value={TripType.OVERSEAS}>海外出張（※パスポート欄が表示されます）</option>
@@ -50,11 +43,9 @@ export function ApplyForm() {
                         2. 出張先・目的地 <span className="text-red-500">*</span>
                     </MyLabel>
                     <MyInputText
-                        dispatch={dispatch}
-                        formKey={FormKeys.destination}
                         placeholder="例：ニューヨーク支社"
-                        state={state}
                         value={state.formData.destination ?? ''}
+                        onChange={(value) => updateValue(FormKeys.destination, value)}
                     />
                 </div>
 
@@ -69,19 +60,10 @@ export function ApplyForm() {
                             </span>
                         </label>
                         <MyInputText
-                            dispatch={dispatch}
-                            formKey={FormKeys.passportNumber}
                             placeholder="例：TK1234567"
-                            state={state}
                             value={state.formData.passportNumber}
+                            onChange={(value) => updateValue(FormKeys.passportNumber, value)}
                         />
-                        {/* <input
-                            type="text"
-                            value={state.formData.passportNumber}
-                            onChange={(e) => setValue(dispatch, FormKeys.passportNumber, e.target.value)}
-                            placeholder="例：TK1234567"
-                            className="w-full rounded-lg border border-gray-300 bg-white p-2.5 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        /> */}
                     </div>
                 </MyDiv>
 
@@ -92,10 +74,8 @@ export function ApplyForm() {
                     <div>
                         <MyLabel>4. 宿泊手配の希望</MyLabel>
                         <MySelect
-                            dispatch={dispatch}
-                            formKey={FormKeys.needHotel}
-                            state={state}
                             value={state.formData.needHotel}
+                            onChange={(value) => updateValue(FormKeys.needHotel, value)}
                         >
                             <option value={NeedHotel.NONE}>希望しない</option>
                             <option value={NeedHotel.DESIRED}>希望する（※ランク選択が有効になります）</option>
@@ -112,10 +92,8 @@ export function ApplyForm() {
 
                         <MySelect
                             disabled={!state.uiState.hotelRankEnabled}
-                            state={state}
-                            formKey={FormKeys.hotelRank}
                             value={state.formData.hotelRank}
-                            dispatch={dispatch}
+                            onChange={(value) => updateValue(FormKeys.hotelRank, value)}
                         >
                             <option value={HotelRank.NONE}></option>
                             <option value={HotelRank.STANDARD}>スタンダード (ビジネスホテル)</option>
@@ -131,11 +109,9 @@ export function ApplyForm() {
                     <div>
                         <MyLabel>6. 特記事項の有無（理由を入力すると詳細欄が活性化します）</MyLabel>
                         <MyInputText
-                            dispatch={dispatch}
-                            formKey={FormKeys.specialNote}
                             placeholder="例：特になし / 機材搬入のため"
-                            state={state}
                             value={state.formData.specialNote}
+                            onChange={(value) => updateValue(FormKeys.specialNote, value)}
                         />
                     </div>
 
@@ -148,11 +124,9 @@ export function ApplyForm() {
                         </MyLabel>
                         <MyInputText
                             disabled={!state.uiState.noteDetailEnabled}
-                            dispatch={dispatch}
-                            formKey={FormKeys.noteDetail}
-                            state={state}
                             value={state.formData.noteDetail ?? ''}
                             placeholder="詳細な理由を入力してください"
+                            onChange={(value) => updateValue(FormKeys.noteDetail, value)}
                         />
                     </div>
                 </div>
@@ -176,7 +150,9 @@ export function ApplyForm() {
                     <input
                         type="checkbox"
                         value={state.formData.isAgreed}
-                        onChange={(e) => setValue(dispatch, FormKeys.isAgreed, e.target.checked ? '1' : '0')}
+                        onChange={(e) =>
+                            updateValue(FormKeys.isAgreed, e.target.checked ? CheckBox.On : CheckBox.Off)
+                        }
                         id="agreePolicy"
                         className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     />

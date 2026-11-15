@@ -1,4 +1,4 @@
-import 'server-only'
+import 'server-only';
 
 import { ApplyForm } from '@/presentation/apply-form/views/apply-form.main';
 
