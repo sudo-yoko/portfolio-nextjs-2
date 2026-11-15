@@ -149,6 +149,7 @@ export function ApplyForm() {
                 <div className="flex items-center space-x-3 pt-2">
                     <input
                         type="checkbox"
+                        checked={state.formData.isAgreed === CheckBox.On}
                         value={state.formData.isAgreed}
                         onChange={(e) =>
                             updateValue(FormKeys.isAgreed, e.target.checked ? CheckBox.On : CheckBox.Off)

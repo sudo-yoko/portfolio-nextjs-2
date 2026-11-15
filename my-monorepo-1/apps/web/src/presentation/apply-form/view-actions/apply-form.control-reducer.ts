@@ -31,7 +31,7 @@ function initialFormData(): FormData<FormKeys> {
 
 export const ActionType = {
     setValue: 'setValue',
-};
+} as const;
 
 export type Action = { type: typeof ActionType.setValue; key: FormKeys; value: string };
 
