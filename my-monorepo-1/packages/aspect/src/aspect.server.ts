@@ -1,0 +1,27 @@
+//
+// サーバーサイド境界で共通の前後処理を行う
+//
+import 'server-only';
+
+import { withAuth, withAuthAsync } from '#aspect/internal/aspect.auth';
+import { withErrorHandling, withErrorHandlingAsync } from '#aspect/internal/aspect.error-handling.server';
+import { Ctx, withLogging, withLoggingAsync } from '#aspect/internal/aspect.logging';
+import logger from '@my/logger/server';
+
+const logPrefix = 'aspect.server.ts: ';
+
+/**
+ * 引数に渡されたサンクに共通処理を追加して実行する。
+ */
+export function withAdvice<T>(thunk: () => T) {
+    const ctx: Ctx = { logger, logPrefix, process: 'sync server process' };
+    return withLogging(ctx, () => withErrorHandling(() => withAuth(thunk)));
+}
+
+/**
+ * 引数に渡されたサンクに共通処理を追加して実行する。
+ */
+export async function withAdviceAsync<T>(thunk: () => Promise<T>) {
+    const ctx: Ctx = { logger, logPrefix, process: 'async server process' };
+    return await withLoggingAsync(ctx, () => withErrorHandlingAsync(() => withAuthAsync(thunk)));
+}
