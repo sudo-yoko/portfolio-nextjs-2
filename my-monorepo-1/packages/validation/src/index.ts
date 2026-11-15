@@ -1,4 +1,5 @@
-export { getViolationsMap, hasError, initialFormDataCore } from '#validation/internal/validation.helpers';
+export { createEmptyFormData, getViolationsMap, hasError } from '#validation/internal/validation.helpers';
+export { CheckBox } from '#validation/internal/validation.types';
 export type {
     FormData,
     FormValidator,

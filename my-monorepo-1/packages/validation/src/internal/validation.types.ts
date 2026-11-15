@@ -8,6 +8,12 @@
 // TODO: 配列に未対応
 export type FormData<FIELD extends string, VALUE = string> = Record<FIELD, VALUE>;
 
+export const CheckBox = {
+    On: '1',
+    Off: '0',
+};
+export type CheckBox = (typeof CheckBox)[keyof typeof CheckBox];
+
 /**
  * バリデーションエラーメッセージを保持する
  */
