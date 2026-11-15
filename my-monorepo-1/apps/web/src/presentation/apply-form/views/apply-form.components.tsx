@@ -3,6 +3,8 @@
 //
 'use client';
 
+import { ActionDispatch, ReactNode } from 'react';
+
 import { FormKeys } from '@/presentation/apply-form/models//apply-form.types';
 import { State } from '@/presentation/apply-form/models/apply-form.state';
 import { Action, setValue } from '@/presentation/apply-form/view-actions/apply-form.control-reducer';
@@ -10,15 +12,15 @@ import { Action, setValue } from '@/presentation/apply-form/view-actions/apply-f
 /**
  * 表示／非表示を指定可能なdiv
  */
-export function ReactiveDiv(props: { visible: boolean; children: React.ReactNode }) {
-    return props.visible && <div>{props.children}</div>;
+export function MyDiv(props: { visible?: boolean; children: ReactNode }) {
+    return props.visible && props.visible && <div>{props.children}</div>;
 }
 
 /**
  * 活性／非活を指定可能なラベル
  */
-export function ReactiveLabel(props: { disabled: boolean; children: React.ReactNode }) {
-    return props.disabled ? (
+export function MyLabel(props: { disabled?: boolean; children: ReactNode }) {
+    return props.disabled && props.disabled ? (
         <label className="mb-1 block text-sm font-medium text-gray-400">{props.children}</label>
     ) : (
         <label className="mb-1 block text-sm font-medium text-gray-700">{props.children}</label>
@@ -28,18 +30,18 @@ export function ReactiveLabel(props: { disabled: boolean; children: React.ReactN
 /**
  * 活性／非活を指定可能な選択ボックス
  */
-export function ReactiveSelect(props: {
-    disabled: boolean;
+export function MySelect(props: {
+    disabled?: boolean;
     state: State;
     formKey: FormKeys;
     value: string;
-    dispatch: React.ActionDispatch<[action: Action]>;
-    children: React.ReactNode;
+    dispatch: ActionDispatch<[action: Action]>;
+    children: ReactNode;
 }) {
     const commonProps = {
         value: props.value,
     };
-    return props.disabled ? (
+    return props.disabled && props.disabled ? (
         <select
             {...commonProps}
             disabled
@@ -62,20 +64,20 @@ export function ReactiveSelect(props: {
 /**
  * 活性／非活を指定可能なテキストボックス
  */
-export function ReactiveInputText(props: {
-    disabled: boolean;
+export function MyInputText(props: {
+    disabled?: boolean;
     state: State;
     formKey: FormKeys;
     value: string;
     placeholder: string;
-    dispatch: React.ActionDispatch<[action: Action]>;
+    dispatch: ActionDispatch<[action: Action]>;
 }) {
     const commonProps = {
         type: 'text' as const,
         value: props.value,
         placeholder: props.placeholder,
     };
-    return props.disabled ? (
+    return props.disabled && props.disabled ? (
         <input
             {...commonProps}
             disabled
@@ -94,11 +96,11 @@ export function ReactiveInputText(props: {
 /**
  * 活性／非活を指定可能なボタン
  */
-export function ReactiveButton(props: { disabled: boolean; buttonText: string }) {
+export function MyButton(props: { disabled?: boolean; buttonText: string }) {
     const commonProps = {
         type: 'button' as const,
     };
-    return props.disabled ? (
+    return props.disabled && props.disabled ? (
         <button
             {...commonProps}
             disabled
@@ -113,54 +115,5 @@ export function ReactiveButton(props: { disabled: boolean; buttonText: string })
         >
             {props.buttonText}
         </button>
-    );
-}
-
-/**
- * ラベル
- */
-export function MyLabel(props: { children: React.ReactNode }) {
-    return <ReactiveLabel disabled={false}>{props.children}</ReactiveLabel>;
-}
-
-/**
- * 選択ボックス
- */
-export function MySelect(props: {
-    state: State;
-    formKey: FormKeys;
-    value: string;
-    dispatch: React.ActionDispatch<[action: Action]>;
-    children: React.ReactNode;
-}) {
-    return (
-        <ReactiveSelect
-            disabled={false}
-            state={props.state}
-            dispatch={props.dispatch}
-            formKey={props.formKey}
-            value={props.value}
-        >
-            {props.children}
-        </ReactiveSelect>
-    );
-}
-
-export function MyInputText(props: {
-    state: State;
-    formKey: FormKeys;
-    value: string;
-    placeholder: string;
-    dispatch: React.ActionDispatch<[action: Action]>;
-}) {
-    return (
-        <ReactiveInputText
-            disabled={false}
-            dispatch={props.dispatch}
-            formKey={props.formKey}
-            placeholder={props.placeholder}
-            state={props.state}
-            value={props.value}
-        ></ReactiveInputText>
     );
 }

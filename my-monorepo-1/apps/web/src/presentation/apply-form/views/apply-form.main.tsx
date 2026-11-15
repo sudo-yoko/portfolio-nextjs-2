@@ -10,14 +10,11 @@ import {
     setValue,
 } from '@/presentation/apply-form/view-actions/apply-form.control-reducer';
 import {
+    MyButton,
+    MyDiv,
     MyInputText,
     MyLabel,
     MySelect,
-    ReactiveButton,
-    ReactiveDiv,
-    ReactiveInputText,
-    ReactiveLabel,
-    ReactiveSelect,
 } from '@/presentation/apply-form/views/apply-form.components';
 
 /**
@@ -63,7 +60,7 @@ export function ApplyForm() {
 
                 {/* 3. パスポート番号（※選択ボックスの選択値に応じて表示／非表示が切り替わるコントロール） */}
                 {/* passportNumber */}
-                <ReactiveDiv visible={state.uiState.passportNumberVisible}>
+                <MyDiv visible={state.uiState.passportNumberVisible}>
                     <div className="rounded-xl border border-blue-100 bg-blue-50 p-4">
                         <label className="mb-1 block text-sm font-medium text-blue-900">
                             3. パスポート番号 <span className="text-red-500">*</span>
@@ -86,7 +83,7 @@ export function ApplyForm() {
                             className="w-full rounded-lg border border-gray-300 bg-white p-2.5 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                         /> */}
                     </div>
-                </ReactiveDiv>
+                </MyDiv>
 
                 {/* 4 & 5. 宿泊手配 ＆ 希望宿泊ランク */}
                 <div className="space-y-4 rounded-xl border border-gray-200 bg-gray-50 p-4">
@@ -108,12 +105,12 @@ export function ApplyForm() {
                     {/* 5. 希望宿泊ランク（※選択ボックスの選択値に応じて活性／非活性が切り替わるコントロール） */}
                     {/* hotelRank */}
                     <div>
-                        <ReactiveLabel disabled={!state.uiState.hotelRankEnabled}>
+                        <MyLabel disabled={!state.uiState.hotelRankEnabled}>
                             5. 希望宿泊ランク{' '}
                             <span className="text-xs">（宿泊手配「希望する」時のみ活性）</span>
-                        </ReactiveLabel>
+                        </MyLabel>
 
-                        <ReactiveSelect
+                        <MySelect
                             disabled={!state.uiState.hotelRankEnabled}
                             state={state}
                             formKey={FormKeys.hotelRank}
@@ -123,7 +120,7 @@ export function ApplyForm() {
                             <option value={HotelRank.NONE}></option>
                             <option value={HotelRank.STANDARD}>スタンダード (ビジネスホテル)</option>
                             <option value={HotelRank.DELUXE}>デラックス (駅近・広め)</option>
-                        </ReactiveSelect>
+                        </MySelect>
                     </div>
                 </div>
 
@@ -145,11 +142,11 @@ export function ApplyForm() {
                     {/* 7. 特記事項詳細（※テキストボックスの入力内容に応じて活性／非活性が切り替わるコントロール） */}
                     {/* noteDetail */}
                     <div>
-                        <ReactiveLabel disabled={!state.uiState.noteDetailEnabled}>
+                        <MyLabel disabled={!state.uiState.noteDetailEnabled}>
                             7. 特記事項詳細{' '}
                             <span className="text-xs">（上記に文字入力がある場合のみ有効）</span>
-                        </ReactiveLabel>
-                        <ReactiveInputText
+                        </MyLabel>
+                        <MyInputText
                             disabled={!state.uiState.noteDetailEnabled}
                             dispatch={dispatch}
                             formKey={FormKeys.noteDetail}
@@ -191,10 +188,7 @@ export function ApplyForm() {
                 {/* 10. 送信ボタン */}
                 {/* applyButton */}
                 <div className="pt-4">
-                    <ReactiveButton
-                        disabled={!state.uiState.applyButtonEnabled}
-                        buttonText="10. 申請を提出する"
-                    />
+                    <MyButton disabled={!state.uiState.applyButtonEnabled} buttonText="10. 申請を提出する" />
                 </div>
             </form>
         </div>
