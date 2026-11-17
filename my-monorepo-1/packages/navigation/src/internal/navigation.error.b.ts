@@ -2,7 +2,14 @@
 
 import { useRouter } from 'next/navigation';
 
-export function navigationError() {
+export function useNavigation() {
     const router = useRouter();
-    router.push('/system-error');
+
+    function navigatePage(url: string) {
+        router.push(url);
+    }
+
+    return {
+        navigatePage,
+    };
 }

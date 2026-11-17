@@ -1,0 +1,82 @@
+navigation パッケージ設計レビュー
+日付: 2026-11-15
+
+依頼内容
+my-monorepo-1/packages/navigation は、Next.jsアプリケーションから利用する、エラーページへの遷移を共通化する試作パッケージ。
+この設計の方向性に問題がないか評価する。
+
+評価
+エラー時の遷移を共通パッケージに切り出し、サーバーとブラウザーで実装を分ける方向性は妥当。
+server-only とサーバー側の戻り値 never も適切。ただし、利用側へ組み込む前に以下を修正したい。
+
+優先度の高い指摘
+
+1. ブラウザー側は遷移関数を返すカスタムフックにする
+対象: src/internal/navigation.error.b.ts:5
+現在は通常の関数内で useRouter() を呼び、その場で遷移している。catch やイベントハンドラーから呼ぶと 
+Hooks のルールに違反する。コンポーネントのレンダー中にそのまま遷移させる形も避ける。
+useErrorNavigation() をコンポーネントのトップレベルで呼び、返された関数をエラー時に実行する形を推奨する。
+
+例:
+export function useErrorNavigation() {
+    const router = useRouter();
+    return (error: unknown): void => {
+        router.replace(getErrorPath(error));
+    };
+}
+
+参考: https://react.dev/learn/reusing-logic-with-custom-hooks
+
+2. 公開エントリーポイントをサーバー／ブラウザーで分ける
+対象: package.json:11
+公開先は src/index.ts だが、このファイルはまだ存在しない。現状では @my/navigation として利用できない。
+以下のような明示的なサブパスを推奨する。
+
+import { redirectToError } from '@my/navigation/server';
+import { useErrorNavigation } from '@my/navigation/browser';
+
+サーバーとブラウザーの実装を同じ入口からまとめて export する構成は避ける。
+
+3. サーバー側の遷移先を /system-error にする
+対象: src/internal/navigation.error.s.ts:12
+redirect('system-error') は相対URL。呼び出し元のURLに依存せず共通ページへ遷移するなら、先頭の / が必要。
+参考: https://nextjs.org/docs/app/api-reference/functions/redirect
+
+設計上の提案
+
+・遷移先の判定を共通化する。
+  現在はサーバー側だけが認証エラーを区別している。同じ方針にするなら getErrorPath(error) のような純粋関数を内部で共有し、
+  判定のずれを防ぐ。
+
+・ログ出力とエラー捕捉は aspect に残す。
+  navigation は遷移先の決定と遷移に絞る。既存の aspect にある直接の redirect／router.push を、
+  このパッケージへ寄せる形が自然。
+
+・戻り値の違いは維持する。
+  サーバーの redirect() は処理を中断するため never、ブラウザーの遷移関数は void。
+  ブラウザーでは呼び出し後も処理が続くため、呼び出し側の制御も必要。
+
+・履歴を残すか決める。
+  エラー前のページへ「戻る」で戻したくないなら、ブラウザー側は push より replace が適している。
+  参考: https://nextjs.org/docs/app/api-reference/functions/use-router
+
+既存 aspect と接続するときの注意
+redirect() は例外で制御する。subject() が行った正常なリダイレクトまで包括的な catch が拾うと、
+システムエラーへの遷移に変換してしまう。Next.jsの制御用例外を通常のアプリケーションエラーとして扱わない設計が必要。
+参考: https://nextjs.org/docs/app/api-reference/functions/redirect
+
+依存関係
+共通パッケージの next は peerDependencies に置き、利用アプリとバージョンを合わせる方針を推奨する。
+確認時点では navigation が ^16.4.6、アプリが 16.2.4 と食い違っている。
+
+確認結果
+・npm run lint --workspace=@my/navigation: 成功
+・npm run typecheck --workspace=@my/navigation: 成功
+・ただし、Hooks の呼び出し方と未作成の公開エントリーポイントは検出されていない。
+・レビューに伴う実装変更は行っていない。
+
+結論
+優先度の高い3点を修正すれば、この方向性で共通化を進めてよい。
+
+保存に関するユーザー指示
+会話の内容を navigation/.review フォルダにテキストファイルで保存する。コミットはしない。
