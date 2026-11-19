@@ -6,10 +6,10 @@ import 'server-only';
 import logger from '@my/logger/server';
 import { RESULT } from '@my/result';
 
-import { withAuthAsync } from '#aspect/internal/aspect.auth';
-import { withErrorHandlingAsync } from '#aspect/internal/aspect.error-handling.bff';
-import { createWithLoggingAsync, Ctx } from '#aspect/internal/aspect.logging';
-import { withResponseAsync } from '#aspect/internal/aspect.result.route';
+import { withAuthAsync } from '#aspect/internal/aspects/aspect.auth';
+import { withErrorHandlingAsync } from '#aspect/internal/aspects/aspect.error-handling.bff';
+import { createWithLoggingAsync, Ctx } from '#aspect/internal/aspects/aspect.logging';
+import { withResponseAsync } from '#aspect/internal/aspects/aspect.result.route';
 
 const logPrefix = 'aspect.route-handler.ts: ';
 

@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { Aspect, AspectAsync } from '#aspect/aspect.types';
+import { Aspect, AspectAsync } from '#aspect/internal/aspect.types';
 import { envString } from '@my/env/server';
 import { formatError, getCustomErrorProperties, isAuthError, isCustomError } from '@my/error';
 import logger from '@my/logger/server';

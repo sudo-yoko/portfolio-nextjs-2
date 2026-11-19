@@ -1,4 +1,4 @@
-import { Aspect, AspectAsync } from '#aspect/aspect.types'
+import { Aspect, AspectAsync } from '#aspect/internal/aspect.types'
 
 /**
  * 引数に渡された各アスペクトを連結して実行する

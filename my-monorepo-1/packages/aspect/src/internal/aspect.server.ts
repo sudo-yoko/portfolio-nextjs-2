@@ -2,11 +2,11 @@ import 'server-only';
 
 import logger from '@my/logger/server';
 
-import { Aspect, AspectAsync } from '#aspect/aspect.types';
-import { chainAspects, chainAspectsAsync } from '#aspect/aspect.utils';
-import { withAuth, withAuthAsync } from '#aspect/internal/aspect.auth';
-import { withErrorHandling, withErrorHandlingAsync } from '#aspect/internal/aspect.error-handling.server';
-import { createWithLogging, createWithLoggingAsync, Ctx } from '#aspect/internal/aspect.logging';
+import { Aspect, AspectAsync } from '#aspect/internal/aspect.types';
+import { chainAspects, chainAspectsAsync } from '#aspect/internal/aspect.utils';
+import { withAuth, withAuthAsync } from '#aspect/internal/aspects/aspect.auth';
+import { withErrorHandling, withErrorHandlingAsync } from '#aspect/internal/aspects/aspect.error-handling.server';
+import { createWithLogging, createWithLoggingAsync, Ctx } from '#aspect/internal/aspects/aspect.logging';
 
 const logPrefix = 'aspect.server.ts: ';
 

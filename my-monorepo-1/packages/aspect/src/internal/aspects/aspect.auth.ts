@@ -1,7 +1,7 @@
 import 'server-only';
 
-import { Aspect, AspectAsync } from '#aspect/aspect.types';
-import { authenticate } from '#aspect/internal/authentication';
+import { Aspect, AspectAsync } from '#aspect/internal/aspect.types';
+import { authenticate } from '#aspect/internal/aspects/authentication';
 
 export const withAuth: Aspect = (thunk) => {
     return () => {

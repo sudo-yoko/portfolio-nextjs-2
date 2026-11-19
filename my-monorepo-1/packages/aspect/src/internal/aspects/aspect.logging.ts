@@ -1,4 +1,4 @@
-import { Aspect, AspectAsync } from '#aspect/aspect.types';
+import { Aspect, AspectAsync } from '#aspect/internal/aspect.types';
 import { Logger } from '@my/logger';
 
 export type Ctx = {

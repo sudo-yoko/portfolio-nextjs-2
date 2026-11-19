@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { AopResult } from '#aspect/aspect.types';
+import { AopResult } from '#aspect/internal/aspect.types';
 import {
     ERR_CODE,
     ERR_TYPE,

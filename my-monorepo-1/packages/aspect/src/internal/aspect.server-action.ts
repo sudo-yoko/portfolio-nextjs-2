@@ -3,10 +3,10 @@ import 'server-only';
 import logger from '@my/logger/server';
 import { RESULT } from '@my/result';
 
-import { withAuth, withAuthAsync } from '#aspect/internal/aspect.auth';
-import { withErrorHandling, withErrorHandlingAsync } from '#aspect/internal/aspect.error-handling.bff';
-import { createWithLogging, createWithLoggingAsync, Ctx } from '#aspect/internal/aspect.logging';
-import { withResultParsing, withResultParsingAsync } from '#aspect/internal/aspect.result.action';
+import { withAuth, withAuthAsync } from '#aspect/internal/aspects/aspect.auth';
+import { withErrorHandling, withErrorHandlingAsync } from '#aspect/internal/aspects/aspect.error-handling.bff';
+import { createWithLogging, createWithLoggingAsync, Ctx } from '#aspect/internal/aspects/aspect.logging';
+import { withResultParsing, withResultParsingAsync } from '#aspect/internal/aspects/aspect.result.action';
 
 const logPrefix = 'aspect.server-action.ts';
 
