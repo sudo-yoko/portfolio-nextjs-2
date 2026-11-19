@@ -58,3 +58,25 @@ redirect() を禁止し、呼び出し側で遷移を決めるルールを設け
 
 型チェック、_exclude を除く ESLint、git diff --check は通過。
 レビュー中に実装コードは変更していない。
+
+ユーザー
+withAdvice 系を実装するファイルには、aspect.*.ts より advice.*.ts が適切か。
+
+アシスタント
+公開の withAdvice / withAdviceAsync を定義するファイルには advice.*.ts が適切。
+公開関数をファイル名から探しやすくなる。例は advice.server.ts、
+advice.server-action.ts、advice.route-handler.ts、advice.browser.ts。
+Aspect 型、合成処理、個別のラッパーには aspect.types.ts、aspect.utils.ts、
+aspect.logging.ts などの名前を使える。パッケージ名 @my/aspect は機能全体を表す。
+
+ユーザー
+パッケージ名や関数名での aspect と advice の使い方は合っているか。
+
+アシスタント
+パッケージ名 @my/aspect と公開関数名 withAdvice / withAdviceAsync は
+今の実装に合っている。パッケージは認証、ログ、エラー処理などの共通処理を
+まとめており、公開関数はそれらを渡された処理に適用して実行する。
+AOP では、aspect は advice やその適用条件をまとめる単位を指す。
+withLogging のように元の処理を前後から包むラッパーは around advice に相当する。
+用語の厳密さを優先するなら、ラッパーを表す型 Aspect / AspectAsync には
+AroundAdvice / AroundAdviceAsync のほうが役割を正確に表す。
