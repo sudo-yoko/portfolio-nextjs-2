@@ -1,0 +1,60 @@
+@my/aspect 実装レビュー
+2026-11-19
+
+ユーザー
+my-monorepo-1/packages/aspect を確認し、実装に間違いがないかレビューする。
+コードは変更しない。_exclude フォルダは除外し、認証のダミースタブは評価しない。
+
+アシスタント
+1. package.json の main と types が存在しない src/index.ts を指しており、
+   @my/aspect をパッケージ名で import すると ERR_MODULE_NOT_FOUND になる。
+   実装が直接参照する @my/result も dependencies に未宣言。
+2. src/aspect.server.ts の withAdvice と withAdviceAsync は、渡された関数を
+   実行するが、chainAspects / chainAspectsAsync の結果を呼び出し側へ返していない。
+3. ラップされた処理で Next.js の redirect() を呼ぶと、その制御用例外を
+   共通エラー処理が捕捉する。通常のサーバー処理ではシステムエラーページへの
+   転送に置き換わり、Server Action と Route Handler では Aborted に変換される。
+4. src/internal/aspect.result.route.ts は JSON 文字列を text/plain として返す。
+   また、RESULT のデータに bigint などが含まれると JSON 変換が例外を投げる。
+   レスポンス変換は共通エラー処理の外側にあり、HTTP 200 でエラーをボディに
+   返すというコメント上の契約から外れる。
+
+型チェックと ESLint は通過。コードの変更なし。
+
+ユーザー
+3 の「サーバー側のエラー処理が Next.js の redirect() を捕捉する」について、
+エラーハンドリングの設計にミスがあるか。
+
+アシスタント
+ラップされた処理から redirect() を呼べる契約なら、共通エラー処理が
+Next.js の制御用例外まで処理する点が設計上の不備になる。
+呼び出し側が処理結果を受け取り、withAdvice の外で遷移を決める契約なら、
+現行の catch で成立する。そのためには処理結果を返す必要がある。
+ラップ内からの遷移も許可する場合は、制御用例外を再スローする設計が必要になる。
+Next.js の unstable_rethrow は公式ドキュメントで本番利用を推奨していない。
+
+Next.js 公式ドキュメント
+https://nextjs.org/docs/app/api-reference/functions/redirect
+https://nextjs.org/docs/app/api-reference/functions/unstable_rethrow
+
+ユーザー
+コードを修正したので再度確認する。withAdvice に渡す処理の中では
+redirect() を禁止し、呼び出し側で遷移を決めるルールを設ける。
+
+アシスタント
+修正済み
+・src/aspect.server.ts:28,42 の同期・非同期 withAdvice が処理結果を返す。
+・src/internal/aspect.result.route.ts:12 で Response.json() を使うようになり、
+  正常な JSON レスポンスの Content-Type が application/json になった。
+・合意した呼び出しルールに従えば、redirect() が共通エラー処理に捕捉される
+  経路を避けられる。
+
+残っている点
+・package.json:6 のエントリーポイントが存在せず、@my/aspect の import は
+  ERR_MODULE_NOT_FOUND になる。@my/result も dependencies に未宣言。
+・src/internal/aspect.result.route.ts:12 の Response.json() は、RESULT の
+  データに bigint が含まれると TypeError を投げる。src/aspect.route-handler.ts:21
+  の構成では、この例外は共通エラー処理を通らない。
+
+型チェック、_exclude を除く ESLint、git diff --check は通過。
+レビュー中に実装コードは変更していない。

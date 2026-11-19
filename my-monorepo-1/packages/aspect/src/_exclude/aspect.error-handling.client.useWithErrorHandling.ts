@@ -31,7 +31,7 @@ export function useWithErrorHandling() {
     /**
      * エラーハンドリングを追加して実行する
      *
-     * @param subject 実行する非同期関数（戻り値の無い関数であること）
+     * @param subject - 実行する非同期関数（戻り値の無い関数であること）
      */
     const withErrorHandlingAsync = async (subject: () => Promise<void>): Promise<void> => {
         const location = 'withAdviceAsync';
@@ -53,7 +53,7 @@ export function useWithErrorHandling() {
         }
         // ログ出力
         const { all } = formatError(errProps);
-        void logger.errorAsync(logPrefix + all);
+        void logger.error(logPrefix + all);
         router.push('/system-error');
     }
 

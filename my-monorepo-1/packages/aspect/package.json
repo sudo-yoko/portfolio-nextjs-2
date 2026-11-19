@@ -13,8 +13,10 @@
         "typecheck": "tsc --noEmit"
     },
     "dependencies": {
+        "@my/env": "*",
         "@my/error": "*",
-        "@my/logger": "*"
+        "@my/logger": "*",
+        "@my/navigation": "*"
     },
     "devDependencies": {}
 }
