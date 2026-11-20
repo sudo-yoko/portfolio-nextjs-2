@@ -11,9 +11,9 @@ export type BffResult<T extends RESULT> = T | AopResult;
 /**
  * アスペクト関数の型
  */
-export type Aspect = <T>(thunk: () => T) => () => T;
+export type AroundAdvice = <T>(thunk: () => T) => () => T;
 
 /**
  * アスペクト関数の型（非同期版）
  */
-export type AspectAsync = <T>(thunk: () => Promise<T>) => () => Promise<T>;
+export type AroundAdviceAsync = <T>(thunk: () => Promise<T>) => () => Promise<T>;

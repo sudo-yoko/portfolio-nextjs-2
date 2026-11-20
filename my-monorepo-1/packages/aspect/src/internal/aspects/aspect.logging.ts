@@ -1,4 +1,4 @@
-import { Aspect, AspectAsync } from '#aspect/internal/aspect.types';
+import { AroundAdvice, AroundAdviceAsync } from '#aspect/internal/aspect.types';
 import { Logger } from '@my/logger';
 
 export type Ctx = {
@@ -8,7 +8,7 @@ export type Ctx = {
 };
 
 export function createWithLogging({ logger, logPrefix, process }: Ctx) {
-    const withLogging: Aspect = (thunk) => {
+    const withLogging: AroundAdvice = (thunk) => {
         return () => {
             logger.info(`${logPrefix}>>>>>>>>>>>>>>>>>>>>> ${process} start.`);
             try {
@@ -22,7 +22,7 @@ export function createWithLogging({ logger, logPrefix, process }: Ctx) {
 }
 
 export function createWithLoggingAsync({ logger, logPrefix, process }: Ctx) {
-    const withLoggingAsync: AspectAsync = (thunk) => {
+    const withLoggingAsync: AroundAdviceAsync = (thunk) => {
         return async () => {
             logger.info(`${logPrefix}>>>>>>>>>>>>>>>>>>>>> ${process} start.`);
             try {

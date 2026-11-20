@@ -1,16 +1,16 @@
 import 'server-only';
 
-import { Aspect, AspectAsync } from '#aspect/internal/aspect.types';
+import { AroundAdvice, AroundAdviceAsync } from '#aspect/internal/aspect.types';
 import { authenticate } from '#aspect/internal/aspects/authentication';
 
-export const withAuth: Aspect = (thunk) => {
+export const withAuth: AroundAdvice = (thunk) => {
     return () => {
         authenticate();
         return thunk();
     };
 };
 
-export const withAuthAsync: AspectAsync = (thunk) => {
+export const withAuthAsync: AroundAdviceAsync = (thunk) => {
     return async () => {
         authenticate();
         return await thunk();

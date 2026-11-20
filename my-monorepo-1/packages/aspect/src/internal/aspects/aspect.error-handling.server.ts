@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { Aspect, AspectAsync } from '#aspect/internal/aspect.types';
+import { AroundAdvice, AroundAdviceAsync } from '#aspect/internal/aspect.types';
 import { envString } from '@my/env/server';
 import { formatError, getCustomErrorProperties, isAuthError, isCustomError } from '@my/error';
 import logger from '@my/logger/server';
@@ -8,7 +8,7 @@ import { redirectPage } from '@my/navigation/server';
 
 const logPrefix = 'aspect.error-handling.server.ts: ';
 
-export const withErrorHandling: Aspect = (thunk) => {
+export const withErrorHandling: AroundAdvice = (thunk) => {
     return () => {
         const location = 'withErrorHandling';
         try {
@@ -20,7 +20,7 @@ export const withErrorHandling: Aspect = (thunk) => {
     };
 };
 
-export const withErrorHandlingAsync: AspectAsync = (thunk) => {
+export const withErrorHandlingAsync: AroundAdviceAsync = (thunk) => {
     return async () => {
         const location = 'withErrorHandlingAsync';
         try {

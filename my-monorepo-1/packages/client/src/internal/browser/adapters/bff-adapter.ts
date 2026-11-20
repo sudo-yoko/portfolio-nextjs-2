@@ -3,6 +3,7 @@
 //
 import 'client-only';
 
+import { applicationError } from '@my/error';
 import logger from '@my/logger/browser';
 
 import {
@@ -39,6 +40,11 @@ export const createBffClient = (client: Client): BffClient => ({
 
         const result = await client.send(props);
         logger.info(logPrefix + `Response -> ${JSON.stringify(result)}`);
+
+        // ルートハンドラーでRESULTがJSON変換できなかった場合など
+        if (result.status !== 200) {
+            throw applicationError({ message: result.rawBody });
+        }
         return result;
     },
 });

@@ -1,0 +1,58 @@
+Route Handler の JSON 変換失敗に関する設計レビュー
+2026-11-20
+
+対象
+- src/internal/advice.route-handler.ts
+- src/internal/aspects/aspect.result.route.ts
+- src/internal/aspects/aspect.error-handling.bff.ts
+
+現行の挙動
+
+withAdviceAsync は withResponseAsync(withErrorHandlingAsync(...)) の順に合成する。
+withErrorHandlingAsync が RESULT を返した後、withResponseAsync が Response.json
+で HTTP 200 のレスポンスを生成する。循環参照や bigint などで JSON 変換が
+例外を投げると、共通エラーハンドラーの catch の外で Promise が reject する。
+この経路では共通ハンドラーによるログ出力や abort(...) への変換は行われず、
+通常は Next.js が HTTP 500 を返す。エラーページへの自動遷移は発生しない。
+fetch は 500 を受信しても resolve し、response.ok は false になる。
+本文が空または JSON 以外なら、そのまま response.json() を呼ぶと解析に失敗する。
+
+設計の前提
+
+withErrorHandlingAsync の正常時と異常時の戻り値を RESULT に統一する。
+HTTP ステータス、本文、画面遷移の方針は HTTP 境界で決められる。
+実行時にも RESULT を保証するには、handleError 内のエラー整形やログ出力が
+例外を投げた場合に、固定の abort(...) を返せる経路も必要になる。
+
+検討した設計
+
+1. HTTP 200 と RESULT を維持する
+   withResponseAsync で Response.json の失敗を捕捉し、サーバーログに記録する。
+   元の RESULT や例外を本文に含めず、固定の Aborted を JSON で返す。
+   常に 200 と RESULT を期待する既存クライアントとの互換性を保てる。
+
+2. HTTP 500 を明示的に返す
+   withResponseAsync で変換失敗を記録し、空ボディなど契約で定めた形式で 500 を
+   返す。fetch の共通処理で response.ok を JSON 解析より先に確認し、500 の場合は
+   共通のエラー表示や画面遷移を行う。
+
+3. Next.js の標準処理に委ねる
+   現行どおり例外を伝播させる。呼び出し側が汎用の 500 を扱え、BFF 固有の
+   エラー本文やログが不要な場合に適する。
+
+4. エラーページへリダイレクトする
+   ブラウザの画面遷移として呼ばれるルートに適する。POST の後にエラーページを
+   GET で開かせるなら 303 See Other を返す。fetch は既定でリダイレクトを追跡し、
+   エラーページの HTML を取得する。表示中の画面を切り替えるには呼び出し側の
+   処理が必要になる。
+
+判断
+
+fetch 向けの BFF でクライアント側の共通処理も見直せる場合は、明示的な HTTP 500
+を推奨する。既存の「常に HTTP 200 と RESULT」の契約を優先する場合は、
+固定の Aborted が適している。
+
+変換失敗を減らすには、ルートごとに送信用 DTO を定義し、RESULT<送信用DTO> を返す。
+たとえば bigint の ID は文字列に変換してから RESULT に入れる。
+更新系では DB 更新後にレスポンス生成だけが失敗し得るため、この失敗を retry()
+やクライアントの自動再送に結びつけない。

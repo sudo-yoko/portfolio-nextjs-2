@@ -2,10 +2,13 @@ import 'server-only';
 
 import logger from '@my/logger/server';
 
-import { Aspect, AspectAsync } from '#aspect/internal/aspect.types';
+import { AroundAdvice, AroundAdviceAsync } from '#aspect/internal/aspect.types';
 import { chainAspects, chainAspectsAsync } from '#aspect/internal/aspect.utils';
 import { withAuth, withAuthAsync } from '#aspect/internal/aspects/aspect.auth';
-import { withErrorHandling, withErrorHandlingAsync } from '#aspect/internal/aspects/aspect.error-handling.server';
+import {
+    withErrorHandling,
+    withErrorHandlingAsync,
+} from '#aspect/internal/aspects/aspect.error-handling.server';
 import { createWithLogging, createWithLoggingAsync, Ctx } from '#aspect/internal/aspects/aspect.logging';
 
 const logPrefix = 'aspect.server.ts: ';
@@ -19,10 +22,10 @@ export function withAdvice<T>(subject: () => T) {
     const withLogging = createWithLogging(ctx);
 
     // アスペクトを登録する
-    const aspects: Aspect[] = [];
-    aspects.push(withAuth); // 認証処理
+    const aspects: AroundAdvice[] = [];
     aspects.push(withErrorHandling); // エラーハンドリング
     aspects.push(withLogging); // 開始・終了ログ
+    aspects.push(withAuth); // 認証処理
 
     // アスペクトを適用して実行する
     return chainAspects(subject, aspects);
@@ -35,9 +38,9 @@ export async function withAdviceAsync<T>(subject: () => Promise<T>) {
     const ctx: Ctx = { logger, logPrefix, process: 'async server process' };
     const withLoggingAsync = createWithLoggingAsync(ctx);
 
-    const aspects: AspectAsync[] = [];
-    aspects.push(withAuthAsync);
+    const aspects: AroundAdviceAsync[] = [];
     aspects.push(withErrorHandlingAsync);
     aspects.push(withLoggingAsync);
+    aspects.push(withAuthAsync);
     return await chainAspectsAsync(subject, aspects);
 }

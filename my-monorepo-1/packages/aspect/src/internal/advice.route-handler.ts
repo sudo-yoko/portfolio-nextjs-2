@@ -18,6 +18,6 @@ export async function withAdviceAsync(subject: () => Promise<RESULT>): Promise<R
     const ctx: Ctx = { logger, logPrefix, process: 'bff route process' };
     const withLoggingAsync = createWithLoggingAsync(ctx);
 
-    const chained = withLoggingAsync(withResponseAsync(withErrorHandlingAsync(withAuthAsync(subject))));
+    const chained = withResponseAsync(withErrorHandlingAsync(withLoggingAsync(withAuthAsync(subject))));
     return chained();
 }
